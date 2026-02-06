@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Fishing Poker [v2.1.0] - Difficulty Balancing</title>
+    <title>Fishing Poker [v2.1.3] - Fail Panel Layout Fix</title>
     <style>
         /* ================= UI 样式保持 v1.9.9 基础 ================= */
         :root {
@@ -30,8 +30,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; font-family: 'Segoe UI', sans-serif; }
         body { background: var(--bg-gradient); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
+        /* Splash Screen */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; pointer-events: none; }
+        .splash-logo { width: 120px; height: 120px; fill: #fff; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+        .splash-text { font-family: 'Segoe UI Light', sans-serif; font-weight: 100; font-size: 24px; letter-spacing: 8px; color: #fff; opacity: 0.8; }
+        .fade-out { opacity: 0 !important; }
+
         /* Lobby */
-        #lobby-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #050a14 0%, #000000 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; overflow: hidden; }
+        #lobby-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #050a14 0%, #000000 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; overflow: hidden; transition: opacity 0.5s; }
         .waves-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 40vh; pointer-events: none; z-index: 1; opacity: 0.3; }
         .waves { width: 100%; height: 100%; min-height: 100px; max-height: 250px; }
         .parallax > use { animation: move-wave 35s cubic-bezier(.55,.5,.45,.5) infinite; }
@@ -49,13 +55,18 @@
         .btn-lobby:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 0 40px var(--highlight); }
         
         /* Header */
-        header { height: 60px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid #333; z-index: 20; }
-        .header-left { display: flex; flex-direction: column; }
+        header { height: 60px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid #333; z-index: 201; position:relative; transition: transform 0.3s ease-in-out; }
+        
+        /* 弹窗时隐藏顶部栏 */
+        body.overlay-active header { display: none; }
+
+        .header-left { display: flex; flex-direction: column; transition: opacity 0.3s; }
         .level-id { font-size: 20px; color: var(--highlight); font-weight: 800; letter-spacing: 1px; }
         .level-goal { font-size: 12px; color: #bbb; margin-top: 2px; }
-        
+        .lobby-hide { opacity: 0; pointer-events: none; }
+
         /* Unified Header Buttons */
-        .header-center { display: flex; gap: 12px; align-items: center; }
+        .header-center { display: flex; gap: 12px; align-items: center; position: absolute; left: 50%; transform: translateX(-50%); }
         .icon-btn { width: 28px; height: 28px; background: #333; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #555; transition: 0.2s; color: #aaa; }
         .icon-btn:hover { border-color: var(--highlight); color: var(--highlight); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
         .icon-btn.active { color: var(--highlight); border-color: var(--highlight); box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); animation: pulse-audio 2s infinite; }
@@ -63,7 +74,7 @@
         
         @keyframes pulse-audio { 0% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } 50% { box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); } 100% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } }
 
-        .header-right { display: flex; gap: 15px; align-items: center; }
+        .header-right { display: flex; gap: 15px; align-items: center; transition: opacity 0.3s; }
         .passive-dock { display: flex; gap: 5px; }
         .passive-icon { width: 28px; height: 28px; background: #2d3748; border: 1px solid var(--rare); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: help; color: var(--rare); position: relative; }
         .passive-icon:hover::after { content: attr(data-desc); position: absolute; top: 140%; right: 0; left: auto; background: rgba(0,0,0,0.98); padding: 12px; font-size: 12px; line-height: 1.5; width: max-content; min-width: 120px; max-width: 220px; height: auto; white-space: pre-wrap; border: 1px solid #666; border-radius: 6px; color: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.9); z-index: 100; pointer-events: none; }
@@ -133,22 +144,37 @@
         .overlay.visible { opacity: 1; pointer-events: all; }
         
         /* 结算面板 - Revert 1.9.7 style */
-        .settle-modal { width: 900px; background: var(--modal-bg); border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.8); border: 1px solid #4a5c6a; overflow: hidden; display: flex; flex-direction: column; }
-        .settle-header { background: rgba(0,0,0,0.3); padding: 10px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; color: #fff; }
-        .multiplier-bar { display: flex; gap: 10px; align-items: center; font-family: monospace; font-size: 18px; color: var(--gold-color);}
-        .settle-content { display: flex; min-height: 300px; }
-        .settle-left { width: 35%; background: rgba(0,0,0,0.2); padding: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.1); gap: 15px; }
-        .settle-right { width: 65%; padding: 30px 40px; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+        /* [优化2] 弹窗尺寸与布局收缩优化 */
+        .settle-modal { 
+            width: 90%; 
+            max-width: 750px; /* 收缩最大宽度 */
+            background: var(--modal-bg); 
+            border-radius: 12px; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+            border: 1px solid #4a5c6a; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            max-height: 90vh; /* 确保不超出一屏 */
+        }
+        .settle-header { background: rgba(0,0,0,0.3); padding: 8px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; color: #fff; flex-shrink: 0; }
+        .multiplier-bar { display: flex; gap: 10px; align-items: center; font-family: monospace; font-size: 16px; color: var(--gold-color);}
+        
+        .settle-content { display: flex; min-height: 200px; flex: 1; overflow-y: auto; } /* 允许内容区滚动 */
+        .settle-left { width: 35%; background: rgba(0,0,0,0.2); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.1); gap: 10px; }
+        .settle-right { width: 65%; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 15px; }
+        
         .result-badge { background: #333; padding: 2px 10px; font-size: 12px; color: #aaa; margin-bottom: 5px; }
-        .win-title-tag { align-self: center; background: linear-gradient(90deg, #d35400, #e67e22); color: white; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; box-shadow: 0 0 15px rgba(230, 126, 34, 0.6); margin-bottom: 15px; }
-        .lose-title-tag { align-self: center; background: #555; color: #aaa; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; margin-bottom: 15px; }
-        .cards-display-row { display: flex; justify-content: center; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
-        .detail-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 4px; font-size: 14px; }
+        .win-title-tag { align-self: center; background: linear-gradient(90deg, #d35400, #e67e22); color: white; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; box-shadow: 0 0 15px rgba(230, 126, 34, 0.6); margin-bottom: 10px; }
+        .lose-title-tag { align-self: center; background: #555; color: #aaa; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; margin-bottom: 10px; }
+        .cards-display-row { display: flex; justify-content: center; gap: 8px; margin: 5px 0; flex-wrap: wrap; }
+        .detail-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 4px; font-size: 14px; }
         .detail-sub { font-size: 12px; color: #888; display: flex; gap: 10px; align-items: center;}
-        .settle-footer { padding: 20px; background: rgba(0,0,0,0.4); text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
-        .tags-container { margin-top: 10px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
-        /* 移除动效相关 CSS */
-        .score-tag { background: #333; border: 1px solid #555; padding: 5px 15px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
+        
+        .settle-footer { padding: 15px; background: rgba(0,0,0,0.4); text-align: center; border-top: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+        .tags-container { margin-top: 5px; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 8px; }
+        
+        .score-tag { background: #333; border: 1px solid #555; padding: 4px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 5px; }
         .tag-win { background: linear-gradient(90deg, #f1c40f, #f39c12); color: #fff; font-weight: bold; border: none; }
         .tag-fish { border:1px solid var(--highlight); color: #fff; font-weight: bold; }
         .tag-skill { border:1px solid var(--rare); color: var(--rare); }
@@ -156,7 +182,8 @@
         .reward-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
         .reward-card { width: 180px; height: 260px; background: #2d3748; border: 2px solid #4a5568; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 20px; text-align: center; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.5); position:relative;}
         .reward-card:hover { transform: scale(1.05); border-color: var(--rare); box-shadow: 0 0 25px rgba(213, 128, 255, 0.4); }
-        .info-panel { background: #1a1a1a; border: 1px solid #555; padding: 20px; border-radius: 8px; width: 500px; color: #ddd; box-shadow: 0 0 30px black; }
+        
+        .info-panel { background: #1a1a1a; border: 1px solid #555; padding: 20px; border-radius: 8px; width: 90%; max-width: 500px; color: #ddd; box-shadow: 0 0 30px black; }
         .info-title { color: var(--highlight); margin-bottom: 5px; text-align: center; font-size: 18px; font-weight: bold; }
         .info-desc { font-size: 12px; color: #888; text-align: center; margin-bottom: 20px; }
         .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #333; font-size: 14px; }
@@ -168,7 +195,8 @@
         .msg-title { font-size: 40px; font-weight: 800; margin-bottom: 20px; color: var(--danger); text-shadow: 0 0 20px rgba(0,0,0,0.8); }
         .msg-subtitle { font-size: 18px; color: #ccc; margin-bottom: 40px; }
         .msg-title.success { color: var(--gold-color); }
-        .letter-modal { width: 800px; max-width: 95%; background: rgba(18, 22, 30, 0.98); border: 2px solid var(--gold-color); border-radius: 12px; padding: 40px; box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.8); font-family: 'Times New Roman', serif; color: #d1d5db; line-height: 1.8; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
+        
+        .letter-modal { width: 95%; max-width: 800px; background: rgba(18, 22, 30, 0.98); border: 2px solid var(--gold-color); border-radius: 12px; padding: 30px; box-shadow: 0 0 50px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.8); font-family: 'Times New Roman', serif; color: #d1d5db; line-height: 1.8; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
         .letter-modal::before { content: '✉'; position: absolute; top: 15px; left: 20px; font-size: 24px; color: var(--gold-color); opacity: 0.5; }
         .letter-header { font-size: 32px; font-weight: bold; color: var(--gold-color); margin-bottom: 25px; text-align: center; border-bottom: 1px solid rgba(255, 215, 0, 0.2); padding-bottom: 15px; font-family: 'YouYuan', serif; }
         .letter-body { font-size: 15px; margin-bottom: 30px; text-align: justify; }
@@ -177,6 +205,25 @@
         .hl-txt { color: var(--highlight); font-weight: bold; }
         .gold-txt { color: var(--gold-color); font-weight: bold; }
         .info-footer { margin-top: 15px; font-size: 12px; color: #666; line-height: 1.5; border-top: 1px solid #444; padding-top: 10px; }
+
+        @media (max-width: 768px) {
+            .settle-modal {
+                width: 95%;
+                max-width: 400px; /* 强制手机窄屏更窄 */
+            }
+            .settle-content {
+                flex-direction: column; /* 手机端垂直排列 */
+            }
+            .settle-left, .settle-right {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                padding: 15px;
+            }
+            .settle-right { border-bottom: none; }
+            .win-title-tag, .lose-title-tag { font-size: 18px; padding: 4px 20px; }
+            .cards-display-row { transform: scale(0.9); margin: 0; }
+        }
 
         @media screen and (max-height: 600px) and (orientation: landscape) {
             :root { --card-width: 40px; --card-height: 56px; --mini-card-width: 32px; --mini-card-height: 44px; }
@@ -231,6 +278,15 @@
 </head>
 <body>
 
+<div id="splash-screen">
+    <svg class="splash-logo" viewBox="0 0 100 100">
+        <path d="M20,80 Q35,60 50,80 T80,80" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" />
+        <path d="M20,50 Q35,30 50,50 T80,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" />
+        <path d="M20,20 Q35,0 50,20 T80,20" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" />
+    </svg>
+    <div class="splash-text">FISHER GAME</div>
+</div>
+
 <div id="lobby-screen">
     <div class="waves-container">
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
@@ -265,11 +321,11 @@
         <div class="lobby-title-sub">无尽塔楼</div>
         <button class="btn btn-lobby" onclick="game.startGame()">开始挑战</button>
     </div>
-    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v2.1.0</div>
+    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v2.1.3</div>
 </div>
 
 <header>
-    <div class="header-left">
+    <div class="header-left lobby-hide" id="header-left-col">
         <div class="level-id" id="level-id">FLOOR 1-1</div>
         <div class="level-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div>
     </div>
@@ -287,7 +343,7 @@
             <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
         </div>
     </div>
-    <div class="header-right">
+    <div class="header-right lobby-hide" id="header-right-col">
         <div class="passive-dock" id="passive-list"></div>
         <div class="gold-container">
             <span class="bet-info" id="bet-display">下注: 0</span>
@@ -759,7 +815,37 @@ class Card {
 }
 
 class Game {
-    constructor() { this.resetGlobal(); this.initDOM(); this.audio = new AtmosphereAudio(); this.isAudioOn = true; }
+    constructor() { 
+        this.resetGlobal(); 
+        this.initDOM(); 
+        this.audio = new AtmosphereAudio(); 
+        this.isAudioOn = true; 
+        this.inGame = false; // Track if we are in game or lobby
+        this.initSplash();
+    }
+
+    initSplash() {
+        const splash = document.getElementById('splash-screen');
+        // Start audio interaction on click anywhere if blocked
+        document.addEventListener('click', () => {
+            this.audio.init();
+            if(this.isAudioOn) {
+                this.audio.start();
+                this.updateAudioBtn(true);
+            }
+            // Auto fullscreen logic
+            this.toggleFullscreen(); 
+        }, { once: true });
+
+        // Auto fade out splash
+        setTimeout(() => {
+            splash.classList.add('fade-out');
+            setTimeout(() => {
+                splash.style.display = 'none';
+                this.showLobby();
+            }, 1500);
+        }, 3000);
+    }
 
     resetGlobal() {
         this.levelIndex = 0; this.playerGold = 200;
@@ -772,17 +858,28 @@ class Game {
         this.opponentName = ""; 
         this.selectedOppCard = null;
         this.justDealt = false;
+        this.inGame = false;
+    }
+
+    showLobby() {
+        // Ensure audio starts if not started
+        this.audio.init();
+        if(this.isAudioOn) this.audio.start();
     }
 
     startGame() { 
         document.getElementById('lobby-screen').style.display = 'none'; 
+        document.getElementById('header-left-col').classList.remove('lobby-hide');
+        document.getElementById('header-right-col').classList.remove('lobby-hide');
+        
+        this.setOverlayState(true); // Tutorial overlay is active
         document.getElementById('tutorial-screen').classList.add('visible'); 
-        this.audio.init();
-        if(this.isAudioOn) {
-            this.audio.start();
-            this.updateAudioBtn(true);
-        }
-        this.toggleFullscreen(); // Auto fullscreen attempt
+        this.inGame = true;
+    }
+
+    setOverlayState(active) {
+        if(active) document.body.classList.add('overlay-active');
+        else document.body.classList.remove('overlay-active');
     }
 
     toggleAudio() {
@@ -805,7 +902,7 @@ class Game {
     toggleFullscreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
-                console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                // console.log(`Error attempting to enable fullscreen: ${err.message}`);
             });
         } else {
             if (document.exitFullscreen) {
@@ -814,8 +911,21 @@ class Game {
         }
     }
 
-    enterLevelOne() { document.getElementById('tutorial-screen').classList.remove('visible'); this.startLevel(); }
-    returnToLobby() { this.resetGlobal(); document.getElementById('overlay-screen').classList.remove('visible'); document.getElementById('lobby-screen').style.display = 'flex'; }
+    enterLevelOne() { 
+        document.getElementById('tutorial-screen').classList.remove('visible'); 
+        this.setOverlayState(false); 
+        this.startLevel(); 
+    }
+    returnToLobby() { 
+        this.resetGlobal(); 
+        document.getElementById('overlay-screen').classList.remove('visible'); 
+        this.setOverlayState(false);
+        document.getElementById('lobby-screen').style.display = 'flex';
+        document.getElementById('header-left-col').classList.add('lobby-hide');
+        document.getElementById('header-right-col').classList.add('lobby-hide');
+        this.inGame = false;
+    }
+    
     initDOM() { document.getElementById('btn-bait').onclick = () => this.confirmBait(); document.getElementById('btn-combo-opp').onclick = () => this.playRound('opp'); document.getElementById('btn-combo-mine').onclick = () => this.playRound('mine'); document.getElementById('btn-play-hand').onclick = () => this.playRound('hand'); document.getElementById('btn-skill-ok').onclick = () => this.executeSkill(); document.getElementById('btn-skill-no').onclick = () => this.cancelSkill(); }
 
     startLevel() {
@@ -868,7 +978,6 @@ class Game {
 
         this.playerHand = draw(7).sort((a,b)=>b.value - a.value);
         
-        // AI Balancing Logic for Early Levels
         let aiHand = [];
         const isNerfLevel = ['1-1', '1-2', '2-1', '2-2'].includes(this.config.id);
         
@@ -879,13 +988,12 @@ class Game {
                 if (!PokerEngine.isTooStrong(aiHand)) {
                     break; 
                 }
-                // Return cards to pile and reshuffle if too strong
                 this.drawPile.push(...aiHand);
                 this.drawPile.sort(() => Math.random() - 0.5);
                 aiHand = [];
                 attempts++;
             }
-            if (aiHand.length === 0) aiHand = draw(7); // Fallback if logic fails
+            if (aiHand.length === 0) aiHand = draw(7); 
         } else {
             aiHand = draw(7);
         }
@@ -1092,6 +1200,9 @@ class Game {
     showSettlePanel(win, myRes, aiRes, gold, myCards, aiCards, mySrc, aiSrc, fish, isEnd, failMsg) {
         const ov = document.getElementById('overlay-screen'); ov.classList.add('visible');
         
+        // [优化1] 弹窗时隐藏顶部栏
+        this.setOverlayState(true);
+
         // Play Audio with Ducking
         if(win) this.audio.playWin();
         else this.audio.playLose();
@@ -1142,11 +1253,42 @@ class Game {
 
     showFailPanel(myRes, aiRes, myCards, aiCards, reason) { 
         this.audio.playLose();
-        const ov = document.getElementById('overlay-screen'); ov.classList.add('visible'); ov.innerHTML = `<div class="settle-modal" style="border-color:var(--danger)"><div class="settle-header" style="background:#400;">DEFEAT</div><div class="settle-content" style="align-items:center; justify-content:center; flex-direction:column; gap:20px;"><h2 style="color:var(--danger)">等着吧～我会赢回来的！</h2><div style="color:#aaa;">对手: ${aiRes.name}</div><div class="cards-display-row">${aiCards.map(c=>this.htmlCard(c,true,true,false)).join('')}</div><div style="color:#888;">我的: ${myRes.name}</div><div class="cards-display-row">${myCards.map(c=>this.htmlCard(c,true,true,false)).join('')}</div><div style="margin-top:10px; color:#e74c3c; font-weight:bold;">${reason || "目标未达成"}</div></div><div class="settle-footer"><button class="btn btn-primary" style="width:200px; margin:0 auto;" onclick="game.showFailScreen()">确定</button></div></div>`; 
+        this.setOverlayState(true);
+        const ov = document.getElementById('overlay-screen'); 
+        ov.classList.add('visible');
+
+        // Card generation helper
+        const getHTML = (cards) => cards.map(c => this.htmlCard(c, true, true, false)).join('');
+
+        // New Split Layout for Fail Panel
+        ov.innerHTML = `
+        <div class="settle-modal" style="border-color:var(--danger)">
+            <div class="settle-header" style="background:#400;">DEFEAT</div>
+            <div class="settle-content">
+                <div class="settle-left" style="justify-content:center; gap:20px;">
+                    <h2 style="color:var(--danger); font-size:24px; text-align:center; line-height:1.4;">等着吧～<br>我会赢回来的！</h2>
+                    <div style="color:#e74c3c; font-weight:bold; text-align:center; font-size:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; width:100%;">${reason || "目标未达成"}</div>
+                </div>
+                <div class="settle-right" style="justify-content:flex-start; gap:15px;">
+                    <div style="text-align:center;">
+                        <div style="font-size:12px; color:#aaa; margin-bottom:5px;">对手: ${aiRes.name}</div>
+                        <div class="cards-display-row">${getHTML(aiCards)}</div>
+                    </div>
+                    <div style="text-align:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                        <div style="font-size:12px; color:#888; margin-bottom:5px;">我的: ${myRes.name}</div>
+                        <div class="cards-display-row">${getHTML(myCards)}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="settle-footer">
+                <button class="btn btn-primary" style="width:200px; margin:0 auto;" onclick="game.showFailScreen()">确定</button>
+            </div>
+        </div>`;
     }
     showFailScreen() { const ov = document.getElementById('overlay-screen'); ov.innerHTML = `<div class="msg-screen-content"><div class="msg-title">挑战失败</div><div class="msg-subtitle">无尽塔楼的试炼还在继续...</div><button class="btn btn-lobby" onclick="game.returnToLobby()">回到大厅</button></div>`; }
     
     pickRewardPhase(pickCount, getCount) {
+        this.setOverlayState(true);
         this.pendingPicks = getCount; const ov = document.getElementById('overlay-screen');
         let html = `<div style="text-align:center"><h2 style="color:var(--gold-color); margin-bottom:20px;">选择战利品 (${pickCount} 选 ${getCount})</h2><div class="reward-container">`;
         const pool = [...REWARD_POOL]; const rw = [];
@@ -1176,8 +1318,18 @@ class Game {
             else { game.nextLevelAction(); }
         }, 500); }
     }
-    nextLevelAction() { document.getElementById('overlay-screen').classList.remove('visible'); this.levelIndex++; this.startLevel(); }
-    nextRound() { document.getElementById('overlay-screen').classList.remove('visible'); this.currentRound++; this.startRound(); }
+    nextLevelAction() { 
+        document.getElementById('overlay-screen').classList.remove('visible'); 
+        this.setOverlayState(false);
+        this.levelIndex++; 
+        this.startLevel(); 
+    }
+    nextRound() { 
+        document.getElementById('overlay-screen').classList.remove('visible'); 
+        this.setOverlayState(false);
+        this.currentRound++; 
+        this.startRound(); 
+    }
 
     activateSkill(k) { this.skillMode = k; this.selectedCards=[]; this.selectedOppCard = null; this.updateControls(); this.renderScene(); }
     cancelSkill() { this.skillMode=null; this.selectedCards=[]; this.selectedOppCard = null; this.updateControls(); this.renderScene(); }
@@ -1262,16 +1414,29 @@ class Game {
     }
     toggleInfo() {
         const sc = document.getElementById('info-screen');
-        if(sc.classList.contains('visible')) { sc.classList.remove('visible'); return; }
+        if(sc.classList.contains('visible')) { 
+            sc.classList.remove('visible'); 
+            this.setOverlayState(false);
+            return; 
+        }
+        
+        this.setOverlayState(true);
         const ct = document.getElementById('info-content'); ct.innerHTML = '';
+        
+        const isDefault = !this.inGame; 
+
         HAND_TYPES_BASE.forEach(t => {
             let val = t.base; let act = false; let mult = 0;
-            this.passives.forEach(p=>{ 
-                if(p.trigger===t.name) { 
-                    if (p.val) { val += p.val; act=true; }
-                } 
-                if(p.trigger===t.name && p.mult) { mult+=p.mult; } 
-            });
+            
+            if (!isDefault) {
+                this.passives.forEach(p=>{ 
+                    if(p.trigger===t.name) { 
+                        if (p.val) { val += p.val; act=true; }
+                    } 
+                    if(p.trigger===t.name && p.mult) { mult+=p.mult; } 
+                });
+            }
+
             ct.innerHTML += `<div class="info-row"><span>${t.name} <span style="font-size:10px; color:#666">(${t.en})</span></span><span style="${act?'color:var(--gold-color)':''}">${val}金币${act?'↑':''}</span><span style="${mult>0?'color:var(--rare)':''}">技能倍数：${mult}</span></div>`;
         });
         sc.classList.add('visible');
