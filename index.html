@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Fishing Poker [v2.1.3] - Fail Panel Layout Fix</title>
+    <title>Fishing Poker [v2.1.8] - Logic & Difficulty Tuned</title>
     <style>
         /* ================= UI 样式保持 v1.9.9 基础 ================= */
         :root {
@@ -140,7 +140,7 @@
         .skill-count { position: absolute; bottom: 2px; right: 2px; font-size: 9px; background: #000; padding: 1px 3px; border-radius: 3px; }
         [data-desc]:hover::after { content: attr(data-desc); position: absolute; bottom: 110%; right: 0; background: rgba(0,0,0,0.95); padding: 8px; font-size: 11px; width: 140px; z-index: 100; color: #fff; border-radius: 4px; border: 1px solid #555; pointer-events: none; box-shadow: 0 5px 15px rgba(0,0,0,0.8); }
         
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 400; opacity: 0; pointer-events: none; transition: 0.3s; }
         .overlay.visible { opacity: 1; pointer-events: all; }
         
         /* 结算面板 - Revert 1.9.7 style */
@@ -321,7 +321,7 @@
         <div class="lobby-title-sub">无尽塔楼</div>
         <button class="btn btn-lobby" onclick="game.startGame()">开始挑战</button>
     </div>
-    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v2.1.3</div>
+    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v2.1.8</div>
 </div>
 
 <header>
@@ -347,7 +347,7 @@
         <div class="passive-dock" id="passive-list"></div>
         <div class="gold-container">
             <span class="bet-info" id="bet-display">下注: 0</span>
-            <div class="gold-pill">💰 <span id="gold-display">200</span></div>
+            <div class="gold-pill">💰 <span id="gold-display">0</span></div>
         </div>
     </div>
 </header>
@@ -409,6 +409,7 @@
             同花顺 > 四炸 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 单牌<br>
             花色大小：黑桃 > 红心 > 方块 > 梅花<br>
             点数大小：A > K > Q > J > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2
+            <br><span style="color:var(--gold-color)">每局获得金币：为本局牌型对应金币数的 10%</span>
         </div>
     </div>
 </div>
@@ -790,21 +791,19 @@ const PokerEngine = {
     isTooStrong: (cards) => {
         const suits = {};
         cards.forEach(c => suits[c.suit] = (suits[c.suit]||0) + 1);
-        if (Object.values(suits).some(c => c >= 5)) return true; // Flush
+        if (Object.values(suits).some(c => c >= 4)) return true; // Nerf: No possible flush
 
         const values = cards.map(c => c.value).sort((a,b)=>a-b);
         const counts = {};
         values.forEach(v => counts[v] = (counts[v]||0) + 1);
         const countVals = Object.values(counts);
-        if (countVals.some(c => c >= 4)) return true; // 4Kind
-        if (countVals.includes(3) && (countVals.includes(2) || countVals.filter(c=>c===3).length > 1)) return true; // FullHouse
+        if (countVals.some(c => c >= 3)) return true; // Nerf: No 3-kind, FullHouse, 4Kind
 
         const uniqueVals = [...new Set(values)];
-        if (uniqueVals.length >= 5) {
-            for(let i=0; i <= uniqueVals.length - 5; i++) {
-                if (uniqueVals[i+4] - uniqueVals[i] === 4) return true; // Straight
-            }
-            if (uniqueVals.includes(14) && uniqueVals.includes(2) && uniqueVals.includes(3) && uniqueVals.includes(4) && uniqueVals.includes(5)) return true; // Wheel
+        if (uniqueVals.length >= 4) {
+             for(let i=0; i <= uniqueVals.length - 4; i++) {
+                if (uniqueVals[i+3] - uniqueVals[i] === 3) return true; // Nerf: No possible Straight
+             }
         }
         return false;
     }
@@ -833,8 +832,6 @@ class Game {
                 this.audio.start();
                 this.updateAudioBtn(true);
             }
-            // Auto fullscreen logic
-            this.toggleFullscreen(); 
         }, { once: true });
 
         // Auto fade out splash
@@ -848,7 +845,8 @@ class Game {
     }
 
     resetGlobal() {
-        this.levelIndex = 0; this.playerGold = 200;
+        this.levelIndex = 0; 
+        this.playerGold = 0; 
         this.activeSkills = ['xuanji', 'yundu', 'huanzhu'];
         this.skillUsage = { xuanji: SKILLS_DB.xuanji.maxUses, yundu: SKILLS_DB.yundu.maxUses };
         this.skillMaxModifiers = { xuanji: 0, yundu: 0 };
@@ -872,9 +870,13 @@ class Game {
         document.getElementById('header-left-col').classList.remove('lobby-hide');
         document.getElementById('header-right-col').classList.remove('lobby-hide');
         
+        // Hide info if open from lobby
+        document.getElementById('info-screen').classList.remove('visible');
+
         this.setOverlayState(true); // Tutorial overlay is active
         document.getElementById('tutorial-screen').classList.add('visible'); 
         this.inGame = true;
+        this.toggleFullscreen(); 
     }
 
     setOverlayState(active) {
@@ -979,6 +981,7 @@ class Game {
         this.playerHand = draw(7).sort((a,b)=>b.value - a.value);
         
         let aiHand = [];
+        // [Optimized Nerf] Check for early levels
         const isNerfLevel = ['1-1', '1-2', '2-1', '2-2'].includes(this.config.id);
         
         if (isNerfLevel) {
@@ -1148,28 +1151,61 @@ class Game {
         const aiOpts = [{ t:'mine', ...aiBestMine }, { t:'opp', ...aiBestOpp }, { t:'none', ...aiDirect }]; aiOpts.sort((a,b)=>b.rawScore - a.rawScore); const aiRes = aiOpts[0];
         const win = myRes.rawScore > aiRes.rawScore; let reward = 0; let fish = false;
         
-        // Revert 1: Logic matches 1.9.7 directly
+        let finalPayout = 0;
+
         if(win) {
             fish = (baitSrc==='mine' && aiRes.t==='mine');
-            // Simplified Reward Calc (1.9.7 style logic integrated)
-            reward = myRes.payout * (fish ? 2 : 1);
-            if(this.currentBet > 0) reward += (this.currentBet * 2);
+            let baseVal = myRes.payout;
+            let fishVal = fish ? baseVal : 0;
+            let betVal = this.currentBet > 0 ? this.currentBet * 2 : 0;
+            let totalVal = baseVal + fishVal + betVal;
+            finalPayout = Math.floor(totalVal * 0.10); // 10%
         } else {
             if(this.currentBet > 0) this.currentTargetGold += this.currentBet;
         }
 
-        this.levelEarnedGold += reward; this.playerGold += reward; this.updateHeader();
-        
-        let pass = false; if(this.config.target==='win') pass = win; else if(this.config.target==='gold') pass = win && reward >= this.currentTargetGold; else if(this.config.target==='accumulate') pass = this.levelEarnedGold >= this.currentTargetGold;
-        let failReason = ""; if(!win) failReason = "牌面数值低于对手"; else if(this.config.target==='gold' && reward < this.currentTargetGold) failReason = `目标未达: ${reward}/${this.currentTargetGold}`; else if(this.config.target==='accumulate' && !pass && this.currentRound===3) failReason = `总金币不足`;
+        let checkReward = 0;
+        if (win) {
+             checkReward = myRes.payout;
+             if (fish) checkReward += myRes.payout;
+             if (this.currentBet > 0) checkReward += (this.currentBet * 2);
+        }
 
-        // Revert 2: Show Panel regardless of 8-3 or Boss logic initially.
+        this.levelEarnedGold += checkReward; 
+        
+        this.playerGold += finalPayout; 
+        this.updateHeader();
+        
+        let pass = false; 
+        if(this.config.target==='win') pass = win; 
+        else if(this.config.target==='gold') pass = win && checkReward >= this.currentTargetGold; 
+        else if(this.config.target==='accumulate') pass = this.levelEarnedGold >= this.currentTargetGold;
+        
+        let failReason = "";
+        
+        if (this.config.target === 'win') {
+             if (!win) failReason = "你的牌型未赢过对方！";
+        } 
+        else if (this.config.target === 'gold') {
+             if (!win) {
+                 failReason = "你的牌型未赢过对方！";
+             } else if (checkReward < this.currentTargetGold) {
+                 // [BugFix 2.1.8] Always show x/n if goal failed, even if win
+                 failReason = `关卡金币不足 ${Math.floor(checkReward)}/${this.currentTargetGold}`;
+             }
+        }
+        else if (this.config.target === 'accumulate') {
+             if (!pass && this.currentRound === 3) {
+                  failReason = `关卡金币不足 ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;
+             }
+        }
+
         if(this.config.target === 'accumulate') {
-            if(pass) this.showSettlePanel(true, myRes, aiRes, reward, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
-            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, reward, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "");
+            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
+            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "");
             else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason);
         } else {
-            if(pass) this.showSettlePanel(true, myRes, aiRes, reward, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
+            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
             else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason);
         }
     }
@@ -1187,7 +1223,6 @@ class Game {
             const current = Math.floor(start + (target - start) * ease);
             el.innerText = current;
             
-            // Randomly play coin sound
             if(progress < 1 && Math.random() > 0.8) this.audio.playCoin();
 
             if(progress < 1) requestAnimationFrame(step);
@@ -1199,39 +1234,34 @@ class Game {
     // Revert 1.9.7: Static Show Panel
     showSettlePanel(win, myRes, aiRes, gold, myCards, aiCards, mySrc, aiSrc, fish, isEnd, failMsg) {
         const ov = document.getElementById('overlay-screen'); ov.classList.add('visible');
-        
-        // [优化1] 弹窗时隐藏顶部栏
         this.setOverlayState(true);
 
-        // Play Audio with Ducking
         if(win) this.audio.playWin();
         else this.audio.playLose();
 
         const myTitle = win ? `${myRes.name} 胜` : `${myRes.name}`; const titleCls = win ? "win-title-tag" : "lose-title-tag";
         const getHTML = (cards) => { let h = ''; const allBait = [...this.playerBait, ...this.oppBait]; cards.forEach(c => { const isB = allBait.some(b => b.id === c.id); h += this.htmlCard(c, true, true, !!isB); }); return h; };
-        const mySourceTxt = mySrc==='mine'?'使用我的放牌':(mySrc==='opp'?'使用TA的放牌':'直接出牌'); const baitBonus = fish ? `<span style="color:var(--highlight); margin-left:10px;">⚡ 钓鱼成功 x2</span>` : '';
+        const mySourceTxt = mySrc==='mine'?'使用我的放牌':(mySrc==='opp'?'使用TA的放牌':'直接出牌'); 
+        
+        // [Optimized 2.1.7] Right aligned bonus
+        const baitBonus = fish ? `<span style="color:var(--highlight); margin-left:auto; display:flex; gap:10px;"><span>⚡ 钓鱼成功 x2</span> <span class="gold-val">金币 +${myRes.payout}</span></span>` : '';
 
-        // Win Badge Check inside (Retained)
         if(isEnd && this.levelIndex >= LEVEL_CONFIG.length - 1 && win) { ov.innerHTML = `<div style="text-align:center; color:gold;"><div style="font-size:60px;">🦊</div><h1>无尽塔楼，挑战成功</h1><p>恭喜获得狐狸徽章</p><button class="btn btn-primary" style="width:200px; margin-top:20px;" onclick="game.returnToLobby()">返回大厅</button></div>`; return; }
 
         const pickCount = this.config.rewardPick || 3; const getCount = this.config.rewardGet || 1;
         let nextAction = isEnd ? `game.pickRewardPhase(${pickCount}, ${getCount})` : "game.nextRound()"; let btnTxt = isEnd ? "领取奖励" : "下一回合";
 
-        // Revert: Generate Tags Static
         let tagsHTML = ''; 
         if(win) { 
             tagsHTML += `<div class="score-tag tag-win" style="opacity:1; transform:scale(1);">${myRes.name} 胜</div>`; 
             if(fish) tagsHTML += `<div class="score-tag tag-fish" style="opacity:1; transform:scale(1);">🎣 钓鱼 x2</div>`; 
             this.passives.forEach(p => { 
-                // Re-check trigger logic purely for display tag match
                 if(p.trigger === myRes.name || p.trigger === 'odd' || p.trigger === 'even' || p.trigger === 'face') { 
-                    // Simplified: just show active skills for this hand
                    tagsHTML += `<div class="score-tag tag-skill" style="opacity:1; transform:scale(1);">${p.icon} ${p.name}</div>`; 
                 }
             }); 
         }
         
-        // Updated Header HTML for Rolling Gold
         ov.innerHTML = `
         <div class="settle-modal">
             <div class="settle-header"><div>${win?'VICTORY':'MATCH RESULT'}</div><div class="multiplier-bar" style="font-size:16px;">本局获得：💰 <span id="settle-gold-num">0</span></div></div>
@@ -1240,14 +1270,19 @@ class Game {
                 <div class="settle-right">
                     <div class="${titleCls}">${myTitle}</div>
                     <div class="cards-display-row" style="transform:scale(1.1)">${getHTML(myCards)}</div>
-                    <div style="width:100%; margin-top:20px;"><div class="detail-row"><span>你的牌型：${myRes.name}</span><span class="gold-val">金币 +${myRes.payout}</span></div><div class="detail-row" style="margin-top:5px; background:rgba(0,0,0,0.2);"><div class="detail-sub"><span>${mySourceTxt}</span>${baitBonus}</div></div></div>
+                    <div style="width:100%; margin-top:20px;">
+                        <div class="detail-row"><span>你的牌型：${myRes.name}</span><span class="gold-val">金币 +${myRes.payout}</span></div>
+                        <div class="detail-row" style="margin-top:5px; background:rgba(0,0,0,0.2);">
+                            <span style="font-size:12px; color:#888">${mySourceTxt}</span>
+                            ${baitBonus}
+                        </div>
+                    </div>
                     <div class="tags-container" style="flex-wrap:wrap; opacity:1;">${tagsHTML}</div>
                 </div>
             </div>
             <div class="settle-footer"><button class="btn btn-primary" style="width:200px; margin:0 auto;" onclick="${nextAction}">${btnTxt}</button></div>
         </div>`;
 
-        // Trigger animation
         if(win) this.animateGold(gold);
     }
 
@@ -1257,10 +1292,8 @@ class Game {
         const ov = document.getElementById('overlay-screen'); 
         ov.classList.add('visible');
 
-        // Card generation helper
         const getHTML = (cards) => cards.map(c => this.htmlCard(c, true, true, false)).join('');
 
-        // New Split Layout for Fail Panel
         ov.innerHTML = `
         <div class="settle-modal" style="border-color:var(--danger)">
             <div class="settle-header" style="background:#400;">DEFEAT</div>
@@ -1353,6 +1386,13 @@ class Game {
                 const pIdx = this.playerHand.findIndex(c => c.id === m.id); 
                 if(pIdx > -1) { 
                     this.playerHand[pIdx] = t; this.oppHand[r] = m; 
+                    
+                    if (this.config.openHand || this.oppHand.some(c => c.revealed)) {
+                        m.revealed = true;
+                    } else {
+                        m.revealed = false;
+                    }
+
                     this.playerHand.sort((a,b)=>b.value-a.value); 
                     this.skillUsage.yundu--; 
                     
@@ -1368,6 +1408,13 @@ class Game {
                 const myIdx = this.playerHand.findIndex(c => c.id === mine.id); const oppIdx = this.oppHand.findIndex(c => c.id === theirs.id); 
                 if (myIdx > -1 && oppIdx > -1) { 
                     this.playerHand[myIdx] = theirs; this.oppHand[oppIdx] = mine; 
+                    
+                    if (this.config.openHand || this.oppHand.some(c => c.revealed)) {
+                        mine.revealed = true;
+                    } else {
+                        mine.revealed = false;
+                    }
+
                     this.playerHand.sort((a,b)=>b.value-a.value); 
                     this.skillUsage.blast--; 
 
@@ -1380,7 +1427,7 @@ class Game {
         } else if (this.skillMode==='xinjing') {
             if(this.oppBait.length === 0) { const sort = [...this.oppHand].sort((a,b)=>a.value-b.value); this.oppBait = [sort[0], sort[1]]; this.oppHand = sort.slice(2); }
             this.oppBait.forEach(c => c.revealed = true); this.skillUsage.xinjing--; this.renderScene();
-            this.cancelSkill(); // Immediately cancel skill mode to refresh view
+            this.cancelSkill();
         } else if (this.skillMode==='abyss') {
             this.oppHand.forEach(c => c.revealed = true); this.skillUsage.abyss--;
             this.cancelSkill();
@@ -1389,7 +1436,6 @@ class Game {
             this.cancelSkill();
         }
         
-        // Remove manual cancel for swap skills as they have setTimeout logic
         if (['xuanji','yundu','blast'].includes(this.skillMode)) {
             this.skillMode = null; 
             this.selectedOppCard = null;
