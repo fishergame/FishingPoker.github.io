@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Fishing Poker [v2.1.8] - Logic & Difficulty Tuned</title>
+    <title>Fishing Poker [v3.0.2] - Detail & Economy Polish</title>
     <style>
         /* ================= UI 样式保持 v1.9.9 基础 ================= */
         :root {
@@ -56,10 +56,7 @@
         
         /* Header */
         header { height: 60px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid #333; z-index: 201; position:relative; transition: transform 0.3s ease-in-out; }
-        
-        /* 弹窗时隐藏顶部栏 */
         body.overlay-active header { display: none; }
-
         .header-left { display: flex; flex-direction: column; transition: opacity 0.3s; }
         .level-id { font-size: 20px; color: var(--highlight); font-weight: 800; letter-spacing: 1px; }
         .level-goal { font-size: 12px; color: #bbb; margin-top: 2px; }
@@ -71,13 +68,17 @@
         .icon-btn:hover { border-color: var(--highlight); color: var(--highlight); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
         .icon-btn.active { color: var(--highlight); border-color: var(--highlight); box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); animation: pulse-audio 2s infinite; }
         .icon-btn svg { width: 14px; height: 14px; fill: currentColor; }
-        
         @keyframes pulse-audio { 0% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } 50% { box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); } 100% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } }
 
         .header-right { display: flex; gap: 15px; align-items: center; transition: opacity 0.3s; }
-        .passive-dock { display: flex; gap: 5px; }
-        .passive-icon { width: 28px; height: 28px; background: #2d3748; border: 1px solid var(--rare); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: help; color: var(--rare); position: relative; }
-        .passive-icon:hover::after { content: attr(data-desc); position: absolute; top: 140%; right: 0; left: auto; background: rgba(0,0,0,0.98); padding: 12px; font-size: 12px; line-height: 1.5; width: max-content; min-width: 120px; max-width: 220px; height: auto; white-space: pre-wrap; border: 1px solid #666; border-radius: 6px; color: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.9); z-index: 100; pointer-events: none; }
+        .passive-dock { display: flex; gap: 5px; max-width: 220px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .passive-dock::-webkit-scrollbar { display: none; }
+        .passive-icon { width: 28px; height: 28px; background: #2d3748; border: 1px solid var(--rare); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: help; color: var(--rare); position: relative; flex-shrink: 0; }
+        
+        #global-tooltip {
+            position: fixed; background: rgba(0,0,0,0.95); padding: 10px 15px; font-size: 12px; line-height: 1.5; border: 1px solid #666; border-radius: 6px; color: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.9); z-index: 9999; pointer-events: none; display: none; max-width: 220px; white-space: pre-wrap;
+        }
+
         .gold-container { display: flex; align-items: center; gap: 10px; }
         .bet-info { font-size: 12px; color: #ff9f43; font-weight: bold; animation: pulse 1s infinite; display: none; }
         .gold-pill { color: var(--gold-color); font-weight: bold; font-size: 16px; background: rgba(255, 215, 0, 0.1); padding: 5px 12px; border-radius: 4px; border: 1px solid rgba(255, 215, 0, 0.3); }
@@ -143,24 +144,11 @@
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 400; opacity: 0; pointer-events: none; transition: 0.3s; }
         .overlay.visible { opacity: 1; pointer-events: all; }
         
-        /* 结算面板 - Revert 1.9.7 style */
-        /* [优化2] 弹窗尺寸与布局收缩优化 */
-        .settle-modal { 
-            width: 90%; 
-            max-width: 750px; /* 收缩最大宽度 */
-            background: var(--modal-bg); 
-            border-radius: 12px; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.8); 
-            border: 1px solid #4a5c6a; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            max-height: 90vh; /* 确保不超出一屏 */
-        }
+        .settle-modal { width: 90%; max-width: 750px; background: var(--modal-bg); border-radius: 12px; box-shadow: 0 0 50px rgba(0,0,0,0.8); border: 1px solid #4a5c6a; overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; }
         .settle-header { background: rgba(0,0,0,0.3); padding: 8px 15px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; color: #fff; flex-shrink: 0; }
         .multiplier-bar { display: flex; gap: 10px; align-items: center; font-family: monospace; font-size: 16px; color: var(--gold-color);}
         
-        .settle-content { display: flex; min-height: 200px; flex: 1; overflow-y: auto; } /* 允许内容区滚动 */
+        .settle-content { display: flex; min-height: 200px; flex: 1; overflow-y: auto; }
         .settle-left { width: 35%; background: rgba(0,0,0,0.2); padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(255,255,255,0.1); gap: 10px; }
         .settle-right { width: 65%; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 15px; }
         
@@ -207,19 +195,9 @@
         .info-footer { margin-top: 15px; font-size: 12px; color: #666; line-height: 1.5; border-top: 1px solid #444; padding-top: 10px; }
 
         @media (max-width: 768px) {
-            .settle-modal {
-                width: 95%;
-                max-width: 400px; /* 强制手机窄屏更窄 */
-            }
-            .settle-content {
-                flex-direction: column; /* 手机端垂直排列 */
-            }
-            .settle-left, .settle-right {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                padding: 15px;
-            }
+            .settle-modal { width: 95%; max-width: 400px; }
+            .settle-content { flex-direction: column; }
+            .settle-left, .settle-right { width: 100%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 15px; }
             .settle-right { border-bottom: none; }
             .win-title-tag, .lose-title-tag { font-size: 18px; padding: 4px 20px; }
             .cards-display-row { transform: scale(0.9); margin: 0; }
@@ -286,6 +264,8 @@
     </svg>
     <div class="splash-text">FISHER GAME</div>
 </div>
+<!-- Global Tooltip for Passive Icons -->
+<div id="global-tooltip"></div>
 
 <div id="lobby-screen">
     <div class="waves-container">
@@ -321,7 +301,7 @@
         <div class="lobby-title-sub">无尽塔楼</div>
         <button class="btn btn-lobby" onclick="game.startGame()">开始挑战</button>
     </div>
-    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v2.1.8</div>
+    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v3.0.2</div>
 </div>
 
 <header>
@@ -669,11 +649,36 @@ class AtmosphereAudio {
 // =================== 配置区 ===================
 const LEVEL_CONFIG = [];
 for (let floor = 1; floor <= 8; floor++) {
-    LEVEL_CONFIG.push(
-        { id: `${floor}-1`, floor: floor, step: 1, target: 'win', gold: 0, rounds: 1, openHand: false, name: '暗牌-胜负局', desc: '牌型赢过对方', rewardPick: 3, rewardGet: 1 },
-        { id: `${floor}-2`, floor: floor, step: 2, target: 'gold', gold: 150 * floor, rounds: 1, openHand: false, name: '暗牌-金币局', desc: `牌型赢过对方，获得金币大于 ${150 * floor}`, rewardPick: 3, rewardGet: 1 },
-        { id: `${floor}-3`, floor: floor, step: 3, target: 'accumulate', gold: 400 * floor, rounds: 3, openHand: true, name: '明牌-金币挑战', desc: `3 回合内金币 > x/${400 * floor}`, rewardPick: 4, rewardGet: 2, boss: true }
-    );
+    // [New Level System v3.0.0]
+    // Step 1: Best of 3 (x-1)
+    LEVEL_CONFIG.push({
+        id: `${floor}-1`,
+        floor: floor,
+        step: 1,
+        target: 'best_of_3',
+        gold: 0,
+        rounds: 3,
+        openHand: false,
+        name: '暗牌-3局2胜',
+        desc: '3局2胜，回合牌型赢过对方即胜',
+        rewardPick: 3,
+        rewardGet: 1
+    });
+    // Step 2: Boss Accumulate (x-2) - Renamed from old x-3
+    LEVEL_CONFIG.push({
+        id: `${floor}-2`, 
+        floor: floor,
+        step: 2,
+        target: 'accumulate',
+        gold: 400 * floor,
+        rounds: 3,
+        openHand: false, 
+        name: '暗牌-金币挑战',
+        desc: `3 回合内金币 > x/${400 * floor}`,
+        rewardPick: 4,
+        rewardGet: 2,
+        boss: true
+    });
 }
 
 const OPPONENT_PERSONAS = {
@@ -797,12 +802,14 @@ const PokerEngine = {
         const counts = {};
         values.forEach(v => counts[v] = (counts[v]||0) + 1);
         const countVals = Object.values(counts);
-        if (countVals.some(c => c >= 3)) return true; // Nerf: No 3-kind, FullHouse, 4Kind
+        
+        if (countVals.some(c => c >= 3)) return true; 
+        if (countVals.filter(c => c === 2).length >= 2) return true;
 
         const uniqueVals = [...new Set(values)];
         if (uniqueVals.length >= 4) {
              for(let i=0; i <= uniqueVals.length - 4; i++) {
-                if (uniqueVals[i+3] - uniqueVals[i] === 3) return true; // Nerf: No possible Straight
+                if (uniqueVals[i+3] - uniqueVals[i] === 3) return true; 
              }
         }
         return false;
@@ -853,10 +860,13 @@ class Game {
         this.passives = []; this.obtainedItems = []; this.upgradeCounts = { yunyan: 0, xuanshu: 0, huance: 0 };
         this.betUsedThisRound = false; this.betRatios = [0.3, 0.5]; this.maxSlots = 6; this.bossDeck = null;
         this.drawPile = [];
+        this.discardPile = [];
         this.opponentName = ""; 
         this.selectedOppCard = null;
         this.justDealt = false;
         this.inGame = false;
+        this.currentLevelWins = 0; 
+        this.currentLevelLosses = 0;
     }
 
     showLobby() {
@@ -928,7 +938,47 @@ class Game {
         this.inGame = false;
     }
     
-    initDOM() { document.getElementById('btn-bait').onclick = () => this.confirmBait(); document.getElementById('btn-combo-opp').onclick = () => this.playRound('opp'); document.getElementById('btn-combo-mine').onclick = () => this.playRound('mine'); document.getElementById('btn-play-hand').onclick = () => this.playRound('hand'); document.getElementById('btn-skill-ok').onclick = () => this.executeSkill(); document.getElementById('btn-skill-no').onclick = () => this.cancelSkill(); }
+    initDOM() { 
+        document.getElementById('btn-bait').onclick = () => this.confirmBait(); 
+        document.getElementById('btn-combo-opp').onclick = () => this.playRound('opp'); 
+        document.getElementById('btn-combo-mine').onclick = () => this.playRound('mine'); 
+        document.getElementById('btn-play-hand').onclick = () => this.playRound('hand'); 
+        document.getElementById('btn-skill-ok').onclick = () => this.executeSkill(); 
+        document.getElementById('btn-skill-no').onclick = () => this.cancelSkill(); 
+
+        const tooltip = document.getElementById('global-tooltip');
+        
+        document.getElementById('passive-list').addEventListener('mouseover', (e) => {
+             const target = e.target.closest('.passive-icon');
+             if(target) {
+                 const desc = target.getAttribute('data-desc');
+                 if(desc) {
+                     tooltip.innerText = desc;
+                     tooltip.style.display = 'block';
+                     const rect = target.getBoundingClientRect();
+                     tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px';
+                     tooltip.style.top = (rect.bottom + 10) + 'px';
+                 }
+             }
+        });
+        document.getElementById('passive-list').addEventListener('mouseout', (e) => {
+             tooltip.style.display = 'none';
+        });
+        document.getElementById('passive-list').addEventListener('click', (e) => {
+             const target = e.target.closest('.passive-icon');
+             if(target) {
+                 const desc = target.getAttribute('data-desc');
+                 if(desc) {
+                     tooltip.innerText = desc;
+                     tooltip.style.display = 'block';
+                     const rect = target.getBoundingClientRect();
+                     tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px';
+                     tooltip.style.top = (rect.bottom + 10) + 'px';
+                     setTimeout(() => tooltip.style.display = 'none', 3000);
+                 }
+             }
+        });
+    }
 
     startLevel() {
         this.config = LEVEL_CONFIG[this.levelIndex];
@@ -939,6 +989,9 @@ class Game {
             this.skillUsage.mirror = SKILLS_DB.mirror.maxUses;
             this.skillUsage.xinjing = SKILLS_DB.xinjing.maxUses;
             this.skillUsage.blast = SKILLS_DB.blast.maxUses;
+            // v3.0.0 Win Reset
+            this.currentLevelWins = 0; 
+            this.currentLevelLosses = 0;
         }
         this.activeSkills.forEach(k => { const s = SKILLS_DB[k]; if(s.type === 'level_limit') this.skillUsage[k] = s.maxUses; });
         if(this.config.boss) this.bossDeck = this.createDeck();
@@ -950,8 +1003,10 @@ class Game {
 
     setupPersona() {
         const floor = this.config.floor; const step = this.config.step;
+        // v3.0.0 Map Persona: Step 1 -> Index 0, Step 2 -> Index 2 (Boss)
         const personas = OPPONENT_PERSONAS[floor] || OPPONENT_PERSONAS[1];
-        const persona = personas[step - 1];
+        const persona = personas[step === 1 ? 0 : 2]; 
+        
         this.opponentName = persona.name;
         document.querySelector('.avatar').style.backgroundImage = `url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;
         document.getElementById('opp-name').innerText = this.opponentName;
@@ -976,13 +1031,27 @@ class Game {
     startRound() {
         let deck; if(this.config.boss) { deck = this.bossDeck; } else { deck = this.createDeck(); }
         this.drawPile = this.config.boss ? deck : this.createDeck();
-        const draw = (n) => { const c = []; for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); return c; };
+        this.discardPile = []; // v3.0.1 Reset Discard Pile for new round
+        
+        // v3.0.1 Fix Draw Function with Recycle Logic
+        const draw = (n) => { 
+            const c = []; 
+            if (this.drawPile.length < n && this.discardPile.length > 0) {
+                // Recycle discards if draw pile is empty
+                this.drawPile.push(...this.discardPile);
+                this.discardPile = [];
+                this.drawPile.sort(() => Math.random() - 0.5);
+            }
+            // Even after recycle, if still not enough, we just draw what's left (should be 52 max anyway)
+            for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); 
+            return c; 
+        };
 
         this.playerHand = draw(7).sort((a,b)=>b.value - a.value);
         
         let aiHand = [];
-        // [Optimized Nerf] Check for early levels
-        const isNerfLevel = ['1-1', '1-2', '2-1', '2-2'].includes(this.config.id);
+        // [Optimized Nerf] Check for early levels (Floors 1 & 2, Step 1)
+        const isNerfLevel = (this.config.floor <= 2 && this.config.step === 1);
         
         if (isNerfLevel) {
             let attempts = 0;
@@ -1008,17 +1077,51 @@ class Game {
         this.updateHeader(); this.renderScene(); this.updateControls();
     }
 
+    // 2.1.6 Modified Eval to support breakdown
     evalHandValue(cards) {
         const isWild = (this.config.rule === 'wild_6'); const res = PokerEngine.evaluate(cards, isWild);
-        let bonus = 0; let mult = 0; 
+        
+        let base = res.base; // Original Base
+        let typeBonus = 0;   // Flat bonus from Hand Type Passives
+        let itemBonus = 0;   // Flat bonus from Item Passives
+        let mult = 0;        // Total Multiplier
+        let triggeredItems = [];
+
         this.passives.forEach(p => { 
-            if(p.trigger === 'odd') { cards.forEach(c => { if(['A','3','5','7','9'].includes(c.rank)) bonus += p.val; }); } 
-            else if (p.trigger === 'even') { cards.forEach(c => { if(['2','4','6','8','10'].includes(c.rank)) bonus += p.val; }); } 
-            else if (p.trigger === 'face') { cards.forEach(c => { if(['J','Q','K'].includes(c.rank)) mult += p.mult; }); } 
-            else if(p.trigger === res.name) { if(p.val) bonus += p.val; if(p.mult) mult += p.mult; } 
+            // Hand Type Flat Bonuses
+            if (['shuangying','sixiang','sanyuan','lianchao','yise','fulu','siji','tianlv'].includes(p.id)) {
+                 if(p.trigger === res.name) { 
+                     typeBonus += p.val; 
+                 }
+            } 
+            // Item Flat/Mult Bonuses
+            else {
+                 let triggered = false;
+                 if(p.trigger === 'odd') { if(cards.some(c=>['A','3','5','7','9'].includes(c.rank))) { itemBonus += (p.val * cards.filter(c=>['A','3','5','7','9'].includes(c.rank)).length); triggered=true; } } // Simplify: Each card triggers? No, just logic check.
+                 // Correct logic from previous: 
+                 else if(p.trigger === 'odd') { cards.forEach(c => { if(['A','3','5','7','9'].includes(c.rank)) itemBonus += p.val; }); triggered=true; } // Always triggers if any? Let's assume yes for UI
+                 else if (p.trigger === 'even') { cards.forEach(c => { if(['2','4','6','8','10'].includes(c.rank)) itemBonus += p.val; }); triggered=true; } 
+                 else if (p.trigger === 'face') { cards.forEach(c => { if(['J','Q','K'].includes(c.rank)) mult += p.mult; }); triggered=true; } 
+                 else if(p.trigger === res.name) { 
+                     if(p.val) itemBonus += p.val; 
+                     if(p.mult) mult += p.mult; 
+                     triggered=true;
+                 }
+                 
+                 if(triggered && !triggeredItems.includes(p.name)) triggeredItems.push(p.name);
+            }
         });
-        const payout = (res.base + bonus) * (1 + mult);
-        return { ...res, payout: payout };
+
+        // 2.1.6 Display Split Logic Data
+        // Row 1: Hand + TypeBonus
+        let row1_val = base + typeBonus;
+        // Row 2: ItemBonus + Multiplier Effect
+        // Total = (Row1 + ItemBonus) * (1+Mult)
+        // Row 2 Display = Total - Row1
+        let total = (row1_val + itemBonus) * (1 + mult);
+        let row2_val = total - row1_val;
+
+        return { ...res, payout: total, row1: row1_val, row2: row2_val, items: triggeredItems };
     }
 
     renderScene() {
@@ -1152,61 +1255,85 @@ class Game {
         const win = myRes.rawScore > aiRes.rawScore; let reward = 0; let fish = false;
         
         let finalPayout = 0;
+        let roundEarned = 0; // Value for level progress
+        
+        // 3.0.2 Bet Logic:
+        // Win: Refund Bet + Profit Bet + (10% of Score). Score counts Profit.
+        // Lose: Bet lost. Target increased.
 
         if(win) {
+            this.currentLevelWins++; 
             fish = (baitSrc==='mine' && aiRes.t==='mine');
-            let baseVal = myRes.payout;
-            let fishVal = fish ? baseVal : 0;
-            let betVal = this.currentBet > 0 ? this.currentBet * 2 : 0;
-            let totalVal = baseVal + fishVal + betVal;
-            finalPayout = Math.floor(totalVal * 0.10); // 10%
+            
+            // Hand Total Value (Base + All Passives)
+            let totalHandVal = myRes.payout;
+            if (fish) totalHandVal *= 2; // Fish x2 on Total
+
+            // Bet Logic
+            let betRefund = 0;
+            let betProfit = 0;
+            if (this.currentBet > 0) {
+                betRefund = this.currentBet;
+                betProfit = this.currentBet; // "Extra obtain bet amount"
+            }
+
+            // Wallet Add
+            // "Final gold = HandValue * 10% + Refund + Profit"
+            finalPayout = Math.floor(totalHandVal * 0.10) + betRefund + betProfit;
+
+            // Level Progress (Accumulate)
+            // "Recorded in this round's obtained gold" -> HandValue + BetProfit
+            roundEarned = totalHandVal + betProfit;
         } else {
+            this.currentLevelLosses++; 
+            // Lose Bet: Target increases
             if(this.currentBet > 0) this.currentTargetGold += this.currentBet;
+            
+            // For FAIL display purposes only (what you could have won sans bet profit maybe? or just hand val)
+            roundEarned = myRes.payout; 
         }
 
-        let checkReward = 0;
-        if (win) {
-             checkReward = myRes.payout;
-             if (fish) checkReward += myRes.payout;
-             if (this.currentBet > 0) checkReward += (this.currentBet * 2);
-        }
-
-        this.levelEarnedGold += checkReward; 
+        this.levelEarnedGold += win ? roundEarned : 0; // Only add to progress if win
         
         this.playerGold += finalPayout; 
         this.updateHeader();
         
         let pass = false; 
-        if(this.config.target==='win') pass = win; 
-        else if(this.config.target==='gold') pass = win && checkReward >= this.currentTargetGold; 
+        if(this.config.target === 'best_of_3') pass = this.currentLevelWins >= 2; 
         else if(this.config.target==='accumulate') pass = this.levelEarnedGold >= this.currentTargetGold;
         
         let failReason = "";
+        if (!win && this.config.target === 'best_of_3') failReason = "本局失败"; 
         
-        if (this.config.target === 'win') {
-             if (!win) failReason = "你的牌型未赢过对方！";
-        } 
-        else if (this.config.target === 'gold') {
-             if (!win) {
-                 failReason = "你的牌型未赢过对方！";
-             } else if (checkReward < this.currentTargetGold) {
-                 // [BugFix 2.1.8] Always show x/n if goal failed, even if win
-                 failReason = `关卡金币不足 ${Math.floor(checkReward)}/${this.currentTargetGold}`;
-             }
-        }
-        else if (this.config.target === 'accumulate') {
-             if (!pass && this.currentRound === 3) {
-                  failReason = `关卡金币不足 ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;
-             }
+        let isEarlyExitWin = (this.config.target === 'best_of_3' && this.currentLevelWins >= 2);
+        let isEarlyExitLoss = (this.config.target === 'best_of_3' && this.currentLevelLosses >= 2);
+
+        if (this.currentRound === 3 && !pass) {
+             if (this.config.target === 'best_of_3') failReason = `胜场不足 (${this.currentLevelWins}/3)`;
+             else if (this.config.target === 'accumulate') failReason = `总金币不足`;
         }
 
         if(this.config.target === 'accumulate') {
-            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
-            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "");
-            else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason);
+            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
+            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", roundEarned);
+            else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, roundEarned); // Pass round val
         } else {
-            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "");
-            else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason);
+             if (isEarlyExitLoss) {
+                let earlyFailReason = `胜场不足 (${this.currentLevelWins}/3)`;
+                this.showFailPanel(myRes, aiRes, cards, aiRes.cards, earlyFailReason, roundEarned);
+             } 
+             else if (isEarlyExitWin) {
+                this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
+             }
+             else if(this.currentRound < 3) {
+                 this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", roundEarned);
+             }
+             else if (pass) {
+                 this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
+             }
+             else {
+                 this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, roundEarned);
+             }
         }
     }
 
@@ -1219,7 +1346,7 @@ class Game {
         const step = (now) => {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 3); // Cubic Ease Out
+            const ease = 1 - Math.pow(1 - progress, 3); 
             const current = Math.floor(start + (target - start) * ease);
             el.innerText = current;
             
@@ -1231,8 +1358,8 @@ class Game {
         requestAnimationFrame(step);
     }
 
-    // Revert 1.9.7: Static Show Panel
-    showSettlePanel(win, myRes, aiRes, gold, myCards, aiCards, mySrc, aiSrc, fish, isEnd, failMsg) {
+    // 3.0.2 Added levelVal (roundEarned) to args
+    showSettlePanel(win, myRes, aiRes, gold, myCards, aiCards, mySrc, aiSrc, fish, isEnd, failMsg, levelVal) {
         const ov = document.getElementById('overlay-screen'); ov.classList.add('visible');
         this.setOverlayState(true);
 
@@ -1241,10 +1368,25 @@ class Game {
 
         const myTitle = win ? `${myRes.name} 胜` : `${myRes.name}`; const titleCls = win ? "win-title-tag" : "lose-title-tag";
         const getHTML = (cards) => { let h = ''; const allBait = [...this.playerBait, ...this.oppBait]; cards.forEach(c => { const isB = allBait.some(b => b.id === c.id); h += this.htmlCard(c, true, true, !!isB); }); return h; };
-        const mySourceTxt = mySrc==='mine'?'使用我的放牌':(mySrc==='opp'?'使用TA的放牌':'直接出牌'); 
         
-        // [Optimized 2.1.7] Right aligned bonus
-        const baitBonus = fish ? `<span style="color:var(--highlight); margin-left:auto; display:flex; gap:10px;"><span>⚡ 钓鱼成功 x2</span> <span class="gold-val">金币 +${myRes.payout}</span></span>` : '';
+        // 3.0.2 Detail Split
+        // Line 1: Hand + Type Bonus
+        const row1 = myRes.row1;
+        // Line 2: Items + Mults
+        const row2 = myRes.row2;
+        const itemsStr = myRes.items.length > 0 ? myRes.items.join(', ') : '无';
+        // Line 3: Fishing
+        const usedBait = mySrc==='mine'?this.playerBait:this.oppBait;
+        const baitStr = usedBait.length>0 ? usedBait.map(c=>c.suit+c.rank).join(' ') : '';
+        const baitTxt = mySrc==='mine' ? `使用钓鱼牌：我的钓饵牌 ${baitStr}` : (mySrc==='opp' ? `使用钓鱼牌：对手的钓饵牌 ${baitStr}` : '未使用钓鱼牌');
+        
+        // Total Gold Logic for Display (before 10% cut, after fish mult)
+        // myRes.payout is (Row1 + Row2). Fish applies to this sum.
+        const totalWithFish = fish ? (myRes.payout * 2) : 0;
+        const fishTxt = fish ? `<span style="color:var(--highlight)">钓鱼成功x2 + 金币${myRes.payout}</span>` : '无钓鱼奖励';
+        
+        // Level Progress Text
+        const progressTxt = this.config.target === 'accumulate' ? `<div style="text-align:right; font-size:12px; color:#aaa; margin-top:5px;">本关进度: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</div>` : '';
 
         if(isEnd && this.levelIndex >= LEVEL_CONFIG.length - 1 && win) { ov.innerHTML = `<div style="text-align:center; color:gold;"><div style="font-size:60px;">🦊</div><h1>无尽塔楼，挑战成功</h1><p>恭喜获得狐狸徽章</p><button class="btn btn-primary" style="width:200px; margin-top:20px;" onclick="game.returnToLobby()">返回大厅</button></div>`; return; }
 
@@ -1268,13 +1410,23 @@ class Game {
             <div class="settle-content">
                 <div class="settle-left"><div class="avatar" style="background-image: url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')"></div><div class="result-badge">${aiRes.name}</div><div class="cards-display-row">${getHTML(aiCards)}</div><div style="font-size:10px; color:#666;">对手最终牌型</div></div>
                 <div class="settle-right">
-                    <div class="${titleCls}">${myTitle}</div>
-                    <div class="cards-display-row" style="transform:scale(1.1)">${getHTML(myCards)}</div>
-                    <div style="width:100%; margin-top:20px;">
-                        <div class="detail-row"><span>你的牌型：${myRes.name}</span><span class="gold-val">金币 +${myRes.payout}</span></div>
-                        <div class="detail-row" style="margin-top:5px; background:rgba(0,0,0,0.2);">
-                            <span style="font-size:12px; color:#888">${mySourceTxt}</span>
-                            ${baitBonus}
+                    <div class="${titleCls}" style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                        <span>${myTitle}</span>
+                        ${progressTxt}
+                    </div>
+                    <div class="cards-display-row" style="transform:scale(1.1); margin:15px 0;">${getHTML(myCards)}</div>
+                    <div style="width:100%; margin-top:10px; display:flex; flex-direction:column; gap:5px;">
+                        <div class="detail-row">
+                            <span>我的牌型：${myRes.name}</span>
+                            <span class="gold-val">金币 +${row1}</span>
+                        </div>
+                        <div class="detail-row" style="background:rgba(255,255,255,0.03);">
+                            <span>道具加倍：${itemsStr}</span>
+                            <span class="gold-val">金币 +${Math.floor(row2)}</span>
+                        </div>
+                        <div class="detail-row" style="background:rgba(255,255,255,0.03);">
+                            <span style="font-size:12px; color:#888; max-width:50%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${baitTxt}</span>
+                            <span>${fishTxt}</span>
                         </div>
                     </div>
                     <div class="tags-container" style="flex-wrap:wrap; opacity:1;">${tagsHTML}</div>
@@ -1286,7 +1438,7 @@ class Game {
         if(win) this.animateGold(gold);
     }
 
-    showFailPanel(myRes, aiRes, myCards, aiCards, reason) { 
+    showFailPanel(myRes, aiRes, myCards, aiCards, reason, levelVal) { 
         this.audio.playLose();
         this.setOverlayState(true);
         const ov = document.getElementById('overlay-screen'); 
@@ -1294,13 +1446,21 @@ class Game {
 
         const getHTML = (cards) => cards.map(c => this.htmlCard(c, true, true, false)).join('');
 
+        // 3.0.2 Left side progress display logic
+        let leftInfo = `<div style="color:#e74c3c; font-weight:bold; text-align:center; font-size:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; width:100%;">${reason}</div>`;
+        
+        // Add specific x/n progress if accumulation level
+        if (this.config.target === 'accumulate') {
+             leftInfo += `<div style="margin-top:10px; color:#aaa; font-size:12px;">本局: ${Math.floor(levelVal)} / 累计: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</div>`;
+        }
+
         ov.innerHTML = `
         <div class="settle-modal" style="border-color:var(--danger)">
             <div class="settle-header" style="background:#400;">DEFEAT</div>
             <div class="settle-content">
                 <div class="settle-left" style="justify-content:center; gap:20px;">
                     <h2 style="color:var(--danger); font-size:24px; text-align:center; line-height:1.4;">等着吧～<br>我会赢回来的！</h2>
-                    <div style="color:#e74c3c; font-weight:bold; text-align:center; font-size:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; width:100%;">${reason || "目标未达成"}</div>
+                    ${leftInfo}
                 </div>
                 <div class="settle-right" style="justify-content:flex-start; gap:15px;">
                     <div style="text-align:center;">
@@ -1368,14 +1528,27 @@ class Game {
     cancelSkill() { this.skillMode=null; this.selectedCards=[]; this.selectedOppCard = null; this.updateControls(); this.renderScene(); }
     
     executeSkill() {
-        const draw = (n) => { const c = []; for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); return c; };
+        const draw = (n) => { const c = []; 
+            if (this.drawPile.length < n) {
+                let fresh = this.createDeck();
+                // v3.0.1 Naive replenish
+                this.drawPile.push(...fresh);
+            }
+            if (this.drawPile.length < n && this.discardPile.length > 0) {
+                 this.drawPile.push(...this.discardPile);
+                 this.discardPile = [];
+                 this.drawPile.sort(() => Math.random() - 0.5);
+            }
+            for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); 
+            return c; 
+        };
 
         if(this.skillMode==='xuanji') {
             const n=this.selectedCards.length; const nc=draw(n); const selIds = this.selectedCards.map(c=>c.id);
             this.playerHand=this.playerHand.filter(x => !selIds.includes(x.id)); for(let c of nc) this.playerHand.push(c); 
             this.playerHand.sort((a,b)=>b.value-a.value); this.skillUsage.xuanji--;
             
-            // Feature: Highlight new cards
+            this.discardPile.push(...this.selectedCards);
             this.selectedCards = [...nc]; 
             this.renderScene();
             setTimeout(() => { this.selectedCards = []; this.renderScene(); }, 2000);
@@ -1396,7 +1569,6 @@ class Game {
                     this.playerHand.sort((a,b)=>b.value-a.value); 
                     this.skillUsage.yundu--; 
                     
-                    // Feature: Highlight swapped card
                     this.selectedCards = [t];
                     this.renderScene();
                     setTimeout(() => { this.selectedCards = []; this.renderScene(); }, 2000);
@@ -1418,7 +1590,6 @@ class Game {
                     this.playerHand.sort((a,b)=>b.value-a.value); 
                     this.skillUsage.blast--; 
 
-                    // Feature: Highlight swapped card
                     this.selectedCards = [theirs];
                     this.renderScene();
                     setTimeout(() => { this.selectedCards = []; this.renderScene(); }, 2000);
@@ -1454,7 +1625,7 @@ class Game {
         this.passives.forEach(p => { const d = document.createElement('div'); d.className = 'passive-icon'; d.setAttribute('data-desc', `${p.name || ''}: ${p.desc}`); d.innerHTML = p.icon; pl.appendChild(d); });
         const g = document.getElementById('level-desc');
         let txt = "";
-        if(this.config.target==='accumulate') { txt = `3回合内金币 > <span class="gold-val">${this.levelEarnedGold}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`; } 
+        if(this.config.target==='accumulate') { txt = `3回合内金币 > <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`; } 
         else { txt = this.config.desc; }
         g.innerHTML = txt;
     }
