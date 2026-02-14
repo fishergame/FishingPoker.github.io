@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Fishing Poker [v3.0.2] - Detail & Economy Polish</title>
+    <title>Fishing Poker [v3.0.5] - Stable Map System</title>
     <style>
         /* ================= UI 样式保持 v1.9.9 基础 ================= */
         :root {
@@ -31,10 +31,10 @@
         body { background: var(--bg-gradient); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
         /* Splash Screen */
-        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; pointer-events: none; }
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; pointer-events: auto; }
         .splash-logo { width: 120px; height: 120px; fill: #fff; margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
         .splash-text { font-family: 'Segoe UI Light', sans-serif; font-weight: 100; font-size: 24px; letter-spacing: 8px; color: #fff; opacity: 0.8; }
-        .fade-out { opacity: 0 !important; }
+        .fade-out { opacity: 0 !important; pointer-events: none; }
 
         /* Lobby */
         #lobby-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #050a14 0%, #000000 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; overflow: hidden; transition: opacity 0.5s; }
@@ -53,6 +53,29 @@
         .lobby-title-sub { font-family: 'YouYuan', 'Microsoft YaHei', sans-serif; font-size: 32px; font-weight: 100; color: var(--highlight); text-shadow: 0 0 10px rgba(0, 242, 255, 0.5); margin-top: 15px; letter-spacing: 8px; margin-bottom: 60px; }
         .btn-lobby { font-size: 20px; padding: 16px 60px; width: auto; background: linear-gradient(90deg, var(--highlight), #0099cc); color: #000; font-weight: 800; border:none; border-radius: 50px; box-shadow: 0 0 25px rgba(0, 242, 255, 0.4); cursor: pointer; transition: 0.3s; letter-spacing: 2px; }
         .btn-lobby:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 0 40px var(--highlight); }
+
+        /* Map Screen (v3.0.5 Fixed) */
+        #map-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #0e121b 0%, #000000 100%); z-index: 250; display: none; flex-direction: column; overflow: hidden; }
+        #map-scroll-area { flex: 1; overflow-y: auto; padding: 40px 20px; display: flex; flex-direction: column-reverse; align-items: center; gap: 50px; scroll-behavior: smooth; }
+        .map-title { text-align: center; padding: 25px; font-size: 28px; color: var(--highlight); letter-spacing: 3px; background: rgba(0,0,0,0.8); z-index: 2; border-bottom: 1px solid #333; font-family: 'YouYuan', sans-serif; }
+        
+        .floor-group { width: 100%; max-width: 450px; position: relative; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; background: rgba(255,255,255,0.03); display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 0.3s; }
+        .floor-group:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
+        .floor-label { position: absolute; top: -14px; left: 20px; background: #000; padding: 2px 12px; color: #666; font-size: 14px; font-weight: bold; border: 1px solid #444; border-radius: 10px; font-family: monospace; }
+        .nodes-row { display: flex; justify-content: space-around; width: 100%; align-items: center; position: relative; }
+        
+        .map-node { width: 70px; height: 70px; border-radius: 50%; background-size: cover; background-position: center; border: 3px solid #444; position: relative; cursor: default; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 2; background-color: #222; }
+        .map-node.locked { filter: grayscale(1) brightness(0.4); opacity: 0.6; }
+        .map-node.active { border-color: var(--highlight); box-shadow: 0 0 25px rgba(0, 242, 255, 0.4); cursor: pointer; animation: pulse-node 2s infinite; transform: scale(1.05); filter: brightness(1.1); }
+        .map-node.active:hover { transform: scale(1.15); box-shadow: 0 0 35px var(--highlight); }
+        .map-node.cleared { border-color: var(--gold-color); filter: brightness(0.8); cursor: default; }
+        .map-node.cleared::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--gold-color); font-weight: bold; text-shadow: 0 0 5px black; }
+        .map-node-label { position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; color: #999; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        
+        @keyframes pulse-node { 0% { box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); } 50% { box-shadow: 0 0 25px rgba(0, 242, 255, 0.6); } 100% { box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); } }
+        
+        .map-connector { flex: 1; height: 3px; background: #333; margin: 0 5px; position: relative; border-radius: 2px; }
+        .map-connector.unlocked { background: linear-gradient(90deg, var(--gold-color), var(--highlight)); box-shadow: 0 0 5px rgba(0,0,0,0.5); }
         
         /* Header */
         header { height: 60px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: rgba(0,0,0,0.9); border-bottom: 1px solid #333; z-index: 201; position:relative; transition: transform 0.3s ease-in-out; }
@@ -71,10 +94,13 @@
         @keyframes pulse-audio { 0% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } 50% { box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); } 100% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.3); } }
 
         .header-right { display: flex; gap: 15px; align-items: center; transition: opacity 0.3s; }
+        
+        /* Passive Dock */
         .passive-dock { display: flex; gap: 5px; max-width: 220px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .passive-dock::-webkit-scrollbar { display: none; }
         .passive-icon { width: 28px; height: 28px; background: #2d3748; border: 1px solid var(--rare); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: help; color: var(--rare); position: relative; flex-shrink: 0; }
         
+        /* Global Tooltip */
         #global-tooltip {
             position: fixed; background: rgba(0,0,0,0.95); padding: 10px 15px; font-size: 12px; line-height: 1.5; border: 1px solid #666; border-radius: 6px; color: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.9); z-index: 9999; pointer-events: none; display: none; max-width: 220px; white-space: pre-wrap;
         }
@@ -153,8 +179,8 @@
         .settle-right { width: 65%; padding: 20px; display: flex; flex-direction: column; justify-content: center; gap: 15px; }
         
         .result-badge { background: #333; padding: 2px 10px; font-size: 12px; color: #aaa; margin-bottom: 5px; }
-        .win-title-tag { align-self: center; background: linear-gradient(90deg, #d35400, #e67e22); color: white; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; box-shadow: 0 0 15px rgba(230, 126, 34, 0.6); margin-bottom: 10px; }
-        .lose-title-tag { align-self: center; background: #555; color: #aaa; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; margin-bottom: 10px; }
+        .win-title-tag { align-self: center; background: linear-gradient(90deg, #d35400, #e67e22); color: white; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; box-shadow: 0 0 15px rgba(230, 126, 34, 0.6); margin-bottom: 5px; }
+        .lose-title-tag { align-self: center; background: #555; color: #aaa; font-weight: bold; font-size: 20px; padding: 5px 25px; border-radius: 4px; margin-bottom: 5px; }
         .cards-display-row { display: flex; justify-content: center; gap: 8px; margin: 5px 0; flex-wrap: wrap; }
         .detail-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 4px; font-size: 14px; }
         .detail-sub { font-size: 12px; color: #888; display: flex; gap: 10px; align-items: center;}
@@ -264,8 +290,15 @@
     </svg>
     <div class="splash-text">FISHER GAME</div>
 </div>
-<!-- Global Tooltip for Passive Icons -->
 <div id="global-tooltip"></div>
+
+<!-- New: Level Map Screen -->
+<div id="map-screen">
+    <div class="map-title">无尽塔楼</div>
+    <div id="map-scroll-area">
+        <!-- Floors injected by JS -->
+    </div>
+</div>
 
 <div id="lobby-screen">
     <div class="waves-container">
@@ -299,9 +332,9 @@
     <div class="lobby-content">
         <div class="lobby-title-main">钓鱼牌</div>
         <div class="lobby-title-sub">无尽塔楼</div>
-        <button class="btn btn-lobby" onclick="game.startGame()">开始挑战</button>
+        <button class="btn btn-lobby" onclick="game.enterMapMode()">开始挑战</button>
     </div>
-    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v3.0.2</div>
+    <div style="position: absolute; bottom: 20px; right: 20px; color: rgba(255,255,255,0.3); font-family: monospace;">v3.0.5</div>
 </div>
 
 <header>
@@ -310,7 +343,7 @@
         <div class="level-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div>
     </div>
     <div class="header-center">
-        <!-- Info Btn (Poker Card) -->
+        <!-- Info Btn -->
         <div class="icon-btn" onclick="game.toggleInfo()" title="牌型说明">
             <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4z"/></svg>
         </div>
@@ -430,15 +463,12 @@ class AtmosphereAudio {
         if (!this.ctx) {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
             this.ctx = new AudioContext();
-            
             this.masterGain = this.ctx.createGain();
             this.masterGain.gain.value = 0.5;
             this.masterGain.connect(this.ctx.destination);
-
             this.bgmGain = this.ctx.createGain();
             this.bgmGain.gain.value = 1.0;
             this.bgmGain.connect(this.masterGain);
-
             this.sfxGain = this.ctx.createGain();
             this.sfxGain.gain.value = 1.0;
             this.sfxGain.connect(this.masterGain);
@@ -449,8 +479,7 @@ class AtmosphereAudio {
         const bufferSize = 2 * this.ctx.sampleRate;
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const output = buffer.getChannelData(0);
-        let b0, b1, b2, b3, b4, b5, b6;
-        b0 = b1 = b2 = b3 = b4 = b5 = b6 = 0.0;
+        let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
         for (let i = 0; i < bufferSize; i++) {
             const white = Math.random() * 2 - 1;
             b0 = 0.99886 * b0 + white * 0.0555179;
@@ -474,18 +503,15 @@ class AtmosphereAudio {
         const filter = this.ctx.createBiquadFilter();
         filter.type = 'lowpass';
         filter.frequency.value = 400;
-        
         const lfo = this.ctx.createOscillator();
         lfo.type = 'sine';
         lfo.frequency.value = 0.15;
         const lfoGain = this.ctx.createGain();
         lfoGain.gain.value = 300;
-        
         lfo.connect(lfoGain);
         lfoGain.connect(filter.frequency);
         noise.connect(filter);
         filter.connect(this.bgmGain);
-        
         noise.start();
         lfo.start();
         this.oceanNode = { noise, lfo };
@@ -495,20 +521,15 @@ class AtmosphereAudio {
         if(!this.isPlaying) return;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
         const note = this.notes[Math.floor(Math.random() * this.notes.length)];
         const freq = Math.random() > 0.7 ? note * 2 : note;
-        
         osc.frequency.value = freq;
         osc.type = 'sine';
-        
         gain.gain.setValueAtTime(0, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0.15, this.ctx.currentTime + 2); 
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 8); 
-        
         osc.connect(gain);
         gain.connect(this.bgmGain);
-        
         osc.start();
         osc.stop(this.ctx.currentTime + 8);
     }
@@ -528,18 +549,14 @@ class AtmosphereAudio {
         const noise = this.createPinkNoise();
         const noiseGain = this.ctx.createGain();
         const filter = this.ctx.createBiquadFilter();
-
         filter.type = 'bandpass';
         filter.frequency.setValueAtTime(800, t);
         filter.frequency.linearRampToValueAtTime(1200, t + 0.1);
-
         noiseGain.gain.setValueAtTime(0.4, t); 
         noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.15); 
-
         noise.connect(filter);
         filter.connect(noiseGain);
         noiseGain.connect(this.sfxGain);
-
         noise.start(t);
         noise.stop(t + 0.15);
     }
@@ -549,15 +566,12 @@ class AtmosphereAudio {
         const t = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(400, t);
         gain.gain.setValueAtTime(1.5, t); 
         gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-
         osc.connect(gain);
         gain.connect(this.sfxGain);
-
         osc.start(t);
         osc.stop(t + 0.05);
     }
@@ -649,7 +663,6 @@ class AtmosphereAudio {
 // =================== 配置区 ===================
 const LEVEL_CONFIG = [];
 for (let floor = 1; floor <= 8; floor++) {
-    // [New Level System v3.0.0]
     // Step 1: Best of 3 (x-1)
     LEVEL_CONFIG.push({
         id: `${floor}-1`,
@@ -758,19 +771,9 @@ const PokerEngine = {
         const arr = Object.values(counts).sort((a,b) => b - a);
         let t = HAND_TYPES_BASE[8];
         if(isFlush && isStraight) t = HAND_TYPES_BASE[0]; else if(arr[0]===4) t = HAND_TYPES_BASE[1]; else if(arr[0]===3 && arr[1]===2) t = HAND_TYPES_BASE[2]; else if(isFlush) t = HAND_TYPES_BASE[3]; else if(isStraight) t = HAND_TYPES_BASE[4]; else if(arr[0]===3) t = HAND_TYPES_BASE[5]; else if(arr[0]===2 && arr[1]===2) t = HAND_TYPES_BASE[6]; else if(arr[0]===2) t = HAND_TYPES_BASE[7];
-        
-        sorted.sort((a, b) => {
-            const ca = counts[a.value], cb = counts[b.value];
-            if(ca !== cb) return cb - ca; 
-            if(a.value !== b.value) return b.value - a.value; 
-            return SUIT_VALS[b.suit] - SUIT_VALS[a.suit];
-        });
-        
+        sorted.sort((a, b) => { const ca = counts[a.value], cb = counts[b.value]; if(ca !== cb) return cb - ca; if(a.value !== b.value) return b.value - a.value; return SUIT_VALS[b.suit] - SUIT_VALS[a.suit]; });
         let raw = t.level * 1000000000000;
-        sorted.forEach((c, i) => {
-             const cardScore = c.value * 10 + SUIT_VALS[c.suit];
-             raw += cardScore * Math.pow(200, 4 - i);
-        });
+        sorted.forEach((c, i) => { raw += (c.value * 10 + SUIT_VALS[c.suit]) * Math.pow(200, 4 - i); });
         return { ...t, rawScore: raw, cards: sorted };
     },
     getStrategicBait: (hand, isBoss) => {
@@ -778,12 +781,9 @@ const PokerEngine = {
         let bait = [], keep = [];
         const rand = Math.random();
         if (!isBoss) {
-            if (rand > 0.5) { bait = [sorted[0], sorted[1]]; keep = sorted.slice(2); } 
-            else { bait = [sorted[0], sorted[6]]; keep = sorted.slice(1,6); }
+            if (rand > 0.5) { bait = [sorted[0], sorted[1]]; keep = sorted.slice(2); } else { bait = [sorted[0], sorted[6]]; keep = sorted.slice(1,6); }
         } else {
-            if (rand > 0.66) { bait = [sorted[0], sorted[1]]; keep = sorted.slice(2); } 
-            else if (rand > 0.33) { bait = [sorted[0], sorted[6]]; keep = sorted.slice(1,6); } 
-            else { bait = [sorted[2], sorted[3]]; keep = [sorted[0], sorted[1], sorted[4], sorted[5], sorted[6]]; }
+            if (rand > 0.66) { bait = [sorted[0], sorted[1]]; keep = sorted.slice(2); } else if (rand > 0.33) { bait = [sorted[0], sorted[6]]; keep = sorted.slice(1,6); } else { bait = [sorted[2], sorted[3]]; keep = [sorted[0], sorted[1], sorted[4], sorted[5], sorted[6]]; }
         }
         return { bait, keep };
     },
@@ -794,193 +794,118 @@ const PokerEngine = {
         return bestRes;
     },
     isTooStrong: (cards) => {
-        const suits = {};
-        cards.forEach(c => suits[c.suit] = (suits[c.suit]||0) + 1);
-        if (Object.values(suits).some(c => c >= 4)) return true; // Nerf: No possible flush
-
-        const values = cards.map(c => c.value).sort((a,b)=>a-b);
-        const counts = {};
-        values.forEach(v => counts[v] = (counts[v]||0) + 1);
-        const countVals = Object.values(counts);
-        
+        const suits = {}; cards.forEach(c => suits[c.suit] = (suits[c.suit]||0) + 1); if (Object.values(suits).some(c => c >= 4)) return true; 
+        const values = cards.map(c => c.value).sort((a,b)=>a-b); const counts = {}; values.forEach(v => counts[v] = (counts[v]||0) + 1); const countVals = Object.values(counts);
         if (countVals.some(c => c >= 3)) return true; 
         if (countVals.filter(c => c === 2).length >= 2) return true;
-
-        const uniqueVals = [...new Set(values)];
-        if (uniqueVals.length >= 4) {
-             for(let i=0; i <= uniqueVals.length - 4; i++) {
-                if (uniqueVals[i+3] - uniqueVals[i] === 3) return true; 
-             }
-        }
+        const uniqueVals = [...new Set(values)]; if (uniqueVals.length >= 4) { for(let i=0; i <= uniqueVals.length - 4; i++) { if (uniqueVals[i+3] - uniqueVals[i] === 3) return true; } }
         return false;
     }
 };
 
-class Card {
-    constructor(s, r) { this.suit = s; this.rank = r; this.value = RANK_VALUES[r]; this.isRed = (s==='♥'||s==='♦'); this.id = Math.random().toString(36).slice(2); this.revealed = false; }
-}
+class Card { constructor(s, r) { this.suit = s; this.rank = r; this.value = RANK_VALUES[r]; this.isRed = (s==='♥'||s==='♦'); this.id = Math.random().toString(36).slice(2); this.revealed = false; } }
 
 class Game {
-    constructor() { 
-        this.resetGlobal(); 
-        this.initDOM(); 
-        this.audio = new AtmosphereAudio(); 
-        this.isAudioOn = true; 
-        this.inGame = false; // Track if we are in game or lobby
-        this.initSplash();
+    constructor() { this.resetGlobal(); this.initDOM(); this.audio = new AtmosphereAudio(); this.isAudioOn = true; this.inGame = false; this.initSplash(); }
+    initSplash() { const splash = document.getElementById('splash-screen'); document.addEventListener('click', () => { this.audio.init(); if(this.isAudioOn) { this.audio.start(); this.updateAudioBtn(true); } }, { once: true }); setTimeout(() => { splash.classList.add('fade-out'); setTimeout(() => { splash.style.display = 'none'; this.showLobby(); }, 1500); }, 3000); }
+    resetGlobal() { this.levelIndex = 0; this.playerGold = 0; this.activeSkills = ['xuanji', 'yundu', 'huanzhu']; this.skillUsage = { xuanji: SKILLS_DB.xuanji.maxUses, yundu: SKILLS_DB.yundu.maxUses }; this.skillMaxModifiers = { xuanji: 0, yundu: 0 }; this.passives = []; this.obtainedItems = []; this.upgradeCounts = { yunyan: 0, xuanshu: 0, huance: 0 }; this.betUsedThisRound = false; this.betRatios = [0.3, 0.5]; this.maxSlots = 6; this.bossDeck = null; this.drawPile = []; this.discardPile = []; this.opponentName = ""; this.selectedOppCard = null; this.justDealt = false; this.inGame = false; this.currentLevelWins = 0; this.currentLevelLosses = 0; }
+    
+    // v3.0.5 Real Shuffle (Fisher-Yates)
+    shuffle(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } }
+
+    showLobby() { this.audio.init(); if(this.isAudioOn) this.audio.start(); }
+    
+    // v3.0.4 Enter Map Mode
+    enterMapMode() {
+        document.getElementById('lobby-screen').style.display = 'none';
+        this.showMap();
     }
-
-    initSplash() {
-        const splash = document.getElementById('splash-screen');
-        // Start audio interaction on click anywhere if blocked
-        document.addEventListener('click', () => {
-            this.audio.init();
-            if(this.isAudioOn) {
-                this.audio.start();
-                this.updateAudioBtn(true);
-            }
-        }, { once: true });
-
-        // Auto fade out splash
-        setTimeout(() => {
-            splash.classList.add('fade-out');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                this.showLobby();
-            }, 1500);
-        }, 3000);
-    }
-
-    resetGlobal() {
-        this.levelIndex = 0; 
-        this.playerGold = 0; 
-        this.activeSkills = ['xuanji', 'yundu', 'huanzhu'];
-        this.skillUsage = { xuanji: SKILLS_DB.xuanji.maxUses, yundu: SKILLS_DB.yundu.maxUses };
-        this.skillMaxModifiers = { xuanji: 0, yundu: 0 };
-        this.passives = []; this.obtainedItems = []; this.upgradeCounts = { yunyan: 0, xuanshu: 0, huance: 0 };
-        this.betUsedThisRound = false; this.betRatios = [0.3, 0.5]; this.maxSlots = 6; this.bossDeck = null;
-        this.drawPile = [];
-        this.discardPile = [];
-        this.opponentName = ""; 
-        this.selectedOppCard = null;
-        this.justDealt = false;
-        this.inGame = false;
-        this.currentLevelWins = 0; 
-        this.currentLevelLosses = 0;
-    }
-
-    showLobby() {
-        // Ensure audio starts if not started
-        this.audio.init();
-        if(this.isAudioOn) this.audio.start();
-    }
-
-    startGame() { 
-        document.getElementById('lobby-screen').style.display = 'none'; 
-        document.getElementById('header-left-col').classList.remove('lobby-hide');
-        document.getElementById('header-right-col').classList.remove('lobby-hide');
+    
+    // v3.0.4 Show Map Logic
+    showMap() {
+        const map = document.getElementById('map-screen');
+        const scroll = document.getElementById('map-scroll-area');
+        scroll.innerHTML = '';
         
-        // Hide info if open from lobby
-        document.getElementById('info-screen').classList.remove('visible');
-
-        this.setOverlayState(true); // Tutorial overlay is active
-        document.getElementById('tutorial-screen').classList.add('visible'); 
-        this.inGame = true;
-        this.toggleFullscreen(); 
-    }
-
-    setOverlayState(active) {
-        if(active) document.body.classList.add('overlay-active');
-        else document.body.classList.remove('overlay-active');
-    }
-
-    toggleAudio() {
-        const isPlaying = this.audio.toggle();
-        this.isAudioOn = isPlaying;
-        this.updateAudioBtn(isPlaying);
-    }
-
-    updateAudioBtn(playing) {
-        const btn = document.getElementById('audio-toggle');
-        if(playing) {
-            btn.classList.add('audio-active');
-            btn.style.opacity = '1';
-        } else {
-            btn.classList.remove('audio-active');
-            btn.style.opacity = '0.5';
-        }
-    }
-
-    toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                // console.log(`Error attempting to enable fullscreen: ${err.message}`);
+        for(let f=1; f<=8; f++) {
+            const group = document.createElement('div');
+            group.className = 'floor-group';
+            group.innerHTML = `<div class="floor-label">Floor ${f}</div>`;
+            const row = document.createElement('div');
+            row.className = 'nodes-row';
+            const steps = LEVEL_CONFIG.filter(l => l.floor === f);
+            
+            steps.forEach((cfg, idx) => {
+                const node = document.createElement('div');
+                const levelIdx = LEVEL_CONFIG.findIndex(l => l.id === cfg.id);
+                let status = 'locked';
+                if (levelIdx < this.levelIndex) status = 'cleared';
+                else if (levelIdx === this.levelIndex) status = 'active';
+                node.className = `map-node ${status}`;
+                const personas = OPPONENT_PERSONAS[f] || OPPONENT_PERSONAS[1];
+                const pIndex = cfg.step === 1 ? 0 : 2;
+                node.style.backgroundImage = `url('https://api.dicebear.com/7.x/bottts/svg?seed=${personas[pIndex].name}')`;
+                
+                if (status === 'active') {
+                    node.onclick = () => { map.style.display = 'none'; this.startLevel(); };
+                }
+                node.innerHTML = `<div class="map-node-label">${cfg.id}</div>`;
+                row.appendChild(node);
+                if (idx < steps.length - 1) {
+                    const conn = document.createElement('div');
+                    conn.className = 'map-connector';
+                    conn.style.width = '40px'; conn.style.height = '2px'; conn.style.margin = '0 10px';
+                    if (status === 'cleared') conn.classList.add('unlocked');
+                    row.appendChild(conn);
+                }
             });
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
+            group.appendChild(row);
+            scroll.appendChild(group);
+            if (f < 8) {
+                 const vConn = document.createElement('div');
+                 vConn.className = 'map-connector';
+                 vConn.style.height = '30px'; vConn.style.width = '2px';
+                 if (this.levelIndex >= LEVEL_CONFIG.findIndex(l => l.floor === f+1)) vConn.classList.add('unlocked');
+                 scroll.appendChild(vConn);
             }
         }
+        map.style.display = 'flex';
+        setTimeout(() => { const active = document.querySelector('.map-node.active'); if(active) active.scrollIntoView({behavior:'smooth', block:'center'}); }, 100);
     }
+    
+    startGame() { /* Deprecated direct start, redirected to map */ this.enterMapMode(); }
+    
+    setOverlayState(active) { if(active) document.body.classList.add('overlay-active'); else document.body.classList.remove('overlay-active'); }
+    toggleAudio() { const isPlaying = this.audio.toggle(); this.isAudioOn = isPlaying; this.updateAudioBtn(isPlaying); }
+    updateAudioBtn(playing) { const btn = document.getElementById('audio-toggle'); if(playing) { btn.classList.add('audio-active'); btn.style.opacity = '1'; } else { btn.classList.remove('audio-active'); btn.style.opacity = '0.5'; } }
+    toggleFullscreen() { if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => {}); } else { if (document.exitFullscreen) { document.exitFullscreen(); } } }
 
-    enterLevelOne() { 
-        document.getElementById('tutorial-screen').classList.remove('visible'); 
-        this.setOverlayState(false); 
+    enterLevelOne() { document.getElementById('tutorial-screen').classList.remove('visible'); this.setOverlayState(false); 
+        // 3.0.4 Return to Map instead of direct start
+        // this.startLevel(); 
+        // Actually tutorial usually starts level directly or map? Let's just start level 1-1 directly from tutorial to be smooth
         this.startLevel(); 
     }
+
     returnToLobby() { 
         this.resetGlobal(); 
         document.getElementById('overlay-screen').classList.remove('visible'); 
         this.setOverlayState(false);
         document.getElementById('lobby-screen').style.display = 'flex';
+        document.getElementById('map-screen').style.display = 'none';
         document.getElementById('header-left-col').classList.add('lobby-hide');
         document.getElementById('header-right-col').classList.add('lobby-hide');
         this.inGame = false;
     }
     
-    initDOM() { 
-        document.getElementById('btn-bait').onclick = () => this.confirmBait(); 
-        document.getElementById('btn-combo-opp').onclick = () => this.playRound('opp'); 
-        document.getElementById('btn-combo-mine').onclick = () => this.playRound('mine'); 
-        document.getElementById('btn-play-hand').onclick = () => this.playRound('hand'); 
-        document.getElementById('btn-skill-ok').onclick = () => this.executeSkill(); 
-        document.getElementById('btn-skill-no').onclick = () => this.cancelSkill(); 
-
-        const tooltip = document.getElementById('global-tooltip');
-        
-        document.getElementById('passive-list').addEventListener('mouseover', (e) => {
-             const target = e.target.closest('.passive-icon');
-             if(target) {
-                 const desc = target.getAttribute('data-desc');
-                 if(desc) {
-                     tooltip.innerText = desc;
-                     tooltip.style.display = 'block';
-                     const rect = target.getBoundingClientRect();
-                     tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px';
-                     tooltip.style.top = (rect.bottom + 10) + 'px';
-                 }
-             }
-        });
-        document.getElementById('passive-list').addEventListener('mouseout', (e) => {
-             tooltip.style.display = 'none';
-        });
-        document.getElementById('passive-list').addEventListener('click', (e) => {
-             const target = e.target.closest('.passive-icon');
-             if(target) {
-                 const desc = target.getAttribute('data-desc');
-                 if(desc) {
-                     tooltip.innerText = desc;
-                     tooltip.style.display = 'block';
-                     const rect = target.getBoundingClientRect();
-                     tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px';
-                     tooltip.style.top = (rect.bottom + 10) + 'px';
-                     setTimeout(() => tooltip.style.display = 'none', 3000);
-                 }
-             }
-        });
-    }
+    initDOM() { document.getElementById('btn-bait').onclick = () => this.confirmBait(); document.getElementById('btn-combo-opp').onclick = () => this.playRound('opp'); document.getElementById('btn-combo-mine').onclick = () => this.playRound('mine'); document.getElementById('btn-play-hand').onclick = () => this.playRound('hand'); document.getElementById('btn-skill-ok').onclick = () => this.executeSkill(); document.getElementById('btn-skill-no').onclick = () => this.cancelSkill(); const tooltip = document.getElementById('global-tooltip'); document.getElementById('passive-list').addEventListener('mouseover', (e) => { const target = e.target.closest('.passive-icon'); if(target) { const desc = target.getAttribute('data-desc'); if(desc) { tooltip.innerText = desc; tooltip.style.display = 'block'; const rect = target.getBoundingClientRect(); tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px'; tooltip.style.top = (rect.bottom + 10) + 'px'; } } }); document.getElementById('passive-list').addEventListener('mouseout', (e) => { tooltip.style.display = 'none'; }); document.getElementById('passive-list').addEventListener('click', (e) => { const target = e.target.closest('.passive-icon'); if(target) { const desc = target.getAttribute('data-desc'); if(desc) { tooltip.innerText = desc; tooltip.style.display = 'block'; const rect = target.getBoundingClientRect(); tooltip.style.left = Math.min(window.innerWidth - 240, Math.max(10, rect.left - 100)) + 'px'; tooltip.style.top = (rect.bottom + 10) + 'px'; setTimeout(() => tooltip.style.display = 'none', 3000); } } }); }
 
     startLevel() {
+        document.getElementById('header-left-col').classList.remove('lobby-hide');
+        document.getElementById('header-right-col').classList.remove('lobby-hide');
+        document.getElementById('info-screen').classList.remove('visible');
+        this.inGame = true;
+
         this.config = LEVEL_CONFIG[this.levelIndex];
         if(this.config.step === 1) { 
             this.skillUsage.xuanji = SKILLS_DB.xuanji.maxUses + this.skillMaxModifiers.xuanji; 
@@ -989,7 +914,6 @@ class Game {
             this.skillUsage.mirror = SKILLS_DB.mirror.maxUses;
             this.skillUsage.xinjing = SKILLS_DB.xinjing.maxUses;
             this.skillUsage.blast = SKILLS_DB.blast.maxUses;
-            // v3.0.0 Win Reset
             this.currentLevelWins = 0; 
             this.currentLevelLosses = 0;
         }
@@ -1003,10 +927,8 @@ class Game {
 
     setupPersona() {
         const floor = this.config.floor; const step = this.config.step;
-        // v3.0.0 Map Persona: Step 1 -> Index 0, Step 2 -> Index 2 (Boss)
         const personas = OPPONENT_PERSONAS[floor] || OPPONENT_PERSONAS[1];
         const persona = personas[step === 1 ? 0 : 2]; 
-        
         this.opponentName = persona.name;
         document.querySelector('.avatar').style.backgroundImage = `url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;
         document.getElementById('opp-name').innerText = this.opponentName;
@@ -1023,7 +945,7 @@ class Game {
 
     createDeck() { 
         let deck = []; SUITS.forEach(s => RANKS.forEach(r => deck.push(new Card(s,r)))); 
-        deck.sort(() => Math.random() - 0.5); 
+        this.shuffle(deck);
         if(this.config.rule === 'wild_6') { deck.forEach(c => { if(c.rank === '6') { c.suit = '♦'; c.isRed = true; } }); } 
         return deck; 
     }
@@ -1031,18 +953,20 @@ class Game {
     startRound() {
         let deck; if(this.config.boss) { deck = this.bossDeck; } else { deck = this.createDeck(); }
         this.drawPile = this.config.boss ? deck : this.createDeck();
-        this.discardPile = []; // v3.0.1 Reset Discard Pile for new round
+        this.discardPile = [];
         
-        // v3.0.1 Fix Draw Function with Recycle Logic
         const draw = (n) => { 
             const c = []; 
-            if (this.drawPile.length < n && this.discardPile.length > 0) {
-                // Recycle discards if draw pile is empty
-                this.drawPile.push(...this.discardPile);
-                this.discardPile = [];
-                this.drawPile.sort(() => Math.random() - 0.5);
+            if (this.drawPile.length < n) {
+                if(this.discardPile.length > 0) {
+                    this.drawPile.push(...this.discardPile);
+                    this.discardPile = [];
+                    this.shuffle(this.drawPile);
+                } else {
+                    let fresh = this.createDeck();
+                    this.drawPile.push(...fresh);
+                }
             }
-            // Even after recycle, if still not enough, we just draw what's left (should be 52 max anyway)
             for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); 
             return c; 
         };
@@ -1050,7 +974,6 @@ class Game {
         this.playerHand = draw(7).sort((a,b)=>b.value - a.value);
         
         let aiHand = [];
-        // [Optimized Nerf] Check for early levels (Floors 1 & 2, Step 1)
         const isNerfLevel = (this.config.floor <= 2 && this.config.step === 1);
         
         if (isNerfLevel) {
@@ -1061,7 +984,7 @@ class Game {
                     break; 
                 }
                 this.drawPile.push(...aiHand);
-                this.drawPile.sort(() => Math.random() - 0.5);
+                this.shuffle(this.drawPile);
                 aiHand = [];
                 attempts++;
             }
@@ -1077,48 +1000,33 @@ class Game {
         this.updateHeader(); this.renderScene(); this.updateControls();
     }
 
-    // 2.1.6 Modified Eval to support breakdown
     evalHandValue(cards) {
         const isWild = (this.config.rule === 'wild_6'); const res = PokerEngine.evaluate(cards, isWild);
-        
-        let base = res.base; // Original Base
-        let typeBonus = 0;   // Flat bonus from Hand Type Passives
-        let itemBonus = 0;   // Flat bonus from Item Passives
-        let mult = 0;        // Total Multiplier
+        let bonus = 0; let mult = 0; 
         let triggeredItems = [];
 
         this.passives.forEach(p => { 
-            // Hand Type Flat Bonuses
             if (['shuangying','sixiang','sanyuan','lianchao','yise','fulu','siji','tianlv'].includes(p.id)) {
                  if(p.trigger === res.name) { 
-                     typeBonus += p.val; 
+                     bonus += p.val; 
                  }
-            } 
-            // Item Flat/Mult Bonuses
-            else {
+            } else {
                  let triggered = false;
-                 if(p.trigger === 'odd') { if(cards.some(c=>['A','3','5','7','9'].includes(c.rank))) { itemBonus += (p.val * cards.filter(c=>['A','3','5','7','9'].includes(c.rank)).length); triggered=true; } } // Simplify: Each card triggers? No, just logic check.
-                 // Correct logic from previous: 
-                 else if(p.trigger === 'odd') { cards.forEach(c => { if(['A','3','5','7','9'].includes(c.rank)) itemBonus += p.val; }); triggered=true; } // Always triggers if any? Let's assume yes for UI
-                 else if (p.trigger === 'even') { cards.forEach(c => { if(['2','4','6','8','10'].includes(c.rank)) itemBonus += p.val; }); triggered=true; } 
+                 if(p.trigger === 'odd') { if(cards.some(c=>['A','3','5','7','9'].includes(c.rank))) { bonus += (p.val * cards.filter(c=>['A','3','5','7','9'].includes(c.rank)).length); triggered=true; } } 
+                 else if (p.trigger === 'even') { cards.forEach(c => { if(['2','4','6','8','10'].includes(c.rank)) bonus += p.val; }); triggered=true; } 
                  else if (p.trigger === 'face') { cards.forEach(c => { if(['J','Q','K'].includes(c.rank)) mult += p.mult; }); triggered=true; } 
                  else if(p.trigger === res.name) { 
-                     if(p.val) itemBonus += p.val; 
+                     if(p.val) bonus += p.val; 
                      if(p.mult) mult += p.mult; 
                      triggered=true;
                  }
-                 
                  if(triggered && !triggeredItems.includes(p.name)) triggeredItems.push(p.name);
             }
         });
 
-        // 2.1.6 Display Split Logic Data
-        // Row 1: Hand + TypeBonus
-        let row1_val = base + typeBonus;
-        // Row 2: ItemBonus + Multiplier Effect
-        // Total = (Row1 + ItemBonus) * (1+Mult)
-        // Row 2 Display = Total - Row1
-        let total = (row1_val + itemBonus) * (1 + mult);
+        // Split for display
+        let row1_val = res.base + bonus; 
+        let total = (row1_val) * (1 + mult);
         let row2_val = total - row1_val;
 
         return { ...res, payout: total, row1: row1_val, row2: row2_val, items: triggeredItems };
@@ -1255,45 +1163,29 @@ class Game {
         const win = myRes.rawScore > aiRes.rawScore; let reward = 0; let fish = false;
         
         let finalPayout = 0;
-        let roundEarned = 0; // Value for level progress
-        
-        // 3.0.2 Bet Logic:
-        // Win: Refund Bet + Profit Bet + (10% of Score). Score counts Profit.
-        // Lose: Bet lost. Target increased.
 
         if(win) {
             this.currentLevelWins++; 
             fish = (baitSrc==='mine' && aiRes.t==='mine');
-            
-            // Hand Total Value (Base + All Passives)
             let totalHandVal = myRes.payout;
-            if (fish) totalHandVal *= 2; // Fish x2 on Total
+            if (fish) totalHandVal *= 2; 
 
-            // Bet Logic
             let betRefund = 0;
             let betProfit = 0;
             if (this.currentBet > 0) {
                 betRefund = this.currentBet;
-                betProfit = this.currentBet; // "Extra obtain bet amount"
+                betProfit = this.currentBet; 
             }
 
-            // Wallet Add
-            // "Final gold = HandValue * 10% + Refund + Profit"
             finalPayout = Math.floor(totalHandVal * 0.10) + betRefund + betProfit;
-
-            // Level Progress (Accumulate)
-            // "Recorded in this round's obtained gold" -> HandValue + BetProfit
-            roundEarned = totalHandVal + betProfit;
         } else {
             this.currentLevelLosses++; 
-            // Lose Bet: Target increases
             if(this.currentBet > 0) this.currentTargetGold += this.currentBet;
-            
-            // For FAIL display purposes only (what you could have won sans bet profit maybe? or just hand val)
-            roundEarned = myRes.payout; 
         }
 
-        this.levelEarnedGold += win ? roundEarned : 0; // Only add to progress if win
+        let checkReward = (win ? (myRes.payout * (fish ? 2 : 1)) : 0); // Accumulate logic val
+
+        this.levelEarnedGold += checkReward; // Accumulate counts hand value (doubled if fished)
         
         this.playerGold += finalPayout; 
         this.updateHeader();
@@ -1303,6 +1195,7 @@ class Game {
         else if(this.config.target==='accumulate') pass = this.levelEarnedGold >= this.currentTargetGold;
         
         let failReason = "";
+        
         if (!win && this.config.target === 'best_of_3') failReason = "本局失败"; 
         
         let isEarlyExitWin = (this.config.target === 'best_of_3' && this.currentLevelWins >= 2);
@@ -1314,25 +1207,25 @@ class Game {
         }
 
         if(this.config.target === 'accumulate') {
-            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
-            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", roundEarned);
-            else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, roundEarned); // Pass round val
+            if(pass) this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", checkReward);
+            else if(this.currentRound < 3) this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", checkReward);
+            else this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, checkReward); 
         } else {
              if (isEarlyExitLoss) {
                 let earlyFailReason = `胜场不足 (${this.currentLevelWins}/3)`;
-                this.showFailPanel(myRes, aiRes, cards, aiRes.cards, earlyFailReason, roundEarned);
+                this.showFailPanel(myRes, aiRes, cards, aiRes.cards, earlyFailReason, checkReward);
              } 
              else if (isEarlyExitWin) {
-                this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
+                this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", checkReward);
              }
              else if(this.currentRound < 3) {
-                 this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", roundEarned);
+                 this.showSettlePanel(win, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, false, "", checkReward);
              }
              else if (pass) {
-                 this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", roundEarned);
+                 this.showSettlePanel(true, myRes, aiRes, finalPayout, cards, aiRes.cards, baitSrc, aiRes.t, fish, true, "", checkReward);
              }
              else {
-                 this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, roundEarned);
+                 this.showFailPanel(myRes, aiRes, cards, aiRes.cards, failReason, checkReward);
              }
         }
     }
@@ -1358,7 +1251,6 @@ class Game {
         requestAnimationFrame(step);
     }
 
-    // 3.0.2 Added levelVal (roundEarned) to args
     showSettlePanel(win, myRes, aiRes, gold, myCards, aiCards, mySrc, aiSrc, fish, isEnd, failMsg, levelVal) {
         const ov = document.getElementById('overlay-screen'); ov.classList.add('visible');
         this.setOverlayState(true);
@@ -1368,30 +1260,21 @@ class Game {
 
         const myTitle = win ? `${myRes.name} 胜` : `${myRes.name}`; const titleCls = win ? "win-title-tag" : "lose-title-tag";
         const getHTML = (cards) => { let h = ''; const allBait = [...this.playerBait, ...this.oppBait]; cards.forEach(c => { const isB = allBait.some(b => b.id === c.id); h += this.htmlCard(c, true, true, !!isB); }); return h; };
+        const mySourceTxt = mySrc==='mine'?'使用我的放牌':(mySrc==='opp'?'使用TA的放牌':'直接出牌'); 
         
-        // 3.0.2 Detail Split
-        // Line 1: Hand + Type Bonus
-        const row1 = myRes.row1;
-        // Line 2: Items + Mults
-        const row2 = myRes.row2;
-        const itemsStr = myRes.items.length > 0 ? myRes.items.join(', ') : '无';
-        // Line 3: Fishing
         const usedBait = mySrc==='mine'?this.playerBait:this.oppBait;
         const baitStr = usedBait.length>0 ? usedBait.map(c=>c.suit+c.rank).join(' ') : '';
-        const baitTxt = mySrc==='mine' ? `使用钓鱼牌：我的钓饵牌 ${baitStr}` : (mySrc==='opp' ? `使用钓鱼牌：对手的钓饵牌 ${baitStr}` : '未使用钓鱼牌');
-        
-        // Total Gold Logic for Display (before 10% cut, after fish mult)
-        // myRes.payout is (Row1 + Row2). Fish applies to this sum.
-        const totalWithFish = fish ? (myRes.payout * 2) : 0;
+        const baitTxt = mySrc==='mine' ? `使用钓鱼：我的诱饵牌 ${baitStr}` : (mySrc==='opp' ? `使用钓鱼：对手的诱饵牌 ${baitStr}` : '未使用钓鱼');
+        const baitBonus = fish ? `<span style="color:var(--highlight); margin-left:auto; display:flex; gap:10px;"><span>⚡ 钓鱼成功 x2</span> <span class="gold-val">金币 +${myRes.payout}</span></span>` : '';
         const fishTxt = fish ? `<span style="color:var(--highlight)">钓鱼成功x2 + 金币${myRes.payout}</span>` : '无钓鱼奖励';
-        
-        // Level Progress Text
-        const progressTxt = this.config.target === 'accumulate' ? `<div style="text-align:right; font-size:12px; color:#aaa; margin-top:5px;">本关进度: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</div>` : '';
-
-        if(isEnd && this.levelIndex >= LEVEL_CONFIG.length - 1 && win) { ov.innerHTML = `<div style="text-align:center; color:gold;"><div style="font-size:60px;">🦊</div><h1>无尽塔楼，挑战成功</h1><p>恭喜获得狐狸徽章</p><button class="btn btn-primary" style="width:200px; margin-top:20px;" onclick="game.returnToLobby()">返回大厅</button></div>`; return; }
 
         const pickCount = this.config.rewardPick || 3; const getCount = this.config.rewardGet || 1;
         let nextAction = isEnd ? `game.pickRewardPhase(${pickCount}, ${getCount})` : "game.nextRound()"; let btnTxt = isEnd ? "领取奖励" : "下一回合";
+
+        // Map Return if End (3.0.4) but Pick Phase handles it.
+        
+        // Badge Logic...
+        if(isEnd && this.levelIndex >= LEVEL_CONFIG.length - 1 && win) { ov.innerHTML = `<div style="text-align:center; color:gold;"><div style="font-size:60px;">🦊</div><h1>无尽塔楼，挑战成功</h1><p>恭喜获得狐狸徽章</p><button class="btn btn-primary" style="width:200px; margin-top:20px;" onclick="game.returnToLobby()">返回大厅</button></div>`; return; }
 
         let tagsHTML = ''; 
         if(win) { 
@@ -1404,6 +1287,16 @@ class Game {
             }); 
         }
         
+        const row1 = myRes.row1;
+        const row2 = myRes.row2;
+        const itemsStr = myRes.items.length > 0 ? myRes.items.join(', ') : '无';
+
+        let progressStr = '';
+        if (this.config.target === 'accumulate') progressStr = `${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;
+        else if (this.config.target === 'best_of_3') progressStr = `${this.currentLevelWins} 胜 ${this.currentLevelLosses} 负`;
+        
+        const progressTxt = progressStr ? `<div style="text-align:right; font-size:12px; color:#fff; margin-top:5px;">本关进度: ${progressStr}</div>` : '';
+
         ov.innerHTML = `
         <div class="settle-modal">
             <div class="settle-header"><div>${win?'VICTORY':'MATCH RESULT'}</div><div class="multiplier-bar" style="font-size:16px;">本局获得：💰 <span id="settle-gold-num">0</span></div></div>
@@ -1414,7 +1307,7 @@ class Game {
                         <span>${myTitle}</span>
                         ${progressTxt}
                     </div>
-                    <div class="cards-display-row" style="transform:scale(1.1); margin:15px 0;">${getHTML(myCards)}</div>
+                    <div class="cards-display-row" style="transform:scale(1.1); margin:5px 0;">${getHTML(myCards)}</div>
                     <div style="width:100%; margin-top:10px; display:flex; flex-direction:column; gap:5px;">
                         <div class="detail-row">
                             <span>我的牌型：${myRes.name}</span>
@@ -1425,7 +1318,7 @@ class Game {
                             <span class="gold-val">金币 +${Math.floor(row2)}</span>
                         </div>
                         <div class="detail-row" style="background:rgba(255,255,255,0.03);">
-                            <span style="font-size:12px; color:#888; max-width:50%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${baitTxt}</span>
+                            <span style="font-size:12px; color:#fff; max-width:50%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${baitTxt}</span>
                             <span>${fishTxt}</span>
                         </div>
                     </div>
@@ -1446,13 +1339,13 @@ class Game {
 
         const getHTML = (cards) => cards.map(c => this.htmlCard(c, true, true, false)).join('');
 
-        // 3.0.2 Left side progress display logic
         let leftInfo = `<div style="color:#e74c3c; font-weight:bold; text-align:center; font-size:14px; background:rgba(0,0,0,0.3); padding:10px; border-radius:4px; width:100%;">${reason}</div>`;
         
-        // Add specific x/n progress if accumulation level
-        if (this.config.target === 'accumulate') {
-             leftInfo += `<div style="margin-top:10px; color:#aaa; font-size:12px;">本局: ${Math.floor(levelVal)} / 累计: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</div>`;
-        }
+        let progressInfo = '';
+        if (this.config.target === 'accumulate') progressInfo = `本局: ${Math.floor(levelVal)} / 累计: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;
+        else if (this.config.target === 'best_of_3') progressInfo = `当前战绩: ${this.currentLevelWins} 胜 ${this.currentLevelLosses} 负`;
+        
+        if(progressInfo) leftInfo += `<div style="margin-top:10px; color:#ddd; font-size:12px;">${progressInfo}</div>`;
 
         ov.innerHTML = `
         <div class="settle-modal" style="border-color:var(--danger)">
@@ -1507,8 +1400,10 @@ class Game {
         el.style.border = '2px solid var(--gold-color)'; el.style.opacity = '0.5'; el.onclick = null;
         this.pendingPicks--;
         if(this.pendingPicks <= 0) { setTimeout(() => { 
-            if (this.config.boss) { const ov = document.getElementById('overlay-screen'); const nextFloor = this.config.floor + 1; ov.innerHTML = `<div class="msg-screen-content"><div class="msg-title success">恭喜爬楼成功</div><div class="msg-subtitle">即将进入 ${nextFloor} 层楼</div><button class="btn btn-lobby" onclick="game.nextLevelAction()">前往挑战</button></div>`; } 
-            else { game.nextLevelAction(); }
+            this.setOverlayState(false);
+            document.getElementById('overlay-screen').classList.remove('visible');
+            this.levelIndex++; 
+            this.showMap(); 
         }, 500); }
     }
     nextLevelAction() { 
@@ -1530,14 +1425,14 @@ class Game {
     executeSkill() {
         const draw = (n) => { const c = []; 
             if (this.drawPile.length < n) {
-                let fresh = this.createDeck();
-                // v3.0.1 Naive replenish
-                this.drawPile.push(...fresh);
-            }
-            if (this.drawPile.length < n && this.discardPile.length > 0) {
-                 this.drawPile.push(...this.discardPile);
-                 this.discardPile = [];
-                 this.drawPile.sort(() => Math.random() - 0.5);
+                if(this.discardPile.length > 0) {
+                    this.drawPile.push(...this.discardPile);
+                    this.discardPile = [];
+                    this.shuffle(this.drawPile);
+                } else {
+                    let fresh = this.createDeck();
+                    this.drawPile.push(...fresh);
+                }
             }
             for(let i=0;i<n;i++) if(this.drawPile.length>0) c.push(this.drawPile.pop()); 
             return c; 
@@ -1623,11 +1518,13 @@ class Game {
         if(this.currentBet > 0) { betDis.style.display='block'; betDis.innerText = `下注: ${this.currentBet}`; } else { betDis.style.display='none'; }
         const pl = document.getElementById('passive-list'); pl.innerHTML = '';
         this.passives.forEach(p => { const d = document.createElement('div'); d.className = 'passive-icon'; d.setAttribute('data-desc', `${p.name || ''}: ${p.desc}`); d.innerHTML = p.icon; pl.appendChild(d); });
+        
         const g = document.getElementById('level-desc');
-        let txt = "";
-        if(this.config.target==='accumulate') { txt = `3回合内金币 > <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`; } 
-        else { txt = this.config.desc; }
-        g.innerHTML = txt;
+        if (this.config.target === 'best_of_3') {
+             g.innerHTML = `3局2胜 (<span class="gold-val">${this.currentLevelWins}胜/${this.currentLevelLosses}负</span>) - 第${this.currentRound}/3回合 <span style="font-size:10px; color:#aaa; margin-left:5px;">牌型赢过对方即胜</span>`;
+        } else {
+             g.innerHTML = `3回合内金币 > <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`;
+        }
     }
     toggleInfo() {
         const sc = document.getElementById('info-screen');
