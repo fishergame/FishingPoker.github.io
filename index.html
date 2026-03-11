@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Fishing Poker[v3.4.8] - Deep Customization</title>
+<title>Fishing Poker[v3.5.3] - Deep Customization</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -81,13 +81,18 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 @keyframes scrollText{0%{transform:translateY(100vh);}100%{transform:translateY(-120%);}}
 .lobby-content{text-align:center;z-index:10;position:relative;}
 .lobby-title-main{font-size:40px;font-weight:normal;color:#fff;text-shadow:0 4px 0px #0099cc, 0 0 20px var(--highlight);margin-bottom:0;line-height:1.4;letter-spacing:2px;}
-.lobby-title-sub{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:24px;font-weight:bold;color:var(--highlight);text-shadow:0 0 10px rgba(0,242,255,0.5);margin-top:15px;letter-spacing:6px;margin-bottom:20px;}
-.lobby-orientation{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin-bottom:50px;}
+.lobby-title-sub{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:24px;font-weight:bold;color:var(--highlight);text-shadow:0 0 10px rgba(0,242,255,0.5);margin-top:15px;letter-spacing:6px;margin-bottom:40px;}
+.lobby-orientation{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin-bottom:50px;display:none;}
 
-.btn-lobby{font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; font-size:20px; padding:15px 60px; background:linear-gradient(180deg,#0ea5e9 0%,#0284c7 100%); color:#fff; border:none; border-radius:16px; font-weight:900; box-shadow:0 8px 20px rgba(14,165,233,0.5); cursor:pointer; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:6px; text-transform:uppercase; width: 280px; text-align: center;}
-.btn-lobby:hover{transform:translateY(-2px); box-shadow:0 12px 25px rgba(14,165,233,0.7); background:linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%);}
-.btn-lobby:active{transform:translateY(4px); box-shadow:0 4px 10px rgba(14,165,233,0.4);}
-.msg-screen-content .btn-lobby { font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; }
+.btn-lobby{font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; font-size:20px; padding:15px 0; background:linear-gradient(180deg,#0ea5e9 0%,#0284c7 100%); color:#fff; border:none; border-radius:12px; font-weight:900; box-shadow:0 6px 15px rgba(14,165,233,0.4); cursor:pointer; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:4px; text-transform:uppercase; width: 240px; text-align: center; margin: 0 auto;}
+.btn-lobby-primary:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(14,165,233,0.6); background:linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%);}
+.btn-lobby-primary:active{transform:translateY(2px); box-shadow:0 4px 10px rgba(14,165,233,0.3);}
+
+#btn-continue {background: linear-gradient(180deg,#10b981 0%,#059669 100%); box-shadow: 0 6px 15px rgba(16,185,129,0.4);}
+#btn-continue:hover {background: linear-gradient(180deg,#34d399 0%,#10b981 100%); box-shadow: 0 10px 20px rgba(16,185,129,0.6); transform:translateY(-2px);}
+#btn-continue:active {box-shadow: 0 4px 10px rgba(16,185,129,0.3); transform:translateY(2px);}
+
+.msg-screen-content .btn-lobby { font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; margin: 0 auto; display: block; }
 
 #map-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,#0e121b 0%,#000000 100%);z-index:250;display:none;flex-direction:column;overflow:hidden;}
 #map-scroll-area{flex:1;overflow-y:auto;padding:40px 20px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
@@ -153,6 +158,8 @@ body.overlay-active header{display:none;}
 .card.red{color:#e74c3c;} .card.black{color:#2c3e50;}
 .card.card-wild{background:linear-gradient(135deg,#fffce0 0%,#ffeaa7 100%) !important;box-shadow:inset 0 0 10px rgba(255,215,0,0.5),2px 2px 5px rgba(0,0,0,0.5);}
 .card.card-star{background:linear-gradient(135deg,#f3e8ff 0%,#d3adf7 100%) !important;box-shadow:inset 0 0 10px rgba(213,128,255,0.5),2px 2px 5px rgba(0,0,0,0.5);}
+.card.card-score{background:#bae6fd !important;box-shadow:inset 0 0 10px rgba(14,165,233,0.5),2px 2px 5px rgba(0,0,0,0.5);}
+
 .card-rank{position:absolute;top:4px;left:6px;font-size:1.4em;font-weight:800;line-height:1;}
 .card-suit{position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);font-size:2.5em;line-height:1;}
 .card-back{background:#34495e;border:2px solid #7f8c8d;display:flex;align-items:center;justify-content:center;}
@@ -213,7 +220,7 @@ body.overlay-active header{display:none;}
 .inv-item:hover{border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);}
 .inv-item.equipped{border-color:var(--highlight);}
 .inv-item.equipped::after{content:'已装备';position:absolute;top:0;right:0;background:var(--highlight);color:#000;font-size:9px;padding:2px 4px;border-radius:0 8px 0 4px;}
-#deck-mod-modal .info-panel{background:#1e293b;border:2px solid var(--highlight);border-radius:12px;}
+#deck-mod-modal .info-panel, #printer-modal .info-panel {background:#1e293b;border:2px solid var(--highlight);border-radius:12px;}
 .deck-mod-card-wrap{display:inline-block;position:relative;cursor:pointer;transition:transform 0.2s;}
 .deck-mod-card-wrap.selected{transform:translateY(-10px);border-radius:6px;border:2px solid var(--highlight);box-shadow:0 0 15px var(--highlight);z-index:10;}
 #info-screen{z-index:600;}
@@ -233,9 +240,51 @@ body.overlay-active header{display:none;}
     50% { transform: translateX(3px) translateY(3px) rotate(3deg); }
     75% { transform: translateX(-3px) translateY(-3px) rotate(-3deg); }
 }
-.shake-anim {
-    animation: customShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+.shake-anim { animation: customShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+/* Clash Animation Styles */
+/* === Level Enter Transition === */
+#level-enter-overlay { overflow:hidden; }
+/* level enter panels — now just a simple full-screen fade-to-black */
+#level-enter-overlay { background: #020617; }
+
+/* === Clash Animation === */
+#clash-overlay { position:fixed; inset:0; background:radial-gradient(ellipse at center, rgba(5,15,35,0.97) 0%, rgba(0,0,0,0.98) 100%); z-index:500; display:none; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; gap:0; }
+#clash-top, #clash-bottom { width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 16px; will-change:transform; }
+#clash-vs { font-family:'Press Start 2P',cursive; font-size:56px; color:#fff; text-shadow:0 0 30px var(--danger), 0 0 60px rgba(225,29,72,0.4); font-style:italic; position:absolute; pointer-events:none; letter-spacing:4px; }
+/* Fan-arc card layout */
+.clash-fan-row { display:flex; align-items:flex-end; justify-content:center; position:relative; height:120px; }
+.clash-fan-row.fan-concave { align-items:flex-start; height:120px; }
+.clash-card-wrap { position:absolute; transform-origin:bottom center; }
+.clash-fan-row.fan-concave .clash-card-wrap { transform-origin:top center; }
+/* Result label */
+.clash-result-label {
+    display: inline-flex; align-items:center; gap:8px;
+    font-family:'SimHei','Microsoft YaHei',sans-serif;
+    font-size:20px; font-weight:900; letter-spacing:3px;
+    padding:10px 28px; border-radius:50px; margin-top:16px;
+    position:relative; overflow:hidden;
 }
+.clash-result-label::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 60%);
+    border-radius:inherit;
+}
+.clash-result-win {
+    background:linear-gradient(135deg,#f97316,#dc5a00);
+    color:#fff; border:1.5px solid rgba(255,200,130,0.6);
+    box-shadow:0 0 40px rgba(249,115,22,0.8), 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+    text-shadow:0 1px 3px rgba(0,0,0,0.4);
+}
+.clash-result-lose {
+    background:linear-gradient(135deg,#e11d48,#9b0d2c);
+    color:#fff; border:1.5px solid rgba(255,160,180,0.5);
+    box-shadow:0 0 40px rgba(225,29,72,0.8), 0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2);
+    text-shadow:0 1px 3px rgba(0,0,0,0.4);
+}
+@keyframes clashShake { 0%,100%{transform:translate(0,0);} 20%{transform:translate(-14px,12px);} 40%{transform:translate(14px,-12px);} 60%{transform:translate(-10px,-10px);} 80%{transform:translate(10px,10px);} }
+@keyframes labelGlow { 0%,100%{box-shadow:0 0 40px rgba(249,115,22,0.8),0 4px 20px rgba(0,0,0,0.5);} 50%{box-shadow:0 0 70px rgba(249,115,22,1),0 4px 30px rgba(0,0,0,0.5);} }
+@keyframes labelGlowR { 0%,100%{box-shadow:0 0 40px rgba(225,29,72,0.8),0 4px 20px rgba(0,0,0,0.5);} 50%{box-shadow:0 0 70px rgba(225,29,72,1),0 4px 30px rgba(0,0,0,0.5);} }
 
 @media (max-width: 768px){
     .card-rank{font-size:0.9em!important;font-weight:normal!important;top:2px!important;left:3px!important;}
@@ -253,6 +302,7 @@ body.overlay-active header{display:none;}
     .settle-card-wrap .card-rank { font-size: 1.2em !important; top: 3px !important; left: 5px !important; }
     .settle-card-wrap .card-suit { font-size: 2em !important; }
     .settle-card-wrap .card.mini { width: 60px !important; height: 84px !important; }
+    #clash-vs { font-size: 40px; }
 }
 @media screen and (max-height: 600px) and (orientation: landscape){
     :root{--card-width:40px;--card-height:56px;--mini-card-width:32px;--mini-card-height:44px;}
@@ -295,6 +345,8 @@ body.overlay-active header{display:none;}
     <div id="interact-desc" style="font-size:11px;color:#aaa;margin-bottom:15px;line-height:1.4;"></div>
     <button id="interact-btn" class="btn btn-primary" style="width:100%;padding:10px;"></button>
 </div>
+
+<!-- General Deck Mod Modal -->
 <div id="deck-mod-modal" class="overlay" style="z-index:10000;">
     <div class="info-panel" style="width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
         <h3 id="deck-mod-title" style="color:var(--highlight);margin-bottom:10px;"></h3>
@@ -306,6 +358,20 @@ body.overlay-active header{display:none;}
         </div>
     </div>
 </div>
+
+<!-- Printer specific Modal -->
+<div id="printer-modal" class="overlay" style="z-index:10000;">
+    <div class="info-panel" style="width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
+        <h3 id="printer-title" style="color:var(--highlight);margin-bottom:10px;">打印机</h3>
+        <div id="printer-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;">选择1张背包中的普通道具牌，复制并获得该牌</div>
+        <div id="printer-cards" class="inv-grid" style="justify-content:center;margin-bottom:20px;min-height:90px;"></div>
+        <div style="display:flex;justify-content:center;gap:20px;">
+            <button id="printer-confirm" class="btn btn-primary" style="width:120px;padding:10px;">确定复制</button>
+            <button id="printer-cancel" class="btn" style="width:120px;padding:10px;" onclick="document.getElementById('printer-modal').classList.remove('visible')">取消</button>
+        </div>
+    </div>
+</div>
+
 <div id="map-screen">
     <div id="map-back-btn" class="absolute top-4 left-4 z-50 cursor-pointer text-white/70 hover:text-white transition-colors" onclick="game.returnToLobby()" style="display:none;">
         <svg viewBox="0 0 24 24" class="w-8 h-8 fill-current"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
@@ -313,6 +379,7 @@ body.overlay-active header{display:none;}
     <div class="map-title">无尽塔楼</div>
     <div id="map-scroll-area"></div>
 </div>
+
 <div id="lobby-screen">
     <div class="waves-container">
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0" /><use xlink:href="#gentle-wave" x="48" y="3" /><use xlink:href="#gentle-wave" x="48" y="5" /></g></svg>
@@ -323,14 +390,14 @@ body.overlay-active header{display:none;}
     <div class="lobby-content">
         <div class="lobby-title-main pixel-font">FISHING POKER</div>
         <div class="lobby-title-sub">钓鱼牌-无尽塔楼</div>
-        <div class="lobby-orientation">&lt; 横屏游玩 &gt;</div>
         <div style="display:flex; flex-direction:column; gap:20px; align-items:center;">
-            <button class="btn-lobby" onclick="game.startNewGame()">开始挑战</button>
-            <button class="btn-lobby" id="btn-continue" onclick="game.continueGame()" style="display:none; background:linear-gradient(180deg,#10b981 0%,#059669 100%); box-shadow:0 8px 20px rgba(16,185,129,0.5);">继续挑战</button>
+            <button class="btn-lobby btn-lobby-primary" onclick="game.startNewGame()">开始挑战</button>
+            <button class="btn-lobby" id="btn-continue" onclick="game.continueGame()" style="display:none;">继续挑战</button>
         </div>
     </div>
-    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.4.8</div>
+    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.5.3</div>
 </div>
+
 <header>
     <div class="header-left lobby-hide" id="header-left-col"><div class="level-id" id="level-id">FLOOR 1-1</div><div class="level-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div></div>
     <div class="header-center">
@@ -381,6 +448,18 @@ body.overlay-active header{display:none;}
 </div>
 <div id="overlay-screen" class="overlay flex items-center justify-center min-h-screen p-4 dark"></div>
 
+<!-- Clash Animation Overlay -->
+<div id="clash-overlay">
+    <div id="clash-top" class="clash-block"></div>
+    <div id="clash-vs">VS</div>
+    <div id="clash-bottom" class="clash-block"></div>
+</div>
+
+<!-- Level Enter Transition Overlay -->
+<div id="level-enter-overlay" style="display:none;position:fixed;inset:0;z-index:600;background:#020617;pointer-events:all;">
+    <canvas id="hook-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+</div>
+
 <!-- Fullscreen Shop & Inventory UI -->
 <div id="shop-screen">
     <div class="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#020617] to-[#010b1a]">
@@ -411,10 +490,11 @@ body.overlay-active header{display:none;}
             </div>
             <div id="tab-content-shop" style="flex:1;overflow-y:auto;overflow-x:hidden;padding:15px;"></div>
             <div id="tab-content-inventory" style="flex:1;overflow-y:auto;padding:20px;display:none;"></div>
-            <div style="padding:15px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;flex-shrink:0;background:rgba(0,0,0,0.3);"><button class="btn btn-primary" style="width:200px;padding:10px;" onclick="game.leaveShop()">进入下一关卡</button></div>
+            <div style="padding:15px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;flex-shrink:0;background:rgba(0,0,0,0.3);"><button id="shop-next-btn" class="btn btn-primary" style="width:240px;padding:10px;" onclick="game.leaveShop()">前往下一关</button></div>
         </div>
     </div>
 </div>
+
 <div id="info-screen" class="overlay" onclick="game.toggleInfo()">
     <div class="info-panel" onclick="event.stopPropagation()">
         <h3 style="color:var(--highlight);margin-bottom:15px;text-align:center;">牌型说明</h3>
@@ -424,16 +504,27 @@ body.overlay-active header{display:none;}
 </div>
 
 <script>
-class AtmosphereAudio{constructor(){this.ctx=null;this.masterGain=null;this.bgmGain=null;this.sfxGain=null;this.isPlaying=false;this.oceanNode=null;this.synthInterval=null;this.shopInterval=null;this.notes=[138.59,164.81,185.00,207.65,246.94];}init(){if(!this.ctx){const AudioContext=window.AudioContext||window.webkitAudioContext;this.ctx=new AudioContext();this.masterGain=this.ctx.createGain();this.masterGain.gain.value=0.5;this.masterGain.connect(this.ctx.destination);this.bgmGain=this.ctx.createGain();this.bgmGain.gain.value=1.0;this.bgmGain.connect(this.masterGain);this.sfxGain=this.ctx.createGain();this.sfxGain.gain.value=1.0;this.sfxGain.connect(this.masterGain);}}createPinkNoise(){const bufferSize=2*this.ctx.sampleRate;const buffer=this.ctx.createBuffer(1,bufferSize,this.ctx.sampleRate);const output=buffer.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<bufferSize;i++){const white=Math.random()*2-1;b0=0.99886*b0+white*0.0555179;b1=0.99332*b1+white*0.0750759;b2=0.96900*b2+white*0.1538520;b3=0.86650*b3+white*0.3104856;b4=0.55000*b4+white*0.5329522;b5=-0.7616*b5-white*0.0168980;output[i]=b0+b1+b2+b3+b4+b5+b6+white*0.5362;output[i]*=0.11;b6=white*0.115926;}const noise=this.ctx.createBufferSource();noise.buffer=buffer;noise.loop=true;return noise;}startOcean(){const noise=this.createPinkNoise();const filter=this.ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=400;const lfo=this.ctx.createOscillator();lfo.type='sine';lfo.frequency.value=0.15;const lfoGain=this.ctx.createGain();lfoGain.gain.value=300;lfo.connect(lfoGain);lfoGain.connect(filter.frequency);noise.connect(filter);filter.connect(this.bgmGain);noise.start();lfo.start();this.oceanNode={noise,lfo};}playNote(){if(!this.isPlaying)return;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();const note=this.notes[Math.floor(Math.random()*this.notes.length)];const freq=Math.random()>0.7?note*2:note;osc.frequency.value=freq;osc.type='sine';gain.gain.setValueAtTime(0,this.ctx.currentTime);gain.gain.linearRampToValueAtTime(0.15,this.ctx.currentTime+2);gain.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+8);osc.connect(gain);gain.connect(this.bgmGain);osc.start();osc.stop(this.ctx.currentTime+8);}duckBgm(duration){if(!this.bgmGain)return;const t=this.ctx.currentTime;this.bgmGain.gain.cancelScheduledValues(t);this.bgmGain.gain.setValueAtTime(this.bgmGain.gain.value,t);this.bgmGain.gain.linearRampToValueAtTime(0.2,t+0.1);this.bgmGain.gain.linearRampToValueAtTime(1.0,t+duration);}
+class AtmosphereAudio{
+    constructor(){this.ctx=null;this.masterGain=null;this.bgmGain=null;this.sfxGain=null;this.isPlaying=false;this.oceanNode=null;this.synthInterval=null;this.shopInterval=null;this.notes=[138.59,164.81,185.00,207.65,246.94];}
+    init(){if(!this.ctx){const AudioContext=window.AudioContext||window.webkitAudioContext;this.ctx=new AudioContext();this.masterGain=this.ctx.createGain();this.masterGain.gain.value=0.5;this.masterGain.connect(this.ctx.destination);this.bgmGain=this.ctx.createGain();this.bgmGain.gain.value=1.0;this.bgmGain.connect(this.masterGain);this.sfxGain=this.ctx.createGain();this.sfxGain.gain.value=1.0;this.sfxGain.connect(this.masterGain);}}
+    createPinkNoise(){const bufferSize=2*this.ctx.sampleRate;const buffer=this.ctx.createBuffer(1,bufferSize,this.ctx.sampleRate);const output=buffer.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<bufferSize;i++){const white=Math.random()*2-1;b0=0.99886*b0+white*0.0555179;b1=0.99332*b1+white*0.0750759;b2=0.96900*b2+white*0.1538520;b3=0.86650*b3+white*0.3104856;b4=0.55000*b4+white*0.5329522;b5=-0.7616*b5-white*0.0168980;output[i]=b0+b1+b2+b3+b4+b5+b6+white*0.5362;output[i]*=0.11;b6=white*0.115926;}const noise=this.ctx.createBufferSource();noise.buffer=buffer;noise.loop=true;return noise;}
+    startOcean(){const noise=this.createPinkNoise();const filter=this.ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=400;const lfo=this.ctx.createOscillator();lfo.type='sine';lfo.frequency.value=0.15;const lfoGain=this.ctx.createGain();lfoGain.gain.value=300;lfo.connect(lfoGain);lfoGain.connect(filter.frequency);noise.connect(filter);filter.connect(this.bgmGain);noise.start();lfo.start();this.oceanNode={noise,lfo};}
+    playNote(){if(!this.isPlaying)return;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();const note=this.notes[Math.floor(Math.random()*this.notes.length)];const freq=Math.random()>0.7?note*2:note;osc.frequency.value=freq;osc.type='sine';gain.gain.setValueAtTime(0,this.ctx.currentTime);gain.gain.linearRampToValueAtTime(0.15,this.ctx.currentTime+2);gain.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+8);osc.connect(gain);gain.connect(this.bgmGain);osc.start();osc.stop(this.ctx.currentTime+8);}
+    duckBgm(duration){if(!this.bgmGain)return;const t=this.ctx.currentTime;this.bgmGain.gain.cancelScheduledValues(t);this.bgmGain.gain.setValueAtTime(this.bgmGain.gain.value,t);this.bgmGain.gain.linearRampToValueAtTime(0.2,t+0.1);this.bgmGain.gain.linearRampToValueAtTime(1.0,t+duration);}
     playCardSlide(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const noise=this.createPinkNoise();const noiseGain=this.ctx.createGain();const filter=this.ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.setValueAtTime(800,t);filter.frequency.linearRampToValueAtTime(1200,t+0.1);noiseGain.gain.setValueAtTime(1.44,t);noiseGain.gain.exponentialRampToValueAtTime(0.001,t+0.15);noise.connect(filter);filter.connect(noiseGain);noiseGain.connect(this.sfxGain);noise.start(t);noise.stop(t+0.15);const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(400,t);gain.gain.setValueAtTime(0.54,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playTick(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(400,t);gain.gain.setValueAtTime(0.9,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playCoin(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(2000+Math.random()*1000,t);gain.gain.setValueAtTime(0.15,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playWin(){if(!this.isPlaying)return;this.duckBgm(3);const t=this.ctx.currentTime;const freqs=[523.25, 659.25, 783.99, 1046.50];freqs.forEach((f,i)=>{const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.value=f;gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(0.3,t+0.1+(i*0.08));gain.gain.exponentialRampToValueAtTime(0.001,t+2.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+2.5);});}
     playLose(){if(!this.isPlaying)return;this.duckBgm(1.5);const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(150,t);osc.frequency.exponentialRampToValueAtTime(80,t+1.5);gain.gain.setValueAtTime(0.24,t);gain.gain.linearRampToValueAtTime(0,t+1.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+1.5);}
+    playClash(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(150,t);osc.frequency.exponentialRampToValueAtTime(30,t+0.4);gain.gain.setValueAtTime(1.5,t);gain.gain.exponentialRampToValueAtTime(0.01,t+0.4);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.4);const noise=this.createPinkNoise();const nGain=this.ctx.createGain();const filter=this.ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.setValueAtTime(800,t);filter.frequency.exponentialRampToValueAtTime(100,t+0.3);nGain.gain.setValueAtTime(2,t);nGain.gain.exponentialRampToValueAtTime(0.01,t+0.3);noise.connect(filter);filter.connect(nGain);nGain.connect(this.sfxGain);noise.start(t);noise.stop(t+0.3);}
     startShopBgm(){if(!this.isPlaying||this.shopInterval)return;if(this.bgmGain)this.bgmGain.gain.linearRampToValueAtTime(0.1,this.ctx.currentTime+0.5);let notes=[261.63,329.63,392.00,523.25,392.00,329.63];let idx=0;this.shopInterval=setInterval(()=>{const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.value=notes[idx];idx=(idx+1)%notes.length;gain.gain.setValueAtTime(0,this.ctx.currentTime);gain.gain.linearRampToValueAtTime(0.06,this.ctx.currentTime+0.05);gain.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+0.3);osc.connect(gain);gain.connect(this.sfxGain);osc.start();osc.stop(this.ctx.currentTime+0.3);},200);}
     stopShopBgm(){if(this.shopInterval){clearInterval(this.shopInterval);this.shopInterval=null;}if(this.bgmGain){this.bgmGain.gain.linearRampToValueAtTime(1.0,this.ctx.currentTime+1.0);}}
     playShopOpenSound(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.frequency.setValueAtTime(300,t);osc.frequency.exponentialRampToValueAtTime(800,t+0.3);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(0.18,t+0.1);gain.gain.exponentialRampToValueAtTime(0.001,t+0.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.5);}
-    toggle(){this.init();if(this.ctx.state==='suspended')this.ctx.resume();if(this.isPlaying){this.stop();}else{this.start();}return this.isPlaying;}start(){if(this.isPlaying)return;this.isPlaying=true;this.startOcean();this.playNote();this.synthInterval=setInterval(()=>{if(Math.random()>0.4)this.playNote();},4000);}stop(){this.isPlaying=false;if(this.oceanNode){this.oceanNode.noise.stop();this.oceanNode.lfo.stop();this.oceanNode=null;}if(this.synthInterval)clearInterval(this.synthInterval);this.stopShopBgm();}}
+    toggle(){this.init();if(this.ctx.state==='suspended')this.ctx.resume();if(this.isPlaying){this.stop();}else{this.start();}return this.isPlaying;}
+    start(){if(this.isPlaying)return;this.isPlaying=true;this.startOcean();this.playNote();this.synthInterval=setInterval(()=>{if(Math.random()>0.4)this.playNote();},4000);}
+    startWithFade(fadeSecs=3){if(this.isPlaying)return;this.isPlaying=true;this.masterGain.gain.setValueAtTime(0,this.ctx.currentTime);this.masterGain.gain.linearRampToValueAtTime(0.5,this.ctx.currentTime+fadeSecs);this.startOcean();this.playNote();this.synthInterval=setInterval(()=>{if(Math.random()>0.4)this.playNote();},4000);}
+    stop(){this.isPlaying=false;if(this.oceanNode){this.oceanNode.noise.stop();this.oceanNode.lfo.stop();this.oceanNode=null;}if(this.synthInterval)clearInterval(this.synthInterval);this.stopShopBgm();}
+}
 
 const LEVEL_CONFIG=[];
 for(let floor=1;floor<=8;floor++){
@@ -473,46 +564,52 @@ const REWARD_POOL=[
 {id:'abyss',weight:20,name:'深渊之眼',desc:'查看对方手牌',type:'item_active',ref:'abyss',unique:false,icon:'👁️',price:50},
 {id:'mirror',weight:20,name:'镜界',desc:'复制对方手牌',type:'item_active',ref:'mirror',unique:false,icon:'🪞',price:50},
 {id:'blast',weight:20,name:'爆破',desc:'选择 1 张牌与对方指定牌交换',type:'item_active',ref:'blast',unique:false,icon:'💥',price:50},
-{id:'xuanshu',weight:10,name:'玄枢',desc:'【玄机】使用次数+1',type:'upgrade',icon:'🆙',effect:'add_xuanji',getPrice:(g)=>g.upgradeCounts.xuanshu?100:50},
-{id:'huance',weight:10,name:'幻策',desc:'【幻注】下注比例+10%',type:'upgrade',icon:'💹',effect:'boost_bet',getPrice:(g)=>g.upgradeCounts.huance?100:50},
-{id:'xinyu',weight:5,name:'心屿',desc:'技能槽位数+1',type:'upgrade',icon:'🧩',effect:'add_slot',getPrice:(g)=>g.upgradeCounts.xinyu?100:50},
-{id:'xunang',weight:5,name:'虚囊',desc:'普通道具槽位数+1',type:'upgrade',icon:'👝',effect:'add_passive_slot',getPrice:(g)=>((g.upgradeCounts.xunang||0)+1)*200},
-{id:'heishi',weight:10,name:'黑石',desc:'选择1～2张牌，将花色变为黑桃',type:'upgrade',icon:'🪨',price:100,unique:false},
-{id:'hongguo',weight:10,name:'红果',desc:'选择1～2张牌，将花色变为红心',type:'upgrade',icon:'🍎',price:100,unique:false},
-{id:'mianju',weight:10,name:'面具',desc:'选择1～2张牌，变为人头牌',type:'upgrade',icon:'🎭',price:100,unique:false},
-{id:'xiangpini',weight:10,name:'橡皮泥',desc:'选择1张牌，变为万能牌',type:'upgrade',icon:'🧱',price:100,unique:false},
-{id:'xuyuanxing',weight:10,name:'许愿星',desc:'选择1张牌，变为特殊奖励牌',type:'upgrade',icon:'🌟',price:100,unique:false},
-{id:'shuangshenglian',weight:10,name:'双生莲',desc:'选择2张牌，复制出同样的牌加入牌组',type:'upgrade',icon:'🪷',price:100,unique:false},
-{id:'fumo',weight:10,name:'浮沫',desc:'【单牌】牌型积分x1.8',type:'upgrade',icon:'🫧',price:200,unique:false},
-{id:'shuangli',weight:10,name:'双鲤',desc:'【对子】牌型积分x1.8',type:'upgrade',icon:'🎏',price:200,unique:false},
-{id:'jinwei',weight:10,name:'锦尾',desc:'【两对】牌型积分x1.8',type:'upgrade',icon:'🐠',price:200,unique:false},
-{id:'yuezhu',weight:10,name:'跃珠',desc:'【三条】牌型积分x2.0',type:'upgrade',icon:'🔮',price:200,unique:false},
-{id:'yousuo',weight:10,name:'游梭',desc:'【顺子】牌型积分x2.0',type:'upgrade',icon:'🛶',price:200,unique:false},
-{id:'yixi',weight:10,name:'一汐',desc:'【同花】牌型积分x1.8',type:'upgrade',icon:'🌊',price:200,unique:false},
-{id:'cangjiao',weight:10,name:'藏鲛',desc:'【葫芦】牌型积分x1.8',type:'upgrade',icon:'🧜',price:200,unique:false},
-{id:'baochao',weight:10,name:'爆潮',desc:'【四炸】牌型积分x2.0',type:'upgrade',icon:'💥',price:200,unique:false},
-{id:'longyuan',weight:10,name:'龙渊',desc:'【同花顺】牌型积分x2.0',type:'upgrade',icon:'🐉',price:200,unique:false},
+{id:'xuanshu',weight:10,name:'玄枢',desc:'【玄机】使用次数+1',type:'secret',icon:'🆙',effect:'add_xuanji',getPrice:(g)=>g.upgradeCounts.xuanshu?100:50},
+{id:'huance',weight:10,name:'幻策',desc:'【幻注】下注比例+10%',type:'secret',icon:'💹',effect:'boost_bet',getPrice:(g)=>g.upgradeCounts.huance?100:50},
+{id:'xinyu',weight:5,name:'心屿',desc:'技能槽位数+1',type:'secret',icon:'🧩',effect:'add_slot',getPrice:(g)=>g.upgradeCounts.xinyu?100:50},
+{id:'xunang',weight:5,name:'虚囊',desc:'普通道具槽位数+1',type:'secret',icon:'👝',effect:'add_passive_slot',getPrice:(g)=>((g.upgradeCounts.xunang||0)+1)*200},
+{id:'yunyan',weight:10,name:'云衍',desc:'【云渡】使用次数+1',type:'secret',icon:'☁️',effect:'add_yundu',getPrice:(g)=>g.upgradeCounts.yunyan?100:50},
+{id:'heishi',weight:10,name:'黑石',desc:'选择1～2张牌，将花色变为黑桃',type:'secret',icon:'🪨',price:100,unique:false},
+{id:'hongguo',weight:10,name:'红果',desc:'选择1～2张牌，将花色变为红心',type:'secret',icon:'🍎',price:100,unique:false},
+{id:'mianju',weight:10,name:'面具',desc:'选择1～2张牌，变为人头牌',type:'secret',icon:'🎭',price:100,unique:false},
+{id:'xiangpini',weight:10,name:'橡皮泥',desc:'选择1张牌，变为万能牌',type:'secret',icon:'🧱',price:100,unique:false},
+{id:'xuyuanxing',weight:10,name:'许愿星',desc:'选择1张牌，变为特殊奖励牌',type:'secret',icon:'🌟',price:100,unique:false},
+{id:'shuangshenglian',weight:10,name:'双生莲',desc:'选择2张牌，复制出同样的牌加入牌组',type:'secret',icon:'🪷',price:100,unique:false},
+{id:'paomo',weight:20,name:'泡沫商城',desc:'商城所有物品 5 折出售',type:'secret',icon:'🫧',price:200,unique:true},
+{id:'huojia',weight:10,name:'货架',desc:'商城道具+1',type:'secret',icon:'🗄️',price:200,unique:true},
+{id:'dalibao',weight:10,name:'大礼包',desc:'商城道具包+1',type:'secret',icon:'🎁',price:200,unique:true},
+{id:'jihaobi',weight:10,name:'记号笔',desc:'选择1张牌，将其变为积分牌，积分+500',type:'secret',icon:'🖍️',price:100,unique:false},
+{id:'dayinji',weight:10,name:'打印机',desc:'选择1张背包中的普通道具牌，复制并获得该牌',type:'secret',icon:'🖨️',price:200,unique:false},
+{id:'fumo',weight:10,name:'浮沫',desc:'升级单牌，牌型积分x1.8',type:'upgrade',icon:'🫧',price:200,unique:false},
+{id:'shuangli',weight:10,name:'双鲤',desc:'升级对子，牌型积分x1.8',type:'upgrade',icon:'🎏',price:200,unique:false},
+{id:'jinwei',weight:10,name:'锦尾',desc:'升级两对，牌型积分x1.8',type:'upgrade',icon:'🐠',price:200,unique:false},
+{id:'yuezhu',weight:10,name:'跃珠',desc:'升级三条，牌型积分x2.0',type:'upgrade',icon:'🔮',price:200,unique:false},
+{id:'yousuo',weight:10,name:'游梭',desc:'升级顺子，牌型积分x2.0',type:'upgrade',icon:'🛶',price:200,unique:false},
+{id:'yixi',weight:10,name:'一汐',desc:'升级同花，牌型积分x1.8',type:'upgrade',icon:'🌊',price:200,unique:false},
+{id:'cangjiao',weight:10,name:'藏鲛',desc:'升级葫芦，牌型积分x1.8',type:'upgrade',icon:'🧜',price:200,unique:false},
+{id:'baochao',weight:10,name:'爆潮',desc:'升级四炸，牌型积分x2.0',type:'upgrade',icon:'💥',price:200,unique:false},
+{id:'longyuan',weight:10,name:'龙渊',desc:'升级同花顺，牌型积分x2.0',type:'upgrade',icon:'🐉',price:200,unique:false},
 {id:'yangyao',weight:20,name:'阳爻',desc:'结算时牌型包含奇数 （1、3、5、7、9），获得牌型积分 x每1张牌数',type:'passive',icon:'🔆',trigger:'odd',unique:true,price:100},
 {id:'yinyao',weight:20,name:'阴爻',desc:'结算时牌型包含偶数（2、4、6、8、10），获得牌型积分 x每1张牌数',type:'passive',icon:'🌑',trigger:'even',unique:true,price:100},
-{id:'qishi',weight:20,name:'骑士',desc:'结算时牌型包含人头牌（J、Q、K)，每 1 张可获得牌型积分 x10',type:'passive',icon:'🛡️',trigger:'face',unique:true,price:50},
+{id:'qishi',weight:20,name:'骑士',desc:'结算时牌型包含人头牌（J、Q、K)，每 1 张可获得牌型积分 x5',type:'passive',icon:'🛡️',trigger:'face',unique:true,price:50},
 {id:'fishhook',weight:20,name:'黄金鱼钩',desc:'钓鱼成功，倍数+1',type:'passive',icon:'🪝',trigger:'fishhook',unique:true,price:50},
 {id:'haixing',weight:20,name:'海星',desc:'结算时牌型包含"红桃 A"，额外获得 200 金币',type:'passive',icon:'⭐',trigger:'haixing',unique:true,price:50},
 {id:'hailuo',weight:20,name:'海螺',desc:'结算时牌型包含"梅花"花色，有 1/2概率获得 1000 积分',type:'passive',icon:'🐚',trigger:'hailuo',unique:true,price:100},
 {id:'shanhu',weight:20,name:'珊瑚',desc:'结算时牌型包含“黑桃”花色，有 1/3概率获得 200 金币',type:'passive',icon:'🪸',trigger:'shanhu',unique:true,price:100},
 {id:'jiangliu',weight:20,name:'江流',desc:'结算时获得 50 金币，此后每次多加 50金币',type:'passive',icon:'🌊',trigger:'jiangliu',unique:true,price:100},
 {id:'langhua',weight:20,name:'浪花',desc:'结算时牌型包含"红桃 6、红桃 8"，额外获得 500 金币',type:'passive',icon:'💦',trigger:'langhua',unique:true,price:100},
-{id:'paomo',weight:20,name:'泡沫商城',desc:'商城所有物品 5 折出售',type:'upgrade',icon:'🫧',price:200,unique:true},
 {id:'chaoxi',weight:20,name:'潮汐',desc:'每回合结束有 1/2 概率获得 1000 积分',type:'passive',icon:'🌙',trigger:'chaoxi',unique:true,price:100},
 {id:'fuping',weight:20,name:'浮萍',desc:'每回合结束获得 100 金币',type:'passive',icon:'🍃',trigger:'fuping',unique:true,price:100},
 {id:'xuanwo',weight:20,name:'漩涡',desc:'【幻注】下注比例各提升 10%',type:'passive',icon:'🌪️',trigger:'xuanwo',unique:true,price:100},
 {id:'jiaoshi',weight:20,name:'礁石',desc:'结算时获得 200 积分，此后每次多加 100积分',type:'passive',icon:'🪨',trigger:'jiaoshi',unique:true,price:100},
-{id:'haikui',weight:20,name:'海葵',desc:'每回合+1 张手牌，玄机使用次数-1',type:'passive',icon:'🪼',trigger:'haikui',unique:true,price:100},
+{id:'haikui',weight:20,name:'海葵',desc:'手牌+1张，玄机使用次数-1',type:'passive',icon:'🪼',trigger:'haikui',unique:true,price:100},
 {id:'zhenzhu',weight:20,name:'珍珠',desc:'打出的诱饵牌为对子，胜利结算时+100 金币',type:'passive',icon:'⚪',trigger:'zhenzhu',unique:true,price:100},
 {id:'shali',weight:20,name:'免费券',desc:'每次通关在商城中获得 1 张随机免费的升级牌',type:'passive',icon:'🎟️',trigger:'shali',unique:true,price:100},
-{id:'yuqun',weight:20,name:'鱼群',desc:'结算时额外获得牌型的数字总和 x50 的积分奖励',type:'passive',icon:'🐟',trigger:'yuqun',unique:true,price:100},
-{id:'riyao',weight:20,name:'日爻',desc:'结算时牌型包含奇数 （1、3、5、7、9），获得牌型积分 x5',type:'passive',icon:'🌞',trigger:'odd_5x',unique:true,price:50},
-{id:'yueyao',weight:20,name:'月爻',desc:'结算时牌型包含偶数（2、4、6、8、10），获得牌型积分 x5',type:'passive',icon:'🌜',trigger:'even_5x',unique:true,price:50},
-{id:'zhanma',weight:20,name:'战马',desc:'结算时牌型包含人头牌（J、Q、K)，获得牌型积分 x5',type:'passive',icon:'🐎',trigger:'face_5x',unique:true,price:50}
+{id:'yuqun',weight:20,name:'鱼群',desc:'结算时额外获得牌型数字总和 x50 积分',type:'passive',icon:'🐟',trigger:'yuqun',unique:true,price:100},
+{id:'riyao',weight:20,name:'日爻',desc:'结算时牌型包含奇数 （1、3、5、7、9），获得牌型积分 x3',type:'passive',icon:'🌞',trigger:'odd_5x',unique:true,price:50},
+{id:'yueyao',weight:20,name:'月爻',desc:'结算时牌型包含偶数（2、4、6、8、10），获得牌型积分 x2.5',type:'passive',icon:'🌜',trigger:'even_5x',unique:true,price:50},
+{id:'hongsewangzuo',weight:20,name:'红色王座',desc:'结算时牌型为同花，且包含人头牌（J、Q、K)，获得牌型积分 x3.5',type:'passive',icon:'🪑',trigger:'flush_face_3.5x',unique:true,price:50},
+{id:'yinsewangzuo',weight:20,name:'银色王座',desc:'结算时牌型为顺子，且包含人头牌（J、Q、K)，获得牌型积分 x4',type:'passive',icon:'💺',trigger:'straight_face_4x',unique:true,price:50}
 ];
 
 const HAND_TYPES_BASE=[{name:'同花顺',en:'Straight Flush',base:300,level:9},{name:'四炸',en:'Four of a Kind',base:200,level:8},{name:'葫芦',en:'Full House',base:160,level:7},{name:'同花',en:'Flush',base:120,level:6},{name:'顺子',en:'Straight',base:90,level:5},{name:'三条',en:'Three of a Kind',base:60,level:4},{name:'两对',en:'Two Pair',base:40,level:3},{name:'对子',en:'Pair',base:20,level:2},{name:'单牌',en:'High Card',base:10,level:1}];
@@ -521,7 +618,7 @@ const RANKS=['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
 const RANK_VALUES={'2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'J':11,'Q':12,'K':13,'A':14};
 const SUIT_VALS={'♠':4,'♥':3,'♦':2,'♣':1};
 
-class Card{constructor(s,r){this.suit=s;this.rank=r;this.value=RANK_VALUES[r];this.isRed=(s==='♥'||s==='♦');this.id=Math.random().toString(36).slice(2);this.revealed=false;this.baseId=0;this.isWild=false;this.isWishingStar=false;this.modIcon=null;}}
+class Card{constructor(s,r){this.suit=s;this.rank=r;this.value=RANK_VALUES[r];this.isRed=(s==='♥'||s==='♦');this.id=Math.random().toString(36).slice(2);this.revealed=false;this.baseId=0;this.isWild=false;this.isWishingStar=false;this.modIcon=null;this.scoreBonus=0;}}
 
 const PokerEngine={
     evaluateBase:(cards)=>{
@@ -581,26 +678,70 @@ class Game {
         const splash=document.getElementById('splash-screen');
         const contBtn=document.getElementById('btn-continue');
         if(localStorage.getItem('fishingPokerSave_v3_4_8')){contBtn.style.display='block';}
-        document.addEventListener('click',()=>{this.audio.init();if(this.isAudioOn){this.audio.start();this.updateAudioBtn(true);}},{once:true});
-        setTimeout(()=>{splash.classList.add('fade-out');setTimeout(()=>{splash.style.display='none';this.showLobby();},1500);},3000);
+
+        // 浏览器要求：AudioContext 必须在用户手势同步调用栈中 init/resume
+        // 策略：在 splash 的任意点击/触碰时 init 音频上下文并标记就绪
+        // 动效结束进入大厅时，若已就绪则 startWithFade()；若未就绪则大厅按钮点击时再启动
+        this._audioCtxReady = false;
+        const onSplashInteract = () => {
+            if(!this._audioCtxReady){
+                this.audio.init();
+                this._audioCtxReady = true;
+            }
+        };
+        splash.addEventListener('click',    onSplashInteract, {once:true});
+        splash.addEventListener('touchstart',onSplashInteract, {once:true});
+
+        setTimeout(()=>{
+            splash.classList.add('fade-out');
+            setTimeout(()=>{
+                splash.style.display='none';
+                this.showLobby();
+                // 进入大厅时若音频上下文已 init（用户曾点击 splash）则淡入启动
+                if(this._audioCtxReady && this.isAudioOn && !this.audio.isPlaying){
+                    this.audio.startWithFade(2.5);
+                    this.updateAudioBtn(true);
+                }
+                // 若未 init（用户未点击 splash，等待自动结束），绑定大厅任意点击触发启动
+                if(!this._audioCtxReady){
+                    const onLobbyFirstClick = () => {
+                        if(!this._audioCtxReady){
+                            this._audioCtxReady = true;
+                            this.audio.init();
+                            if(this.isAudioOn && !this.audio.isPlaying){
+                                this.audio.startWithFade(2.5);
+                                this.updateAudioBtn(true);
+                            }
+                        }
+                    };
+                    document.addEventListener('click',     onLobbyFirstClick, {once:true});
+                    document.addEventListener('touchstart', onLobbyFirstClick, {once:true});
+                }
+            },1500);
+        },3000);
     }
     generateStandardDeck(){let deck=[];let idCounter=0;SUITS.forEach(s=>RANKS.forEach(r=>{let c=new Card(s,r);c.baseId=idCounter++;deck.push(c);}));return deck;}
     resetGlobal(){this.levelIndex=0;this.playerGold=0;this.ownedSkills=['xuanji'];this.ownedPassives=[];this.equippedSkills=['xuanji'];this.equippedPassives=[];this.skillUsage={};this.skillMaxModifiers={xuanji:0};this.obtainedItems=[];this.upgradeCounts={};this.runDeckTemplate=this.generateStandardDeck();this.jiangliuCount=0;this.jiaoshiCount=0;this.betUsedThisRound=false;this.betRatios=[0.3,0.5];this.maxSkillSlots=3;this.maxPassiveSlots=5;this.bossDeck=null;this.drawPile=[];this.discardPile=[];this.opponentName="";this.selectedOppCard=null;this.justDealt=false;this.inGame=false;this.currentLevelWins=0;this.currentLevelLosses=0;this.animCards=[];this.shopDirectItems=[];this.availablePacks=[];}
     saveState() {
         const state = {
-            version: '3.4.8', levelIndex: this.levelIndex, playerGold: this.playerGold,
+            version: '3.5.3', levelIndex: this.levelIndex, playerGold: this.playerGold,
             ownedSkills: this.ownedSkills, ownedPassives: this.ownedPassives,
             equippedSkills: this.equippedSkills, equippedPassives: this.equippedPassives,
             skillUsage: this.skillUsage, skillMaxModifiers: this.skillMaxModifiers,
             upgradeCounts: this.upgradeCounts, runDeckTemplate: this.runDeckTemplate,
             jiangliuCount: this.jiangliuCount, jiaoshiCount: this.jiaoshiCount,
             maxSkillSlots: this.maxSkillSlots, maxPassiveSlots: this.maxPassiveSlots,
+            betRatios: this.betRatios,
             currentLevelWins: this.currentLevelWins, currentLevelLosses: this.currentLevelLosses,
-            levelEarnedGold: this.levelEarnedGold, currentRound: this.currentRound,
-            inGame: this.inGame, phase: this.phase, currentBet: this.currentBet, betUsedThisRound: this.betUsedThisRound,
-            playerHand: this.playerHand, oppHand: this.oppHand, drawPile: this.drawPile, discardPile: this.discardPile,
+            levelEarnedGold: this.levelEarnedGold, currentTargetGold: this.currentTargetGold,
+            currentRound: this.currentRound,
+            inGame: this.inGame, phase: this.phase,
+            currentBet: this.currentBet, betUsedThisRound: this.betUsedThisRound,
+            playerHand: this.playerHand, oppHand: this.oppHand,
+            drawPile: this.drawPile, discardPile: this.discardPile,
             playerBait: this.playerBait, oppBait: this.oppBait,
-            bossDeck: this.bossDeck, config: this.config, opponentName: this.opponentName
+            selectedCards: this.selectedCards || [],
+            config: this.config, opponentName: this.opponentName
         };
         localStorage.setItem('fishingPokerSave_v3_4_8', JSON.stringify(state));
     }
@@ -609,26 +750,45 @@ class Game {
         if(!saved) return false;
         try {
             const state = JSON.parse(saved);
-            const reviveCards = (arr) => arr ? arr.map(c => Object.assign(new Card(c.suit, c.rank), c)) :[];
-            this.levelIndex = state.levelIndex || 0; this.playerGold = state.playerGold || 0; 
-            this.ownedSkills = state.ownedSkills ||['xuanji']; this.ownedPassives = state.ownedPassives ||[]; 
-            this.equippedSkills = state.equippedSkills ||['xuanji']; this.equippedPassives = state.equippedPassives ||[]; 
-            this.skillUsage = state.skillUsage || {}; this.skillMaxModifiers = state.skillMaxModifiers || {xuanji:0}; 
-            this.upgradeCounts = state.upgradeCounts || {};
-            this.runDeckTemplate = reviveCards(state.runDeckTemplate);
-            this.jiangliuCount = state.jiangliuCount || 0; this.jiaoshiCount = state.jiaoshiCount || 0; 
-            this.maxSkillSlots = state.maxSkillSlots || 3; this.maxPassiveSlots = state.maxPassiveSlots || 5; 
-            this.currentLevelWins = state.currentLevelWins || 0; this.currentLevelLosses = state.currentLevelLosses || 0; 
-            this.levelEarnedGold = state.levelEarnedGold || 0; this.currentRound = state.currentRound || 1;
-            this.inGame = state.inGame || false; this.phase = state.phase || 'BAIT';
-            this.currentBet = state.currentBet || 0; this.betUsedThisRound = state.betUsedThisRound || false;
-            this.playerHand = reviveCards(state.playerHand); this.oppHand = reviveCards(state.oppHand);
-            this.drawPile = reviveCards(state.drawPile); this.discardPile = reviveCards(state.discardPile);
-            this.playerBait = reviveCards(state.playerBait); this.oppBait = reviveCards(state.oppBait);
-            this.bossDeck = reviveCards(state.bossDeck); this.config = state.config || LEVEL_CONFIG[this.levelIndex];
-            this.opponentName = state.opponentName || "";
+            const reviveCards = (arr) => (arr || []).map(c => {
+                let nc = Object.assign(new Card(c.suit, c.rank), c);
+                return nc;
+            });
+            this.levelIndex         = state.levelIndex  || 0;
+            this.playerGold         = state.playerGold  || 0;
+            this.ownedSkills        = state.ownedSkills  || ['xuanji'];
+            this.ownedPassives      = state.ownedPassives || [];
+            this.equippedSkills     = state.equippedSkills || ['xuanji'];
+            this.equippedPassives   = state.equippedPassives || [];
+            this.skillUsage         = state.skillUsage  || {};
+            this.skillMaxModifiers  = state.skillMaxModifiers || {xuanji:0};
+            this.upgradeCounts      = state.upgradeCounts || {};
+            this.runDeckTemplate    = reviveCards(state.runDeckTemplate);
+            this.jiangliuCount      = state.jiangliuCount  || 0;
+            this.jiaoshiCount       = state.jiaoshiCount   || 0;
+            this.maxSkillSlots      = state.maxSkillSlots  || 3;
+            this.maxPassiveSlots    = state.maxPassiveSlots || 5;
+            this.betRatios          = state.betRatios || [0.3, 0.5];
+            this.currentLevelWins   = state.currentLevelWins   || 0;
+            this.currentLevelLosses = state.currentLevelLosses || 0;
+            this.levelEarnedGold    = state.levelEarnedGold    || 0;
+            this.currentTargetGold  = state.currentTargetGold  || 0;
+            this.currentRound       = state.currentRound || 1;
+            this.inGame             = state.inGame    || false;
+            this.phase              = state.phase     || 'BAIT';
+            this.currentBet         = state.currentBet || 0;
+            this.betUsedThisRound   = state.betUsedThisRound || false;
+            this.playerHand         = reviveCards(state.playerHand);
+            this.oppHand            = reviveCards(state.oppHand);
+            this.drawPile           = reviveCards(state.drawPile);
+            this.discardPile        = reviveCards(state.discardPile);
+            this.playerBait         = reviveCards(state.playerBait);
+            this.oppBait            = reviveCards(state.oppBait);
+            this.selectedCards      = reviveCards(state.selectedCards);
+            this.config             = state.config || LEVEL_CONFIG[this.levelIndex];
+            this.opponentName       = state.opponentName || "";
             return true;
-        } catch(e) { return false; }
+        } catch(e) { console.error('loadState error:', e); return false; }
     }
     startNewGame() {
         localStorage.removeItem('fishingPokerSave_v3_4_8');
@@ -639,23 +799,44 @@ class Game {
     continueGame() {
         if(this.loadState()) {
             document.getElementById('lobby-screen').style.display='none';
-            if (this.inGame && this.phase !== 'SETTLE') {
-                document.getElementById('header-left-col').classList.remove('lobby-hide');
-                document.getElementById('header-right-col').classList.remove('lobby-hide');
-                document.getElementById('info-screen').classList.remove('visible');
+            if(this.inGame && this.phase !== 'SETTLE') {
+                // ── 恢复牌桌场景：先显示洗牌转场 ────────────────────────
+                document.getElementById('map-screen').style.display='none';
                 document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;
                 document.getElementById('opp-name').innerText=this.opponentName;
-                this.updateHeader();
-                this.renderScene();
-                this.updateControls();
+                const freshCfg = LEVEL_CONFIG[this.levelIndex];
+                if(freshCfg) this.config = Object.assign({}, freshCfg, this.config);
+                this.playLevelEnterTransition(()=>{
+                    document.getElementById('header-left-col').classList.remove('lobby-hide');
+                    document.getElementById('header-right-col').classList.remove('lobby-hide');
+                    document.getElementById('info-screen').classList.remove('visible');
+                    if(!this.playerHand || this.playerHand.length === 0) {
+                        this.startRound();
+                    } else {
+                        this.justDealt = false;
+                        this.animCards = [];
+                        this.skillMode = null;
+                        this.selectedOppCard = null;
+                        if(this.selectedCards && this.selectedCards.length > 0) {
+                            const selIds = new Set(this.selectedCards.map(c => c.id));
+                            this.selectedCards = this.playerHand.filter(c => selIds.has(c.id));
+                        } else {
+                            this.selectedCards = [];
+                        }
+                        this.updateHeader();
+                        this.renderScene();
+                        this.updateControls();
+                    }
+                });
             } else {
+                // 存档在关卡选择或结算中，回到地图
                 this.inGame = false;
                 this.showMap();
             }
         } else { this.startNewGame(); }
     }
     shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}}
-    showLobby(){this.audio.init();if(this.isAudioOn)this.audio.start();}
+    showLobby(){/* audio lifecycle now managed by initSplash */}
     enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.showMap();}
     showMap(){
         this.saveState();
@@ -672,7 +853,7 @@ class Game {
                 node.className=`map-node ${status}`;const personas=OPPONENT_PERSONAS[f]||OPPONENT_PERSONAS[1];const pIndex=cfg.step===1?0:2;
                 node.style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${personas[pIndex].name}')`;
                 if(status==='active'){node.onclick=()=>{map.style.display='none';this.startLevel();};}
-                node.innerHTML=`<div class="map-node-label">${cfg.id}</div>`;row.appendChild(node);
+                const lbl=document.createElement('div');lbl.className='map-node-label';lbl.textContent=`${cfg.id} ${cfg.step===1?'胜负场':'积分场'}`;node.appendChild(lbl);row.appendChild(node);
                 if(idx<steps.length-1){const conn=document.createElement('div');conn.className='map-connector';conn.style.width='40px';conn.style.height='2px';conn.style.margin='0 10px';if(status==='cleared')conn.classList.add('unlocked');row.appendChild(conn);}
             });
             group.appendChild(row);scroll.appendChild(group);
@@ -711,32 +892,331 @@ class Game {
         const tooltip=document.getElementById('global-tooltip');
         const showTooltip=(target)=>{
             const desc=target.getAttribute('data-desc');
-            if(desc){tooltip.innerText=desc;tooltip.style.display='block';const rect=target.getBoundingClientRect();let finalTop=rect.top-tooltip.offsetHeight-10;let isTop=target.closest('header')||target.closest('.shop-header-bar');if(target.closest('#skill-dock')||target.classList.contains('skill-item')||target.classList.contains('card')){finalTop=rect.top-tooltip.offsetHeight-10;}else if(isTop){finalTop=rect.bottom+10;}if(finalTop<10){finalTop=rect.bottom+10;}let finalX=rect.left+rect.width/2-tooltip.offsetWidth/2;if(finalX<10)finalX=10;if(finalX+tooltip.offsetWidth>window.innerWidth-10)finalX=window.innerWidth-tooltip.offsetWidth-10;tooltip.style.top=finalTop+'px';tooltip.style.left=finalX+'px';}
+            if(desc){tooltip.innerText=desc;tooltip.style.display='block';const rect=target.getBoundingClientRect();let finalTop=rect.top-tooltip.offsetHeight-10;let isTop=target.closest('header')||target.closest('.shop-header-bar');if(target.closest('#skill-dock')||target.classList.contains('skill-item')||target.classList.contains('card')||target.classList.contains('inv-item')){finalTop=rect.top-tooltip.offsetHeight-10;}else if(isTop){finalTop=rect.bottom+10;}if(finalTop<10){finalTop=rect.bottom+10;}let finalX=rect.left+rect.width/2-tooltip.offsetWidth/2;if(finalX<10)finalX=10;if(finalX+tooltip.offsetWidth>window.innerWidth-10)finalX=window.innerWidth-tooltip.offsetWidth-10;tooltip.style.top=finalTop+'px';tooltip.style.left=finalX+'px';}
         };
-        document.body.addEventListener('mouseover',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card');if(target)showTooltip(target);});
-        document.body.addEventListener('mouseout',(e)=>{if(e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card'))tooltip.style.display='none';});
-        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
+        document.body.addEventListener('mouseover',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target)showTooltip(target);});
+        document.body.addEventListener('mouseout',(e)=>{if(e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item'))tooltip.style.display='none';});
+        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
     }
-    startLevel(){document.getElementById('header-left-col').classList.remove('lobby-hide');document.getElementById('header-right-col').classList.remove('lobby-hide');document.getElementById('info-screen').classList.remove('visible');this.inGame=true;this.config=LEVEL_CONFIG[this.levelIndex];if(this.config.step===1){this.currentLevelWins=0;this.currentLevelLosses=0;}if(this.config.boss)this.bossDeck=this.createDeck();this.currentRound=1;this.levelEarnedGold=0;this.currentTargetGold=this.config.gold;this.setupPersona();this.updateHeader();this.startRound();}
+    startLevel(){
+        this.inGame=true;
+        this.config=LEVEL_CONFIG[this.levelIndex];
+        if(this.config.step===1){this.currentLevelWins=0;this.currentLevelLosses=0;}
+        this.currentRound=1;this.levelEarnedGold=0;this.currentTargetGold=this.config.gold;
+        this.setupPersona();
+        this.playLevelEnterTransition(()=>{
+            document.getElementById('header-left-col').classList.remove('lobby-hide');
+            document.getElementById('header-right-col').classList.remove('lobby-hide');
+            document.getElementById('info-screen').classList.remove('visible');
+            this.updateHeader();
+            this.startRound();
+        });
+    }
+
+    playLevelEnterTransition(callback){
+        const ov     = document.getElementById('level-enter-overlay');
+        const canvas = document.getElementById('hook-canvas');
+        ov.style.display='block'; ov.style.opacity='1'; ov.style.transition='';
+        canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+        const ctx=canvas.getContext('2d');
+        const W=canvas.width, H=canvas.height;
+
+        /* ── easing ──────────────────────────────────────────── */
+        const easeOut3 = t => 1-Math.pow(1-t,3);
+        const easeOut2 = t => 1-(1-t)*(1-t);
+        const easeIO   = t => t<.5 ? 2*t*t : 1-(2*(1-t))*(2*(1-t))/2;
+        const lerp     = (a,b,t) => a+(b-a)*t;
+        const bezier   = (a,c,b,t) => (1-t)*(1-t)*a+2*(1-t)*t*c+t*t*b;
+
+        /* ── card dimensions ─────────────────────────────────── */
+        /* Match game's card-back: #34495e body, #7f8c8d border   */
+        const CW = Math.min(Math.round(W*0.12), 88);
+        const CH = Math.round(CW*1.44);
+        const CR = Math.round(CW*0.1);
+
+        /* ── draw ONE face-down card, centred at (cx,cy) ──────── */
+        function drawCard(cx, cy, rot, alpha=1, lit=false){
+            ctx.save();
+            ctx.globalAlpha = alpha;
+            ctx.translate(cx, cy);
+            ctx.rotate(rot);
+            /* shadow */
+            ctx.shadowColor = lit ? 'rgba(0,242,255,0.7)' : 'rgba(0,0,0,0.7)';
+            ctx.shadowBlur  = lit ? 18 : 12;
+            ctx.shadowOffsetY = lit ? 0 : 5;
+            /* rounded-rect path helper */
+            function rr(x,y,w,h,r){
+                ctx.beginPath();
+                ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+                ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+                ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+                ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y);
+                ctx.closePath();
+            }
+            const hw=CW/2,hh=CH/2;
+            /* body — exactly #34495e like .card-back */
+            rr(-hw,-hh,CW,CH,CR);
+            ctx.fillStyle = '#34495e';
+            ctx.fill();
+            /* border — #7f8c8d like .card-back */
+            ctx.shadowBlur=0; ctx.shadowOffsetY=0;
+            ctx.strokeStyle = lit ? 'rgba(0,242,255,0.85)' : '#7f8c8d';
+            ctx.lineWidth = lit ? 2 : 1.8;
+            ctx.stroke();
+            /* inner border inset */
+            rr(-hw+4,-hh+4,CW-8,CH-8,CR-2);
+            ctx.strokeStyle = lit ? 'rgba(0,242,255,0.3)' : 'rgba(127,140,141,0.35)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            /* fish/anchor SVG shape recreation in canvas:
+               M20,30 L50,80 L80,30 L90,10 L50,30 L10,10 Z  (100×100 viewBox)
+               Scale to ~55% of card, centred, opacity 0.28  */
+            ctx.save();
+            const scl = CW*0.55/100;
+            ctx.scale(scl, scl);
+            ctx.translate(-50, -50);   /* centre the 100×100 path */
+            ctx.beginPath();
+            ctx.moveTo(20,30); ctx.lineTo(50,80); ctx.lineTo(80,30);
+            ctx.lineTo(90,10); ctx.lineTo(50,30); ctx.lineTo(10,10);
+            ctx.closePath();
+            ctx.strokeStyle = 'rgba(148,163,184,0.30)'; /* #94a3b8 @ 0.30 */
+            ctx.lineWidth = 5/scl;
+            ctx.stroke();
+            ctx.restore();
+            ctx.restore();
+        }
+
+        /* ── pile helpers ────────────────────────────────────── */
+        const VSTEP = 2.6;   /* vertical gap between cards in a stack */
+
+        /* draw a pile of `n` cards, bottom card centred at (px,py) */
+        /* leanSeed: different piles get different lean seeds       */
+        function drawPile(px, py, n, leanSeed, extraRot=0, litTop=false){
+            for(let i=0; i<n; i++){
+                /* tiny lean per card: deterministic from seed+i */
+                const lean = Math.sin(leanSeed*7.3+i*3.7)*0.018;
+                const cx=px, cy=py-i*VSTEP;
+                drawCard(cx, cy, lean+extraRot, 1, litTop&&i===n-1);
+            }
+        }
+
+        /* ── scene constants ─────────────────────────────────── */
+        /* Deck: TOTAL=12 cards split into 3 piles of 4            */
+        const TOTAL=12, THIRD=4;
+        /* Stack sits at screen centre */
+        const CX=W*0.5, CY=H*0.5+CH*0.1;
+
+        /* pile tops (y of topmost card in merged stack) */
+        const mergedTopY = CY - (TOTAL-1)*VSTEP;
+
+        /* ── background (matches game body bg-gradient) ─────── */
+        function drawBg(){
+            const bg=ctx.createRadialGradient(W/2,H/2,0, W/2,H/2, Math.max(W,H)*0.7);
+            bg.addColorStop(0,'#1a202c'); bg.addColorStop(1,'#000000');
+            ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+        }
+
+        /* ════════════════════════════════════════════════════════
+           CUT SEQUENCE — "向中合牌":
+
+           The 12-card deck splits into 3 piles:
+             left   = cards  0..3   (THIRD=4 cards)
+             middle = cards  4..7
+             right  = cards  8..11
+
+           START: single merged stack at CX, CY
+
+           PHASE "open":
+             Stack fans out: left pile slides left, right pile slides right,
+             middle pile stays at centre.
+
+           PHASE "merge1":
+             Left pile arcs inward (rightward) and lands ON TOP of middle pile.
+
+           PHASE "pause1": brief rest — now left+mid stacked at centre.
+
+           PHASE "merge2":
+             Right pile arcs inward (leftward) and lands ON TOP of the
+             centre combined pile.
+
+           PHASE "pause2": brief rest — all 12 cards merged at centre.
+
+           PHASE "fadeout": scene fades to black → callback.
+        ════════════════════════════════════════════════════════ */
+
+        /* pile x-positions when spread out */
+        const GAP    = CW * 0.7;      /* gap between spread piles — closer together */
+        const pLeft  = CX - CW - GAP;
+        const pMid   = CX;
+        const pRight = CX + CW + GAP;
+
+        /* y-origin of each pile (bottom card) when spread */
+        const pileY  = CY + CH * 0.1;
+
+        /* Phase timing — tightened for snappier feel */
+        const PHASE_MS = {
+            show:   200,   /* initial full stack */
+            open:   280,   /* fan out into 3 piles */
+            merge1: 360,   /* left pile arcs to centre */
+            pause1: 120,
+            merge2: 360,   /* right pile arcs to centre */
+            pause2: 120,
+            fadeout: 380
+        };
+        const PHASE_ORDER = ['show','open','merge1','pause1','merge2','pause2','fadeout'];
+        let phaseIdx=0, phaseElapsed=0, lastTs=null, doneFired=false;
+
+        function phase(){ return PHASE_ORDER[phaseIdx]; }
+        function nextPhase(){ phaseIdx++; phaseElapsed=0; }
+
+        function animate(ts){
+            if(!lastTs) lastTs=ts;
+            const dt=Math.min(ts-lastTs,50); lastTs=ts;
+            phaseElapsed+=dt;
+            const dur=PHASE_MS[phase()]||500;
+            const t=Math.min(phaseElapsed/dur,1);
+            const e=easeOut3(t);
+
+            ctx.clearRect(0,0,W,H);
+            drawBg();
+
+            const ph=phase();
+
+            if(ph==='show'){
+                /* single merged stack at centre */
+                drawPile(CX, CY, TOTAL, 0);
+            }
+            else if(ph==='open'){
+                /* bottom third fans left */
+                const lx=lerp(CX, pLeft, e);
+                const lyT=lerp(CY, pileY, e);
+                drawPile(lx, lyT, THIRD, 0);
+                /* middle third stays, settles to pileY */
+                const myT=lerp(CY-(THIRD)*VSTEP, pileY, e);
+                drawPile(pMid, myT, THIRD, 10);
+                /* top third fans right */
+                const rx=lerp(CX, pRight, e);
+                const ryT=lerp(CY-(THIRD*2)*VSTEP, pileY, e);
+                drawPile(rx, ryT, THIRD, 20);
+            }
+            else if(ph==='merge1'){
+                /* left pile arcs inward (right) toward centre, lands on mid pile top */
+                /* destination: on top of middle pile */
+                const destX = pMid;
+                const destY = pileY - (THIRD - 1) * VSTEP - VSTEP;
+                /* control point: arc upward and toward centre */
+                const ctrlX = lerp(pLeft, pMid, 0.5);
+                const ctrlY = pileY - CH * 2.0;
+                const bx = bezier(pLeft, ctrlX, destX, e);
+                const by = bezier(pileY, ctrlY, destY, e);
+                /* tilt: lean left on way up, straighten at landing */
+                const rot = -0.20 * Math.sin(t * Math.PI);
+
+                /* static piles */
+                drawPile(pMid, pileY, THIRD, 10);
+                drawPile(pRight, pileY, THIRD, 20);
+                /* flying left pile */
+                drawPile(bx, by, THIRD, 0, rot, e > 0.5);
+            }
+            else if(ph==='pause1'){
+                /* centre now has left+mid stacked (left on top); right unchanged */
+                drawPile(pMid, pileY, THIRD, 10);          /* mid pile base */
+                for(let i=0;i<THIRD;i++){                   /* left pile on top */
+                    const lean=Math.sin(i*3.7)*0.018;
+                    const topOfMid=pileY-(THIRD-1)*VSTEP;
+                    drawCard(pMid, topOfMid-(i+1)*VSTEP, lean, 1, false);
+                }
+                drawPile(pRight, pileY, THIRD, 20);
+            }
+            else if(ph==='merge2'){
+                /* right pile arcs inward (left) toward centre, lands on top of combined pile */
+                /* combined centre pile now has THIRD*2 cards */
+                const destX = pMid;
+                const destY = pileY - (THIRD * 2 - 1) * VSTEP - VSTEP;
+                const ctrlX = lerp(pRight, pMid, 0.5);
+                const ctrlY = pileY - CH * 2.2;
+                const bx = bezier(pRight, ctrlX, destX, e);
+                const by = bezier(pileY, ctrlY, destY, e);
+                /* tilt: lean right on way up, straighten at landing */
+                const rot = 0.20 * Math.sin(t * Math.PI);
+
+                /* static: combined centre pile */
+                drawPile(pMid, pileY, THIRD, 10);
+                for(let i=0;i<THIRD;i++){
+                    const lean=Math.sin(i*3.7)*0.018;
+                    const topOfMid=pileY-(THIRD-1)*VSTEP;
+                    drawCard(pMid, topOfMid-(i+1)*VSTEP, lean, 1, false);
+                }
+                /* flying right pile */
+                drawPile(bx, by, THIRD, 20, rot, e > 0.5);
+            }
+            else if(ph==='pause2'){
+                /* all 12 cards merged at centre */
+                drawPile(pMid, pileY, TOTAL, 5, 0, false);
+            }
+            else if(ph==='fadeout'){
+                drawPile(pMid, pileY, TOTAL, 5);
+                /* radial fade-out to black */
+                const fadeGrad=ctx.createRadialGradient(W/2,H/2,0, W/2,H/2, Math.max(W,H)*0.75);
+                fadeGrad.addColorStop(0,   `rgba(2,6,23,${e*0.35})`);
+                fadeGrad.addColorStop(0.55,`rgba(2,6,23,${e*0.75})`);
+                fadeGrad.addColorStop(1,   `rgba(2,6,23,${e})`);
+                ctx.fillStyle=fadeGrad; ctx.fillRect(0,0,W,H);
+                if(t>0.75){
+                    const extra=(t-0.75)/0.25;
+                    ctx.fillStyle=`rgba(2,6,23,${easeOut2(extra)})`;
+                    ctx.fillRect(0,0,W,H);
+                }
+                if(t>=1&&!doneFired){
+                    doneFired=true;
+                    /* First: invoke callback while overlay still covers screen
+                       so the game scene is fully ready before we reveal it.
+                       Then fade-out the overlay, and only show the game after
+                       the overlay has fully disappeared. */
+                    callback();
+                    /* short delay so the DOM paint from callback settles */
+                    setTimeout(()=>{
+                        ov.style.transition='opacity 0.4s ease';
+                        ov.style.opacity='0';
+                        setTimeout(()=>{
+                            ov.style.display='none';
+                            ov.style.opacity='1';
+                            ov.style.transition='';
+                            ctx.clearRect(0,0,W,H);
+                        }, 420);
+                    }, 60);
+                }
+            }
+
+            if(t>=1&&ph!=='fadeout') nextPhase();
+            if(!doneFired) requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
+    }
+
     setupPersona(){const floor=this.config.floor;const step=this.config.step;const personas=OPPONENT_PERSONAS[floor]||OPPONENT_PERSONAS[1];const persona=personas[step===1?0:2];this.opponentName=persona.name;document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;document.getElementById('opp-name').innerText=this.opponentName;const img=new Image();img.src=`https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}`;img.onerror=()=>{document.querySelector('.avatar').style.backgroundImage="none";document.querySelector('.avatar').innerHTML="🤖";};setTimeout(()=>this.speak(persona.text),1500);}
     speak(text){const bubble=document.getElementById('opp-speech');bubble.innerText=text;bubble.style.opacity=1;setTimeout(()=>{bubble.style.opacity=0;},5000);}
-    createDeck(){let deck=this.runDeckTemplate.map(c=>{let card=new Card(c.suit,c.rank);card.baseId=c.baseId;card.isWild=c.isWild;card.isWishingStar=c.isWishingStar;card.modIcon=c.modIcon;if(this.config&&this.config.rule==='wild_6'&&card.rank==='6'){card.suit='♦';card.isRed=true;}return card;});this.shuffle(deck);return deck;}
-    startRound(){this.drawPile=this.config.boss?[...this.bossDeck]:this.createDeck();this.discardPile=[];const draw=(n,isAI=false)=>{const c=[];let rejected=[];let attempts=0;while(c.length<n){attempts++;if(attempts>200){let fallback=new Card(SUITS[0],'2');fallback.baseId=9999;c.push(fallback);continue;}if(this.drawPile.length===0){if(this.discardPile.length>0){this.drawPile.push(...this.discardPile);this.discardPile=[];this.shuffle(this.drawPile);}else{let fresh=this.createDeck();this.drawPile.push(...fresh);}}let card=this.drawPile.pop();if(isAI&&(card.isWild||card.isWishingStar||card.modIcon==='🪷')){rejected.push(card);}else{c.push(card);}}if(rejected.length>0){this.drawPile.unshift(...rejected);}return c;};let handSize=7;if(this.equippedPassives.includes('haikui'))handSize=8;this.playerHand=draw(handSize,false).sort((a,b)=>b.value-a.value);let aiHand=[];const isNerfLevel=(this.config.floor<=2&&this.config.step===1);if(isNerfLevel){let attempts=0;while(attempts<20){aiHand=draw(7,true);if(!PokerEngine.isTooStrong(aiHand)){break;}this.drawPile.push(...aiHand);this.shuffle(this.drawPile);aiHand=[];attempts++;}if(aiHand.length===0)aiHand=draw(7,true);}else{aiHand=draw(7,true);}this.oppHand=aiHand.sort((a,b)=>b.value-a.value);this.playerBait=[];this.oppBait=[];this.selectedCards=[];this.selectedOppCard=null;this.skillMode=null;this.phase='BAIT';this.currentBet=0;this.betUsedThisRound=false;this.equippedSkills.forEach(k=>{const s=SKILLS_DB[k];if(s&&s.type==='round_limit'){let bonus=this.skillMaxModifiers[k]||0;let usage=s.maxUses+bonus;if(k==='xuanji'&&this.equippedPassives.includes('haikui'))usage-=1;this.skillUsage[k]=usage;}});this.justDealt=true;this.updateHeader();this.renderScene();this.updateControls();this.saveState();}
+    createDeck(){let deck=this.runDeckTemplate.map(c=>{let card=new Card(c.suit,c.rank);card.baseId=c.baseId;card.isWild=c.isWild;card.isWishingStar=c.isWishingStar;card.modIcon=c.modIcon;card.scoreBonus=c.scoreBonus;if(this.config&&this.config.rule==='wild_6'&&card.rank==='6'){card.suit='♦';card.isRed=true;}return card;});this.shuffle(deck);return deck;}
+    startRound(){this.drawPile=this.createDeck();this.discardPile=[];const draw=(n,isAI=false)=>{const c=[];let rejected=[];let attempts=0;while(c.length<n){attempts++;if(attempts>200){let fallback=new Card(SUITS[0],'2');fallback.baseId=9999;c.push(fallback);continue;}if(this.drawPile.length===0){if(this.discardPile.length>0){this.drawPile.push(...this.discardPile);this.discardPile=[];this.shuffle(this.drawPile);}else{let fresh=this.createDeck();this.drawPile.push(...fresh);}}let card=this.drawPile.pop();if(isAI&&(card.isWild||card.isWishingStar||card.modIcon==='🪷'||card.scoreBonus>0)){rejected.push(card);}else{c.push(card);}}if(rejected.length>0){this.drawPile.unshift(...rejected);}return c;};let handSize=7;if(this.equippedPassives.includes('haikui'))handSize=8;this.playerHand=draw(handSize,false).sort((a,b)=>b.value-a.value);let aiHand=[];const isNerfLevel=(this.config.floor<=2&&this.config.step===1);if(isNerfLevel){let attempts=0;while(attempts<20){aiHand=draw(7,true);if(!PokerEngine.isTooStrong(aiHand)){break;}this.drawPile.push(...aiHand);this.shuffle(this.drawPile);aiHand=[];attempts++;}if(aiHand.length===0)aiHand=draw(7,true);}else{aiHand=draw(7,true);}this.oppHand=aiHand.sort((a,b)=>b.value-a.value);this.playerBait=[];this.oppBait=[];this.selectedCards=[];this.selectedOppCard=null;this.skillMode=null;this.phase='BAIT';this.currentBet=0;this.betUsedThisRound=false;this.equippedSkills.forEach(k=>{const s=SKILLS_DB[k];if(s&&s.type==='round_limit'){let bonus=this.skillMaxModifiers[k]||0;let usage=s.maxUses+bonus;if(k==='xuanji'&&this.equippedPassives.includes('haikui'))usage-=1;this.skillUsage[k]=usage;}});this.justDealt=true;this.updateHeader();this.renderScene();this.updateControls();this.saveState();}
     evalHandValue(cards,isWildConfig,isFinalSettle=false){
         const res=PokerEngine.evaluate(cards);let base=res.base;let typeBonus=0;let itemBonus=0;let mult=0;let triggeredItems=[];let bonusGold=0;
         let hasWishingStar=cards.some(c=>c.isWishingStar);if(hasWishingStar){if(['顺子','同花','葫芦','同花顺'].includes(res.name)){res.name='受阻失效';base=10;}else{itemBonus+=100;}}
         if(UPGRADE_MAP[res.name]&&this.upgradeCounts[UPGRADE_MAP[res.name].id]){
             base = Math.floor(base * Math.pow(UPGRADE_MAP[res.name].mult, this.upgradeCounts[UPGRADE_MAP[res.name].id]));
         }
+        let scoreBonusSum = 0;
+        cards.forEach(c => { if(c.scoreBonus) scoreBonusSum += c.scoreBonus; });
+        itemBonus += scoreBonusSum;
         this.equippedPassives.forEach(pId=>{
             const p=REWARD_POOL.find(x=>x.id===pId);if(!p)return;let triggered=false;
             if(['guchen','shuangying','sixiang','sanyuan','lianchao','yise','fulu','siji','tianlv','chaodie','xingcu','liuxu','zhanyi','xuanhe','jiyao','minglv'].includes(p.id)){if(p.trigger===res.name){if(p.val)typeBonus+=p.val;if(p.mult)mult+=p.mult;triggered=true;}}
             else if(p.id==='yangyao'){const count=cards.filter(c=>!c.isWild&&['A','3','5','7','9'].includes(c.rank)).length;if(count>0){itemBonus+=(base*count);triggered=true;}}
             else if(p.id==='yinyao'){const count=cards.filter(c=>!c.isWild&&['2','4','6','8','10'].includes(c.rank)).length;if(count>0){itemBonus+=(base*count);triggered=true;}}
-            else if(p.id==='qishi'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){itemBonus+=(base*10*count);triggered=true;}}
-            else if(p.id==='riyao'){const count=cards.filter(c=>!c.isWild&&['A','3','5','7','9'].includes(c.rank)).length;if(count>0){itemBonus+=(base*5);triggered=true;}}
-            else if(p.id==='yueyao'){const count=cards.filter(c=>!c.isWild&&['2','4','6','8','10'].includes(c.rank)).length;if(count>0){itemBonus+=(base*5);triggered=true;}}
-            else if(p.id==='zhanma'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){itemBonus+=(base*5);triggered=true;}}
+            else if(p.id==='qishi'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){itemBonus+=(base*5*count);triggered=true;}}
+            else if(p.id==='riyao'){const count=cards.filter(c=>!c.isWild&&['A','3','5','7','9'].includes(c.rank)).length;if(count>0){itemBonus+=(base*3);triggered=true;}}
+            else if(p.id==='yueyao'){const count=cards.filter(c=>!c.isWild&&['2','4','6','8','10'].includes(c.rank)).length;if(count>0){itemBonus+=(base*2.5);triggered=true;}}
+            else if(p.id==='hongsewangzuo'){if(res.name==='同花'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){itemBonus+=(base*3.5);triggered=true;}}}
+            else if(p.id==='yinsewangzuo'){if(res.name==='顺子'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){itemBonus+=(base*4);triggered=true;}}}
             else if(p.trigger==='face'){const count=cards.filter(c=>!c.isWild&&['J','Q','K'].includes(c.rank)).length;if(count>0){mult+=(p.mult*count);triggered=true;}}
             else if(p.id==='haixing'&&cards.some(c=>!c.isWild&&c.suit==='♥'&&c.rank==='A')){if(isFinalSettle)bonusGold+=200;triggered=true;}
             else if(p.id==='hailuo'&&cards.some(c=>!c.isWild&&c.suit==='♣')){if(isFinalSettle){if(Math.random()<0.5){itemBonus+=1000;triggered=true;}}else{triggered=true;}}
@@ -776,15 +1256,21 @@ class Game {
     htmlCard(c,mini,face,isBait){
         if(!face)return`<div class="card ${mini?'mini':''} card-back"></div>`;
         const badge=isBait?`<div class="badge-bait">放</div>`:'';
-        let specialBadge='';let extraClasses='';let dataDesc='';
-        if(c.isWild){specialBadge=`<div style="position:absolute; bottom:2px; right:2px; font-size:16px;">🧱</div>`;extraClasses='card-wild';dataDesc=' data-desc="万能牌：可充当任意花色的任意牌，结算时该牌不计入道具牌奖励。"';}
-        else if(c.isWishingStar){specialBadge=`<div style="position:absolute; bottom:2px; right:2px; font-size:16px;">🌟</div>`;extraClasses='card-star';dataDesc=' data-desc="特殊奖励牌：在牌型组合中，顺子、同花、葫芦、同花顺牌型不可使用该牌，会导致牌型失效，牌型积分变为10进行结算。可作为辅助牌，在单牌、对子、两对、三条、四炸中可使用；结算时牌型中包含该牌，本回合中牌型积分+100进行结算。"';}
+        let specialBadge='';let extraClasses='';let dataDescArr=[];
+        if(c.isWild){specialBadge=`<div style="position:absolute; bottom:2px; right:2px; font-size:16px;">🧱</div>`;extraClasses='card-wild';dataDescArr.push("万能牌：可充当任意花色的任意牌，结算时该牌不计入道具牌奖励。");}
+        else if(c.isWishingStar){specialBadge=`<div style="position:absolute; bottom:2px; right:2px; font-size:16px;">🌟</div>`;extraClasses='card-star';dataDescArr.push("特殊奖励牌：在牌型组合中，顺子、同花、葫芦、同花顺牌型不可使用该牌，会导致牌型失效，牌型积分变为10进行结算。可作为辅助牌，在单牌、对子、两对、三条、四炸中可使用；结算时牌型中包含该牌，本回合中牌型积分+100进行结算。");}
         else if(c.modIcon){specialBadge=`<div style="position:absolute; bottom:2px; right:2px; font-size:16px;">${c.modIcon}</div>`;
-            if(c.modIcon==='🪨')dataDesc=' data-desc="黑石牌：由其他花色转变为黑桃"';
-            else if(c.modIcon==='🍎')dataDesc=' data-desc="红果牌：由其他花色转变为红心"';
-            else if(c.modIcon==='🎭')dataDesc=' data-desc="面具牌：由其他牌转变为人头牌"';
-            else if(c.modIcon==='🪷')dataDesc=' data-desc="双生莲牌：被复制出来的牌"';
+            if(c.modIcon==='🪨')dataDescArr.push("黑石牌：由其他花色转变为黑桃");
+            else if(c.modIcon==='🍎')dataDescArr.push("红果牌：由其他花色转变为红心");
+            else if(c.modIcon==='🎭')dataDescArr.push("面具牌：由其他牌转变为人头牌");
+            else if(c.modIcon==='🪷')dataDescArr.push("双生莲牌：被复制出来的牌");
         }
+        if(c.scoreBonus) {
+            specialBadge+=`<div style="position:absolute; bottom:2px; left:2px; font-size:12px; color:#000; font-weight:900;">+${c.scoreBonus}</div>`;
+            extraClasses+=' card-score';
+            dataDescArr.push(`积分牌：结算时牌型包含本张牌，牌型积分+${c.scoreBonus}。`);
+        }
+        let dataDesc = dataDescArr.length > 0 ? ` data-desc="${dataDescArr.join(' ')}"` : '';
         return`<div class="card ${mini?'mini':''} ${c.isRed?'red':'black'} ${extraClasses}"${dataDesc}><div class="card-rank">${c.rank}</div><div class="card-suit">${c.suit}</div>${badge}${specialBadge}</div>`;
     }
     renderSkills(){
@@ -853,19 +1339,231 @@ class Game {
 
         this.saveState();
 
-        if(this.config.target==='accumulate'){
-            if(pass)this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);
-            else if(this.currentRound<3)this.showSettlePanel(win,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,false,"",checkRewardForVisual);
-            else this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,failReason,checkRewardForVisual);
-        }else{
-            if(isEarlyExitLoss){let earlyFailReason=`胜场不足 (${this.currentLevelWins}胜 ${this.currentLevelLosses}负)`;this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,earlyFailReason,checkRewardForVisual);}
-            else if(isEarlyExitWin){this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);}
-            else if(this.currentRound<3){this.showSettlePanel(win,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,false,"",checkRewardForVisual);}
-            else if(pass){this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);}
-            else{this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,failReason,checkRewardForVisual);}
-        }
+        this.playClashAnim(myRes.cards, aiRes.cards, myRes, aiRes, win, () => {
+            if(this.config.target==='accumulate'){
+                if(pass) this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);
+                else if(this.currentRound<3) this.showSettlePanel(win,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,false,"",checkRewardForVisual);
+                else this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,failReason,checkRewardForVisual, win);
+            }else{
+                if(isEarlyExitLoss){let earlyFailReason=`胜场不足 (${this.currentLevelWins}胜 ${this.currentLevelLosses}负)`;this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,earlyFailReason,checkRewardForVisual, win);}
+                else if(isEarlyExitWin){this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);}
+                else if(this.currentRound<3){this.showSettlePanel(win,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,false,"",checkRewardForVisual);}
+                else if(pass){this.showSettlePanel(true,myRes,aiRes,finalPayout,myRes.cards,aiRes.cards,baitSrc,aiRes.t,fish,true,"",checkRewardForVisual);}
+                else{this.showFailPanel(myRes,aiRes,myRes.cards,aiRes.cards,failReason,checkRewardForVisual, win);}
+            }
+        });
     }
-    rollNumber(elId, start, end, duration) {
+    getClashHandHtml(cards) {
+        let html = '';
+        const allBait=[...this.playerBait,...this.oppBait];
+        cards.forEach(c => {
+            const isB = allBait.some(b => b.id === c.id);
+            html += `<div class="card-shadow rounded-lg flex-shrink-0">${this.htmlCard(c, false, true, isB)}</div>`; 
+        });
+        return html;
+    }
+    playClashAnim(myCards, aiCards, myRes, aiRes, roundWin, callback) {
+        const overlay = document.getElementById('clash-overlay');
+        const topEl   = document.getElementById('clash-top');
+        const botEl   = document.getElementById('clash-bottom');
+        const vsEl    = document.getElementById('clash-vs');
+
+        // ── Fan arc builder ──────────────────────────────────────────────
+        // topArc=true  → 凹弧：中间牌下压，两侧牌上扬，transform-origin底部
+        // topArc=false → 凸弧：中间牌上抬，两侧牌下垂，transform-origin顶部
+        const buildFanHtml = (cards, topArc) => {
+            const n = cards.length;
+            if(n === 0) return '';
+            const allBait = [...this.playerBait, ...this.oppBait];
+            const W = 74, H = 104;
+            const totalArc    = Math.min(20, n * 4);
+            const startAngle  = -totalArc / 2;
+            const stepAngle   = n > 1 ? totalArc / (n - 1) : 0;
+            const arcDepth    = 18;
+            // 上方牌间距缩小，下方保持
+            const cardSpacing = topArc
+                ? Math.min(58, 280 / Math.max(n - 1, 1))
+                : Math.min(72, 320 / Math.max(n - 1, 1));
+            const totalW      = (n - 1) * cardSpacing + W;
+            const containerW  = Math.max(totalW + 32, 280);
+            const containerH  = H + arcDepth + 8;
+
+            let html = `<div id="clash-fan-${topArc?'my':'ai'}" style="position:relative;width:${containerW}px;height:${containerH}px;margin:0 auto;flex-shrink:0;">`;
+            for(let i = 0; i < n; i++) {
+                const c       = cards[i];
+                const angle   = n > 1 ? startAngle + i * stepAngle : 0;
+                // midFrac: -1(左端) → 0(中间) → +1(右端)
+                const midFrac = n > 1 ? (i / (n - 1) - 0.5) * 2 : 0;
+                // curvature: 0在中间，1在两端
+                const curve   = midFrac * midFrac;
+                let x, y;
+                if(topArc) {
+                    // 凹弧(上方我方)：中间牌y最大(下压)，两侧y=0(上扬)
+                    // y从0(两侧)增到arcDepth(中间)
+                    x = i * cardSpacing;
+                    y = arcDepth * (1 - curve);          // 中间最大，两侧为0
+                } else {
+                    // 凸弧(下方对手)：中间牌y=0(最高)，两侧y最大(下垂)
+                    x = i * cardSpacing;
+                    y = arcDepth * curve;                // 中间为0，两侧最大
+                }
+                const origin = topArc ? 'bottom center' : 'top center';
+                const isB = allBait.some(b => b.id === c.id);
+                const cardHtml = this.htmlCard(c, false, true, isB);
+                html += `<div style="position:absolute;left:${x}px;top:${y}px;
+                    transform:rotate(${angle}deg);transform-origin:${origin};
+                    filter:drop-shadow(0 6px 16px rgba(0,0,0,0.65));">
+                    <div style="width:${W}px;height:${H}px;border-radius:7px;overflow:hidden;">
+                        ${cardHtml}
+                    </div>
+                </div>`;
+            }
+            html += '</div>';
+            return html;
+        };
+
+        // ── Label HTML (hidden initially) ────────────────────────────────
+        const myLabelHtml = roundWin
+            ? `<div id="clash-lbl-my" class="clash-result-label clash-result-win">🏆 我方胜</div>`
+            : `<div style="height:50px;flex-shrink:0;"></div>`;
+        const aiLabelHtml = !roundWin
+            ? `<div id="clash-lbl-ai" class="clash-result-label clash-result-lose">💀 对方胜</div>`
+            : `<div style="height:50px;flex-shrink:0;"></div>`;
+
+        // ── Pill label for hand type ─────────────────────────────────────
+        const myPill  = `<div style="font-family:'SimHei',sans-serif;font-size:13px;font-weight:900;
+            color:#22d3ee;letter-spacing:2px;background:rgba(8,18,40,0.92);
+            padding:5px 18px;border-radius:20px;border:1px solid rgba(34,211,238,0.45);
+            margin-bottom:14px;box-shadow:0 0 14px rgba(34,211,238,0.18);flex-shrink:0;">
+            我的牌型：<span style="color:#fff;">${myRes.name}</span></div>`;
+        const aiPill  = `<div style="font-family:'SimHei',sans-serif;font-size:13px;font-weight:900;
+            color:#fb7185;letter-spacing:2px;background:rgba(8,18,40,0.92);
+            padding:5px 18px;border-radius:20px;border:1px solid rgba(251,113,133,0.45);
+            margin-top:14px;box-shadow:0 0 14px rgba(251,113,133,0.18);flex-shrink:0;">
+            对手牌型：<span style="color:#fff;">${aiRes.name}</span></div>`;
+
+        // ── Populate blocks ──────────────────────────────────────────────
+        // TOP (my): pill → 凹弧牌 → 胜负标签
+        topEl.innerHTML = `${myPill}${buildFanHtml(myCards, true)}${myLabelHtml}`;
+        // BOTTOM (opp): 胜负标签 → 凸弧牌 → pill
+        botEl.innerHTML = `${aiLabelHtml}${buildFanHtml(aiCards, false)}${aiPill}`;
+
+        // Hide labels
+        const lblMy = document.getElementById('clash-lbl-my');
+        const lblAi = document.getElementById('clash-lbl-ai');
+        [lblMy, lblAi].forEach(el => {
+            if(!el) return;
+            el.style.opacity = '0';
+            el.style.transform = 'scale(0.2) translateY(16px)';
+            el.style.filter = 'blur(5px)';
+        });
+
+        // ── Initial state: blocks off-screen ────────────────────────────
+        topEl.style.transition = 'none';
+        botEl.style.transition = 'none';
+        topEl.style.transform  = 'translateY(-115vh)';
+        botEl.style.transform  = 'translateY(115vh)';
+        vsEl.style.opacity     = '0';
+        vsEl.style.transform   = 'scale(4)';
+        vsEl.style.transition  = 'none';
+
+        // Overlay fade-in
+        overlay.style.opacity    = '0';
+        overlay.style.display    = 'flex';
+        overlay.style.transition = 'opacity 0.22s';
+
+        requestAnimationFrame(() => { requestAnimationFrame(() => {
+            overlay.style.opacity = '1';
+
+            // STEP 1 (0ms): Blocks slide to center
+            const ease = 'transform 0.52s cubic-bezier(0.22,1,0.36,1)';
+            topEl.style.transition = ease;
+            botEl.style.transition = ease;
+            topEl.style.transform  = 'translateY(0)';
+            botEl.style.transform  = 'translateY(0)';
+            this.audio.playCardSlide();
+
+            // STEP 2 (630ms): VS flash + shake
+            setTimeout(() => {
+                vsEl.style.transition = 'opacity 0.18s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1)';
+                vsEl.style.opacity    = '1';
+                vsEl.style.transform  = 'scale(1)';
+                this.audio.playClash();
+                overlay.style.animation = 'clashShake 0.42s cubic-bezier(.36,.07,.19,.97) both';
+                setTimeout(() => { overlay.style.animation = ''; }, 460);
+            }, 630);
+
+            // STEP 3 (1100ms): VS exits, result labels pop in + losing side greys out
+            setTimeout(() => {
+                vsEl.style.opacity   = '0';
+                vsEl.style.transform = 'scale(0.1)';
+                const popLabel = (el, glowAnim) => {
+                    if(!el) return;
+                    el.style.transition = 'none';
+                    el.style.opacity    = '0';
+                    el.style.transform  = 'scale(0.2) translateY(16px)';
+                    el.style.filter     = 'blur(5px)';
+                    requestAnimationFrame(() => { requestAnimationFrame(() => {
+                        el.style.transition = 'opacity 0.38s ease, transform 0.42s cubic-bezier(0.175,0.885,0.32,1.5), filter 0.38s ease';
+                        el.style.opacity    = '1';
+                        el.style.transform  = 'scale(1) translateY(0)';
+                        el.style.filter     = 'blur(0)';
+                        setTimeout(() => { el.style.animation = `${glowAnim} 1.8s ease-in-out infinite`; }, 440);
+                    }); });
+                };
+                popLabel(lblMy, 'labelGlow');
+                popLabel(lblAi, 'labelGlowR');
+
+                // 失败方牌型置灰：标签弹出后 300ms 开始渐变
+                setTimeout(() => {
+                    const losingFanId = roundWin ? 'clash-fan-ai' : 'clash-fan-my';
+                    const cardContainer = document.getElementById(losingFanId);
+                    if(cardContainer){
+                        cardContainer.style.transition = 'filter 0.65s ease, opacity 0.65s ease';
+                        cardContainer.style.filter     = 'grayscale(1) brightness(0.4)';
+                        cardContainer.style.opacity    = '0.65';
+                    }
+                }, 300);
+            }, 1100);
+
+            // STEP 4 (3300ms): 标签停留 ~1.5s 后，overlay内容淡出
+            // 但不隐藏 overlay 本身，而是在内容消失后直接衔接弹窗
+            setTimeout(() => {
+                // 淡出 clash 内容，但保持黑色背景（overlay 继续显示）
+                topEl.style.transition = 'opacity 0.35s';
+                botEl.style.transition = 'opacity 0.35s';
+                vsEl.style.transition  = 'opacity 0.35s';
+                topEl.style.opacity    = '0';
+                botEl.style.opacity    = '0';
+                vsEl.style.opacity     = '0';
+
+                setTimeout(() => {
+                    // overlay 变成透明背景，然后隐藏，期间结算弹窗已出现
+                    overlay.style.transition = 'opacity 0.3s';
+                    overlay.style.opacity    = '0';
+
+                    // callback 触发结算弹窗（弹窗本身有黑色遮罩，无缝衔接）
+                    callback();
+
+                    // 弹窗出现后再隐藏 clash-overlay
+                    setTimeout(() => {
+                        overlay.style.display   = 'none';
+                        overlay.style.opacity   = '1';
+                        overlay.style.animation = '';
+                        topEl.style.transition  = '';
+                        botEl.style.transition  = '';
+                        topEl.style.opacity     = '1';
+                        botEl.style.opacity     = '1';
+                        vsEl.style.transition   = '';
+                        vsEl.style.opacity      = '0';
+                    }, 350);
+                }, 380);
+            }, 3300);
+
+        }); });
+    }
+
+        rollNumber(elId, start, end, duration) {
         const el = document.getElementById(elId);
         if(!el) return;
         let startTime = null;
@@ -980,32 +1678,201 @@ class Game {
             }, 50);
         }
     }
-    showFailPanel(myRes,aiRes,myCards,aiCards,reason,levelVal){
+    showFailPanel(myRes,aiRes,myCards,aiCards,reason,levelVal, roundWin){
         this.audio.playLose();this.setOverlayState(true);const ov=document.getElementById('overlay-screen');ov.classList.add('visible');
         let progressInfo='';if(this.config.target==='accumulate')progressInfo=`本局积分: ${Math.floor(levelVal)} / 累计积分: ${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;else if(this.config.target==='best_of_3')progressInfo=`当前战绩: ${this.currentLevelWins}胜 ${this.currentLevelLosses}负`;
         const getHandHtml=(cards)=>{let html=`<div class="flex flex-wrap gap-2 md:gap-3 justify-center items-center settle-card-wrap">`;cards.forEach(c=>{html+=`<div class="card-shadow rounded-lg flex-shrink-0">${this.htmlCard(c,true,true,false)}</div>`;});html+=`</div>`;return html;};
-        const myTitleBlock=`<div class="flex items-center justify-center gap-2 w-full"><div class="bg-slate-700/60 text-slate-300 text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border border-slate-600/50 uppercase tracking-widest m-0 shadow-sm">我的牌型：${myRes.name}</div></div>`;
-        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 w-full"><div class="bg-defeat-red text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none">WINNER!</div><div class="bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[11px] md:text-xs font-black px-3 py-1 rounded-lg uppercase tracking-widest shadow-lg m-0">对手牌型：${aiRes.name}</div></div>`;
-        ov.innerHTML=`<div class="relative w-[95%] max-w-4xl bg-slate-900 border border-rose-700/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"><div class="flex flex-1 overflow-y-auto overflow-x-hidden flex-col md:flex-row"><div class="w-full md:w-[50%] bg-slate-800/30 p-8 md:p-10 border-b md:border-b-0 md:border-r border-slate-700/30 flex flex-col justify-center gap-4 relative shrink-0 min-h-[300px]"><div class="flex flex-col items-center relative z-10 w-full opacity-60 mb-4">${myTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(myCards)}</div></div><div class="flex items-center gap-4 px-6 sm:px-12 my-1 w-full"><div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-600"></div><div class="italic font-black text-slate-500 text-xs tracking-widest" style="user-select:none;">VS</div><div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-600"></div></div><div class="flex flex-col items-center opacity-100 w-full mt-4">${aiTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(aiCards)}</div></div></div><div class="flex-1 p-8 flex flex-col justify-center items-center bg-slate-900/40 gap-8 relative shrink-0"><div class="text-6xl mb-2">💔</div><h2 class="text-rose-500 text-2xl sm:text-3xl font-black text-center leading-relaxed" style="user-select:none;">等着吧～<br>我会赢回来的！</h2><div class="bg-rose-500/10 border border-rose-500/20 text-rose-300 p-4 rounded-xl w-full text-center max-w-[250px]"><div class="font-bold text-sm" style="user-select:none;">${reason}</div><div class="text-xs opacity-70 mt-1" style="user-select:none;">${progressInfo}</div></div><div class="flex flex-col sm:flex-row items-center gap-3 mt-4 pt-4 border-t border-slate-700/50 shrink-0 justify-end w-full"><button class="btn btn-primary transition-all active:scale-95 w-full sm:w-auto btn-lobby" style="min-width: 140px; padding: 12px 30px; font-size: 14px;" onclick="game.showFailScreen()">确定</button></div></div></div></div>`;
+        const myTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${roundWin?`<div class="bg-victory-orange text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-orange border border-orange-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${roundWin?'bg-cyan-500/20 text-cyan-400 border-cyan-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest m-0 shadow-sm">我的牌型：${myRes.name}</div></div>`;
+        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${!roundWin?`<div class="bg-defeat-red text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${!roundWin?'bg-rose-500/20 text-rose-400 border-rose-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest shadow-lg m-0">对手牌型：${aiRes.name}</div></div>`;
+        const quotes =["就这？我闭着眼打都比你好。","牌都给你了，还能打成这样？","别挣扎了，这把运气真不行。","小丑都在笑你，还不服气吗？","手气这么臭，还是先去洗洗手吧。","这一局是教训，下一局是传奇。","筹码已散尽，勇气请重新集结。","牌运未至，收起残局，静待良机。","无语吧！你的直觉还需磨砺。","迷雾未散，深呼吸，继续前行吧。"];
+        const q = quotes[Math.floor(Math.random()*quotes.length)];
+        ov.innerHTML=`<div class="relative w-[95%] max-w-4xl bg-slate-900 border border-rose-700/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"><div class="flex flex-1 overflow-y-auto overflow-x-hidden flex-col md:flex-row"><div class="w-full md:w-[50%] bg-slate-800/30 p-8 md:p-10 border-b md:border-b-0 md:border-r border-slate-700/30 flex flex-col justify-center gap-4 relative shrink-0 min-h-[300px]"><div class="flex flex-col items-center relative z-10 w-full mb-4 opacity-${roundWin?'100':'60'}">${myTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(myCards)}</div></div><div class="flex items-center gap-4 px-6 sm:px-12 my-1 w-full"><div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-600"></div><div class="italic font-black text-slate-500 text-xs tracking-widest" style="user-select:none;">VS</div><div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-600"></div></div><div class="flex flex-col items-center w-full mt-4 opacity-${!roundWin?'100':'60'}">${aiTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(aiCards)}</div></div></div><div class="flex-1 p-8 flex flex-col justify-center items-center bg-slate-900/40 gap-6 relative shrink-0"><div class="flex items-center justify-center mb-2" style="position:relative;width:100px;height:100px;">
+<div id="fail-opp-avatar" style="width:100px;height:100px;border-radius:50%;background-size:cover;background-position:center;border:2px solid rgba(225,29,72,0.6);box-shadow:0 0 18px rgba(225,29,72,0.6);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:36px;background-color:#1e293b;">🤖</div>
+</div><div class="bg-slate-800/80 border border-rose-500/30 text-slate-200 p-4 rounded-xl w-full text-center max-w-[260px] relative shadow-lg"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-800 border-t border-l border-rose-500/30 transform rotate-45"></div><div class="font-bold text-[13px] italic relative z-10" style="color:var(--highlight);">"${q}"</div><div class="text-xs opacity-70 mt-3 pt-2 border-t border-slate-700/50" style="user-select:none; color:#f87171;">失败原因: ${reason}</div><div class="text-[10px] opacity-50 mt-1" style="user-select:none;">${progressInfo}</div></div><div class="flex w-full justify-center mt-2"><button class="btn btn-primary transition-all active:scale-95 w-full btn-lobby btn-lobby-primary" style="font-size: 14px; padding: 12px 0;" onclick="game.returnToLobby(true)">返回大厅</button></div></div></div></div>`;
+        // 注入当前关卡对手头像
+        const failAvatarEl = document.getElementById('fail-opp-avatar');
+        if(failAvatarEl && this.config){
+            const floor = this.config.floor;
+            const step  = this.config.step;
+            const personas = OPPONENT_PERSONAS[floor] || OPPONENT_PERSONAS[1];
+            const pIndex   = step === 1 ? 0 : 2;
+            const oppName  = personas[pIndex].name;
+            const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(oppName)}`;
+            failAvatarEl.innerHTML = '';
+            failAvatarEl.style.backgroundImage = `url('${avatarUrl}')`;
+            failAvatarEl.title = oppName;
+        }
     }
-    showFailScreen(){const ov=document.getElementById('overlay-screen');ov.innerHTML=`<div class="msg-screen-content"><div class="msg-title">挑战失败</div><div class="msg-subtitle">无尽塔楼的试炼还在继续...</div><button class="btn btn-lobby" onclick="game.returnToLobby(true)">回到大厅</button></div>`;}
-    openShopInventory(){const ov=document.getElementById('overlay-screen');ov.innerHTML='';ov.classList.add('visible');const modal=document.getElementById('shop-screen');modal.style.display='flex';setTimeout(()=>{modal.classList.add('shop-visible');},50);this.audio.playShopOpenSound();this.audio.startShopBgm();this.setOverlayState(true);let allPacks=['upgrade','skill','normal'];this.shuffle(allPacks);this.availablePacks=allPacks.slice(0,2);this.shopDirectItems=this.generateRandomItems(2);if(this.equippedPassives.includes('shali')){let freeUpgrade=this.generateRandomItems(1,'upgrade')[0];if(freeUpgrade){freeUpgrade.price=0;this.shopDirectItems.unshift(freeUpgrade);}}this.switchShopTab('shop');this.renderEquipCircle();this.saveState();}
-    generateRandomItems(count,forceType=null){const pool=[...REWARD_POOL];let available=pool.filter(i=>{if(forceType&&i.type!==forceType)return false;if(i.unique&&(this.ownedSkills.includes(i.ref||i.id)||this.ownedPassives.includes(i.id)||this.upgradeCounts[i.id]))return false;if(i.type==='upgrade'&&!['fumo','shuangli','jinwei','yuezhu','yousuo','yixi','cangjiao','baochao','longyuan'].includes(i.id)){if(['yunyan','xuanshu','huance','xinyu','xunang'].includes(i.id)&&(this.upgradeCounts[i.id]||0)>=2)return false;if(i.id==='yunyan'&&!this.ownedSkills.includes('yundu'))return false;if(i.id==='xuanshu'&&!this.ownedSkills.includes('xuanji'))return false;if(i.id==='huance'&&!this.ownedSkills.includes('huanzhu'))return false;}return true;});if(available.length<count&&forceType){let fallback=pool.filter(i=>i.type===forceType);available=[...available,...fallback,...fallback,...fallback];}this.shuffle(available);let res=[];for(let i=0;i<count;i++){if(available[i]){res.push({...available[i],_purchased:false,_uid:Math.random().toString(36).slice(2)});}}return res;}
+    openShopInventory(){const ov=document.getElementById('overlay-screen');ov.innerHTML='';ov.classList.add('visible');const modal=document.getElementById('shop-screen');modal.style.display='flex';setTimeout(()=>{modal.classList.add('shop-visible');},50);this.audio.playShopOpenSound();this.audio.startShopBgm();this.setOverlayState(true);let allPacks=['upgrade','skill','normal','secret'];this.shuffle(allPacks);let packsCount=2+(this.upgradeCounts['dalibao']?1:0);this.availablePacks=allPacks.slice(0,packsCount);let itemsCount=2+(this.upgradeCounts['huojia']?1:0);this.shopDirectItems=this.generateRandomItems(itemsCount);if(this.equippedPassives.includes('shali')){let freeUpgrade=this.generateRandomItems(1,'upgrade')[0];if(freeUpgrade){freeUpgrade.price=0;this.shopDirectItems.unshift(freeUpgrade);}}this.switchShopTab('shop');this.renderEquipCircle();
+        // Set next level button text
+        const nextLevelIdx = this.levelIndex + 1;
+        const nextCfg = LEVEL_CONFIG[nextLevelIdx];
+        const shopNextBtn = document.getElementById('shop-next-btn');
+        if(shopNextBtn){
+            if(nextCfg){
+                const typeName = nextCfg.step===1?'胜负场':'积分场';
+                shopNextBtn.innerText = `前往下一关（${nextCfg.id} ${typeName}）`;
+            } else {
+                shopNextBtn.innerText = '前往下一关';
+            }
+        }
+        this.saveState();}
+    generateRandomItems(count,forceType=null){const pool=[...REWARD_POOL];let available=pool.filter(i=>{if(forceType&&i.type!==forceType)return false;if(i.unique&&(this.ownedSkills.includes(i.ref||i.id)||this.ownedPassives.includes(i.id)||this.upgradeCounts[i.id]))return false;if((i.type==='upgrade'||i.type==='secret')&&!['fumo','shuangli','jinwei','yuezhu','yousuo','yixi','cangjiao','baochao','longyuan'].includes(i.id)){if(['yunyan','xuanshu','huance','xinyu','xunang'].includes(i.id)&&(this.upgradeCounts[i.id]||0)>=2)return false;if(i.id==='yunyan'&&!this.ownedSkills.includes('yundu'))return false;if(i.id==='xuanshu'&&!this.ownedSkills.includes('xuanji'))return false;if(i.id==='huance'&&!this.ownedSkills.includes('huanzhu'))return false;}if(i.id==='dayinji'&&this.ownedPassives.length===0)return false;return true;});if(available.length<count&&forceType){let fallback=pool.filter(i=>i.type===forceType);available=[...available,...fallback,...fallback,...fallback];}this.shuffle(available);let res=[];for(let i=0;i<count;i++){if(available[i]){let item = {...available[i],_purchased:false,_uid:Math.random().toString(36).slice(2)}; item.price = typeof item.getPrice==='function'?item.getPrice(this):item.price; res.push(item);}}return res;}
     switchShopTab(tab){document.querySelectorAll('.shop-tab').forEach(el=>el.classList.remove('active'));document.getElementById('tab-btn-'+tab).classList.add('active');document.getElementById('tab-content-shop').style.display='none';document.getElementById('tab-content-inventory').style.display='none';document.getElementById('tab-content-'+tab).style.display='block';document.getElementById('shop-modal-gold').innerText=this.playerGold;if(tab==='shop'){this.renderShopHome();}else{this.renderInventory();}}
-    renderShopHome(){const ct=document.getElementById('tab-content-shop');let discount=1;let badgeText='';if(this.upgradeCounts['paomo']){discount*=0.5;badgeText='五折优惠';}if(this.config.floor===1){discount*=0.1;badgeText='限时1折';}let html='<div style="display:flex; flex-direction:column;">';html+=`<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; align-content: flex-start; padding-bottom: 15px;">`;if(this.shopDirectItems.length===0){html+=`<div style="text-align:center; width:100%; color:#888; padding: 20px;">暂无道具可购买</div>`;}else{this.shopDirectItems.forEach(r=>{let basePrice=r.price;let price=Math.max(1,Math.floor(basePrice*discount));if(r.price===0)price=0;const canBuy=this.playerGold>=price;const isPurchased=r._purchased;const btnStyle=isPurchased?'btn disabled':(canBuy?'btn-primary':'btn disabled');const btnState=(isPurchased||!canBuy)?'disabled':'';const cardStateClass=(!canBuy&&!isPurchased)?'disabled':'';let isConsumable=r.type==='item_active'&&r.ref&&SKILLS_DB[r.ref]&&SKILLS_DB[r.ref].type==='consumable';let btnTxt='';if(isPurchased)btnTxt='已购买';else if(price===0)btnTxt='免费获取';else if(isConsumable)btnTxt=`💰 ${price}/1 次`;else btnTxt=`💰 ${price} 购买`;let discountBadge=(badgeText&&price>0)?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';let dynDesc=r.desc;if(r.id==='jiangliu')dynDesc+=` 本回合可得${50+(this.jiangliuCount||0)*50}`;else if(r.id==='jiaoshi')dynDesc+=` 本回合可得${200+(this.jiaoshiCount||0)*100}`;html+=`<div class="reward-card ${cardStateClass}" id="rcard-${r._uid}" style="width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; padding: 10px; height: 190px; justify-content: flex-start; padding-top: 15px; ${isPurchased?'border: 2px solid var(--gold-color); opacity: 0.6;':''}">${discountBadge}<div style="font-size:30px; margin-bottom:5px;">${r.icon||'🔰'}</div><div style="color:var(--highlight); font-weight:bold; margin-bottom:5px; font-size:12px;">${r.name}</div><div style="font-size:10px; color:#ccc; margin-bottom:10px; flex:1; display:flex; align-items:center; justify-content:center; line-height:1.4; text-align:center; white-space:pre-wrap;">${dynDesc}</div><button class="btn ${btnStyle}" id="buy-btn-${r._uid}" ${btnState} onclick="game.buyShopItem('${r._uid}', ${price})" style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0;">${btnTxt}</button></div>`;});}html+='</div>';html+=`<div style="height: 1px; background: rgba(255,255,255,0.1); width: 100%; margin: 10px 0; flex-shrink: 0;"></div>`;if(this.availablePacks.length>0){html+=`<div style="display: flex; justify-content: flex-start; gap: 10px; padding-top: 10px; padding-bottom: 20px; flex-wrap: wrap;">`;const packDefs={'upgrade':{icon:'🆙',name:'升级包',desc:'随机1~3张升级卡',color:'var(--gold-color)',bg:'linear-gradient(180deg, rgba(255,215,0,0.15) 0%, rgba(45,55,72,0.9) 100%)'},'skill':{icon:'🔮',name:'技能包',desc:'随机1张技能卡',color:'var(--rare)',bg:'linear-gradient(180deg, rgba(213,128,255,0.15) 0%, rgba(45,55,72,0.9) 100%)'},'normal':{icon:'🎒',name:'道具包',desc:'随机2张普通道具',color:'var(--highlight)',bg:'linear-gradient(180deg, rgba(0,242,255,0.15) 0%, rgba(45,55,72,0.9) 100%)'}};let packBasePrice=100;let packPrice=Math.max(1,Math.floor(packBasePrice*discount));let packDiscountBadge=badgeText?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';this.availablePacks.forEach(p=>{const def=packDefs[p];const canBuyPack=this.playerGold>=packPrice;const packStateClass=!canBuyPack?'disabled':'';const btnState=!canBuyPack?'disabled':'';const btnStyle=canBuyPack?'btn-primary':'btn disabled';html+=`<div class="pack-card ${packStateClass}" style="padding: 10px; width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; height: 150px; justify-content: flex-start; padding-top: 20px; display: flex; flex-direction: column; align-items: center; position:relative; background: ${def.bg}; border-color: ${def.color};">${packDiscountBadge}<div style="font-size: 30px;">${def.icon}</div><div style="font-weight: bold; margin-top:5px; font-size:12px; color: ${def.color};">${def.name}</div><div style="font-size:9px; color:#ddd; margin-top:3px; margin-bottom: 10px;">${def.desc}</div><button class="btn ${btnStyle}" ${btnState} style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0; margin-top: auto;" onclick="game.openPack('${p}', ${packPrice})">💰 ${packPrice} 开启</button></div>`;});html+=`</div>`;}else{html+=`<div style="text-align:center; padding: 15px; color:#666; font-size:12px; padding-bottom: 30px;">所有卡包已开启</div>`;}html+='</div>';ct.innerHTML=html;}
-    openPack(type,price){if(this.playerGold<price){document.getElementById('msg-modal').classList.add('visible');return;}this.playerGold-=price;document.getElementById('shop-modal-gold').innerText=this.playerGold;this.updateHeader();this.availablePacks=this.availablePacks.filter(p=>p!==type);let targetType='';let count=1;if(type==='upgrade'){targetType='upgrade';count=Math.floor(Math.random()*3)+1;}else if(type==='skill'){targetType='item_active';count=1;}else if(type==='normal'){targetType='passive';count=2;}let newItems=this.generateRandomItems(count,targetType);if(newItems.length===0){const t=document.getElementById('toast-msg');t.style.display='block';setTimeout(()=>{t.style.display='none';},3000);}this.shopDirectItems=[...newItems,...this.shopDirectItems];this.renderShopHome();this.saveState();}
-    openDeckModPopup(itemObj){const modal=document.getElementById('deck-mod-modal');const cardsContainer=document.getElementById('deck-mod-cards');const confirmBtn=document.getElementById('deck-mod-confirm');const cancelBtn=document.getElementById('deck-mod-cancel');let pool=[...this.runDeckTemplate];this.shuffle(pool);let count=0;this.deckModMin=1;this.deckModMax=1;let confirmText='确定转变';if(itemObj.id==='heishi'){count=8;this.deckModMax=2;}else if(itemObj.id==='hongguo'){count=8;this.deckModMax=2;}else if(itemObj.id==='mianju'){count=6;this.deckModMax=2;}else if(itemObj.id==='xiangpini'){count=4;this.deckModMax=1;}else if(itemObj.id==='xuyuanxing'){count=4;this.deckModMax=1;}else if(itemObj.id==='shuangshenglian'){count=8;this.deckModMax=2;confirmText='确定复制';}this.deckModSelected=[];this.deckModCandidates=pool.slice(0,count);document.getElementById('deck-mod-title').innerText=itemObj.name;let descText=itemObj.desc;if(itemObj.id==='xuyuanxing'){descText+='\n\n特殊奖励牌：在牌型组合中，顺子、同花、葫芦、同花顺牌型不可使用该牌，会导致牌型失效，牌型积分变为10进行结算。可作为辅助牌，在单牌、对子、两对、三条、四炸中可使用；结算时牌型中包含该牌，本回合中牌型积分+100进行结算。';}const descDiv=document.getElementById('deck-mod-desc');descDiv.innerText=descText;if(itemObj.id==='xuyuanxing'){descDiv.style.textAlign='left';descDiv.style.padding='0 10px';}else{descDiv.style.textAlign='center';descDiv.style.padding='0';}confirmBtn.innerText=confirmText;confirmBtn.disabled=true;this.renderDeckModCards=()=>{cardsContainer.innerHTML='';this.deckModCandidates.forEach(c=>{const el=document.createElement('div');el.className='deck-mod-card-wrap';el.innerHTML=this.htmlCard(c,false,true,false);if(this.deckModSelected.includes(c))el.classList.add('selected');el.onclick=()=>{const idx=this.deckModSelected.indexOf(c);if(idx>-1){this.deckModSelected.splice(idx,1);}else{if(this.deckModSelected.length<this.deckModMax){this.deckModSelected.push(c);}}confirmBtn.disabled=this.deckModSelected.length<this.deckModMin;this.renderDeckModCards();};cardsContainer.appendChild(el);});};this.renderDeckModCards();confirmBtn.onclick=()=>{this.applyDeckMod(itemObj.id,this.deckModSelected);modal.classList.remove('visible');};cancelBtn.onclick=()=>{modal.classList.remove('visible');};modal.classList.add('visible');}
-    applyDeckMod(itemId,selectedCards){if(itemId==='heishi'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.suit='♠';tc.isRed=false;tc.modIcon='🪨';}});}else if(itemId==='hongguo'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.suit='♥';tc.isRed=true;tc.modIcon='🍎';}});}else if(itemId==='mianju'){const faceRanks=['J','Q','K'];selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.rank=faceRanks[Math.floor(Math.random()*faceRanks.length)];tc.value=RANK_VALUES[tc.rank];tc.modIcon='🎭';}});}else if(itemId==='xiangpini'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc)tc.isWild=true;});}else if(itemId==='xuyuanxing'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc)tc.isWishingStar=true;});}else if(itemId==='shuangshenglian'){let maxBaseId=Math.max(...this.runDeckTemplate.map(x=>x.baseId))||100;selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){let copy=new Card(tc.suit,tc.rank);copy.isWild=tc.isWild;copy.isWishingStar=tc.isWishingStar;copy.modIcon='🪷';copy.baseId=++maxBaseId;this.runDeckTemplate.push(copy);}});}this.renderScene();this.saveState();}
+    renderShopHome(){const ct=document.getElementById('tab-content-shop');let discount=1;let badgeText='';if(this.upgradeCounts['paomo']){discount*=0.5;badgeText='五折优惠';}if(this.config.floor===1){discount*=0.1;badgeText='限时1折';}let html='<div style="display:flex; flex-direction:column;">';html+=`<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; align-content: flex-start; padding-bottom: 15px;">`;if(this.shopDirectItems.length===0){html+=`<div style="text-align:center; width:100%; color:#888; padding: 20px;">暂无道具可购买</div>`;}else{this.shopDirectItems.forEach(r=>{const poolDef=REWARD_POOL.find(x=>x.id===r.id)||r;let basePrice=typeof poolDef.getPrice==='function'?poolDef.getPrice(this):poolDef.price;let price=Math.max(1,Math.floor(basePrice*discount));if(r.price===0||basePrice===0)price=0;const canBuy=this.playerGold>=price;const isPurchased=r._purchased;const btnStyle=isPurchased?'btn disabled':(canBuy?'btn-primary':'btn disabled');const btnState=(isPurchased||!canBuy)?'disabled':'';const cardStateClass=(!canBuy&&!isPurchased)?'disabled':'';let isConsumable=r.type==='item_active'&&r.ref&&SKILLS_DB[r.ref]&&SKILLS_DB[r.ref].type==='consumable';let btnTxt='';if(isPurchased)btnTxt='已购买';else if(price===0)btnTxt='免费获取';else if(isConsumable)btnTxt=`💰 ${price}/1 次`;else btnTxt=`💰 ${price} 购买`;let discountBadge=(badgeText&&price>0)?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';let dynDesc=r.desc;if(r.id==='jiangliu')dynDesc+=` 本回合可得${50+(this.jiangliuCount||0)*50}`;else if(r.id==='jiaoshi')dynDesc+=` 本回合可得${200+(this.jiaoshiCount||0)*100}`;html+=`<div class="reward-card ${cardStateClass}" id="rcard-${r._uid}" style="width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; padding: 10px; height: 190px; justify-content: flex-start; padding-top: 15px; ${isPurchased?'border: 2px solid var(--gold-color); opacity: 0.6;':''}">${discountBadge}<div style="font-size:30px; margin-bottom:5px;">${r.icon||'🔰'}</div><div style="color:var(--highlight); font-weight:bold; margin-bottom:5px; font-size:12px;">${r.name}</div><div style="font-size:10px; color:#ccc; margin-bottom:10px; flex:1; display:flex; align-items:center; justify-content:center; line-height:1.4; text-align:center; white-space:pre-wrap;">${dynDesc}</div><button class="btn ${btnStyle}" id="buy-btn-${r._uid}" ${btnState} onclick="game.buyShopItem('${r._uid}', ${price})" style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0;">${btnTxt}</button></div>`;});}html+='</div>';html+=`<div style="height: 1px; background: rgba(255,255,255,0.1); width: 100%; margin: 10px 0; flex-shrink: 0;"></div>`;if(this.availablePacks.length>0){html+=`<div style="display: flex; justify-content: flex-start; gap: 10px; padding-top: 10px; padding-bottom: 20px; flex-wrap: wrap;">`;const packDefs={'upgrade':{icon:'🆙',name:'升级包',desc:'随机1~3张升级卡',color:'var(--gold-color)',bg:'linear-gradient(180deg, rgba(255,215,0,0.15) 0%, rgba(45,55,72,0.9) 100%)'},'skill':{icon:'🔮',name:'技能包',desc:'随机1张技能卡',color:'var(--rare)',bg:'linear-gradient(180deg, rgba(213,128,255,0.15) 0%, rgba(45,55,72,0.9) 100%)'},'normal':{icon:'🎒',name:'道具包',desc:'随机2张普通道具',color:'var(--highlight)',bg:'linear-gradient(180deg, rgba(0,242,255,0.15) 0%, rgba(45,55,72,0.9) 100%)'},'secret':{icon:'📜',name:'秘术包',desc:'随机1~2张秘术卡',color:'var(--victory-orange)',bg:'linear-gradient(180deg, rgba(249,115,22,0.15) 0%, rgba(45,55,72,0.9) 100%)'}};let packBasePrice=100;let packPrice=Math.max(1,Math.floor(packBasePrice*discount));let packDiscountBadge=badgeText?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';this.availablePacks.forEach(p=>{const def=packDefs[p];const canBuyPack=this.playerGold>=packPrice;const packStateClass=!canBuyPack?'disabled':'';const btnState=!canBuyPack?'disabled':'';const btnStyle=canBuyPack?'btn-primary':'btn disabled';html+=`<div class="pack-card ${packStateClass}" style="padding: 10px; width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; height: 150px; justify-content: flex-start; padding-top: 20px; display: flex; flex-direction: column; align-items: center; position:relative; background: ${def.bg}; border-color: ${def.color};">${packDiscountBadge}<div style="font-size: 30px;">${def.icon}</div><div style="font-weight: bold; margin-top:5px; font-size:12px; color: ${def.color};">${def.name}</div><div style="font-size:9px; color:#ddd; margin-top:3px; margin-bottom: 10px;">${def.desc}</div><button class="btn ${btnStyle}" ${btnState} style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0; margin-top: auto;" onclick="game.openPack('${p}', ${packPrice})">💰 ${packPrice} 开启</button></div>`;});html+=`</div>`;}else{html+=`<div style="text-align:center; padding: 15px; color:#666; font-size:12px; padding-bottom: 30px;">所有卡包已开启</div>`;}html+='</div>';ct.innerHTML=html;}
+    openPack(type,price){if(this.playerGold<price){document.getElementById('msg-modal').classList.add('visible');return;}this.playerGold-=price;document.getElementById('shop-modal-gold').innerText=this.playerGold;this.updateHeader();this.availablePacks=this.availablePacks.filter(p=>p!==type);let targetType='';let count=1;if(type==='upgrade'){targetType='upgrade';count=Math.floor(Math.random()*3)+1;}else if(type==='skill'){targetType='item_active';count=1;}else if(type==='normal'){targetType='passive';count=2;}else if(type==='secret'){targetType='secret';count=Math.floor(Math.random()*2)+1;}let newItems=this.generateRandomItems(count,targetType);if(newItems.length===0){const t=document.getElementById('toast-msg');t.style.display='block';setTimeout(()=>{t.style.display='none';},3000);}this.shopDirectItems=[...newItems,...this.shopDirectItems];this.renderShopHome();this.saveState();}
+    openDeckModPopup(itemObj){
+        const modal=document.getElementById('deck-mod-modal');
+        const cardsContainer=document.getElementById('deck-mod-cards');
+        const confirmBtn=document.getElementById('deck-mod-confirm');
+        const newConfirmBtn=confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        const cancelBtn=document.getElementById('deck-mod-cancel');
+        let pool=[...this.runDeckTemplate];this.shuffle(pool);let count=0;this.deckModMin=1;this.deckModMax=1;let confirmText='确定转变';
+        if(itemObj.id==='heishi'){count=8;this.deckModMax=2;}else if(itemObj.id==='hongguo'){count=8;this.deckModMax=2;}else if(itemObj.id==='mianju'){count=6;this.deckModMax=2;}else if(itemObj.id==='xiangpini'){count=4;this.deckModMax=1;}else if(itemObj.id==='xuyuanxing'){count=4;this.deckModMax=1;}else if(itemObj.id==='shuangshenglian'){count=8;this.deckModMax=2;confirmText='确定复制';}else if(itemObj.id==='jihaobi'){count=6;this.deckModMax=1;}
+        this.deckModSelected=[];this.deckModCandidates=pool.slice(0,count);document.getElementById('deck-mod-title').innerText=itemObj.name;let descText=itemObj.desc;
+        if(itemObj.id==='xuyuanxing'){descText+='\n\n特殊奖励牌：在牌型组合中，顺子、同花、葫芦、同花顺牌型不可使用该牌，会导致牌型失效，牌型积分变为10进行结算。可作为辅助牌，在单牌、对子、两对、三条、四炸中可使用；结算时牌型中包含该牌，本回合中牌型积分+100进行结算。';}
+        if(itemObj.id==='jihaobi'){descText+='\n\n在牌型结算时包含本张牌，牌型积分+500，同张牌可叠加。';}
+        const descDiv=document.getElementById('deck-mod-desc');descDiv.innerText=descText;
+        if(itemObj.id==='xuyuanxing'||itemObj.id==='jihaobi'){descDiv.style.textAlign='left';descDiv.style.padding='0 10px';}else{descDiv.style.textAlign='center';descDiv.style.padding='0';}
+        newConfirmBtn.innerText=confirmText;newConfirmBtn.disabled=true;
+        this.renderDeckModCards=()=>{cardsContainer.innerHTML='';this.deckModCandidates.forEach(c=>{const el=document.createElement('div');el.className='deck-mod-card-wrap';el.innerHTML=this.htmlCard(c,false,true,false);if(this.deckModSelected.includes(c))el.classList.add('selected');el.onclick=()=>{const idx=this.deckModSelected.indexOf(c);if(idx>-1){this.deckModSelected.splice(idx,1);}else{if(this.deckModSelected.length<this.deckModMax){this.deckModSelected.push(c);}}newConfirmBtn.disabled=this.deckModSelected.length<this.deckModMin;this.renderDeckModCards();};cardsContainer.appendChild(el);});};
+        this.renderDeckModCards();
+        newConfirmBtn.onclick=()=>{this.applyDeckMod(itemObj.id,this.deckModSelected);modal.classList.remove('visible');};
+        cancelBtn.onclick=()=>{modal.classList.remove('visible');};modal.classList.add('visible');
+    }
+    openPrinterPopup(){
+        const modal=document.getElementById('printer-modal');
+        const cardsContainer=document.getElementById('printer-cards');
+        const confirmBtn=document.getElementById('printer-confirm');
+        const newConfirmBtn=confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        let candidates=[];
+        this.ownedPassives.forEach(id=>{let p=REWARD_POOL.find(x=>x.id===id);if(p)candidates.push({_type:'passive',_id:id,item:p});});
+        // Deduplicate candidates by _id for display (show unique items only in picker)
+        const seenIds=new Set();const uniqueCandidates=[];
+        candidates.forEach(c=>{if(!seenIds.has(c._id)){seenIds.add(c._id);uniqueCandidates.push(c);}});
+        if(uniqueCandidates.length===0){
+            const t=document.getElementById('toast-msg');t.innerText="暂无复制道具";t.style.display='block';setTimeout(()=>{t.style.display='none';},3000);
+            return;
+        }
+        this.deckModSelected=[];this.deckModMin=1;this.deckModMax=1;newConfirmBtn.disabled=true;
+        this.renderDeckModCards=()=>{
+            cardsContainer.innerHTML='';
+            uniqueCandidates.forEach(cand=>{
+                const isSelected=this.deckModSelected.includes(cand);
+                const wrapper=document.createElement('div');wrapper.style.position='relative';wrapper.style.display='inline-flex';wrapper.style.flexDirection='column';wrapper.style.alignItems='center';
+                // Tooltip bubble above item (only shown when selected)
+                if(isSelected){
+                    const bubble=document.createElement('div');
+                    bubble.style.cssText='position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(10,15,25,0.97);border:1px solid var(--highlight);border-radius:8px;padding:8px 10px;font-size:10px;color:#ddd;white-space:pre-wrap;max-width:160px;line-height:1.5;z-index:200;pointer-events:none;box-shadow:0 4px 15px rgba(0,0,0,0.7);text-align:left;';
+                    bubble.style.width='160px';
+                    const descText=this.getDynamicDesc(cand._id,'passive',true);
+                    bubble.innerHTML=`<div style="color:var(--highlight);font-weight:bold;font-size:11px;margin-bottom:4px;">${cand.item.name}</div><div>${descText}</div>`;
+                    // Arrow pointing down
+                    const arrow=document.createElement('div');arrow.style.cssText='position:absolute;bottom:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:10px;height:10px;background:rgba(10,15,25,0.97);border-right:1px solid var(--highlight);border-bottom:1px solid var(--highlight);';
+                    bubble.appendChild(arrow);
+                    wrapper.appendChild(bubble);
+                }
+                const el=document.createElement('div');el.className='inv-item';el.style.width='70px';el.style.height='70px';
+                if(isSelected)el.style.borderColor='var(--highlight)';
+                el.innerHTML=`<div style="font-size:24px;margin-bottom:5px;">${cand.item.icon}</div><div style="font-size:10px;font-weight:bold;color:#fff;">${cand.item.name}</div>`;
+                el.setAttribute('data-desc', `${cand.item.name}: ${this.getDynamicDesc(cand._id, cand._type, true)}`);
+                el.onclick=()=>{
+                    const idx=this.deckModSelected.indexOf(cand);
+                    if(idx>-1) this.deckModSelected.splice(idx,1);
+                    else { this.deckModSelected=[cand]; }
+                    newConfirmBtn.disabled=this.deckModSelected.length<1;
+                    this.renderDeckModCards();
+                };
+                wrapper.appendChild(el);
+                cardsContainer.appendChild(wrapper);
+            });
+        };
+        this.renderDeckModCards();
+        newConfirmBtn.onclick=()=>{
+            let sel=this.deckModSelected[0];
+            if(sel){
+                this.ownedPassives.unshift(sel._id);
+            }
+            modal.classList.remove('visible');
+            this.renderShopHome();
+            this.renderInventory();
+            this.saveState();
+        };
+        modal.classList.add('visible');
+    }
+    applyDeckMod(itemId,selectedCards){if(itemId==='heishi'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.suit='♠';tc.isRed=false;tc.modIcon='🪨';}});}else if(itemId==='hongguo'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.suit='♥';tc.isRed=true;tc.modIcon='🍎';}});}else if(itemId==='mianju'){const faceRanks=['J','Q','K'];selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.rank=faceRanks[Math.floor(Math.random()*faceRanks.length)];tc.value=RANK_VALUES[tc.rank];tc.modIcon='🎭';}});}else if(itemId==='xiangpini'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc)tc.isWild=true;});}else if(itemId==='xuyuanxing'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc)tc.isWishingStar=true;});}else if(itemId==='shuangshenglian'){let maxBaseId=Math.max(...this.runDeckTemplate.map(x=>x.baseId))||100;selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){let copy=new Card(tc.suit,tc.rank);copy.isWild=tc.isWild;copy.isWishingStar=tc.isWishingStar;copy.modIcon='🪷';copy.baseId=++maxBaseId;this.runDeckTemplate.push(copy);}});}else if(itemId==='jihaobi'){selectedCards.forEach(c=>{let tc=this.runDeckTemplate.find(x=>x.baseId===c.baseId);if(tc){tc.scoreBonus=(tc.scoreBonus||0)+500;}});}this.renderScene();this.saveState();}
     showUpgradePopup(name, level, oldScore, newScore) {
         document.getElementById('upgrade-modal-title').innerText = name;
         document.getElementById('upgrade-modal-text').innerHTML = `【${name}】牌型升至 <span style="color:var(--highlight);font-weight:bold;">${level} 级</span><br>积分 <span style="color:#aaa;text-decoration:line-through;">${oldScore}</span> 提升至 <span style="color:var(--gold-color);font-weight:bold;">${newScore}</span>`;
         document.getElementById('upgrade-modal').classList.add('visible');
     }
-    buyShopItem(uid,price){if(this.playerGold<price){document.getElementById('msg-modal').classList.add('visible');return;}const r=this.shopDirectItems.find(x=>x._uid===uid);if(!r)return;this.playerGold-=price;document.getElementById('shop-modal-gold').innerText=this.playerGold;this.updateHeader();r._purchased=true;if(r.type==='upgrade'){if(['heishi','hongguo','mianju','xiangpini','xuyuanxing','shuangshenglian'].includes(r.id)){this.openDeckModPopup(r);}else{this.upgradeCounts[r.id]=(this.upgradeCounts[r.id]||0)+1;if(['fumo','shuangli','jinwei','yuezhu','yousuo','yixi','cangjiao','baochao','longyuan'].includes(r.id)){let count=this.upgradeCounts[r.id];let handName=Object.keys(UPGRADE_MAP).find(k=>UPGRADE_MAP[k].id===r.id);let mult=UPGRADE_MAP[handName].mult;let baseScore=HAND_TYPES_BASE.find(t=>t.name===handName).base;let oldScore=Math.floor(baseScore*Math.pow(mult,count-1));let newScore=Math.floor(baseScore*Math.pow(mult,count));this.showUpgradePopup(handName,count+1,oldScore,newScore);}if(r.id==='yunyan'){this.skillMaxModifiers.yundu+=1;if(this.skillUsage.yundu!==undefined)this.skillUsage.yundu+=1;}else if(r.id==='xuanshu'){this.skillMaxModifiers.xuanji+=1;if(this.skillUsage.xuanji!==undefined)this.skillUsage.xuanji+=1;}else if(r.id==='huance'){if(this.betRatios[0]===0.3)this.betRatios=[0.4,0.6];else if(this.betRatios[0]===0.4)this.betRatios=[0.5,0.7];}else if(r.id==='xinyu'){this.maxSkillSlots++;this.renderEquipCircle();}else if(r.id==='xunang'){this.maxPassiveSlots++;this.renderEquipCircle();}}}else if(r.type==='item_active'){if(!this.ownedSkills.includes(r.ref)){this.ownedSkills.unshift(r.ref);}const s=SKILLS_DB[r.ref];if(s&&s.type==='consumable'){this.skillUsage[r.ref]=(this.skillUsage[r.ref]||0)+1;}if(this.equippedSkills.length<this.maxSkillSlots&&!this.equippedSkills.includes(r.ref)){this.equippedSkills.push(r.ref);this.renderEquipCircle();}}else{if(!this.ownedPassives.includes(r.id)){this.ownedPassives.unshift(r.id);}if(this.equippedPassives.length<this.maxPassiveSlots&&!this.equippedPassives.includes(r.id)){this.equippedPassives.push(r.id);this.renderEquipCircle();}}const btn=document.getElementById('buy-btn-'+uid);if(btn){btn.innerText="已购买";btn.disabled=true;btn.classList.remove('btn-primary');btn.classList.add('disabled');}const card=document.getElementById('rcard-'+uid);if(card){card.style.border='2px solid var(--gold-color)';card.style.opacity='0.6';card.classList.remove('disabled');}this.renderShopHome();this.saveState();}
+    buyShopItem(uid,price){if(this.playerGold<price){document.getElementById('msg-modal').classList.add('visible');return;}const r=this.shopDirectItems.find(x=>x._uid===uid);if(!r)return;this.playerGold-=price;document.getElementById('shop-modal-gold').innerText=this.playerGold;this.updateHeader();r._purchased=true;if(r.type==='upgrade'||r.type==='secret'){if(['heishi','hongguo','mianju','xiangpini','xuyuanxing','shuangshenglian','jihaobi'].includes(r.id)){this.openDeckModPopup(r);}else if(r.id==='dayinji'){this.openPrinterPopup();}else{this.upgradeCounts[r.id]=(this.upgradeCounts[r.id]||0)+1;if(['fumo','shuangli','jinwei','yuezhu','yousuo','yixi','cangjiao','baochao','longyuan'].includes(r.id)){let count=this.upgradeCounts[r.id];let handName=Object.keys(UPGRADE_MAP).find(k=>UPGRADE_MAP[k].id===r.id);let mult=UPGRADE_MAP[handName].mult;let baseScore=HAND_TYPES_BASE.find(t=>t.name===handName).base;let oldScore=Math.floor(baseScore*Math.pow(mult,count-1));let newScore=Math.floor(baseScore*Math.pow(mult,count));this.showUpgradePopup(handName,count+1,oldScore,newScore);}if(r.id==='yunyan'){this.skillMaxModifiers.yundu+=1;if(this.skillUsage.yundu!==undefined)this.skillUsage.yundu+=1;}else if(r.id==='xuanshu'){this.skillMaxModifiers.xuanji+=1;if(this.skillUsage.xuanji!==undefined)this.skillUsage.xuanji+=1;}else if(r.id==='huance'){if(this.betRatios[0]===0.3)this.betRatios=[0.4,0.6];else if(this.betRatios[0]===0.4)this.betRatios=[0.5,0.7];}else if(r.id==='xinyu'){this.maxSkillSlots++;this.renderEquipCircle();}else if(r.id==='xunang'){this.maxPassiveSlots++;this.renderEquipCircle();}}}else if(r.type==='item_active'){if(!this.ownedSkills.includes(r.ref)){this.ownedSkills.unshift(r.ref);}const s=SKILLS_DB[r.ref];if(s&&s.type==='consumable'){this.skillUsage[r.ref]=(this.skillUsage[r.ref]||0)+1;}if(this.equippedSkills.length<this.maxSkillSlots&&!this.equippedSkills.includes(r.ref)){this.equippedSkills.push(r.ref);this.renderEquipCircle();}}else{if(!this.ownedPassives.includes(r.id)){this.ownedPassives.unshift(r.id);}if(this.equippedPassives.length<this.maxPassiveSlots&&!this.equippedPassives.includes(r.id)){this.equippedPassives.push(r.id);this.renderEquipCircle();}}const btn=document.getElementById('buy-btn-'+uid);if(btn){btn.innerText="已购买";btn.disabled=true;btn.classList.remove('btn-primary');btn.classList.add('disabled');}const card=document.getElementById('rcard-'+uid);if(card){card.style.border='2px solid var(--gold-color)';card.style.opacity='0.6';card.classList.remove('disabled');}this.renderShopHome();this.saveState();}
     renderEquipCircle(){const container=document.getElementById('equip-circle-container');let html='';const isMobile=window.innerWidth<=768;const sR=isMobile?45:55;const pR=isMobile?100:130;html+=`<div style="position: absolute; width: ${pR*2}px; height: ${pR*2}px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.05); background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%); box-shadow: inset 0 0 30px rgba(0,0,0,0.8); pointer-events: none; left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>`;html+=`<div style="position: absolute; width: ${sR*2+20}px; height: ${sR*2+20}px; border-radius: 50%; border: 1px dashed rgba(213,128,255,0.3); background: radial-gradient(circle, rgba(213,128,255,0.1) 0%, rgba(0,0,0,0) 70%); pointer-events: none; left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>`;html+=`<div style="position: absolute; width: 30px; height: 30px; border-radius: 50%; background: var(--rare); opacity: 0.1; box-shadow: 0 0 20px var(--rare); pointer-events: none; left: 50%; top: 50%; transform: translate(-50%, -50%);"></div>`;html+=`<svg style="position: absolute; width: 100%; height: 100%; pointer-events: none; z-index: 0;">`;for(let i=0;i<this.maxPassiveSlots;i++){const angle=(i*360/this.maxPassiveSlots)*(Math.PI/180)-Math.PI/2;const x1=50+Math.cos(angle)*15;const y1=50+Math.sin(angle)*15;const x2=50+Math.cos(angle)*45;const y2=50+Math.sin(angle)*45;html+=`<line x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%" stroke="rgba(255,255,255,0.05)" stroke-width="1" />`;}html+=`</svg>`;for(let i=0;i<this.maxSkillSlots;i++){const angle=(i*360/this.maxSkillSlots)*(Math.PI/180)-Math.PI/2;const x=Math.cos(angle)*sR;const y=Math.sin(angle)*sR;const skillId=this.equippedSkills[i];let content='',cls='normal';if(skillId){const s=SKILLS_DB[skillId];content=s?s.icon:'';cls='filled';}html+=`<div class="equip-slot ${cls}" style="transform: translate(calc(-50% + ${x}px), calc(-50% + ${y}px));" onclick="game.clickEquipSlot('skill', ${i}, event)">${content}</div>`;}for(let i=0;i<this.maxPassiveSlots;i++){const angle=(i*360/this.maxPassiveSlots)*(Math.PI/180)-Math.PI/2;const x=Math.cos(angle)*pR;const y=Math.sin(angle)*pR;const passId=this.equippedPassives[i];let content='',cls='';if(passId){const p=REWARD_POOL.find(x=>x.id===passId);content=p?p.icon:'';cls='filled';}html+=`<div class="equip-slot ${cls}" style="transform: translate(calc(-50% + ${x}px), calc(-50% + ${y}px));" onclick="game.clickEquipSlot('passive', ${i}, event)">${content}</div>`;}container.innerHTML=html;}
-    renderInventory(){const ct=document.getElementById('tab-content-inventory');let html='';const skillItems=[];this.ownedSkills.forEach(id=>{const s=SKILLS_DB[id];if(s)skillItems.push({_type:'skill',_id:id,icon:s.icon,name:s.name,desc:s.desc});});const passiveItems=[];this.ownedPassives.forEach(id=>{const p=REWARD_POOL.find(x=>x.id===id);if(p)passiveItems.push({_type:'passive',_id:id,icon:p.icon,name:p.name,desc:p.desc});});html+=`<div style="color: var(--rare); margin-bottom: 10px; font-weight: bold; padding-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.1);">技能道具</div>`;html+='<div class="inv-grid">';if(skillItems.length===0){html+=`<div style="grid-column: 1/-1; text-align: center; color: #666; padding: 10px;">暂无技能道具</div>`;}else{skillItems.forEach(item=>{const isEquip=this.equippedSkills.includes(item._id);const equipCls=isEquip?'equipped':'';let countBadge='';if(SKILLS_DB[item._id]&&SKILLS_DB[item._id].type==='consumable'){countBadge=`<div style="position:absolute; bottom:-5px; right:-5px; background:#000; color:#fff; font-size:10px; padding:2px 4px; border:1px solid var(--rare); border-radius:4px;">x${this.skillUsage[item._id]||0}</div>`;}html+=`<div class="inv-item ${equipCls}" onclick="game.clickInvItem('${item._type}', '${item._id}', event)"><div style="font-size: 28px; margin-bottom: 5px;">${item.icon}</div><div style="font-size: 11px; font-weight: bold; color: #fff;">${item.name}</div>${countBadge}</div>`;});}html+='</div>';html+=`<div style="color: var(--highlight); margin-bottom: 10px; margin-top: 10px; font-weight: bold; padding-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.1);">普通道具</div>`;html+='<div class="inv-grid">';if(passiveItems.length===0){html+=`<div style="grid-column: 1/-1; text-align: center; color: #666; padding: 10px;">暂无普通道具</div>`;}else{passiveItems.forEach(item=>{const isEquip=this.equippedPassives.includes(item._id);const equipCls=isEquip?'equipped':'';html+=`<div class="inv-item ${equipCls}" onclick="game.clickInvItem('${item._type}', '${item._id}', event)"><div style="font-size: 28px; margin-bottom: 5px;">${item.icon}</div><div style="font-size: 11px; font-weight: bold; color: #fff;">${item.name}</div></div>`;});}html+='</div>';ct.innerHTML=html;}
+    renderInventory(){const ct=document.getElementById('tab-content-inventory');let html='';
+        // Skills section
+        const skillItems=[];this.ownedSkills.forEach(id=>{const s=SKILLS_DB[id];if(s)skillItems.push({_type:'skill',_id:id,icon:s.icon,name:s.name,desc:s.desc});});
+        html+=`<div style="color: var(--rare); margin-bottom: 10px; font-weight: bold; padding-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.1);">技能道具</div>`;html+='<div class="inv-grid">';
+        if(skillItems.length===0){html+=`<div style="grid-column: 1/-1; text-align: center; color: #666; padding: 10px;">暂无技能道具</div>`;}
+        else{skillItems.forEach(item=>{const isEquip=this.equippedSkills.includes(item._id);const equipCls=isEquip?'equipped':'';let countBadge='';if(SKILLS_DB[item._id]&&SKILLS_DB[item._id].type==='consumable'){countBadge=`<div style="position:absolute; bottom:-5px; right:-5px; background:#000; color:#fff; font-size:10px; padding:2px 4px; border:1px solid var(--rare); border-radius:4px;">x${this.skillUsage[item._id]||0}</div>`;}html+=`<div class="inv-item ${equipCls}" onclick="game.clickInvItem('${item._type}', '${item._id}', event)"><div style="font-size: 28px; margin-bottom: 5px;">${item.icon}</div><div style="font-size: 11px; font-weight: bold; color: #fff;">${item.name}</div>${countBadge}</div>`;});}
+        html+='</div>';
+        // Passive items — handle duplicates: each instance shown separately, equipped state per-instance
+        html+=`<div style="color: var(--highlight); margin-bottom: 10px; margin-top: 10px; font-weight: bold; padding-bottom:5px; border-bottom:1px solid rgba(255,255,255,0.1);">普通道具</div>`;html+='<div class="inv-grid">';
+        if(this.ownedPassives.length===0){html+=`<div style="grid-column: 1/-1; text-align: center; color: #666; padding: 10px;">暂无普通道具</div>`;}
+        else{
+            // Build per-instance list with equipped count tracking
+            const equippedCount={};
+            this.equippedPassives.forEach(id=>{equippedCount[id]=(equippedCount[id]||0)+1;});
+            const instanceCount={};
+            this.ownedPassives.forEach((id,ownedIdx)=>{
+                const p=REWARD_POOL.find(x=>x.id===id);if(!p)return;
+                instanceCount[id]=(instanceCount[id]||0)+1;
+                const thisInstance=instanceCount[id];
+                const equippedSoFar=equippedCount[id]||0;
+                const isEquip=thisInstance<=equippedSoFar;
+                const equipCls=isEquip?'equipped':'';
+                html+=`<div class="inv-item ${equipCls}" onclick="game.clickInvItemByIndex('passive', ${ownedIdx}, event)"><div style="font-size: 28px; margin-bottom: 5px;">${p.icon}</div><div style="font-size: 11px; font-weight: bold; color: #fff;">${p.name}</div></div>`;
+            });
+        }
+        html+='</div>';ct.innerHTML=html;}
+    clickInvItemByIndex(type, ownedIdx, e){
+        // Handle passive items by owned index to support duplicates
+        if(type!=='passive'){return;}
+        e.stopPropagation();
+        const id=this.ownedPassives[ownedIdx];
+        if(!id)return;
+        const p=REWARD_POOL.find(x=>x.id===id);if(!p)return;
+        const name=p.name;const desc=this.getDynamicDesc(id,'passive',true);
+        // Count how many of this id are equipped
+        const equippedCount=this.equippedPassives.filter(x=>x===id).length;
+        // Count how many of this id are owned before and including this index
+        const ownedBefore=this.ownedPassives.slice(0,ownedIdx+1).filter(x=>x===id).length;
+        // This instance is equipped if ownedBefore <= equippedCount
+        const isEquip=ownedBefore<=equippedCount;
+        if(isEquip){
+            this.showInteractBubble(e.clientX,e.clientY,name,desc,'卸下',()=>{
+                // Remove one instance from equippedPassives
+                const idx=this.equippedPassives.lastIndexOf(id);
+                if(idx>-1){
+                    let unequippedId=this.equippedPassives[idx];
+                    this.equippedPassives.splice(idx,1);
+                    if(unequippedId==='jiangliu')this.jiangliuCount=0;
+                    if(unequippedId==='jiaoshi')this.jiaoshiCount=0;
+                }
+                this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();
+            });
+        } else {
+            const canEquip=this.equippedPassives.length<this.maxPassiveSlots;
+            this.showInteractBubble(e.clientX,e.clientY,name,desc,'装备',()=>{
+                this.equippedPassives.push(id);
+                this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();
+            },!canEquip);
+        }
+    }
     clickEquipSlot(type,index,e){e.stopPropagation();let itemId=type==='skill'?this.equippedSkills[index]:this.equippedPassives[index];if(!itemId)return;let name='',desc='';if(type==='skill'){const s=SKILLS_DB[itemId];name=s.name;desc=this.getDynamicDesc(itemId,'skill',true);}else{const p=REWARD_POOL.find(x=>x.id===itemId);name=p.name;desc=this.getDynamicDesc(itemId,'passive',true);}this.showInteractBubble(e.clientX,e.clientY,name,desc,'卸下',()=>{if(type==='skill'){this.equippedSkills.splice(index,1);}else{let unequippedId=this.equippedPassives[index];this.equippedPassives.splice(index,1);if(unequippedId==='jiangliu')this.jiangliuCount=0;if(unequippedId==='jiaoshi')this.jiaoshiCount=0;}this.renderEquipCircle();if(document.getElementById('tab-content-inventory').style.display==='block'){this.renderInventory();}document.getElementById('item-interact-bubble').style.display='none';this.saveState();});}
-    clickInvItem(type,id,e){e.stopPropagation();let name='',desc='';if(type==='skill'){const s=SKILLS_DB[id];name=s.name;desc=this.getDynamicDesc(id,'skill',true);}else{const p=REWARD_POOL.find(x=>x.id===id);name=p.name;desc=this.getDynamicDesc(id,'passive',true);}const isEquipped=(type==='skill'&&this.equippedSkills.includes(id))||(type==='passive'&&this.equippedPassives.includes(id));if(isEquipped){this.showInteractBubble(e.clientX,e.clientY,name,desc,'卸下',()=>{if(type==='skill'){const idx=this.equippedSkills.indexOf(id);if(idx>-1)this.equippedSkills.splice(idx,1);}else{const idx=this.equippedPassives.indexOf(id);if(idx>-1){let unequippedId=this.equippedPassives[idx];this.equippedPassives.splice(idx,1);if(unequippedId==='jiangliu')this.jiangliuCount=0;if(unequippedId==='jiaoshi')this.jiaoshiCount=0;}}this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();});}else{const canEquip=(type==='skill'&&this.equippedSkills.length<this.maxSkillSlots)||(type==='passive'&&this.equippedPassives.length<this.maxPassiveSlots);this.showInteractBubble(e.clientX,e.clientY,name,desc,'装备',()=>{if(type==='skill')this.equippedSkills.push(id);else this.equippedPassives.push(id);this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();},!canEquip);}}
+    clickInvItem(type,id,e){e.stopPropagation();if(type==='passive'){// passives handled by clickInvItemByIndex
+        return;}let name='',desc='';if(type==='skill'){const s=SKILLS_DB[id];name=s.name;desc=this.getDynamicDesc(id,'skill',true);}else{const p=REWARD_POOL.find(x=>x.id===id);name=p.name;desc=this.getDynamicDesc(id,'passive',true);}const isEquipped=(type==='skill'&&this.equippedSkills.includes(id));if(isEquipped){this.showInteractBubble(e.clientX,e.clientY,name,desc,'卸下',()=>{if(type==='skill'){const idx=this.equippedSkills.indexOf(id);if(idx>-1)this.equippedSkills.splice(idx,1);}this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();});}else{const canEquip=(type==='skill'&&this.equippedSkills.length<this.maxSkillSlots);this.showInteractBubble(e.clientX,e.clientY,name,desc,'装备',()=>{if(type==='skill')this.equippedSkills.push(id);this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();},!canEquip);}}
     showInteractBubble(x,y,name,desc,btnText,onClick,disableBtn=false){const bubble=document.getElementById('item-interact-bubble');document.getElementById('interact-name').innerText=name;document.getElementById('interact-desc').innerText=desc;const btn=document.getElementById('interact-btn');btn.innerText=btnText;btn.disabled=disableBtn;btn.className=disableBtn?'btn':(btnText==='卸下'?'btn':'btn btn-primary');if(btnText==='卸下')btn.style.border='1px solid #e74c3c';else btn.style.border='';btn.onclick=onClick;bubble.style.display='block';let bw=220,bh=bubble.offsetHeight||150;let finalX=x+15;let finalY=y+15;if(finalX+bw>window.innerWidth)finalX=x-bw-15;if(finalY+bh>window.innerHeight)finalY=y-bh-15;bubble.style.left=finalX+'px';bubble.style.top=finalY+'px';}
     leaveShop(){const modal=document.getElementById('shop-screen');modal.classList.remove('shop-visible');this.audio.stopShopBgm();setTimeout(()=>{modal.style.display='none';document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.showMap();},500);}
     nextLevelAction(){document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.startLevel();}
@@ -1037,7 +1904,7 @@ class Game {
     toggleInfo(){
         const sc=document.getElementById('info-screen');if(sc.classList.contains('visible')){sc.classList.remove('visible');this.setOverlayState(false);return;}
         this.setOverlayState(true);const ct=document.getElementById('info-content');ct.innerHTML='';const isDefault=!this.inGame;
-        HAND_TYPES_BASE.forEach(t=>{let val=t.base;let act=false;if(UPGRADE_MAP[t.name]&&this.upgradeCounts[UPGRADE_MAP[t.name].id]){val=Math.floor(val*Math.pow(UPGRADE_MAP[t.name].mult,this.upgradeCounts[UPGRADE_MAP[t.name].id]));act=true;}if(!isDefault){this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&p.trigger===t.name){if(p.val){val+=p.val;act=true;}}});}ct.innerHTML+=`<div class="info-row"><span>${t.name} <span style="font-size:10px; color:#666">(${t.en})</span></span><span style="${act?'color:var(--gold-color)':''}">${val} 积分${act?'↑':''}</span></div>`;});
+        HAND_TYPES_BASE.forEach(t=>{let val=t.base;let act=false;let level=1;if(UPGRADE_MAP[t.name]&&this.upgradeCounts[UPGRADE_MAP[t.name].id]){level+=this.upgradeCounts[UPGRADE_MAP[t.name].id];val=Math.floor(val*Math.pow(UPGRADE_MAP[t.name].mult,this.upgradeCounts[UPGRADE_MAP[t.name].id]));act=true;}if(!isDefault){this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&p.trigger===t.name){if(p.val){val+=p.val;act=true;}}});}ct.innerHTML+=`<div class="info-row"><span>${t.name} <span style="font-size:10px; color:#a855f7; font-weight:bold; margin:0 4px;">Lv.${level}</span> <span style="font-size:10px; color:#666">(${t.en})</span></span><span style="${act?'color:var(--gold-color)':''}">${val} 积分${act?'↑':''}</span></div>`;});
         sc.classList.add('visible');
     }
 }
