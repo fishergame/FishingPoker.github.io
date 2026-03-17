@@ -236,13 +236,15 @@ body.overlay-active header{display:none;}
 .settle-card-wrap .card.mini { width: 57px !important; height: 80px !important; }
 
 /* Fail Panel Cards Sizing - smaller to fit in narrow left column */
-.fail-panel-card-wrap .card { width: 48px !important; height: 68px !important; }
+.fail-panel-card-wrap .card,
+.fail-panel-card-wrap .card.mini { width: 48px !important; height: 68px !important; }
 .fail-panel-card-wrap .card-rank { font-size: 1em !important; top: 1px !important; left: 3px !important; }
 .fail-panel-card-wrap .card-suit { font-size: 1.5em !important; }
 @media (max-width: 768px) {
-    .fail-panel-card-wrap .card { width: 36px !important; height: 52px !important; }
-    .fail-panel-card-wrap .card-rank { font-size: 0.75em !important; top: 1px !important; left: 2px !important; }
-    .fail-panel-card-wrap .card-suit { font-size: 1.1em !important; }
+    .fail-panel-card-wrap .card,
+    .fail-panel-card-wrap .card.mini { width: 32px !important; height: 46px !important; }
+    .fail-panel-card-wrap .card-rank { font-size: 0.7em !important; top: 1px !important; left: 2px !important; }
+    .fail-panel-card-wrap .card-suit { font-size: 1em !important; }
 }
 
 @keyframes customShake {
@@ -1669,9 +1671,12 @@ class Game {
             if(s.type==='limit'||s.type==='item_active'||s.type==='round_limit'||s.type==='level_limit'||s.type==='consumable'){count=this.skillUsage[k]!==undefined?this.skillUsage[k]:0;if(count<=0)dis=true;}
             else if(s.type==='once_per_round'){if(k==='huanzhu'&&!this.config.boss)dis=true;else if(this.betUsedThisRound&&k==='huanzhu')dis=true;}
             if(k==='xinjing'&&this.oppBait.length>0&&this.oppBait[0].revealed)dis=true;if(k==='xinjing'&&this.phase!=='BAIT')dis=true;
-            if(dis)el.classList.add('disabled');el.setAttribute('data-desc',`${s.name}: ${this.getDynamicDesc(k,'skill',true)}`);
+            if(dis)el.classList.add('disabled');
+            // 技能提示仅通过 mouseover 显示，click 不显示
+            el.setAttribute('data-desc',`${s.name}: ${this.getDynamicDesc(k,'skill',true)}`);
+            el.setAttribute('data-skill-id',k);
             const icon=s.icon||'🔰';el.innerHTML=`<div style="font-size:20px">${icon}</div><div style="font-size:10px">${s.name}</div>${count!==''?`<div class="skill-count">${count}</div>`:''}`;
-            el.onclick=()=>{if(!dis)this.activateSkill(k);}
+            el.onclick=(e)=>{e.stopPropagation();if(!dis)this.activateSkill(k);}
             el.style.border='1px solid #566573';div.appendChild(el);
         });
     }
