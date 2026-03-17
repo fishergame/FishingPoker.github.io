@@ -59,6 +59,8 @@ tailwind.config={
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 :root{--bg-gradient:radial-gradient(circle at center,#1a202c 0%,#000000 100%);--card-width:60px;--card-height:86px;--mini-card-width:48px;--mini-card-height:68px;--gold-color:#ffd700;--highlight:#00f2ff;--danger:#ff0055;--rare:#d580ff;--panel-bg:rgba(25,25,30,0.95);--modal-bg:linear-gradient(180deg,#37475a 0%,#232d3a 100%);}
+@font-face{font-family:'AliHei';src:url('assets/fonts/font-bt-Aliheiti-Bold.otf') format('opentype');font-weight:bold;font-style:normal;}
+@font-face{font-family:'HeiTi';src:url('assets/fonts/font-zw-heiti-medium.ttc') format('truetype');font-weight:normal;font-style:normal;}
 @media (min-width: 768px){:root{--card-width:80px;--card-height:112px;}}
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;font-family:'Segoe UI',sans-serif;scrollbar-width:none;}
 ::-webkit-scrollbar{display:none;}
@@ -76,10 +78,23 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 .parallax>use:nth-child(2){animation-duration:30s;fill:rgba(0,80,150,0.2);}
 .parallax>use:nth-child(3){animation-duration:20s;fill:rgba(0,100,200,0.1);}
 @keyframes move-wave{0%{transform:translate3d(-90px,0,0);}100%{transform:translate3d(85px,0,0);}}
-.story-scroll{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;display:flex;justify-content:center;mask-image:linear-gradient(to bottom,transparent 10%,black 40%,black 60%,transparent 90%);-webkit-mask-image:linear-gradient(to bottom,transparent 10%,black 40%,black 60%,transparent 90%);}
-.story-content{width:600px;color:rgba(220,220,220,0.3);font-size:16px;line-height:2.2;text-align:center;font-family:'Georgia',serif;font-style:italic;animation:scrollText 45s linear infinite;animation-delay:2s;transform:translateY(100vh);}
-@keyframes scrollText{0%{transform:translateY(100vh);}100%{transform:translateY(-120%);}}
-.lobby-content{position:absolute;right:33.33%;top:50%;transform:translate(50%,-50%);text-align:center;z-index:10;}
+.fog-container{position:absolute;top:0;left:0;width:100%;height:60%;z-index:8;pointer-events:none;overflow:hidden;}
+.fog-layer{position:absolute;top:0;left:-100%;width:200%;height:100%;background:linear-gradient(90deg,transparent 0%,rgba(200,210,230,0.08) 20%,rgba(200,210,230,0.15) 40%,rgba(200,210,230,0.08) 60%,transparent 100%);filter:blur(40px);animation:fogMove 25s linear infinite;}
+.fog-layer-1{animation-duration:35s;animation-delay:0s;opacity:0.6;}
+.fog-layer-2{animation-duration:28s;animation-delay:-10s;opacity:0.4;}
+.fog-layer-3{animation-duration:42s;animation-delay:-20s;opacity:0.3;}
+@keyframes fogMove{0%{transform:translateX(0);}100%{transform:translateX(50%);}}
+.map-fog{height:100%;z-index:1;}
+.lobby-content{position:absolute;right:33.33%;top:45%;transform:translate(50%,-50%);text-align:center;z-index:10;}
+.lobby-light { position: absolute; top: 0; left: 20%; height: 120vh; width: auto; opacity: 0.6; pointer-events: none; z-index: 5; transform-origin: top center; animation: swayLight 6s ease-in-out infinite alternate; mix-blend-mode: screen; }
+@keyframes swayLight { 0% { transform: rotate(-5deg) translateX(-10px); opacity: 0.4; } 100% { transform: rotate(5deg) translateX(10px); opacity: 0.7; } }
+.lobby-logo { width: 320px; margin-bottom: 60px; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); transition: filter 0.2s ease-out; }
+.lobby-logo:hover { filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.4)) blur(1px); }
+.lobby-btn-wrap { position: relative; cursor: pointer; display: block; transition: transform 0.2s; margin: 0 auto; width: 110px; }
+.lobby-btn-wrap:active { transform: translateY(2px); }
+.lobby-btn-img { width: 100%; height: auto; display: block; position: relative; z-index: 2; pointer-events: none; }
+.lobby-btn-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.2s; z-index: 1; pointer-events: none; }
+.lobby-btn-wrap:hover .lobby-btn-hover { opacity: 1; }
 .lobby-title-main{font-size:40px;font-weight:normal;color:#fff;text-shadow:0 4px 0px #0099cc, 0 0 20px var(--highlight);margin-bottom:0;line-height:1.4;letter-spacing:2px;}
 .lobby-title-sub{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:24px;font-weight:bold;color:var(--highlight);text-shadow:0 0 10px rgba(0,242,255,0.5);margin-top:15px;letter-spacing:6px;margin-bottom:40px;}
 .lobby-orientation{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin-bottom:50px;display:none;}
@@ -88,15 +103,11 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 .btn-lobby-primary:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(14,165,233,0.6); background:linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%);}
 .btn-lobby-primary:active{transform:translateY(2px); box-shadow:0 4px 10px rgba(14,165,233,0.3);}
 
-#btn-continue {background: linear-gradient(180deg,#10b981 0%,#059669 100%); box-shadow: 0 6px 15px rgba(16,185,129,0.4);}
-#btn-continue:hover {background: linear-gradient(180deg,#34d399 0%,#10b981 100%); box-shadow: 0 10px 20px rgba(16,185,129,0.6); transform:translateY(-2px);}
-#btn-continue:active {box-shadow: 0 4px 10px rgba(16,185,129,0.3); transform:translateY(2px);}
-
 .msg-screen-content .btn-lobby { font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; margin: 0 auto; display: block; }
 
-#map-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,#0e121b 0%,#000000 100%);z-index:250;display:none;flex-direction:column;overflow:hidden;}
+#map-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:url('assets/images/backgrounds/bg-gameselected.jpg') no-repeat center center;background-size:cover;z-index:250;display:none;flex-direction:column;overflow:hidden;}
 #map-scroll-area{flex:1;overflow-y:auto;padding:40px 20px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
-.map-title{text-align:center;padding:25px;font-size:28px;color:var(--highlight);letter-spacing:3px;background:rgba(0,0,0,0.8);z-index:2;border-bottom:1px solid #333;font-family:'YouYuan',sans-serif;}
+.map-title{text-align:center;padding:14px 25px;font-size:22px;color:#fff;letter-spacing:3px;background:rgba(0,0,0,0.3);z-index:2;border-bottom:1px solid rgba(51,51,51,0.3);font-family:'AliHei',sans-serif;height:60px;display:flex;align-items:center;justify-content:center;}
 .floor-group{width:100%;max-width:450px;position:relative;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:25px;background:rgba(255,255,255,0.03);display:flex;flex-direction:column;align-items:center;gap:20px;transition:0.3s;}
 .floor-group:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);}
 .floor-label{position:absolute;top:-14px;left:20px;background:#000;padding:2px 12px;color:#666;font-size:14px;font-weight:bold;border:1px solid #444;border-radius:10px;font-family:monospace;}
@@ -111,16 +122,17 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 @keyframes pulse-node{0%{box-shadow:0 0 10px rgba(0,242,255,0.3);}50%{box-shadow:0 0 25px rgba(0,242,255,0.6);}100%{box-shadow:0 0 10px rgba(0,242,255,0.3);}}
 .map-connector{flex:1;height:3px;background:#333;margin:0 5px;position:relative;border-radius:2px;}
 .map-connector.unlocked{background:linear-gradient(90deg,var(--gold-color),var(--highlight));box-shadow:0 0 5px rgba(0,0,0,0.5);}
-header{height:60px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:rgba(0,0,0,0.9);border-bottom:1px solid #333;z-index:201;position:relative;transition:transform 0.3s ease-in-out;}
+header{height:60px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(51,51,51,0.5);z-index:201;position:relative;transition:transform 0.3s ease-in-out;}
+body.lobby-mode header{background:rgba(0,0,0,0.1);border-bottom:none;}
 body.overlay-active header{display:none;}
 .header-left{display:flex;flex-direction:column;transition:opacity 0.3s;}
-.level-id{font-size:20px;color:var(--highlight);font-weight:800;letter-spacing:1px;}
-.level-goal{font-size:12px;color:#bbb;margin-top:2px;}
+.level-id{font-size:20px;color:var(--highlight);font-weight:800;letter-spacing:1px;font-family:'AliHei',sans-serif;}
+.level-goal{font-size:12px;color:#bbb;margin-top:2px;font-family:'HeiTi',sans-serif;}
 .lobby-hide{opacity:0;pointer-events:none;}
 .header-center{display:flex;gap:12px;align-items:center;position:absolute;left:50%;transform:translateX(-50%);}
-.icon-btn{width:28px;height:28px;background:#333;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid #555;transition:0.2s;color:#aaa;}
-.icon-btn:hover{border-color:var(--highlight);color:var(--highlight);box-shadow:0 0 10px rgba(0,242,255,0.2);}
-.icon-btn.active{color:var(--highlight);border-color:var(--highlight);box-shadow:0 0 5px rgba(0,242,255,0.3);animation:pulse-audio 2s infinite;}
+.icon-btn{width:28px;height:28px;background:rgba(255,255,255,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.4);transition:0.2s;color:#fff;}
+.icon-btn:hover{border-color:#fff;color:#fff;box-shadow:0 0 10px rgba(255,255,255,0.3);}
+.icon-btn.active{color:#fff;border-color:#fff;box-shadow:0 0 5px rgba(255,255,255,0.4);animation:pulse-audio 2s infinite;}
 .icon-btn svg{width:14px;height:14px;fill:currentColor;}
 @keyframes pulse-audio{0%{box-shadow:0 0 5px rgba(0,242,255,0.3);}50%{box-shadow:0 0 15px rgba(0,242,255,0.5);}100%{box-shadow:0 0 5px rgba(0,242,255,0.3);}}
 .header-right{display:flex;gap:15px;align-items:center;transition:opacity 0.3s;}
@@ -131,7 +143,8 @@ body.overlay-active header{display:none;}
 #global-tooltip{position:fixed;background:rgba(0,0,0,0.95);padding:10px 15px;font-size:12px;line-height:1.5;border:1px solid #666;border-radius:6px;color:#fff;box-shadow:0 5px 20px rgba(0,0,0,0.9);z-index:9999;pointer-events:none;display:none;max-width:260px;white-space:pre-wrap;transition:opacity 0.2s;}
 .gold-container{display:flex;align-items:center;gap:10px;}
 .bet-info{font-size:12px;color:#ff9f43;font-weight:bold;animation:pulse 1s infinite;display:none;}
-.gold-pill{color:var(--gold-color);font-weight:bold;font-size:16px;background:rgba(255,215,0,0.1);padding:5px 12px;border-radius:4px;border:1px solid rgba(255,215,0,0.3);}
+.gold-pill{color:var(--gold-color);font-weight:bold;font-size:16px;background:rgba(255,215,0,0.1);padding:5px 12px;border-radius:4px;border:1px solid rgba(255,215,0,0.3);display:flex;align-items:center;gap:6px;}
+.gold-icon{width:20px;height:20px;object-fit:contain;vertical-align:middle;}
 .gold-val{color:var(--gold-color);font-weight:bold;}
 #main-stage{flex:1;display:flex;padding:20px;gap:20px;overflow:hidden;align-items:stretch;}
 .panel{background:var(--panel-bg);border:1px solid rgba(255,255,255,0.1);border-radius:12px;display:flex;flex-direction:column;align-items:center;padding:15px;position:relative;}
@@ -188,7 +201,7 @@ body.overlay-active header{display:none;}
 .pack-card.disabled{filter:grayscale(1);opacity:0.7;cursor:not-allowed;}
 .pack-card.disabled:hover{transform:none;box-shadow:none;border-color:#4a5568;}
 .info-panel{background:#1a1a1a;border:1px solid #555;padding:20px;border-radius:8px;width:90%;max-width:620px;color:#ddd;box-shadow:0 0 30px black;}
-.info-title{color:var(--highlight);margin-bottom:5px;text-align:center;font-size:18px;font-weight:bold;}
+.info-title{color:var(--highlight);margin-bottom:5px;text-align:center;font-size:18px;font-weight:bold;font-family:'AliHei',sans-serif;}
 .info-desc{font-size:12px;color:#888;text-align:center;margin-bottom:20px;}
 .info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #333;font-size:14px;}
 .info-row span{flex:1;text-align:center;}
@@ -399,8 +412,8 @@ body.overlay-active header{display:none;}
     /* 移动端扑克图片适配 */
     .card img{border-radius:4px;object-fit:cover;}
     .card.mini img{border-radius:3px;}
-    /* 移动端减小手牌和结算牌的尺寸 */
-    :root{--card-width:42px;--card-height:60px;--mini-card-width:32px;--mini-card-height:46px;}
+    /* 移动端加大手牌和钓鱼牌的尺寸 */
+    :root{--card-width:54px;--card-height:76px;--mini-card-width:44px;--mini-card-height:62px;}
     #shop-screen{flex-direction:column;gap:15px;padding-top:60px;overflow-y:auto;display:flex;align-items:center;justify-content:flex-start;}
     #shop-left-card{width:95%;height:250px;transform:translateY(-50px);flex-shrink:0;}
     #shop-right-card{width:95%;height:60vh;min-height:450px;transform:translateY(50px);flex-shrink:0;margin-bottom:20px;}
@@ -411,15 +424,19 @@ body.overlay-active header{display:none;}
     .settle-card-wrap .card { width: 65px !important; height: 93px !important; }
     .settle-card-wrap .card.mini { width: 65px !important; height: 93px !important; }
     #clash-vs { font-size: 40px; }
+    /* 竖屏移动端：分割线上移，钓饵牌位置上移 */
+    .baits-container{gap:4px;padding-bottom:8px;border-bottom:1px solid #444;}
+    .bait-row{min-height:70px;}
+    #player-hand-area{height:100px;padding-top:8px;border-top:none;}
 }
 @media screen and (max-height: 600px) and (orientation: landscape){
-    :root{--card-width:40px;--card-height:56px;--mini-card-width:32px;--mini-card-height:44px;}
+    :root{--card-width:58px;--card-height:82px;--mini-card-width:40px;--mini-card-height:56px;}
     .card.mini .card-rank{font-size:1.2em!important;top:1px!important;left:2px!important;}.card.mini .card-suit{font-size:1.2em!important;top:60%!important;}
     .card-rank{font-size:1.5em!important;top:1px!important;left:3px!important;}.card-suit{font-size:1.5em!important;top:58%!important;}
     .info-panel{width:90%;max-height:85vh;overflow-y:auto;font-size:10px;padding:10px;}.info-footer{font-size:10px!important;}
     .lobby-title-main{font-size:24px;}
     .lobby-title-sub{font-size:20px;margin-bottom:10px;letter-spacing:2px;}.lobby-orientation{font-size:12px;margin-bottom:20px;letter-spacing:2px;}
-    .story-content{font-size:14px;width:80%;}header{height:40px;padding:0 10px;}.level-id{font-size:16px;}.level-goal{font-size:10px;}.info-btn{padding:4px 8px;font-size:10px;}.gold-pill{font-size:12px;padding:3px 8px;}#main-stage{padding:5px;gap:8px;}#left-panel{flex:0 0 130px;padding:8px;}.avatar{width:50px;height:50px;margin-bottom:5px;}.opp-hand-grid{gap:4px;}.panel-title{font-size:10px;margin-bottom:5px;padding-bottom:2px;}.opp-speech{left:110px;top:25px;width:auto;max-width:200px;font-size:10px;padding:6px;border-radius:8px;}#right-panel{flex:0 0 160px;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}.btn{padding:8px 2px;font-size:10px;}#skill-dock{margin-top:5px;padding-top:5px;gap:4px;}.skill-item div:first-child{font-size:16px;}.skill-item div:nth-child(2){font-size:9px;transform:scale(0.9);}#center-panel{padding:5px;}.baits-container{gap:5px;}.bait-row{min-height:60px;gap:8px;}.bait-label{min-width:40px;font-size:10px;margin-right:5px;}.slot-placeholder{border-width:1px;border-radius:4px;}#player-hand-area{height:70px;padding-top:10px;}.msg-title{font-size:28px;}.msg-subtitle{font-size:14px;margin-bottom:20px;}#shop-screen{flex-direction:row;gap:15px;align-items:center;justify-content:center;}#shop-left-card{width:35%;height:90vh;transform:translateX(-50px);}#shop-right-card{width:60%;height:90vh;transform:translateX(50px);}
+    header{height:60px;padding:0 10px;}.level-id{font-size:16px;}.level-goal{font-size:10px;}.info-btn{padding:4px 8px;font-size:10px;}.gold-pill{font-size:12px;padding:3px 8px;}#main-stage{padding:5px;gap:8px;}#left-panel{flex:0 0 130px;padding:8px;}.avatar{width:50px;height:50px;margin-bottom:5px;}.opp-hand-grid{gap:4px;}.panel-title{font-size:10px;margin-bottom:5px;padding-bottom:2px;}.opp-speech{left:110px;top:25px;width:auto;max-width:200px;font-size:10px;padding:6px;border-radius:8px;}#right-panel{flex:0 0 160px;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}.btn{padding:8px 2px;font-size:10px;}#skill-dock{margin-top:5px;padding-top:5px;gap:4px;}.skill-item div:first-child{font-size:16px;}.skill-item div:nth-child(2){font-size:9px;transform:scale(0.9);}#center-panel{padding:5px;}.baits-container{gap:3px;padding-bottom:6px;border-bottom:1px solid #444;}.bait-row{min-height:52px;gap:8px;}.bait-label{min-width:40px;font-size:10px;margin-right:5px;}.slot-placeholder{border-width:1px;border-radius:4px;}#player-hand-area{height:85px;padding-top:6px;border-top:none;}.msg-title{font-size:28px;}.msg-subtitle{font-size:14px;margin-bottom:20px;}#shop-screen{flex-direction:row;gap:15px;align-items:center;justify-content:center;}#shop-left-card{width:35%;height:90vh;transform:translateX(-50px);}#shop-right-card{width:60%;height:90vh;transform:translateX(50px);}
     .settle-card-wrap .card { width: 44px !important; height: 62px !important; }
     .settle-card-wrap .card.mini { width: 44px !important; height: 62px !important; }
 }
@@ -429,6 +446,9 @@ body.overlay-active header{display:none;}
 <div id="splash-screen">
     <svg class="splash-logo" viewBox="0 0 100 100"><path d="M20,80 Q35,60 50,80 T80,80" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,50 Q35,30 50,50 T80,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,20 Q35,0 50,20 T80,20" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /></svg>
     <div class="splash-text">FISHER GAME</div>
+    <div style="width: 240px; height: 14px; background: #fff; border-radius: 7px; margin-top: 50px; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
+        <div id="splash-progress" style="width: 0%; height: 100%; background: #000; border-radius: 7px; transition: width 0.1s ease-out;"></div>
+    </div>
 </div>
 <div id="toast-msg" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);border:1px solid var(--highlight);color:#fff;padding:15px 30px;border-radius:8px;z-index:10000;display:none;text-align:center;pointer-events:none;font-size:16px;box-shadow:0 5px 25px rgba(0,0,0,0.8);">运气差点哦，没有开出道具！</div>
 <div id="msg-modal" class="overlay" style="z-index:9999;">
@@ -495,28 +515,37 @@ body.overlay-active header{display:none;}
 
 <div id="map-screen">
     <div id="map-back-btn" class="absolute top-4 left-4 z-50 cursor-pointer text-white/70 hover:text-white transition-colors" onclick="game.returnToLobby()" style="display:none;">
-        <svg viewBox="0 0 24 24" class="w-8 h-8 fill-current"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        <svg viewBox="0 0 24 24" class="w-8 h-8 fill-current"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
     </div>
     <div class="map-title">无尽塔楼</div>
     <div id="map-scroll-area"></div>
 </div>
 
 <div id="lobby-screen">
+    <canvas id="rain-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3;"></canvas>
     <div class="waves-container">
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0" /><use xlink:href="#gentle-wave" x="48" y="3" /><use xlink:href="#gentle-wave" x="48" y="5" /></g></svg>
     </div>
-    <div class="story-scroll">
-        <div class="story-content">睁开眼，已经到了港口<br>爷爷在我被赶下船前，塞给我了一个宝盒，一个锦囊，让我一定带好，它会给我好运<br>好复古的袋子，里面装着一张卡片，看起来，有些年头。<br>爷爷说，宝石无论如何别拿出来，只管带着就好。而镜囊，在危机时刻，可以帮我。<br>我点了点头，又看了眼宝盒，里面装着的宝石亮着紫色，光芒耀眼，我立马合上宝盒。<br>在喇叭的催促下，随着人群走下船。<br>这里是他们口中说的，征途里的第一岛：狐狸岛，难度系数达4星半；都没到及格的6星，<br>却是让最多人倒下的地方，甚至有传言这里经常有人失踪，忘了回家的路。<br>谁知道呢，或许成为大人的路上，都是难免的？我不知道。<br>去了再说吧。但他们什么都不说，要怎么才能拿到狐狸岛的通关盖章呢？<br>“下船啦，下船啦。”<br>“要拿到通关盖章，得靠你们自己。14天后，还是在这里，拿到盖章者，即将前往下一岛。<br>失败者，遣返回村。“<br>“去吧。”</div>
+    <div class="fog-container">
+        <div class="fog-layer fog-layer-1"></div>
+        <div class="fog-layer fog-layer-2"></div>
+        <div class="fog-layer fog-layer-3"></div>
     </div>
+    <img src="assets/images/backgrounds/ui-light.png" class="lobby-light" alt="light">
     <div class="lobby-content">
-        <div class="lobby-title-main pixel-font">FISHING POKER</div>
-        <div class="lobby-title-sub">钓鱼牌-无尽塔楼</div>
+        <img src="assets/images/backgrounds/ui-logo.png" id="lobby-logo" class="lobby-logo" alt="logo">
         <div style="display:flex; flex-direction:column; gap:20px; align-items:center;">
-            <button class="btn-lobby btn-lobby-primary" onclick="game.startNewGame()">开始挑战</button>
-            <button class="btn-lobby" id="btn-continue" onclick="game.continueGame()" style="display:none;">继续挑战</button>
+            <div class="lobby-btn-wrap" onclick="game.startNewGame()">
+                <img src="assets/images/backgrounds/btn-selected state.png" class="lobby-btn-hover" alt="hover">
+                <img src="assets/images/ui/btn-cn-start.png" class="lobby-btn-img" alt="start">
+            </div>
+            <div class="lobby-btn-wrap" id="btn-continue" onclick="game.continueGame()" style="display:none;">
+                <img src="assets/images/backgrounds/btn-selected state.png" class="lobby-btn-hover" alt="hover">
+                <img src="assets/images/ui/btn-cn-continue.png" class="lobby-btn-img" alt="continue">
+            </div>
         </div>
     </div>
-    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.6.7</div>
+    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.0</div>
 </div>
 
 <!-- 邮箱弹窗 -->
@@ -550,7 +579,7 @@ body.overlay-active header{display:none;}
     </div>
     <div class="header-right lobby-hide" id="header-right-col">
         <div class="passive-dock" id="passive-list"></div>
-        <div class="gold-container"><span class="bet-info" id="bet-display">下注: 0</span><div class="gold-pill">💰 <span id="gold-display">0</span></div></div>
+        <div class="gold-container"><span class="bet-info" id="bet-display">下注: 0</span><div class="gold-pill"><img src="assets/images/ui/icon-money.png" class="gold-icon" alt="金币"><span id="gold-display">0</span></div></div>
     </div>
 </header>
 <div id="main-stage">
@@ -628,7 +657,7 @@ body.overlay-active header{display:none;}
                     <div class="icon-btn" id="shop-audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
                     <div class="icon-btn" onclick="game.toggleFullscreen()" title="全屏切换"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></div>
                     <div style="width:1px;height:20px;background:rgba(255,255,255,0.2);margin:0 5px;"></div>
-                    <div style="color:var(--gold-color);font-weight:bold;">💰 <span id="shop-modal-gold">0</span></div>
+                    <div style="color:var(--gold-color);font-weight:bold;display:flex;align-items:center;gap:6px;"><img src="assets/images/ui/icon-money.png" class="gold-icon" alt="金币"><span id="shop-modal-gold">0</span></div>
                 </div>
             </div>
             <div id="tab-content-shop" style="flex:1;overflow-y:auto;overflow-x:hidden;padding:15px;"></div>
@@ -647,6 +676,7 @@ body.overlay-active header{display:none;}
 </div>
 
 <script src="src/config.js"></script>
+<script src="src/test-tool.js"></script>
 
 <script>
 class AtmosphereAudio{
@@ -740,11 +770,11 @@ const PokerEngine={
 };
 
 class Game {
-    constructor(){this.resetGlobal();this.initDOM();this.audio=new AtmosphereAudio();this.isAudioOn=true;this.inGame=false;this.initSplash();}
+    constructor(){this.resetGlobal();this.initDOM();this.audio=new AtmosphereAudio();this.isAudioOn=true;this.inGame=false;this.initSplash();this.rainConfig={density:80,speed:8,length:15,color:'rgba(174,194,224,0.5)'};}
     initSplash(){
         const splash=document.getElementById('splash-screen');
         const contBtn=document.getElementById('btn-continue');
-        if(localStorage.getItem('fishingPokerSave_v3_4_8')){contBtn.style.display='block';}
+        if(localStorage.getItem('fishingPokerSave_v3_7_0')){contBtn.style.display='block';}
 
         // 浏览器要求：AudioContext 必须在用户手势同步调用栈中 init/resume
         // 策略：在 splash 的任意点击/触碰时 init 音频上下文并标记就绪
@@ -759,33 +789,45 @@ class Game {
         splash.addEventListener('click',    onSplashInteract, {once:true});
         splash.addEventListener('touchstart',onSplashInteract, {once:true});
 
+        let p = 0;
+        let pb = document.getElementById('splash-progress');
+        let timer = setInterval(()=>{
+            if(p < 85) p += Math.random() * 8;
+            if(p > 85) p = 85;
+            if(pb) pb.style.width = p + '%';
+        }, 150);
+
         setTimeout(()=>{
-            splash.classList.add('fade-out');
+            clearInterval(timer);
+            if(pb) pb.style.width = '100%';
             setTimeout(()=>{
-                splash.style.display='none';
-                this.showLobby();
-                // 进入大厅时若音频上下文已 init（用户曾点击 splash）则淡入启动
-                if(this._audioCtxReady && this.isAudioOn && !this.audio.isPlaying){
-                    this.audio.startWithFade(2.5);
-                    this.updateAudioBtn(true);
-                }
-                // 若未 init（用户未点击 splash，等待自动结束），绑定大厅任意点击触发启动
-                if(!this._audioCtxReady){
-                    const onLobbyFirstClick = () => {
-                        if(!this._audioCtxReady){
-                            this._audioCtxReady = true;
-                            this.audio.init();
-                            if(this.isAudioOn && !this.audio.isPlaying){
-                                this.audio.startWithFade(2.5);
-                                this.updateAudioBtn(true);
+                splash.classList.add('fade-out');
+                setTimeout(()=>{
+                    splash.style.display='none';
+                    this.showLobby();
+                    // 进入大厅时若音频上下文已 init（用户曾点击 splash）则淡入启动
+                    if(this._audioCtxReady && this.isAudioOn && !this.audio.isPlaying){
+                        this.audio.startWithFade(2.5);
+                        this.updateAudioBtn(true);
+                    }
+                    // 若未 init（用户未点击 splash，等待自动结束），绑定大厅任意点击触发启动
+                    if(!this._audioCtxReady){
+                        const onLobbyFirstClick = () => {
+                            if(!this._audioCtxReady){
+                                this._audioCtxReady = true;
+                                this.audio.init();
+                                if(this.isAudioOn && !this.audio.isPlaying){
+                                    this.audio.startWithFade(2.5);
+                                    this.updateAudioBtn(true);
+                                }
                             }
-                        }
-                    };
-                    document.addEventListener('click',     onLobbyFirstClick, {once:true});
-                    document.addEventListener('touchstart', onLobbyFirstClick, {once:true});
-                }
-            },1500);
-        },3000);
+                        };
+                        document.addEventListener('click',     onLobbyFirstClick, {once:true});
+                        document.addEventListener('touchstart', onLobbyFirstClick, {once:true});
+                    }
+                },1500);
+            }, 300); // Wait a bit after 100% to fade out
+        }, 3000);
     }
     generateStandardDeck(){let deck=[];let idCounter=0;SUITS.forEach(s=>RANKS.forEach(r=>{let c=new Card(s,r);c.baseId=idCounter++;deck.push(c);}));return deck;}
     resetGlobal(){this.levelIndex=0;this.playerGold=0;this.ownedSkills=['xuanji'];this.ownedPassives=[];this.equippedSkills=['xuanji'];this.equippedPassives=[];this.skillUsage={};this.skillMaxModifiers={xuanji:0};this.obtainedItems=[];this.upgradeCounts={};this.runDeckTemplate=this.generateStandardDeck();this.jiangliuCount=0;this.jiaoshiCount=0;this.betUsedThisRound=false;this.betRatios=[0.3,0.5];this.maxSkillSlots=3;this.maxPassiveSlots=5;this.bossDeck=null;this.drawPile=[];this.discardPile=[];this.opponentName="";this.selectedOppCard=null;this.justDealt=false;this.inGame=false;this.currentLevelWins=0;this.currentLevelLosses=0;this.animCards=[];this.shopDirectItems=[];this.availablePacks=[];}
@@ -794,7 +836,7 @@ class Game {
         // phase 改存为 'ROUND_DONE'，以便恢复时知道需要进入下一回合
         const savedPhase = (this.phase === 'SETTLE') ? 'ROUND_DONE' : this.phase;
         const state = {
-            version: '3.6.7', levelIndex: this.levelIndex, playerGold: this.playerGold,
+            version: '3.7.0', levelIndex: this.levelIndex, playerGold: this.playerGold,
             ownedSkills: this.ownedSkills, ownedPassives: this.ownedPassives,
             equippedSkills: this.equippedSkills, equippedPassives: this.equippedPassives,
             skillUsage: this.skillUsage, skillMaxModifiers: this.skillMaxModifiers,
@@ -828,10 +870,10 @@ class Game {
             _challengeWon: this._challengeWon || false,
             _challengeRewardId: this._challengeRewardId || null
         };
-        localStorage.setItem('fishingPokerSave_v3_4_8', JSON.stringify(state));
+        localStorage.setItem('fishingPokerSave_v3_7_0', JSON.stringify(state));
     }
     loadState() {
-        const saved = localStorage.getItem('fishingPokerSave_v3_4_8');
+        const saved = localStorage.getItem('fishingPokerSave_v3_7_0');
         if(!saved) return false;
         try {
             const state = JSON.parse(saved);
@@ -891,7 +933,7 @@ class Game {
         } catch(e) { console.error('loadState error:', e); return false; }
     }
     startNewGame() {
-        localStorage.removeItem('fishingPokerSave_v3_4_8');
+        localStorage.removeItem('fishingPokerSave_v3_7_0');
         this.resetGlobal();
         document.getElementById('btn-continue').style.display='none';
         this.enterMapMode();
@@ -899,6 +941,8 @@ class Game {
     continueGame() {
         if(this.loadState()) {
             document.getElementById('lobby-screen').style.display='none';
+            this.stopRain();
+            document.body.classList.remove('lobby-mode');
             // ROUND_DONE：本回合已出牌结算，需要进入下一回合（或若已是最后回合则回地图）
             if(this.inGame && this.phase === 'ROUND_DONE') {
                 document.getElementById('map-screen').style.display='none';
@@ -960,7 +1004,7 @@ class Game {
         } else { this.startNewGame(); }
     }
     shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}}
-    showLobby(){/* audio lifecycle now managed by initSplash */this.updateMailBadge();}
+    showLobby(){/* audio lifecycle now managed by initSplash */this.updateMailBadge();this.startRain();document.body.classList.add('lobby-mode');}
     // ========== 邮箱系统 ==========
     get mailData(){
         if(!this._mailData){
@@ -1028,7 +1072,7 @@ class Game {
     }
     closeMailbox(){document.getElementById('mailbox-modal').style.display='none';}
     // ========== 邮箱系统结束 ==========
-    enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.showMap();}
+    enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.stopRain();document.body.classList.remove('lobby-mode');this.showMap();}
     showMap(){
         this.saveState();
         const map=document.getElementById('map-screen');const scroll=document.getElementById('map-scroll-area');scroll.innerHTML='';
@@ -1076,15 +1120,16 @@ class Game {
         const rewardId=(window._challengeRewards&&window._challengeRewards[cfg.id])||'youming';
         const rewardItem=REWARD_POOL.find(x=>x.id===rewardId)||{name:'罕见道具',icon:'🎁',desc:'罕见道具'};
         const ov=document.getElementById('overlay-screen');ov.classList.add('visible');this.setOverlayState(true);
-        ov.innerHTML=`<div style="background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);border:2px solid #f97316;border-radius:20px;padding:32px 28px;text-align:center;max-width:420px;width:92%;color:#fff;box-shadow:0 0 40px rgba(249,115,22,0.3);">
-            <div style="font-size:26px;font-weight:900;color:#f97316;margin-bottom:4px;letter-spacing:2px;">⚡ 挑战关卡</div>
+        ov.innerHTML=`<div style="background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);border:2px solid #f97316;border-radius:20px;padding:32px 28px;text-align:center;max-width:420px;width:92%;color:#fff;box-shadow:0 0 40px rgba(249,115,22,0.3);font-family:'HeiTi',sans-serif;">
+            <div style="font-size:26px;font-weight:900;color:#f97316;margin-bottom:4px;letter-spacing:2px;font-family:'AliHei',sans-serif;">⚡ 挑战关卡</div>
             <div style="font-size:13px;color:#94a3b8;margin-bottom:20px;">${cfg.id} · ${cfg.name}</div>
             <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.3);border-radius:12px;padding:16px;margin-bottom:18px;">
-                <div style="font-size:12px;color:#f97316;font-weight:bold;margin-bottom:10px;letter-spacing:1px;">⭐ 胜利道具奖励</div>
+                <div style="font-size:12px;color:#f97316;font-weight:bold;margin-bottom:10px;letter-spacing:1px;font-family:'AliHei',sans-serif;">⭐ 胜利道具奖励</div>
                 <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;background:#2d3748;border:2px solid #d580ff;border-radius:10px;padding:12px 18px;position:relative;">
                     <span style="font-size:28px;">${rewardItem.icon}</span>
-                    <span style="font-size:13px;font-weight:bold;color:#fff;">${rewardItem.name}</span>
-                    <span style="position:absolute;top:-8px;right:-8px;background:#f97316;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;">罕见</span>
+                    <span style="font-size:13px;font-weight:bold;color:#fff;font-family:'AliHei',sans-serif;">${rewardItem.name}</span>
+                    <span style="position:absolute;top:-8px;right:-8px;background:#f97316;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;font-family:'AliHei',sans-serif;">罕见</span>
+                    <span style="font-size:10px;color:#cbd5e1;max-width:180px;line-height:1.4;margin-top:4px;">${this.getDynamicDesc(rewardId, 'passive')}</span>
                 </div>
             </div>
             <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12.5px;line-height:1.9;color:#cbd5e1;text-align:left;">
@@ -1095,8 +1140,8 @@ class Game {
                 ⏭️ 跳过挑战关卡，直接获得 <strong style="color:#fbbf24;">${cfg.skipGold} 金币</strong>。
             </div>
             <div style="display:flex;gap:12px;justify-content:center;">
-                <button style="flex:1;background:linear-gradient(180deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'SimHei',sans-serif;letter-spacing:2px;" onclick="game.startChallenge('${cfg.id}','${rewardId}')">前往挑战</button>
-                <button style="flex:1;background:linear-gradient(180deg,#374151,#1f2937);color:#9ca3af;border:1px solid #4b5563;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'SimHei',sans-serif;letter-spacing:2px;" onclick="game.skipChallenge(${cfg.skipGold})">跳 过</button>
+                <button style="flex:1;background:linear-gradient(180deg,#374151,#1f2937);color:#9ca3af;border:1px solid #4b5563;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'AliHei',sans-serif;letter-spacing:2px;" onclick="game.skipChallenge(${cfg.skipGold})">跳 过</button>
+                <button style="flex:1;background:linear-gradient(180deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'AliHei',sans-serif;letter-spacing:2px;" onclick="game.startChallenge('${cfg.id}','${rewardId}')">前往挑战</button>
             </div>
         </div>`;
     }
@@ -1117,13 +1162,15 @@ class Game {
     updateAudioBtn(playing){const btn=document.getElementById('audio-toggle');const sbtn=document.getElementById('shop-audio-toggle');if(playing){if(btn)btn.classList.add('active');if(sbtn)sbtn.classList.add('active');if(btn)btn.style.opacity='1';if(sbtn)sbtn.style.opacity='1';}else{if(btn)btn.classList.remove('active');if(sbtn)sbtn.classList.remove('active');if(btn)btn.style.opacity='0.5';if(sbtn)sbtn.style.opacity='0.5';}}
     toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(err=>{});}else{if(document.exitFullscreen){document.exitFullscreen();}}}
     returnToLobby(isClear = false){
-        if (isClear) localStorage.removeItem('fishingPokerSave_v3_4_8');
+        if (isClear) localStorage.removeItem('fishingPokerSave_v3_7_0');
         this.resetGlobal();
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
         document.getElementById('lobby-screen').style.display='flex';document.getElementById('map-screen').style.display='none';
         document.getElementById('header-left-col').classList.add('lobby-hide');document.getElementById('header-right-col').classList.add('lobby-hide');
         this.inGame=false;
-        if(localStorage.getItem('fishingPokerSave_v3_4_8')){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
+        this.startRain();
+        document.body.classList.add('lobby-mode');
+        if(localStorage.getItem('fishingPokerSave_v3_7_0')){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
     }
     getDynamicDesc(id,type,isTooltip=false,isSettle=false){
         if(type==='skill'){let s=SKILLS_DB[id];if(!s)return'';if(id==='huanzhu'&&isTooltip&&s.extDesc)return s.extDesc;return s.desc;}
@@ -1131,7 +1178,7 @@ class Game {
         if(id==='jiangliu'){
             let countToUse=isSettle?this.jiangliuCount-1:this.jiangliuCount;if(countToUse<0)countToUse=0;
             let n=50+(countToUse||0)*50;
-            desc=desc.replace('本回合可得N',`本回合可得💰${n}`);
+            desc=desc.replace('本回合可得N',`本回合可得<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:16px;height:16px;vertical-align:middle;margin:0 2px;">${n}`);
         }
         else if(id==='jiaoshi'){
             let countToUse=isSettle?this.jiaoshiCount-1:this.jiaoshiCount;if(countToUse<0)countToUse=0;
@@ -1148,7 +1195,7 @@ class Game {
         }
         else if(id==='douli'){
             const dc=this.douliCount||0;const n=100*Math.pow(2,dc);
-            desc=desc.replace('本回合可得N',`本回合可得💰${Math.floor(n)}`);
+            desc=desc.replace('本回合可得N',`本回合可得${Math.floor(n)} 金币`);
         }
         else if(id==='yinxinchanggou'){
             const ym=(this._yinxinMult!==undefined)?this._yinxinMult:1.5;
@@ -1165,7 +1212,82 @@ class Game {
         else if(p.ref==='huanzhu'&&isTooltip&&SKILLS_DB.huanzhu.extDesc){desc=SKILLS_DB.huanzhu.extDesc;}
         return desc;}
     }
+    initRain(){
+        this._rainCanvas=document.getElementById('rain-canvas');
+        if(!this._rainCanvas)return;
+        this._rainCtx=this._rainCanvas.getContext('2d');
+        this._rainDrops=[];
+        this._rainAnimId=null;
+        this._resizeRain();
+        window.addEventListener('resize',()=>this._resizeRain());
+    }
+    _resizeRain(){
+        if(!this._rainCanvas)return;
+        this._rainCanvas.width=this._rainCanvas.offsetWidth;
+        this._rainCanvas.height=this._rainCanvas.offsetHeight;
+    }
+    startRain(){
+        if(!this._rainCanvas||!this._rainCtx)return;
+        this._rainDrops=[];
+        const cfg=this.rainConfig;
+        for(let i=0;i<cfg.density;i++){
+            this._rainDrops.push({
+                x:Math.random()*this._rainCanvas.width,
+                y:Math.random()*this._rainCanvas.height,
+                speed:cfg.speed+Math.random()*4,
+                length:cfg.length+Math.random()*10
+            });
+        }
+        if(this._rainAnimId)cancelAnimationFrame(this._rainAnimId);
+        this._animateRain();
+    }
+    stopRain(){
+        if(this._rainAnimId){
+            cancelAnimationFrame(this._rainAnimId);
+            this._rainAnimId=null;
+        }
+        if(this._rainCtx&&this._rainCanvas){
+            this._rainCtx.clearRect(0,0,this._rainCanvas.width,this._rainCanvas.height);
+        }
+    }
+    _animateRain(){
+        if(!this._rainCtx||!this._rainCanvas)return;
+        const ctx=this._rainCtx;
+        const canvas=this._rainCanvas;
+        const cfg=this.rainConfig;
+        const bottomLimit=canvas.height-40;
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.strokeStyle=cfg.color;
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        for(let drop of this._rainDrops){
+            ctx.moveTo(drop.x,drop.y);
+            ctx.lineTo(drop.x,drop.y+drop.length);
+            drop.y+=drop.speed;
+            if(drop.y>bottomLimit){
+                drop.y=-drop.length;
+                drop.x=Math.random()*canvas.width;
+            }
+        }
+        ctx.stroke();
+        this._rainAnimId=requestAnimationFrame(()=>this._animateRain());
+    }
     initDOM(){
+        this.initRain();
+        const logo = document.getElementById('lobby-logo');
+        if (logo) {
+            logo.addEventListener('mousemove', (e) => {
+                const rect = logo.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width/2;
+                const y = e.clientY - rect.top - rect.height/2;
+                const dist = Math.sqrt(x*x + y*y);
+                const blur = Math.min(3, Math.max(0, dist / 30));
+                logo.style.filter = `drop-shadow(0 0 12px rgba(0, 242, 255, 0.4)) blur(${blur}px)`;
+            });
+            logo.addEventListener('mouseleave', () => {
+                logo.style.filter = '';
+            });
+        }
         document.getElementById('btn-bait').onclick=()=>this.confirmBait();
         document.getElementById('btn-combo-opp').onclick=()=>this.playRound('opp');
         document.getElementById('btn-combo-mine').onclick=()=>this.playRound('mine');
@@ -1504,7 +1626,7 @@ class Game {
     setupPersona(){const floor=this.config.floor;const step=this.config.step;const personas=OPPONENT_PERSONAS[floor]||OPPONENT_PERSONAS[1];const persona=personas[step===1?0:2];this.opponentName=persona.name;document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;document.getElementById('opp-name').innerText=this.opponentName;const img=new Image();img.src=`https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}`;img.onerror=()=>{document.querySelector('.avatar').style.backgroundImage="none";document.querySelector('.avatar').innerHTML="🤖";};setTimeout(()=>this.speak(persona.text),1500);}
     speak(text){const bubble=document.getElementById('opp-speech');bubble.innerText=text;bubble.style.opacity=1;setTimeout(()=>{bubble.style.opacity=0;},5000);}
     createDeck(){let deck=this.runDeckTemplate.map(c=>{let card=new Card(c.suit,c.rank);card.baseId=c.baseId;card.isWild=c.isWild;card.isWishingStar=c.isWishingStar;card.modIcon=c.modIcon;card.scoreBonus=c.scoreBonus;if(this.config&&this.config.rule==='wild_6'&&card.rank==='6'){card.suit='♦';card.isRed=true;}return card;});this.shuffle(deck);return deck;}
-    startRound(){this.drawPile=this.createDeck();this.discardPile=[];const draw=(n,isAI=false)=>{const c=[];let rejected=[];let attempts=0;while(c.length<n){attempts++;if(attempts>200){let fallback=new Card(SUITS[0],'2');fallback.baseId=9999;c.push(fallback);continue;}if(this.drawPile.length===0){if(this.discardPile.length>0){this.drawPile.push(...this.discardPile);this.discardPile=[];this.shuffle(this.drawPile);}else{let fresh=this.createDeck();this.drawPile.push(...fresh);}}let card=this.drawPile.pop();if(isAI&&(card.isWild||card.isWishingStar||card.modIcon==='🪷'||card.scoreBonus>0)){rejected.push(card);}else{c.push(card);}}if(rejected.length>0){this.drawPile.unshift(...rejected);}return c;};let handSize=7;if(!this.equippedPassives.includes('youming')){if(this.equippedPassives.includes('haikui'))handSize=8;if(this.equippedPassives.includes('bupaif'))handSize+=this.equippedPassives.filter(x=>x==='bupaif').length;if(this.equippedPassives.includes('canjuan')&&this.currentRound===2&&this.currentLevelWins===0)handSize+=2;}else{handSize=5;}this.playerHand=draw(handSize,false).sort((a,b)=>b.value-a.value);
+    startRound(){this.drawPile=this.createDeck();this.discardPile=[];const draw=(n,isAI=false)=>{const c=[];let rejected=[];let attempts=0;while(c.length<n){attempts++;if(attempts>200){let fallback=new Card(SUITS[0],'2');fallback.baseId=9999;c.push(fallback);continue;}if(this.drawPile.length===0){if(this.discardPile.length>0){this.drawPile.push(...this.discardPile);this.discardPile=[];this.shuffle(this.drawPile);}else{let fresh=this.createDeck();this.drawPile.push(...fresh);}}let card=this.drawPile.pop();if(isAI&&(card.isWild||card.isWishingStar||card.modIcon==='🪷'||card.scoreBonus>0)){rejected.push(card);}else{c.push(card);}}if(rejected.length>0){this.drawPile.unshift(...rejected);}return c;};let handSize=7;if(!this.equippedPassives.includes('youming')){if(this.equippedPassives.includes('haikui'))handSize=8;if(this.equippedPassives.includes('bupaif'))handSize+=this.equippedPassives.filter(x=>x==='bupaif').length;if(this.equippedPassives.includes('canjuan')&&this.currentRound===2&&this.currentLevelLosses>0)handSize+=2;}else{handSize=5;}this.playerHand=draw(handSize,false).sort((a,b)=>b.value-a.value);
         // 预兆：第2/3回合，将第1回合记录的诱饵牌（按suit+rank匹配）变为万能牌
         if(this.equippedPassives.includes('yizhao')&&this.currentRound>1&&this._yizhaoTemplates&&this._yizhaoTemplates.length>0){this._yizhaoTemplates.forEach(t=>{const idx=this.playerHand.findIndex(c=>!c.isWild&&c.suit===t.suit&&c.rank===t.rank);if(idx>-1){this.playerHand[idx].isWild=true;this.playerHand[idx].isRed=false;}});}
         let aiHand=[];const isNerfLevel=(this.config.floor<=2&&this.config.step===1);if(isNerfLevel){let attempts=0;while(attempts<20){aiHand=draw(7,true);if(!PokerEngine.isTooStrong(aiHand)){break;}this.drawPile.push(...aiHand);this.shuffle(this.drawPile);aiHand=[];attempts++;}if(aiHand.length===0)aiHand=draw(7,true);}else{aiHand=draw(7,true);}this.oppHand=aiHand.sort((a,b)=>b.value-a.value);this.playerBait=[];this.oppBait=[];this.selectedCards=[];this.selectedOppCard=null;this.skillMode=null;this.phase='BAIT';this.currentBet=0;this.betUsedThisRound=false;this.equippedSkills.forEach(k=>{const s=SKILLS_DB[k];if(s&&s.type==='round_limit'){let bonus=this.skillMaxModifiers[k]||0;let usage=s.maxUses+bonus;if(k==='xuanji'&&this.equippedPassives.includes('haikui'))usage-=1;this.skillUsage[k]=usage;}});
@@ -1598,7 +1720,7 @@ class Game {
         let subtotal=(row1_val+itemBonus)*(1+mult);
         // 总积分倍数道具（回响/引信长钩/溯洄/星烛/赤迹）叠加后相乘
         let totalMultBonus=0;
-        if(totalMult>0&&isFinalSettle){totalMultBonus=Math.floor(subtotal*totalMult);}
+        if(totalMult>0&&isFinalSettle){totalMultBonus=Math.floor(subtotal*(totalMult-1));}
         let total=subtotal+totalMultBonus;
         let row2_val=total-row1_val;
         return{...res,payout:total,row1:row1_val,row2:row2_val,totalMultBonus:totalMultBonus,totalMult:totalMult,items:triggeredItems,bonusGold:bonusGold};
@@ -2074,17 +2196,17 @@ class Game {
         let breakdownHtml='';
         if(isChallenge&&win){
             // 挑战场专用结算行
-            breakdownHtml+=`<div id="row-hand-score" class="flex items-center justify-between p-2 rounded-lg bg-orange-500/10 border border-orange-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-orange-400 text-base">⚡</span><span class="text-slate-300 text-sm font-medium" style="user-select:none;">挑战胜利奖励</span></div><div class="text-yellow-400 font-bold text-sm" style="user-select:none;">+<span id="val-hand-score">0</span> 💰</div></div>`;
-            if(fish){breakdownHtml+=`<div id="row-fish" class="flex items-center justify-between p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-cyan-400 text-base" style="user-select:none;">🎣</span><span class="text-cyan-100 text-sm font-medium" style="user-select:none;">钓鱼成功: <span class="text-white text-xs ml-1">金币翻倍！</span></span></div><div class="text-cyan-400 font-bold text-sm" style="user-select:none;"><span id="val-fish">x2</span></div></div>`;}
-            breakdownHtml+=`<div id="row-final" class="flex gap-2 mt-3 opacity-0 translate-y-4 transition-all duration-500 hidden"><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/20 border border-yellow-500/50"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得金币</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-gold-num-top">0</span><span class="text-xs">💰</span></div></div></div>`;
+            breakdownHtml+=`<div id="row-hand-score" class="flex items-center justify-between p-2 rounded-lg bg-orange-500/10 border border-orange-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-orange-400 text-base">⚡</span><span class="text-slate-300 text-sm font-medium" style="user-select:none;">挑战胜利奖励</span></div><div class="text-yellow-400 font-bold text-sm flex items-center gap-1" style="user-select:none;">+<span id="val-hand-score">0</span><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:14px;height:14px;"></div></div>`;
+            if(fish){breakdownHtml+=`<div id="row-fish" class="flex items-center justify-between p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-cyan-400 text-base" style="user-select:none;">🎣</span><span class="text-cyan-100 text-sm font-medium" style="user-select:none;">钓鱼成功: <span class="text-white text-xs ml-1">金币翻倍！</span></span></div><div class="text-cyan-400 font-bold text-sm flex items-center gap-1" style="user-select:none;">+<span id="val-fish-num">0</span><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:14px;height:14px;"></div></div>`;}
+            breakdownHtml+=`<div id="row-final" class="flex gap-2 mt-3 opacity-0 translate-y-4 transition-all duration-500 hidden"><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/20 border border-yellow-500/50"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得金币</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-gold-num-top">0</span><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:14px;height:14px;"></div></div></div>`;
         } else {
         breakdownHtml+=`<div id="row-hand-score" class="flex items-center justify-between p-2 rounded-lg bg-slate-800/40 border border-slate-700/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full ${win?'bg-cyan-400':'bg-rose-400'}"></span><span class="text-slate-300 text-sm font-medium" style="user-select:none;">牌型积分: <span class="text-white">${myRes.name}</span></span></div><div class="text-yellow-400 font-bold text-sm" style="user-select:none;">+<span id="val-hand-score">0</span></div></div>`;
         if(myRes.row2>0){breakdownHtml+=`<div id="row-item-bonus" class="flex items-center justify-between p-2 rounded-lg bg-slate-800/40 border border-slate-700/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span class="text-slate-300 text-sm font-medium" style="user-select:none;">道具加倍: <span class="text-white truncate max-w-[140px] inline-block align-bottom" title="${itemsStr}">${itemsStr}</span></span></div><div class="text-slate-400 font-bold text-sm" style="user-select:none;">+<span id="val-item-bonus">0</span></div></div>`;}
         if(myRes.totalMultBonus>0){const tmStr=myRes.totalMult?`x${myRes.totalMult.toFixed(1)}`:'';breakdownHtml+=`<div id="row-total-mult" class="flex items-center justify-between p-2 rounded-lg bg-purple-500/10 border border-purple-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-purple-400 text-base" style="user-select:none;">✨</span><span class="text-purple-100 text-sm font-medium" style="user-select:none;">总积分奖励 <span class="text-white text-xs ml-1">${tmStr}</span></span></div><div class="text-purple-400 font-bold text-sm" style="user-select:none;">+<span id="val-total-mult">0</span></div></div>`;}
         if(fish){breakdownHtml+=`<div id="row-fish" class="flex items-center justify-between p-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-cyan-400 text-base" style="user-select:none;">🎣</span><span class="text-cyan-100 text-sm font-medium" style="user-select:none;">钓鱼成功: <span class="text-white text-xs ml-1">+${fishBonusText}倍</span></span></div><div class="text-cyan-400 font-bold text-sm" style="user-select:none;">+<span id="val-fish">0</span></div></div>`;}
-        if(myRes.bonusGold&&myRes.bonusGold>0){breakdownHtml+=`<div id="row-bonus-gold" class="flex items-center justify-between p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-yellow-400 text-base" style="user-select:none;">💰</span><span class="text-yellow-100 text-sm font-medium" style="user-select:none;">道具金币奖励</span></div><div class="text-yellow-400 font-bold text-sm" style="user-select:none;">+<span id="val-bonus-gold">0</span></div></div>`;}
+        if(myRes.bonusGold&&myRes.bonusGold>0){breakdownHtml+=`<div id="row-bonus-gold" class="flex items-center justify-between p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:14px;height:14px;"><span class="text-yellow-100 text-sm font-medium" style="user-select:none;">道具金币奖励</span></div><div class="text-yellow-400 font-bold text-sm flex items-center gap-1" style="user-select:none;">+<span id="val-bonus-gold">0</span><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;"></div></div>`;}
         if(win&&this.currentBet>0){breakdownHtml+=`<div id="row-bet" class="flex items-center justify-between p-2 rounded-lg bg-purple-500/10 border border-purple-500/30 opacity-0 translate-y-4 transition-all duration-500 hidden mt-1.5"><div class="flex items-center gap-2"><span class="text-purple-400 text-base" style="user-select:none;">💸</span><span class="text-purple-100 text-sm font-medium" style="user-select:none;">下注奖励: <span class="text-white text-[12px] ml-1">返还 ${this.currentBet}</span></span></div><div class="text-purple-400 font-bold text-sm" style="user-select:none;">+<span id="val-bet">0</span></div></div>`;}
-        breakdownHtml+=`<div id="row-final" class="flex gap-2 mt-3 opacity-0 translate-y-4 transition-all duration-500 hidden"><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/10 border border-yellow-500/30"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得金币</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-gold-num-top">0</span><span class="text-xs">💰</span></div></div><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/20 border border-yellow-500/50"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得积分</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-score-num">0</span><span class="text-xs">✨</span></div></div></div>`;
+        breakdownHtml+=`<div id="row-final" class="flex gap-2 mt-3 opacity-0 translate-y-4 transition-all duration-500 hidden"><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/10 border border-yellow-500/30"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得金币</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-gold-num-top">0</span><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:14px;height:14px;"></div></div><div class="flex-1 flex items-center justify-between p-2.5 rounded-lg bg-yellow-500/20 border border-yellow-500/50"><span class="text-yellow-100 font-bold text-xs" style="user-select:none;">获得积分</span><div class="text-yellow-400 font-black text-base flex items-center gap-1" style="user-select:none;"><span id="settle-score-num">0</span><span class="text-xs">✨</span></div></div></div>`;
         }
         
         let tagsHTML='';
@@ -2100,7 +2222,7 @@ class Game {
             setTimeout(() => {
                 myCards.forEach((c, i) => { let el = document.getElementById(`my-card-${i}`); if(el) { el.classList.add('shake-anim'); setTimeout(()=>el.classList.remove('shake-anim'), 400); } });
                 const r = document.getElementById('row-hand-score');
-                if(r) { r.classList.remove('hidden'); setTimeout(()=>r.classList.remove('opacity-0', 'translate-y-4'), 20); this.rollNumber('val-hand-score', 0, myRes.row1, 800); }
+                if(r) { r.classList.remove('hidden'); setTimeout(()=>r.classList.remove('opacity-0', 'translate-y-4'), 20); this.rollNumber('val-hand-score', 0, isChallenge ? this.config.rewardGold : myRes.row1, 800); }
             }, delay);
             delay += 1000;
             if(myRes.row2 > 0) {
@@ -2121,7 +2243,7 @@ class Game {
             if(fish) {
                 setTimeout(() => {
                     const r = document.getElementById('row-fish');
-                    if(r) { r.classList.remove('hidden'); setTimeout(()=>r.classList.remove('opacity-0', 'translate-y-4'), 20); this.rollNumber('val-fish', 0, Math.floor(extraFishBonus), 800); }
+                    if(r) { r.classList.remove('hidden'); setTimeout(()=>r.classList.remove('opacity-0', 'translate-y-4'), 20); if(isChallenge) { this.rollNumber('val-fish-num', 0, this.config.rewardGold, 800); } else { this.rollNumber('val-fish', 0, Math.floor(extraFishBonus), 800); } }
                 }, delay);
                 delay += 1000;
             }
@@ -2152,10 +2274,10 @@ class Game {
                     const el = document.getElementById(id);
                     if(el) {
                         el.classList.remove('hidden', 'opacity-0', 'translate-y-4');
-                        if(id==='row-hand-score') document.getElementById('val-hand-score').innerText = myRes.row1;
+                        if(id==='row-hand-score') document.getElementById('val-hand-score').innerText = isChallenge ? this.config.rewardGold : myRes.row1;
                         if(id==='row-item-bonus') { const v = document.getElementById('val-item-bonus'); if(v) v.innerText = Math.floor(myRes.row2); }
                         if(id==='row-total-mult') { const v = document.getElementById('val-total-mult'); if(v) v.innerText = Math.floor(myRes.totalMultBonus||0); }
-                        if(id==='row-fish') { const v = document.getElementById('val-fish'); if(v) v.innerText = Math.floor(extraFishBonus); }
+                        if(id==='row-fish') { if(isChallenge) { const vn = document.getElementById('val-fish-num'); if(vn) vn.innerText = this.config.rewardGold; } else { const v = document.getElementById('val-fish'); if(v) v.innerText = Math.floor(extraFishBonus); } }
                         if(id==='row-bonus-gold') { const v = document.getElementById('val-bonus-gold'); if(v) v.innerText = myRes.bonusGold; }
                         if(id==='row-bet') { const v = document.getElementById('val-bet'); if(v) v.innerText = this.currentBet; }
                     }
@@ -2232,7 +2354,7 @@ class Game {
     getShopQualityFilter(){const floor=this.config?this.config.floor:1;if(floor<=2)return(q)=>q==='普通';if(floor<=5)return(q)=>q==='普通'||q==='稀有';return(q)=>{const r=Math.random();if(r<0.03)return q==='传说';if(r<0.13)return q==='罕见';return q==='普通'||q==='稀有';};}
     generateRandomItems(count,forceType=null){const pool=[...REWARD_POOL];const qualityOk=this.getShopQualityFilter();let available=pool.filter(i=>{if(forceType&&i.type!==forceType)return false;const q=i.quality||'普通';if(!qualityOk(q))return false;if(i.unique&&(this.ownedSkills.includes(i.ref||i.id)||this.ownedPassives.includes(i.id)||this.upgradeCounts[i.id]))return false;if((i.type==='upgrade'||i.type==='secret')&&!['fumo','shuangli','jinwei','yuezhu','yousuo','yixi','cangjiao','baochao','longyuan'].includes(i.id)){if(['xuanshu','huance','xinyu','xunang'].includes(i.id)&&(this.upgradeCounts[i.id]||0)>=2)return false;if(i.id==='xuanshu'&&!this.ownedSkills.includes('xuanji'))return false;if(i.id==='huance'&&!this.ownedSkills.includes('huanzhu'))return false;}if(i.id==='dayinji'&&this.ownedPassives.length===0)return false;return true;});if(available.length<count&&forceType){let fallback=pool.filter(i=>i.type===forceType);available=[...available,...fallback,...fallback,...fallback];}this.shuffle(available);let res=[];for(let i=0;i<count;i++){if(available[i]){let item = {...available[i],_purchased:false,_uid:Math.random().toString(36).slice(2)}; item.price = typeof item.getPrice==='function'?item.getPrice(this):item.price; res.push(item);}}return res;}
     switchShopTab(tab){document.querySelectorAll('.shop-tab').forEach(el=>el.classList.remove('active'));document.getElementById('tab-btn-'+tab).classList.add('active');document.getElementById('tab-content-shop').style.display='none';document.getElementById('tab-content-inventory').style.display='none';document.getElementById('tab-content-'+tab).style.display='block';document.getElementById('shop-modal-gold').innerText=this.playerGold;if(tab==='shop'){this.renderShopHome();}else{this.renderInventory();}}
-    renderShopHome(){const ct=document.getElementById('tab-content-shop');let discount=1;let badgeText='';if(this.upgradeCounts['paomo']){discount*=0.5;badgeText='五折优惠';}if(this.config.floor===1){discount*=0.1;badgeText='限时1折';}let html='<div style="display:flex; flex-direction:column;">';html+=`<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; align-content: flex-start; padding-bottom: 15px;">`;if(this.shopDirectItems.length===0){html+=`<div style="text-align:center; width:100%; color:#888; padding: 20px;">暂无道具可购买</div>`;}else{this.shopDirectItems.forEach(r=>{const poolDef=REWARD_POOL.find(x=>x.id===r.id)||r;let basePrice=typeof poolDef.getPrice==='function'?poolDef.getPrice(this):poolDef.price;let price=Math.max(1,Math.floor(basePrice*discount));if(r.price===0||basePrice===0)price=0;const canBuy=this.playerGold>=price;const isPurchased=r._purchased;const btnStyle=isPurchased?'btn disabled':(canBuy?'btn-primary':'btn disabled');const btnState=(isPurchased||!canBuy)?'disabled':'';const cardStateClass=(!canBuy&&!isPurchased)?'disabled':'';let isConsumable=r.type==='item_active'&&r.ref&&SKILLS_DB[r.ref]&&SKILLS_DB[r.ref].type==='consumable';let btnTxt='';if(isPurchased)btnTxt='已购买';else if(price===0)btnTxt='免费获取';else if(isConsumable)btnTxt=`💰 ${price}/1 次`;else btnTxt=`💰 ${price} 购买`;let discountBadge=(badgeText&&price>0)?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';let dynDesc=r.desc;if(r.id==='jiangliu')dynDesc+=` 本回合可得${50+(this.jiangliuCount||0)*50}`;else if(r.id==='jiaoshi')dynDesc+=` 本回合可得${200+(this.jiaoshiCount||0)*100}`;const iconHtml=r.type==='fishnet_card'?`<div style="margin-bottom:5px;display:flex;align-items:center;justify-content:center;height:80px;">${r.icon}</div>`:`<div style="font-size:30px; margin-bottom:5px;">${r.icon||'🔰'}</div>`;html+=`<div class="reward-card ${cardStateClass}" id="rcard-${r._uid}" style="width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; padding: 10px; height: 190px; justify-content: flex-start; padding-top: 15px; ${isPurchased?'border: 2px solid var(--gold-color); opacity: 0.6;':''}">${discountBadge}${iconHtml}<div style="color:var(--highlight); font-weight:bold; margin-bottom:5px; font-size:12px;">${r.name}</div><div style="font-size:10px; color:#ccc; margin-bottom:10px; flex:1; display:flex; align-items:center; justify-content:center; line-height:1.4; text-align:center; white-space:pre-wrap;">${dynDesc}</div><button class="btn ${btnStyle}" id="buy-btn-${r._uid}" ${btnState} onclick="game.buyShopItem('${r._uid}', ${price})" style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0;">${btnTxt}</button></div>`;});}html+='</div>';html+=`<div style="height: 1px; background: rgba(255,255,255,0.1); width: 100%; margin: 10px 0; flex-shrink: 0;"></div>`;if(this.availablePacks.length>0){html+=`<div style="display: flex; justify-content: flex-start; gap: 10px; padding-top: 10px; padding-bottom: 20px; flex-wrap: wrap;">`;let packDiscountBadge=badgeText?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';this.availablePacks.forEach(p=>{const def=PACK_CONFIG[p];if(!def)return;let packPrice=Math.max(1,Math.floor(def.price*discount));const canBuyPack=this.playerGold>=packPrice;const packStateClass=!canBuyPack?'disabled':'';const btnState=!canBuyPack?'disabled':'';const btnStyle=canBuyPack?'btn-primary':'btn disabled';html+=`<div class="pack-card ${packStateClass}" style="padding: 10px; width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; height: 150px; justify-content: flex-start; padding-top: 20px; display: flex; flex-direction: column; align-items: center; position:relative; background: ${def.bg}; border-color: ${def.color};">${packDiscountBadge}<div style="font-size: 30px;">${def.icon}</div><div style="font-weight: bold; margin-top:5px; font-size:12px; color: ${def.color};">${def.name}</div><div style="font-size:9px; color:#ddd; margin-top:3px; margin-bottom: 10px;">${def.desc}</div><button class="btn ${btnStyle}" ${btnState} style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0; margin-top: auto;" onclick="game.openPack('${p}', ${packPrice})">💰 ${packPrice} 开启</button></div>`;});html+=`</div>`;}else{html+=`<div style="text-align:center; padding: 15px; color:#666; font-size:12px; padding-bottom: 30px;">所有卡包已开启</div>`;}html+='</div>';ct.innerHTML=html;}
+    renderShopHome(){const ct=document.getElementById('tab-content-shop');let discount=1;let badgeText='';if(this.upgradeCounts['paomo']){discount*=0.5;badgeText='五折优惠';}if(this.config.floor===1){discount*=0.1;badgeText='限时1折';}let html='<div style="display:flex; flex-direction:column;">';html+=`<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-start; align-content: flex-start; padding-bottom: 15px;">`;if(this.shopDirectItems.length===0){html+=`<div style="text-align:center; width:100%; color:#888; padding: 20px;">暂无道具可购买</div>`;}else{this.shopDirectItems.forEach(r=>{const poolDef=REWARD_POOL.find(x=>x.id===r.id)||r;let basePrice=typeof poolDef.getPrice==='function'?poolDef.getPrice(this):poolDef.price;let price=Math.max(1,Math.floor(basePrice*discount));if(r.price===0||basePrice===0)price=0;const canBuy=this.playerGold>=price;const isPurchased=r._purchased;const btnStyle=isPurchased?'btn disabled':(canBuy?'btn-primary':'btn disabled');const btnState=(isPurchased||!canBuy)?'disabled':'';const cardStateClass=(!canBuy&&!isPurchased)?'disabled':'';let isConsumable=r.type==='item_active'&&r.ref&&SKILLS_DB[r.ref]&&SKILLS_DB[r.ref].type==='consumable';let btnTxt='';if(isPurchased)btnTxt='已购买';else if(price===0)btnTxt='免费获取';else if(isConsumable)btnTxt=`<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;">${price}/1 次`;else btnTxt=`<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;">${price} 购买`;let discountBadge=(badgeText&&price>0)?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';let dynDesc=this.getDynamicDesc(r.id, r.type) || r.desc;const iconHtml=r.type==='fishnet_card'?`<div style="margin-bottom:5px;display:flex;align-items:center;justify-content:center;height:80px;">${r.icon}</div>`:`<div style="font-size:30px; margin-bottom:5px;">${r.icon||'🔰'}</div>`;html+=`<div class="reward-card ${cardStateClass}" id="rcard-${r._uid}" style="width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; padding: 10px; height: 190px; justify-content: flex-start; padding-top: 15px; ${isPurchased?'border: 2px solid var(--gold-color); opacity: 0.6;':''}">${discountBadge}${iconHtml}<div style="color:var(--highlight); font-weight:bold; margin-bottom:5px; font-size:12px;">${r.name}</div><div style="font-size:10px; color:#ccc; margin-bottom:10px; flex:1; display:flex; align-items:center; justify-content:center; line-height:1.4; text-align:center; white-space:pre-wrap;">${dynDesc}</div><button class="btn ${btnStyle}" id="buy-btn-${r._uid}" ${btnState} onclick="game.buyShopItem('${r._uid}', ${price})" style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0;">${btnTxt}</button></div>`;});}html+='</div>';html+=`<div style="height: 1px; background: rgba(255,255,255,0.1); width: 100%; margin: 10px 0; flex-shrink: 0;"></div>`;if(this.availablePacks.length>0){html+=`<div style="display: flex; justify-content: flex-start; gap: 10px; padding-top: 10px; padding-bottom: 20px; flex-wrap: wrap;">`;let packDiscountBadge=badgeText?`<div style="position:absolute; top:4px; right:4px; background:var(--danger); color:#fff; font-size:10px; padding:2px 4px; border-radius:4px; font-weight:bold; z-index:10; box-shadow:0 2px 5px rgba(0,0,0,0.5);">${badgeText}</div>`:'';this.availablePacks.forEach(p=>{const def=PACK_CONFIG[p];if(!def)return;let packPrice=Math.max(1,Math.floor(def.price*discount));const canBuyPack=this.playerGold>=packPrice;const packStateClass=!canBuyPack?'disabled':'';const btnState=!canBuyPack?'disabled':'';const btnStyle=canBuyPack?'btn-primary':'btn disabled';html+=`<div class="pack-card ${packStateClass}" style="padding: 10px; width: calc(33.33% - 10px); min-width: 110px; max-width: 150px; height: 150px; justify-content: flex-start; padding-top: 20px; display: flex; flex-direction: column; align-items: center; position:relative; background: ${def.bg}; border-color: ${def.color};">${packDiscountBadge}<div style="font-size: 30px;">${def.icon}</div><div style="font-weight: bold; margin-top:5px; font-size:12px; color: ${def.color};">${def.name}</div><div style="font-size:9px; color:#ddd; margin-top:3px; margin-bottom: 10px;">${def.desc}</div><button class="btn ${btnStyle}" ${btnState} style="width:100%; padding: 6px 0; font-size: 11px; flex-shrink:0; margin-top: auto;" onclick="game.openPack('${p}', ${packPrice})"><img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;vertical-align:middle;margin-right:2px;">${packPrice} 开启</button></div>`;});html+=`</div>`;}else{html+=`<div style="text-align:center; padding: 15px; color:#666; font-size:12px; padding-bottom: 30px;">所有卡包已开启</div>`;}html+='</div>';ct.innerHTML=html;}
     openPack(type,price){if(this.playerGold<price){document.getElementById('msg-modal').classList.add('visible');return;}this.playerGold-=price;document.getElementById('shop-modal-gold').innerText=this.playerGold;this.updateHeader();this.availablePacks=this.availablePacks.filter(p=>p!==type);const cfg=PACK_CONFIG[type];if(!cfg){this.renderShopHome();this.saveState();return;}if(type==='supply'){let allTypes=['upgrade','item_active','passive','secret'];let t=allTypes[Math.floor(Math.random()*allTypes.length)];let it=this.generateRandomItems(1,t)[0];if(it){it.price=0;this.shopDirectItems.unshift(it);}this.renderShopHome();this.saveState();return;}else if(type==='fishnet'){let deck=[...this.runDeckTemplate];this.shuffle(deck);let card=deck[0];if(card){const _sm={'♥':'hearts','♦':'diamonds','♣':'clubs','♠':'spades'};const _sn=_sm[card.suit]||'spades';const _px=(_sn==='clubs'&&card.rank==='3')?'P':'p';const _imgSrc=`assets/images/poker/${_px}-${_sn}-${card.rank}.png`;let fakeItem={_uid:'fishnet_'+Date.now(),id:'fishnet_card',type:'fishnet_card',icon:`<img src="${_imgSrc}" alt="${card.suit}${card.rank}" style="width:52px;height:72px;object-fit:cover;border-radius:4px;display:block;box-shadow:1px 2px 6px rgba(0,0,0,0.5);" draggable="false">`,name:'扑克牌',desc:`${card.suit} ${card.rank}（加入本次挑战牌组）`,price:0,_card:card};this.shopDirectItems.unshift(fakeItem);}this.renderShopHome();this.saveState();return;}let targetType=cfg.openType;let count=Math.floor(Math.random()*(cfg.maxCount-cfg.minCount+1))+cfg.minCount;let newItems=this.generateRandomItems(count,targetType);if(newItems.length===0){const t=document.getElementById('toast-msg');t.style.display='block';setTimeout(()=>{t.style.display='none';},3000);}this.shopDirectItems=[...newItems,...this.shopDirectItems];this.renderShopHome();this.saveState();}
     openDeckModPopup(itemObj){
         const modal=document.getElementById('deck-mod-modal');
@@ -2389,7 +2511,7 @@ class Game {
     }
     showSellConfirm(sellInfo){
         const modal=document.getElementById('sell-confirm-modal');
-        document.getElementById('sell-confirm-text').innerHTML=`确认出售「<span style="color:var(--highlight);font-weight:bold;">${sellInfo.name}</span>」道具<br>获得 <span style="color:var(--gold-color);font-weight:bold;">${sellInfo.sellGold} 💰</span>`;
+        document.getElementById('sell-confirm-text').innerHTML=`确认出售「<span style="color:var(--highlight);font-weight:bold;">${sellInfo.name}</span>」道具<br>获得 <span style="color:var(--gold-color);font-weight:bold;display:inline-flex;align-items:center;gap:4px;">${sellInfo.sellGold}<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:16px;height:16px;"></span>`;
         const okBtn=document.getElementById('sell-confirm-ok');
         const newOk=okBtn.cloneNode(true);okBtn.parentNode.replaceChild(newOk,okBtn);
         newOk.onclick=()=>{
@@ -2417,7 +2539,7 @@ class Game {
         return;}let name='',desc='';if(type==='skill'){const s=SKILLS_DB[id];name=s.name;desc=this.getDynamicDesc(id,'skill',true);}else{const p=REWARD_POOL.find(x=>x.id===id);name=p.name;desc=this.getDynamicDesc(id,'passive',true);}const isEquipped=(type==='skill'&&this.equippedSkills.includes(id));if(isEquipped){this.showInteractBubble(e.clientX,e.clientY,name,desc,'卸下',()=>{if(type==='skill'){const idx=this.equippedSkills.indexOf(id);if(idx>-1)this.equippedSkills.splice(idx,1);}this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();});}else{const canEquip=(type==='skill'&&this.equippedSkills.length<this.maxSkillSlots);this.showInteractBubble(e.clientX,e.clientY,name,desc,'装备',()=>{if(type==='skill')this.equippedSkills.push(id);this.renderEquipCircle();this.renderInventory();document.getElementById('item-interact-bubble').style.display='none';this.saveState();},!canEquip);}}
     showInteractBubble(x,y,name,desc,btnText,onClick,disableBtn=false,sellInfo=null){const bubble=document.getElementById('item-interact-bubble');document.getElementById('interact-name').innerText=name;document.getElementById('interact-desc').innerText=desc;const btn=document.getElementById('interact-btn');btn.innerText=btnText;btn.disabled=disableBtn;btn.className=disableBtn?'btn':(btnText==='卸下'?'btn':'btn btn-primary');if(btnText==='卸下')btn.style.border='1px solid #e74c3c';else btn.style.border='';btn.onclick=onClick;
         // 出售按钮（仅普通道具且不是技能类型）
-        const sellBtn=document.getElementById('interact-sell-btn');if(sellInfo){sellBtn.style.display='block';const sellGold=sellInfo.sellGold;sellBtn.innerText=`售出 (+${sellGold} 💰)`;sellBtn.onclick=()=>{bubble.style.display='none';this.showSellConfirm(sellInfo);};}else{sellBtn.style.display='none';}
+        const sellBtn=document.getElementById('interact-sell-btn');if(sellInfo){sellBtn.style.display='block';const sellGold=sellInfo.sellGold;sellBtn.innerHTML=`售出 (+${sellGold} <img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;vertical-align:middle;">)`;sellBtn.onclick=()=>{bubble.style.display='none';this.showSellConfirm(sellInfo);};}else{sellBtn.style.display='none';}
         bubble.style.display='block';let bw=220,bh=bubble.offsetHeight||160;let finalX=x+15;let finalY=y+15;if(finalX+bw>window.innerWidth)finalX=x-bw-15;if(finalY+bh>window.innerHeight)finalY=y-bh-15;bubble.style.left=finalX+'px';bubble.style.top=finalY+'px';}
     leaveShop(){const modal=document.getElementById('shop-screen');modal.classList.remove('shop-visible');this.audio.stopShopBgm();setTimeout(()=>{modal.style.display='none';document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.showMap();},500);}
     nextLevelAction(){document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.startLevel();}
@@ -2466,7 +2588,7 @@ class Game {
             this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p){const d=document.createElement('div');d.className='passive-icon';d.setAttribute('data-desc',`${p.name||''}: ${this.getDynamicDesc(p.id,'passive',true)}`);d.innerHTML=p.icon;pl.appendChild(d);}});
         }
         const g=document.getElementById('level-desc');
-        if(isChallenge){g.innerHTML=`<span style="color:#f97316;font-weight:bold;">1局定胜负</span> · 牌型比大小 · <span style="color:#fbbf24;">胜利奖励 2000💰</span>`;}
+        if(isChallenge){g.innerHTML=`<span style="color:#f97316;font-weight:bold;">1局定胜负</span> · 牌型比大小 · <span style="color:#fbbf24;display:inline-flex;align-items:center;gap:2px;">胜利奖励 2000<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;"></span>`;}
         else if(this.config.target==='best_of_3'){g.innerHTML=`3局2胜 (<span class="gold-val">${this.currentLevelWins}胜/${this.currentLevelLosses}负</span>) - 第${this.currentRound}/3回合 <span style="font-size:10px; color:#aaa; margin-left:5px;">牌型赢过对方即胜</span>`;}
         else{g.innerHTML=`3回合内积分 ≥ <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`;}
     }
@@ -2480,6 +2602,7 @@ class Game {
     }
 }
 const game=new Game();
+window.game = game;
 </script>
 </body>
 </html>
