@@ -123,7 +123,7 @@ const REWARD_POOL=[
 {id:'xianzhi',weight:15,name:'献祭',desc:'每弃掉1张人头牌（J、Q、K）金币+100',type:'passive',icon:'🗡️',trigger:'xianzhi',unique:true,price:100,quality:'稀有'},
 {id:'shenyv',weight:15,name:'神谕',desc:'每回合随机获得1个技能道具，使用次数+1（必须有空位）',type:'passive',icon:'🔮',trigger:'shenyv',unique:true,price:100,quality:'普通'},
 {id:'tuike',weight:15,name:'蜕壳',desc:'结算时有1/2概率获得本次牌型的升级牌',type:'passive',icon:'🐚',trigger:'tuike',unique:true,price:100,quality:'稀有'},
-{id:'weimang',weight:15,name:'星烛',desc:'结算时牌型包含1对A，获得总积分x3，每回合倍数-0.1，本回合xN（未装备时不扣倍数；复制后道具倍数与原道具一致）',type:'passive',icon:'✨',trigger:'weimang',unique:true,price:200,quality:'稀有'},
+{id:'weimang',weight:15,name:'星烛',desc:'结算时牌型包含1对A，获得总积分x3，每回合倍数-0.1，本回合xN（未装备时不扣倍数）',type:'passive',icon:'✨',trigger:'weimang',unique:true,price:200,quality:'稀有'},
 {id:'wanxiangtu',weight:15,name:'万象图',desc:'获得牌型积分x牌面数总和，此后牌面数每次+10',type:'passive',icon:'🗺️',trigger:'wanxiangtu',unique:true,price:200,quality:'稀有'},
 {id:'yinxinchanggou',weight:15,name:'引信长钩',desc:'钓鱼成功获得总积分x1.5，每次钓鱼成功倍数+0.1，本回合xN',type:'passive',icon:'🪝',trigger:'yinxinchanggou',unique:true,price:200,quality:'稀有'},
 {id:'tianming',weight:15,name:'天命',desc:'每使用1次玄机，所有牌型积分+20，1/5概率销毁该道具',type:'passive',icon:'☀️',trigger:'tianming',unique:true,price:200,quality:'普通'},

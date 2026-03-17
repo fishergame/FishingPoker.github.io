@@ -239,6 +239,11 @@ body.overlay-active header{display:none;}
 .fail-panel-card-wrap .card { width: 48px !important; height: 68px !important; }
 .fail-panel-card-wrap .card-rank { font-size: 1em !important; top: 1px !important; left: 3px !important; }
 .fail-panel-card-wrap .card-suit { font-size: 1.5em !important; }
+@media (max-width: 768px) {
+    .fail-panel-card-wrap .card { width: 36px !important; height: 52px !important; }
+    .fail-panel-card-wrap .card-rank { font-size: 0.75em !important; top: 1px !important; left: 2px !important; }
+    .fail-panel-card-wrap .card-suit { font-size: 1.1em !important; }
+}
 
 @keyframes customShake {
     0%, 100% { transform: translateX(0) translateY(0); }
@@ -396,7 +401,7 @@ body.overlay-active header{display:none;}
     :root{--card-width:42px;--card-height:60px;--mini-card-width:32px;--mini-card-height:46px;}
     #shop-screen{flex-direction:column;gap:15px;padding-top:60px;overflow-y:auto;display:flex;align-items:center;justify-content:flex-start;}
     #shop-left-card{width:95%;height:250px;transform:translateY(-50px);flex-shrink:0;}
-    #shop-right-card{width:95%;height:auto;min-height:500px;transform:translateY(50px);flex-shrink:0;margin-bottom:20px;}
+    #shop-right-card{width:95%;height:60vh;min-height:450px;transform:translateY(50px);flex-shrink:0;margin-bottom:20px;}
     #shop-screen.shop-visible .shop-panel-card{transform:translateY(0);}
     .info-footer{font-size:14px;}
     .lobby-title-main{font-size: 24px !important; text-shadow: 0 2px 0px #0099cc, 0 0 10px var(--highlight) !important;}
@@ -1194,7 +1199,7 @@ class Game {
         };
         document.body.addEventListener('mouseover',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target)showTooltip(target);});
         document.body.addEventListener('mouseout',(e)=>{if(e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item'))tooltip.style.display='none';});
-        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
+        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.card')||e.target.closest('.inv-item');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
     }
     startLevel(){
         this.inGame=true;
