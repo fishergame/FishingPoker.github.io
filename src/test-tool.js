@@ -38,19 +38,17 @@
             if (!lobby) return;
             var btn = document.createElement('button');
             btn.id = 'test-mode-btn';
-            btn.className = 'btn-lobby';
             btn.style.cssText = [
                 'position:absolute',
-                'left:24px',
-                'bottom:24px',
-                'padding:10px 22px',
-                'font-size:15px',
+                'right:30px',
+                'bottom:30px',
+                'padding:6px 10px',
+                'font-size:13px',
                 'z-index:9999',
                 'cursor:pointer',
-                'border:2px solid #f97316',
-                'color:#f97316',
-                'border-radius:10px',
-                'background:rgba(249,115,22,0.12)',
+                'border:none',
+                'background:none',
+                'color:rgba(255,255,255,0.55)',
                 'font-weight:bold',
                 'letter-spacing:2px',
                 'font-family:"SimHei",sans-serif'
@@ -173,7 +171,7 @@
                 document.getElementById('header-left-col').classList.add('lobby-hide');
                 document.getElementById('header-right-col').classList.add('lobby-hide');
                 var continueBtn = document.getElementById('btn-continue');
-                if (continueBtn) continueBtn.style.display = localStorage.getItem('fishingPokerSave_v3_7_0') ? 'block' : 'none';
+                if (continueBtn) continueBtn.style.display = localStorage.getItem('fishingPokerSave_v3_7_2') ? 'block' : 'none';
                 game.inGame = false;
             }, 300);
         }

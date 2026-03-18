@@ -66,7 +66,7 @@ tailwind.config={
 ::-webkit-scrollbar{display:none;}
 body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 .pixel-font { font-family: 'Press Start 2P', cursive; }
-#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:300;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 1.5s ease-in-out;pointer-events:auto;}
+#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2000;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 1.5s ease-in-out;pointer-events:auto;}
 .splash-logo{width:120px;height:120px;fill:#fff;margin-bottom:20px;filter:drop-shadow(0 0 10px rgba(255,255,255,0.5));}
 .splash-text{font-family:'Segoe UI Light',sans-serif;font-weight:100;font-size:24px;letter-spacing:8px;color:#fff;opacity:0.8;}
 .fade-out{opacity:0!important;pointer-events:none;}
@@ -85,19 +85,23 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 .fog-layer-3{animation-duration:42s;animation-delay:-20s;opacity:0.3;}
 @keyframes fogMove{0%{transform:translateX(0);}100%{transform:translateX(50%);}}
 .map-fog{height:100%;z-index:1;}
-.lobby-content{position:absolute;right:33.33%;top:45%;transform:translate(50%,-50%);text-align:center;z-index:10;}
+.lobby-content{position:absolute;right:33.33%;top:60px;bottom:120px;transform:translateX(50%);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;z-index:10;}
+.lobby-content > div[style] { margin-bottom: 0 !important; }
 .lobby-light { position: absolute; top: 0; left: 20%; height: 120vh; width: auto; opacity: 0.6; pointer-events: none; z-index: 5; transform-origin: top center; animation: swayLight 6s ease-in-out infinite alternate; mix-blend-mode: screen; }
 @keyframes swayLight { 0% { transform: rotate(-5deg) translateX(-10px); opacity: 0.4; } 100% { transform: rotate(5deg) translateX(10px); opacity: 0.7; } }
-.lobby-logo { width: 320px; margin-bottom: 60px; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); transition: filter 0.2s ease-out; }
+/* 这边是logo 和开始游戏的间距 */
+.lobby-logo { width: 320px; margin-bottom: 35px; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); transition: filter 0.2s ease-out; }
 .lobby-logo:hover { filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.4)) blur(1px); }
 .lobby-btn-wrap { position: relative; cursor: pointer; display: block; transition: transform 0.2s; margin: 0 auto; width: 110px; }
 .lobby-btn-wrap:active { transform: translateY(2px); }
 .lobby-btn-img { width: 100%; height: auto; display: block; position: relative; z-index: 2; pointer-events: none; }
-.lobby-btn-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.2s; z-index: 1; pointer-events: none; }
-.lobby-btn-wrap:hover .lobby-btn-hover { opacity: 1; }
+.lobby-btn-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.2s, transform 0.2s; z-index: 1; pointer-events: none; transform:scale(1); }
+.lobby-btn-wrap:hover .lobby-btn-hover { opacity: 1; transform:scale(1.25); }
 .lobby-title-main{font-size:40px;font-weight:normal;color:#fff;text-shadow:0 4px 0px #0099cc, 0 0 20px var(--highlight);margin-bottom:0;line-height:1.4;letter-spacing:2px;}
 .lobby-title-sub{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:24px;font-weight:bold;color:var(--highlight);text-shadow:0 0 10px rgba(0,242,255,0.5);margin-top:15px;letter-spacing:6px;margin-bottom:40px;}
 .lobby-orientation{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin-bottom:50px;display:none;}
+
+
 
 .btn-lobby{font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; font-size:20px; padding:15px 0; background:linear-gradient(180deg,#0ea5e9 0%,#0284c7 100%); color:#fff; border:none; border-radius:12px; font-weight:900; box-shadow:0 6px 15px rgba(14,165,233,0.4); cursor:pointer; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:4px; text-transform:uppercase; width: 240px; text-align: center; margin: 0 auto;}
 .btn-lobby-primary:hover{transform:translateY(-2px); box-shadow:0 10px 20px rgba(14,165,233,0.6); background:linear-gradient(180deg,#38bdf8 0%,#0ea5e9 100%);}
@@ -123,7 +127,7 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 .map-connector{flex:1;height:3px;background:#333;margin:0 5px;position:relative;border-radius:2px;}
 .map-connector.unlocked{background:linear-gradient(90deg,var(--gold-color),var(--highlight));box-shadow:0 0 5px rgba(0,0,0,0.5);}
 header{height:60px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(51,51,51,0.5);z-index:201;position:relative;transition:transform 0.3s ease-in-out;}
-body.lobby-mode header{background:rgba(0,0,0,0.1);border-bottom:none;}
+body.lobby-mode header{display:none;z-index:0;}
 body.overlay-active header{display:none;}
 .header-left{display:flex;flex-direction:column;transition:opacity 0.3s;}
 .level-id{font-size:20px;color:var(--highlight);font-weight:800;letter-spacing:1px;font-family:'AliHei',sans-serif;}
@@ -179,9 +183,86 @@ body.overlay-active header{display:none;}
 .card-back::after{content:none;}
 .card-back-img{width:100%;height:100%;object-fit:cover;border-radius:4px;display:block;}
 .card:hover{transform:translateY(-5px);z-index:10;}
-.card.selected{transform:translateY(-15px);box-shadow:0 0 15px var(--highlight);border:2px solid var(--highlight);z-index:10;}
-.card.opp-selected{transform:translateY(-15px);box-shadow:0 0 15px var(--danger);border:2px solid var(--danger);z-index:10;}
+.card.selected{transform:translateY(-15px);box-shadow:none;border:none;z-index:10;}
+.card.skill-selected{transform:translateY(-15px);box-shadow:0 0 12px rgba(248,113,113,0.45);border:2px solid rgba(248,113,113,0.55);z-index:10;}
+.card.opp-selected{transform:translateY(-15px);box-shadow:0 0 12px rgba(248,113,113,0.45);border:2px solid rgba(248,113,113,0.55);z-index:10;}
 .badge-bait{position:absolute;top:0;right:0;background:#333;color:#fff;font-size:9px;padding:1px 3px;z-index:2;}
+
+#lobby-func-controls{
+    position:absolute;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:42px;
+    z-index:210;
+}
+.lobby-func-btn{
+    background:none;
+    border:none;
+    padding:6px 10px;
+    cursor:pointer;
+    color:rgba(255,255,255,0.72);
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:6px;
+    font-family:'SimHei','Microsoft YaHei',sans-serif;
+}
+.lobby-func-btn:hover{color:#fff;}
+.lobby-func-btn .material-symbols-outlined{font-size:22px;line-height:1;}
+.lobby-func-btn .lbl{font-size:12px;letter-spacing:2px;white-space:nowrap;}
+.lobby-func-btn.muted .material-symbols-outlined{position:relative;}
+.lobby-func-btn.muted .material-symbols-outlined::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:28px;
+    height:2px;
+    background:currentColor;
+    transform:translate(-50%,-50%) rotate(-40deg);
+    opacity:0.9;
+}
+
+#game-func-controls{
+    position:fixed;
+    left:30px;
+    bottom:30px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    z-index:1000;
+}
+body.lobby-mode #game-func-controls{display:none;}
+body.overlay-active #game-func-controls{display:none;}
+.game-func-btn{
+    background:none;
+    border:none;
+    padding:6px;
+    cursor:pointer;
+    color:rgba(255,255,255,0.55);
+    transition:color 0.15s, opacity 0.15s;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+}
+.game-func-btn:hover{color:#fff;}
+.game-func-btn .material-symbols-outlined{font-size:22px;line-height:1;}
+.game-func-btn.muted .material-symbols-outlined{position:relative;}
+.game-func-btn.muted .material-symbols-outlined::after{
+    content:'';
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:30px;
+    height:2px;
+    background:currentColor;
+    transform:translate(-50%,-50%) rotate(-40deg);
+    opacity:0.9;
+}
 .btn{background:linear-gradient(145deg,#2c3e50,#1a252f);border:1px solid #4a5c6a;color:#fff;padding:12px 5px;border-radius:4px;cursor:pointer;transition:0.2s;font-size:13px;text-align:center;position:relative;box-shadow:0 2px 5px rgba(0,0,0,0.3);user-select:none;-webkit-tap-highlight-color:transparent;}
 .btn:active{transform:scale(0.95);}
 .btn:hover:not(:disabled){border-color:var(--highlight);box-shadow:0 0 15px rgba(0,242,255,0.5);background:#34495e;}
@@ -403,8 +484,14 @@ body.overlay-active header{display:none;}
     75%{transform:var(--scatter-bounce);}
     100%{opacity:1;transform:var(--scatter-to);}
 }
-
 @media (max-width: 768px){
+    #game-func-controls{left:18px;bottom:18px;gap:6px;}
+    .game-func-btn{padding:4px;}
+    .game-func-btn .material-symbols-outlined{font-size:16px;}
+    .lobby-func-btn .material-symbols-outlined{font-size:20px;}
+    .lobby-func-btn{min-width:100px;}
+    .lobby-func-btn .lbl{font-size:11px;}
+
     .card-rank{font-size:0.9em!important;font-weight:normal!important;top:2px!important;left:3px!important;}
     .card-suit{font-size:1.0em!important;}
     .card.mini .card-rank{font-size:0.8em!important;font-weight:normal!important;top:2px!important;left:2px!important;}
@@ -424,10 +511,10 @@ body.overlay-active header{display:none;}
     .settle-card-wrap .card { width: 65px !important; height: 93px !important; }
     .settle-card-wrap .card.mini { width: 65px !important; height: 93px !important; }
     #clash-vs { font-size: 40px; }
-    /* 竖屏移动端：分割线上移，钓饵牌位置上移 */
-    .baits-container{gap:4px;padding-bottom:8px;border-bottom:1px solid #444;}
-    .bait-row{min-height:70px;}
-    #player-hand-area{height:100px;padding-top:8px;border-top:none;}
+}
+@media (max-width: 480px){
+    #game-func-controls{left:12px;bottom:12px;gap:8px;}
+    .game-func-btn .material-symbols-outlined{font-size:18px;}
 }
 @media screen and (max-height: 600px) and (orientation: landscape){
     :root{--card-width:58px;--card-height:82px;--mini-card-width:40px;--mini-card-height:56px;}
@@ -442,17 +529,20 @@ body.overlay-active header{display:none;}
 }
 </style>
 </head>
-<body>
+<body class="lobby-mode">
 <div id="splash-screen">
     <svg class="splash-logo" viewBox="0 0 100 100"><path d="M20,80 Q35,60 50,80 T80,80" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,50 Q35,30 50,50 T80,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,20 Q35,0 50,20 T80,20" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /></svg>
     <div class="splash-text">FISHER GAME</div>
-    <div style="width: 240px; height: 14px; background: #fff; border-radius: 7px; margin-top: 50px; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.2);">
+    <div style="width: 240px; height: 10px; background: #fff; border-radius: 6px; margin-top: 50px; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.2); border:2px solid #9ca3af;">
         <div id="splash-progress" style="width: 0%; height: 100%; background: #000; border-radius: 7px; transition: width 0.1s ease-out;"></div>
     </div>
 </div>
 <div id="toast-msg" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);border:1px solid var(--highlight);color:#fff;padding:15px 30px;border-radius:8px;z-index:10000;display:none;text-align:center;pointer-events:none;font-size:16px;box-shadow:0 5px 25px rgba(0,0,0,0.8);">运气差点哦，没有开出道具！</div>
 <div id="msg-modal" class="overlay" style="z-index:9999;">
-    <div class="info-panel" style="text-align:center;border-color:var(--danger);width:80%;max-width:300px;padding:30px;">
+    <div class="info-panel" style="position:relative;text-align:center;border-color:var(--danger);width:80%;max-width:300px;padding:30px;">
+        <button onclick="document.getElementById('msg-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
+            <span class="material-symbols-outlined">close</span>
+        </button>
         <div style="font-size:18px;font-weight:bold;color:var(--danger);margin-bottom:25px;" id="msg-modal-text">当前金币不足</div>
         <button class="btn btn-primary" style="width:100px;padding:10px;" onclick="document.getElementById('msg-modal').classList.remove('visible')">确定</button>
     </div>
@@ -460,7 +550,10 @@ body.overlay-active header{display:none;}
 
 <!-- Upgrade Notification Modal -->
 <div id="upgrade-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="text-align:center;border-color:var(--gold-color);width:80%;max-width:300px;padding:30px;background:#1e293b;">
+    <div class="info-panel" style="position:relative;text-align:center;border-color:var(--gold-color);width:80%;max-width:300px;padding:30px;background:#1e293b;">
+        <button onclick="document.getElementById('upgrade-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
+            <span class="material-symbols-outlined">close</span>
+        </button>
         <h3 id="upgrade-modal-title" style="color:var(--gold-color);margin-bottom:15px;font-size:22px;font-weight:bold;"></h3>
         <div id="upgrade-modal-text" style="font-size:14px;color:#ddd;margin-bottom:25px;line-height:1.6;"></div>
         <button class="btn btn-primary" style="width:120px;padding:10px;" onclick="document.getElementById('upgrade-modal').classList.remove('visible')">确定</button>
@@ -477,7 +570,10 @@ body.overlay-active header{display:none;}
 
 <!-- 道具出售确认弹窗 -->
 <div id="sell-confirm-modal" class="overlay" style="z-index:200000;">
-    <div class="info-panel" style="text-align:center;border-color:#f97316;width:80%;max-width:300px;padding:25px;background:#1e293b;">
+    <div class="info-panel" style="position:relative;text-align:center;border-color:#f97316;width:80%;max-width:300px;padding:25px;background:#1e293b;">
+        <button onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
+            <span class="material-symbols-outlined">close</span>
+        </button>
         <h3 style="color:#f97316;margin-bottom:15px;font-size:18px;font-weight:bold;">道具出售</h3>
         <div id="sell-confirm-text" style="font-size:13px;color:#ddd;margin-bottom:20px;line-height:1.6;"></div>
         <div style="display:flex;gap:10px;justify-content:center;">
@@ -489,7 +585,10 @@ body.overlay-active header{display:none;}
 
 <!-- General Deck Mod Modal -->
 <div id="deck-mod-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
+    <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
+        <button onclick="document.getElementById('deck-mod-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
+            <span class="material-symbols-outlined">close</span>
+        </button>
         <h3 id="deck-mod-title" style="color:var(--highlight);margin-bottom:10px;"></h3>
         <div id="deck-mod-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;"></div>
         <div id="deck-mod-cards" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;min-height:90px;"></div>
@@ -502,7 +601,10 @@ body.overlay-active header{display:none;}
 
 <!-- Printer specific Modal -->
 <div id="printer-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
+    <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
+        <button onclick="document.getElementById('printer-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
+            <span class="material-symbols-outlined">close</span>
+        </button>
         <h3 id="printer-title" style="color:var(--highlight);margin-bottom:10px;">打印机</h3>
         <div id="printer-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;">选择1张背包中的普通道具牌，复制并获得该牌</div>
         <div id="printer-cards" class="inv-grid" style="justify-content:center;margin-bottom:20px;min-height:90px;"></div>
@@ -515,14 +617,14 @@ body.overlay-active header{display:none;}
 
 <div id="map-screen">
     <div id="map-back-btn" class="absolute top-4 left-4 z-50 cursor-pointer text-white/70 hover:text-white transition-colors" onclick="game.returnToLobby()" style="display:none;">
-        <svg viewBox="0 0 24 24" class="w-8 h-8 fill-current"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        <span class="material-symbols-outlined" style="font-size:28px;">arrow_back</span>
     </div>
     <div class="map-title">无尽塔楼</div>
     <div id="map-scroll-area"></div>
 </div>
 
 <div id="lobby-screen">
-    <canvas id="rain-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3;"></canvas>
+    <canvas id="rain-canvas" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9;"></canvas>
     <div class="waves-container">
         <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs><g class="parallax"><use xlink:href="#gentle-wave" x="48" y="0" /><use xlink:href="#gentle-wave" x="48" y="3" /><use xlink:href="#gentle-wave" x="48" y="5" /></g></svg>
     </div>
@@ -534,7 +636,7 @@ body.overlay-active header{display:none;}
     <img src="assets/images/backgrounds/ui-light.png" class="lobby-light" alt="light">
     <div class="lobby-content">
         <img src="assets/images/backgrounds/ui-logo.png" id="lobby-logo" class="lobby-logo" alt="logo">
-        <div style="display:flex; flex-direction:column; gap:20px; align-items:center;">
+        <div style="display:flex; flex-direction:column; gap:20px; align-items:center; margin-bottom:100px;">
             <div class="lobby-btn-wrap" onclick="game.startNewGame()">
                 <img src="assets/images/backgrounds/btn-selected state.png" class="lobby-btn-hover" alt="hover">
                 <img src="assets/images/ui/btn-cn-start.png" class="lobby-btn-img" alt="start">
@@ -545,7 +647,26 @@ body.overlay-active header{display:none;}
             </div>
         </div>
     </div>
-    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.0</div>
+    <div id="lobby-func-controls">
+        <button class="lobby-func-btn" onclick="game.toggleInfo()" title="牌型说明">
+            <span class="material-symbols-outlined">menu_book</span>
+            <span class="lbl">牌型</span>
+        </button>
+        <button class="lobby-func-btn" id="lobby-audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效">
+            <span class="material-symbols-outlined">music_note</span>
+            <span class="lbl">音乐</span>
+        </button>
+        <button class="lobby-func-btn" onclick="game.openMailbox()" title="邮箱" style="position:relative;">
+            <span class="material-symbols-outlined">mail</span>
+            <span id="mail-badge" style="display:none;position:absolute;top:2px;right:10px;width:7px;height:7px;border-radius:50%;background:#f87171;border:1px solid #1a1a2e;"></span>
+            <span class="lbl">邮箱</span>
+        </button>
+        <button class="lobby-func-btn" id="lobby-fs-toggle" onclick="game.toggleFullscreen()" title="全屏切换">
+            <span class="material-symbols-outlined">fullscreen</span>
+            <span class="lbl">全屏</span>
+        </button>
+    </div>
+    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.2</div>
 </div>
 
 <!-- 邮箱弹窗 -->
@@ -557,7 +678,7 @@ body.overlay-active header{display:none;}
                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#94a3b8;"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                 邮箱
             </div>
-            <button onclick="game.closeMailbox()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;padding:2px 6px;" title="关闭">✕</button>
+            <button onclick="game.closeMailbox()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;padding:2px 6px;" title="关闭"><span class="material-symbols-outlined">close</span></button>
         </div>
         <!-- 内容区 -->
         <div style="display:flex;flex:1;overflow:hidden;">
@@ -571,17 +692,26 @@ body.overlay-active header{display:none;}
 
 <header>
     <div class="header-left lobby-hide" id="header-left-col"><div class="level-id" id="level-id">FLOOR 1-1</div><div class="level-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div></div>
-    <div class="header-center">
-        <div class="icon-btn" onclick="game.toggleInfo()" title="牌型说明"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4h2v4zm0-6h-2V7h2v4z"/></svg></div>
-        <div class="icon-btn" id="audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
-        <div class="icon-btn" id="fs-toggle" onclick="game.toggleFullscreen()" title="全屏切换"><svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg></div>
-        <div class="icon-btn" id="btn-mailbox" onclick="game.openMailbox()" title="邮箱" style="position:relative;"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span id="mail-badge" style="display:none;position:absolute;top:1px;right:1px;width:7px;height:7px;border-radius:50%;background:#f87171;border:1px solid #1a1a2e;"></span></div>
-    </div>
     <div class="header-right lobby-hide" id="header-right-col">
         <div class="passive-dock" id="passive-list"></div>
         <div class="gold-container"><span class="bet-info" id="bet-display">下注: 0</span><div class="gold-pill"><img src="assets/images/ui/icon-money.png" class="gold-icon" alt="金币"><span id="gold-display">0</span></div></div>
     </div>
 </header>
+
+<div id="game-func-controls">
+    <button class="game-func-btn" onclick="game.toggleInfo()" title="牌型说明">
+        <span class="material-symbols-outlined">menu_book</span>
+    </button>
+    <button class="game-func-btn" id="game-audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效">
+        <span class="material-symbols-outlined">music_note</span>
+    </button>
+    <button class="game-func-btn" onclick="game.showExitConfirm()" title="退出游戏">
+        <span class="material-symbols-outlined">logout</span>
+    </button>
+    <button class="game-func-btn" id="game-fs-toggle" onclick="game.toggleFullscreen()" title="全屏切换">
+        <span class="material-symbols-outlined">fullscreen</span>
+    </button>
+</div>
 <div id="main-stage">
     <div class="panel" id="left-panel"><div class="panel-title" id="opp-name">对手</div><div class="avatar" id="opp-avatar"></div><div class="opp-speech" id="opp-speech"></div><div style="font-size:12px;color:#aaa;margin-bottom:5px;">手牌: <span id="opp-count">7</span></div><div class="opp-hand-grid" id="opp-hand-container"></div></div>
     <div class="panel" id="center-panel">
@@ -601,7 +731,6 @@ body.overlay-active header{display:none;}
                 <button id="btn-play-hand" class="btn" disabled><span>直接出 5 张手牌</span></button>
             </div>
             <div id="skill-confirm-group" style="display:none;flex-direction:column;gap:5px;">
-                <div id="skill-desc-text" style="font-size:11px;color:var(--rare);text-align:center;margin-bottom:5px;white-space:pre-wrap;"></div>
                 <button id="btn-skill-ok" class="btn btn-primary" style="background:var(--rare)">确认施法</button>
                 <button id="btn-skill-no" class="btn">取消</button>
             </div>
@@ -619,6 +748,17 @@ body.overlay-active header{display:none;}
     </div>
 </div>
 <div id="overlay-screen" class="overlay flex items-center justify-center min-h-screen p-4 dark"></div>
+
+<div id="exit-confirm-modal" class="overlay" style="z-index:12000;" onclick="if(event.target===this)game.hideExitConfirm()">
+    <div class="info-panel" style="text-align:center;border-color:rgba(251,191,36,0.45);width:86%;max-width:360px;padding:26px;background:#1e293b;">
+        <div style="font-size:16px;font-weight:bold;color:#fff;margin-bottom:12px;">确认保存进度并返回大厅？</div>
+        <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;line-height:1.6;">返回大厅后仍可在大厅点击「继续游戏」恢复进度</div>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button class="btn btn-primary" style="width:110px;padding:10px;" onclick="game.confirmExitToLobby()">确认</button>
+            <button class="btn" style="width:110px;padding:10px;border:1px solid #555;" onclick="game.hideExitConfirm()">取消</button>
+        </div>
+    </div>
+</div>
 
 <!-- Clash Animation Overlay -->
 <div id="clash-overlay">
@@ -676,6 +816,12 @@ body.overlay-active header{display:none;}
 </div>
 
 <script src="src/config.js"></script>
+<script src="src/scenes/BootScene.js"></script>
+<script src="src/scenes/LobbyScene.js"></script>
+<script src="src/scenes/LevelSelectScene.js"></script>
+<script src="src/scenes/GameplayScene.js"></script>
+<script src="src/scenes/ShopScene.js"></script>
+<script src="src/scenes/ResultScene.js"></script>
 <script src="src/test-tool.js"></script>
 
 <script>
@@ -774,7 +920,8 @@ class Game {
     initSplash(){
         const splash=document.getElementById('splash-screen');
         const contBtn=document.getElementById('btn-continue');
-        if(localStorage.getItem('fishingPokerSave_v3_7_0')){contBtn.style.display='block';}
+        if(localStorage.getItem('fishingPokerSave_v3_7_2')){contBtn.style.display='block';}
+        const gfc=document.getElementById('game-func-controls');if(gfc)gfc.style.display='none';
 
         // 浏览器要求：AudioContext 必须在用户手势同步调用栈中 init/resume
         // 策略：在 splash 的任意点击/触碰时 init 音频上下文并标记就绪
@@ -805,6 +952,7 @@ class Game {
                 setTimeout(()=>{
                     splash.style.display='none';
                     this.showLobby();
+                    if(gfc)gfc.style.display='';
                     // 进入大厅时若音频上下文已 init（用户曾点击 splash）则淡入启动
                     if(this._audioCtxReady && this.isAudioOn && !this.audio.isPlaying){
                         this.audio.startWithFade(2.5);
@@ -836,7 +984,7 @@ class Game {
         // phase 改存为 'ROUND_DONE'，以便恢复时知道需要进入下一回合
         const savedPhase = (this.phase === 'SETTLE') ? 'ROUND_DONE' : this.phase;
         const state = {
-            version: '3.7.0', levelIndex: this.levelIndex, playerGold: this.playerGold,
+            version: '3.7.2', levelIndex: this.levelIndex, playerGold: this.playerGold,
             ownedSkills: this.ownedSkills, ownedPassives: this.ownedPassives,
             equippedSkills: this.equippedSkills, equippedPassives: this.equippedPassives,
             skillUsage: this.skillUsage, skillMaxModifiers: this.skillMaxModifiers,
@@ -870,10 +1018,10 @@ class Game {
             _challengeWon: this._challengeWon || false,
             _challengeRewardId: this._challengeRewardId || null
         };
-        localStorage.setItem('fishingPokerSave_v3_7_0', JSON.stringify(state));
+        localStorage.setItem('fishingPokerSave_v3_7_2', JSON.stringify(state));
     }
     loadState() {
-        const saved = localStorage.getItem('fishingPokerSave_v3_7_0');
+        const saved = localStorage.getItem('fishingPokerSave_v3_7_2');
         if(!saved) return false;
         try {
             const state = JSON.parse(saved);
@@ -933,7 +1081,7 @@ class Game {
         } catch(e) { console.error('loadState error:', e); return false; }
     }
     startNewGame() {
-        localStorage.removeItem('fishingPokerSave_v3_7_0');
+        localStorage.removeItem('fishingPokerSave_v3_7_2');
         this.resetGlobal();
         document.getElementById('btn-continue').style.display='none';
         this.enterMapMode();
@@ -1075,6 +1223,7 @@ class Game {
     enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.stopRain();document.body.classList.remove('lobby-mode');this.showMap();}
     showMap(){
         this.saveState();
+        const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
         const map=document.getElementById('map-screen');const scroll=document.getElementById('map-scroll-area');scroll.innerHTML='';
         const backBtn=document.getElementById('map-back-btn');
         if(backBtn){if(this.levelIndex===0)backBtn.style.display='block';else backBtn.style.display='none';}
@@ -1159,10 +1308,29 @@ class Game {
     }
     setOverlayState(active){if(active)document.body.classList.add('overlay-active');else document.body.classList.remove('overlay-active');}
     toggleAudio(){const isPlaying=this.audio.toggle();this.isAudioOn=isPlaying;this.updateAudioBtn(isPlaying);}
-    updateAudioBtn(playing){const btn=document.getElementById('audio-toggle');const sbtn=document.getElementById('shop-audio-toggle');if(playing){if(btn)btn.classList.add('active');if(sbtn)sbtn.classList.add('active');if(btn)btn.style.opacity='1';if(sbtn)sbtn.style.opacity='1';}else{if(btn)btn.classList.remove('active');if(sbtn)sbtn.classList.remove('active');if(btn)btn.style.opacity='0.5';if(sbtn)sbtn.style.opacity='0.5';}}
+    updateAudioBtn(playing){
+        const shopBtn=document.getElementById('shop-audio-toggle');
+        if(shopBtn){
+            if(playing){shopBtn.classList.add('active');shopBtn.style.opacity='1';}
+            else{shopBtn.classList.remove('active');shopBtn.style.opacity='0.5';}
+        }
+        const lobbyBtn=document.getElementById('lobby-audio-toggle');
+        if(lobbyBtn){
+            if(playing){lobbyBtn.classList.remove('muted');lobbyBtn.style.opacity='1';}
+            else{lobbyBtn.classList.add('muted');lobbyBtn.style.opacity='0.72';}
+        }
+        const gameBtn=document.getElementById('game-audio-toggle');
+        if(gameBtn){
+            if(playing){gameBtn.classList.remove('muted');gameBtn.style.opacity='1';}
+            else{gameBtn.classList.add('muted');gameBtn.style.opacity='0.72';}
+        }
+    }
     toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(err=>{});}else{if(document.exitFullscreen){document.exitFullscreen();}}}
+    showExitConfirm(){const m=document.getElementById('exit-confirm-modal');if(m){m.classList.add('visible');this.setOverlayState(true);}}
+    hideExitConfirm(){const m=document.getElementById('exit-confirm-modal');if(m){m.classList.remove('visible');}this.setOverlayState(false);}
+    confirmExitToLobby(){this.saveState();this.hideExitConfirm();this.playLevelEnterTransition(()=>{this.returnToLobby(false);});}
     returnToLobby(isClear = false){
-        if (isClear) localStorage.removeItem('fishingPokerSave_v3_7_0');
+        if (isClear) localStorage.removeItem('fishingPokerSave_v3_7_2');
         this.resetGlobal();
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
         document.getElementById('lobby-screen').style.display='flex';document.getElementById('map-screen').style.display='none';
@@ -1170,7 +1338,7 @@ class Game {
         this.inGame=false;
         this.startRain();
         document.body.classList.add('lobby-mode');
-        if(localStorage.getItem('fishingPokerSave_v3_7_0')){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
+        if(localStorage.getItem('fishingPokerSave_v3_7_2')){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
     }
     getDynamicDesc(id,type,isTooltip=false,isSettle=false){
         if(type==='skill'){let s=SKILLS_DB[id];if(!s)return'';if(id==='huanzhu'&&isTooltip&&s.extDesc)return s.extDesc;return s.desc;}
@@ -1228,6 +1396,7 @@ class Game {
     }
     startRain(){
         if(!this._rainCanvas||!this._rainCtx)return;
+        this._resizeRain();
         this._rainDrops=[];
         const cfg=this.rainConfig;
         for(let i=0;i<cfg.density;i++){
@@ -1361,6 +1530,7 @@ class Game {
     playLevelEnterTransition(callback){
         const ov     = document.getElementById('level-enter-overlay');
         const canvas = document.getElementById('hook-canvas');
+        const gfc    = document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
         ov.style.display='block'; ov.style.opacity='1'; ov.style.transition='';
         canvas.width=window.innerWidth; canvas.height=window.innerHeight;
         const ctx=canvas.getContext('2d');
@@ -1621,6 +1791,8 @@ class Game {
             if(!doneFired) requestAnimationFrame(animate);
         }
         requestAnimationFrame(animate);
+        const originalCallback = callback;
+        callback = ()=>{ if(gfc) gfc.style.display=''; if(typeof originalCallback==='function') originalCallback(); };
     }
 
     setupPersona(){const floor=this.config.floor;const step=this.config.step;const personas=OPPONENT_PERSONAS[floor]||OPPONENT_PERSONAS[1];const persona=personas[step===1?0:2];this.opponentName=persona.name;document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;document.getElementById('opp-name').innerText=this.opponentName;const img=new Image();img.src=`https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}`;img.onerror=()=>{document.querySelector('.avatar').style.backgroundImage="none";document.querySelector('.avatar').innerHTML="🤖";};setTimeout(()=>this.speak(persona.text),1500);}
@@ -1739,13 +1911,13 @@ class Game {
             const el=document.createElement('div');el.innerHTML=this.htmlCard(c,false,true,false);const dom=el.firstElementChild;
             if(handCount>=9)dom.style.marginRight=cardMarginRight;
             if(this.justDealt){dom.classList.add('card-deal-anim');dom.style.animationDelay=`${idx*0.15}s`;setTimeout(()=>this.audio.playCardSlide(),idx*150);}
-            if(this.selectedCards.includes(c)||(this.animCards&&this.animCards.includes(c))){dom.classList.add('selected');if(handCount>=9)dom.style.marginRight='0px';}if(this.skillMode==='yundu'||this.skillMode==='blast')dom.style.borderColor='#d580ff';
+            if(this.selectedCards.includes(c)||(this.animCards&&this.animCards.includes(c))){dom.classList.add(this.skillMode?'skill-selected':'selected');if(handCount>=9)dom.style.marginRight='0px';}
             if(this.config.rule==='no_hearts'&&c.suit==='♥'&&this.phase==='ACTION'&&this.skillMode===null){dom.style.opacity='0.5';dom.style.cursor='not-allowed';}else{dom.onclick=()=>this.onCardClick(c);}
             hC.appendChild(dom);
         });
         if(this.justDealt)setTimeout(()=>this.justDealt=false,1500);
         const oppC=document.getElementById('opp-hand-container');oppC.innerHTML='';document.getElementById('opp-count').innerText=this.oppHand.length;
-        this.oppHand.forEach(c=>{const show=this.config.openHand||c.revealed;const el=document.createElement('div');el.innerHTML=this.htmlCard(c,true,show,false);const dom=el.firstElementChild;if(this.selectedOppCard&&this.selectedOppCard.id===c.id)dom.classList.add('opp-selected');if(this.skillMode==='blast')dom.onclick=()=>this.onOppCardClick(c);oppC.appendChild(dom);});
+        this.oppHand.forEach(c=>{const show=this.config.openHand||c.revealed;const el=document.createElement('div');el.innerHTML=this.htmlCard(c,true,show,false);const dom=el.firstElementChild;if(this.selectedOppCard&&this.selectedOppCard.id===c.id)dom.classList.add('skill-selected');if(this.skillMode==='blast')dom.onclick=()=>this.onOppCardClick(c);oppC.appendChild(dom);});
         const myB=document.getElementById('my-bait-container');const oppB=document.getElementById('opp-bait-container');
         myB.innerHTML=this.playerBait.length===0?'<div class="slot-placeholder"></div><div class="slot-placeholder"></div>':'';
         this.playerBait.forEach(c=>myB.innerHTML+=this.htmlCard(c,false,true,false));
@@ -1807,7 +1979,7 @@ class Game {
         bait.style.display='none';play.style.display='none';skill.style.display='none';bet.style.display='none';
         if(this.skillMode){
             if(this.skillMode==='huanzhu'){let r1=this.betRatios[0];let r2=this.betRatios[1];if(this.equippedPassives.includes('xuanwo')){r1+=0.1;r2+=0.1;}document.querySelector('#bet-panel button:nth-child(2)').innerText=`下注 ${(r1*100).toFixed(0)}%`;document.querySelector('#bet-panel button:nth-child(2)').onclick=()=>this.placeBet(0);document.querySelector('#bet-panel button:nth-child(3)').innerText=`下注 ${(r2*100).toFixed(0)}%`;document.querySelector('#bet-panel button:nth-child(3)').onclick=()=>this.placeBet(1);bet.style.display='flex';return;}
-            skill.style.display='flex';document.getElementById('skill-desc-text').innerText=this.getDynamicDesc(this.skillMode,'skill',false);
+            skill.style.display='flex';
             const ok=document.getElementById('btn-skill-ok');if(['yundu','blast'].includes(this.skillMode))ok.disabled=this.selectedCards.length!==1;else if(this.skillMode==='xuanji')ok.disabled=this.selectedCards.length===0;else ok.disabled=false;
             return;
         }
