@@ -115,7 +115,6 @@
             modal.style.display = 'flex';
             setTimeout(function () { modal.classList.add('shop-visible'); }, 50);
             game.audio && game.audio.playShopOpenSound && game.audio.playShopOpenSound();
-            game.audio && game.audio.startShopBgm && game.audio.startShopBgm();
             game.setOverlayState(true);
 
             game.switchShopTab('shop');
@@ -159,7 +158,6 @@
             // 关闭商店 UI（不走 leaveShop 避免 levelIndex++ / showMap 副作用）
             var shopModal = document.getElementById('shop-screen');
             shopModal.classList.remove('shop-visible');
-            game.audio && game.audio.stopShopBgm && game.audio.stopShopBgm();
             setTimeout(function () {
                 shopModal.style.display = 'none';
                 document.getElementById('overlay-screen').classList.remove('visible');
@@ -171,7 +169,7 @@
                 document.getElementById('header-left-col').classList.add('lobby-hide');
                 document.getElementById('header-right-col').classList.add('lobby-hide');
                 var continueBtn = document.getElementById('btn-continue');
-                if (continueBtn) continueBtn.style.display = localStorage.getItem('fishingPokerSave_v3_7_2') ? 'block' : 'none';
+                if (continueBtn) continueBtn.style.display = (localStorage.getItem('fishingPokerSave_v3_7_5') || localStorage.getItem('fishingPokerSave_v3_7_4')) ? 'block' : 'none';
                 game.inGame = false;
             }, 300);
         }

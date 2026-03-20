@@ -66,9 +66,10 @@ tailwind.config={
 ::-webkit-scrollbar{display:none;}
 body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 .pixel-font { font-family: 'Press Start 2P', cursive; }
-#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:2000;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 1.5s ease-in-out;pointer-events:auto;}
-.splash-logo{width:120px;height:120px;fill:#fff;margin-bottom:20px;filter:drop-shadow(0 0 10px rgba(255,255,255,0.5));}
-.splash-text{font-family:'Segoe UI Light',sans-serif;font-weight:100;font-size:24px;letter-spacing:8px;color:#fff;opacity:0.8;}
+#splash-screen{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;background-image:url('assets/images/backgrounds/bg-animation.png');background-repeat:no-repeat;background-position:center center;background-size:cover;z-index:2000;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 1.5s ease-in-out;pointer-events:auto;overflow:hidden;}
+.splash-logo{width:min(420px,72vw);height:auto;display:block;filter:drop-shadow(0 0 14px rgba(255,255,255,0.35));transform: scale(0.6);}/* 首页logo0.6倍尺寸 */
+.splash-progress-wrap{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(80px + env(safe-area-inset-bottom));width:min(320px,72vw);height:10px;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 0 15px rgba(255,255,255,0.2);border:2px solid #9ca3af;}
+#splash-progress{width:0%;height:100%;background:#000;border-radius:7px;transition:width 0.1s ease-out;}
 .fade-out{opacity:0!important;pointer-events:none;}
 #lobby-screen{position:fixed;top:0;left:0;width:100%;height:100%;background-color:#0a0f1e;background-image:url('assets/images/backgrounds/bg-login.png');background-repeat:no-repeat;background-position:center center;background-size:cover;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:200;overflow:hidden;transition:opacity 0.5s;}
 .waves-container{display:none;position:absolute;bottom:0;left:0;width:100%;height:40vh;pointer-events:none;z-index:1;opacity:0.3;}
@@ -92,11 +93,25 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 /* 这边是logo 和开始游戏的间距 */
 .lobby-logo { width: 320px; margin-bottom: 35px; filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5)); transition: filter 0.2s ease-out; }
 .lobby-logo:hover { filter: drop-shadow(0 0 12px rgba(0, 242, 255, 0.4)) blur(1px); }
-.lobby-btn-wrap { position: relative; cursor: pointer; display: block; transition: transform 0.2s; margin: 0 auto; width: 110px; }
-.lobby-btn-wrap:active { transform: translateY(2px); }
-.lobby-btn-img { width: 100%; height: auto; display: block; position: relative; z-index: 2; pointer-events: none; }
-.lobby-btn-hover { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 0.2s, transform 0.2s; z-index: 1; pointer-events: none; transform:scale(1); }
-.lobby-btn-wrap:hover .lobby-btn-hover { opacity: 1; transform:scale(1.25); }
+/* 大厅的字体 */
+.lobby-btn-text {
+    font-size: 20px;
+
+    cursor: pointer;
+    transition: transform 0.2s;
+    user-select: none;
+    font-family: 'HeiTi', 'SimHei', sans-serif;
+    letter-spacing: 4px;
+}
+.lobby-btn-text:hover {
+    transform: scale(1.15);
+}
+@media (max-width: 768px) {
+    .lobby-btn-text {
+        font-size: 22px;
+        letter-spacing: 2px;
+    }
+}
 .lobby-title-main{font-size:40px;font-weight:normal;color:#fff;text-shadow:0 4px 0px #0099cc, 0 0 20px var(--highlight);margin-bottom:0;line-height:1.4;letter-spacing:2px;}
 .lobby-title-sub{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:24px;font-weight:bold;color:var(--highlight);text-shadow:0 0 10px rgba(0,242,255,0.5);margin-top:15px;letter-spacing:6px;margin-bottom:40px;}
 .lobby-orientation{font-family:'YouYuan','Microsoft YaHei',sans-serif;font-size:14px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin-bottom:50px;display:none;}
@@ -110,8 +125,53 @@ body{background:var(--bg-gradient);color:#fff;height:100vh;display:flex;flex-dir
 .msg-screen-content .btn-lobby { font-family: 'SimHei', 'Microsoft YaHei', sans-serif !important; margin: 0 auto; display: block; }
 
 #map-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:url('assets/images/backgrounds/bg-gameselected.jpg') no-repeat center center;background-size:cover;z-index:250;display:none;flex-direction:column;overflow:hidden;}
-#map-scroll-area{flex:1;overflow-y:auto;padding:40px 20px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
-.map-title{text-align:center;padding:14px 25px;font-size:22px;color:#fff;letter-spacing:3px;background:rgba(0,0,0,0.3);z-index:2;border-bottom:1px solid rgba(51,51,51,0.3);font-family:'AliHei',sans-serif;height:60px;display:flex;align-items:center;justify-content:center;}
+#gameplay-map-screen{position:fixed;top:0;left:0;width:100%;height:100%;background:url('assets/images/backgrounds/bg-map.jpg') no-repeat center center;background-size:cover;z-index:240;display:none;flex-direction:column;overflow:hidden;}
+.gms-topbar {height: 60px;display: flex; align-items: center; justify-content: flex-start; gap: 20px;padding: 0 16px; 
+    /* 核心修复 */
+    background: transparent !important; /* 强制透明 */ position: absolute;                 /* 改为绝对定位，悬浮在地图上 */
+    top: 0;left: 0;width: 100%;z-index: 100;                       /* 确保在最上层 */
+    /* 防止内部元素导致高度溢出 */
+    box-sizing: border-box; 
+}
+
+/* 额外保险：确保身体和主容器没有默认白色背景 */
+body, .gms-stage, .gms-map {
+    background-color: transparent; 
+    /* 如果你的背景是通过 img 标签或 background-image 设置的，这里不需要改颜色 */
+}
+.gms-title{font-size:20px;color:#fff;letter-spacing:2px;font-family:'AliHei',sans-serif;}
+.gms-back-btn{position:static;transform:none;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;border:none;border-radius:0;transition:none;flex:0 0 auto;}
+.gms-back-btn img{width:28px;height:28px;display:block;}
+.gms-stage{flex:1;position:relative;overflow:hidden;}
+.gms-stage::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,6,23,0.08),rgba(2,6,23,0.55));pointer-events:none;}
+.gms-map{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.gms-map-inner{position:relative;width:min(100vw,1613px);height:auto;aspect-ratio:1613 / 900;max-height:calc(100vh - 60px);margin:auto;}
+#gameplay-map-screen .gms-map-inner{visibility:hidden;}
+#gameplay-map-screen.gms-ready .gms-map-inner{visibility:visible;}
+.gms-marker{position:absolute;left:0;top:0;transform:translate(-50%,-50%);user-select:none;}
+.gms-slogo{pointer-events:none;opacity:0.3;filter:drop-shadow(0 10px 25px rgba(0,0,0,0.7));}
+.gms-lock{pointer-events:none;filter:drop-shadow(0 12px 22px rgba(0,0,0,0.65));}
+.gms-fox-label{display:flex;align-items:center;gap:10px;pointer-events:none;}
+.gms-fox-label .name{color:#fff;font-size:30px;font-weight:900;letter-spacing:2px;font-family:'HeiTi','SimHei',sans-serif;text-shadow:0 8px 18px rgba(0,0,0,0.8);}
+.gms-fox-label img{display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,0.7));}
+.gms-play-hit{width:180px;height:180px;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.12s ease;position:relative;}
+.gms-play-hit:active{transform:scale(1.06);}
+.gms-delayed-enter{opacity:0;pointer-events:none;transition:opacity 420ms ease;transition-delay:0.5s;}/* 0.5s出现 */
+.gms-delayed-enter.gms-entered{opacity:1;pointer-events:auto;}
+.gms-play-label{position:absolute;left:50%;top:0;transform:translate(-50%,-100%);color:#fff;font-family:'HeiTi','SimHei',sans-serif;white-space:nowrap;pointer-events:none;text-shadow:0 8px 18px rgba(0,0,0,0.8);}
+.gms-play-icon-img{width:auto;height:110px;max-width:100%;/*灰鼠岛字体间距 */max-height:100%;display:block;filter:drop-shadow(0 14px 28px rgba(0,0,0,0.6));animation:gmsPlayFloat 1.7s ease-in-out infinite;will-change:transform;}
+.gms-play-hit:hover .gms-play-icon-img{filter:drop-shadow(0 18px 38px rgba(0,0,0,0.75));}
+@keyframes gmsPlayFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}   /* 幅度-6 */
+#gms-fox-label{display:none;}
+.map-topbar{height:60px;display:flex;align-items:center;justify-content:flex-start;gap:20px;padding:0 16px;background:transparent;position:absolute;left:0;top:0;right:0;z-index:3;}
+.map-back-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;border:none;border-radius:0;flex:0 0 auto;}
+.map-back-btn img{width:28px;height:28px;display:block;}
+.map-title{text-align:left;padding:0;font-size:22px;color:#fff;letter-spacing:3px;background:transparent;z-index:2;border-bottom:none;font-family:'AliHei',sans-serif;height:auto;display:flex;align-items:center;justify-content:flex-start;}
+#map-scroll-area{position:absolute;left:0;top:0;right:0;bottom:0;overflow-y:auto;padding:20px 20px 40px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
+
+@keyframes gameplayMapEnterZoom{0%{transform:scale(0.98);opacity:0;}100%{transform:scale(1);opacity:1;}}
+/* 入场动效 */
+.gms-enter-zoom{transform-origin:center;animation:gameplayMapEnterZoom 420ms cubic-bezier(0.2,0.9,0.2,1) both;}
 .floor-group{width:100%;max-width:450px;position:relative;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:25px;background:rgba(255,255,255,0.03);display:flex;flex-direction:column;align-items:center;gap:20px;transition:0.3s;}
 .floor-group:hover{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05);}
 .floor-label{position:absolute;top:-14px;left:20px;background:#000;padding:2px 12px;color:#666;font-size:14px;font-weight:bold;border:1px solid #444;border-radius:10px;font-family:monospace;}
@@ -212,10 +272,10 @@ body.overlay-active header{display:none;}
     font-family:'SimHei','Microsoft YaHei',sans-serif;
 }
 .lobby-func-btn:hover{color:#fff;}
-.lobby-func-btn .material-symbols-outlined{font-size:22px;line-height:1;}
+.lobby-func-btn .icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;}
+.lobby-func-btn .func-icon{width:22px;height:22px;display:block;}
 .lobby-func-btn .lbl{font-size:12px;letter-spacing:2px;white-space:nowrap;}
-.lobby-func-btn.muted .material-symbols-outlined{position:relative;}
-.lobby-func-btn.muted .material-symbols-outlined::after{
+.lobby-func-btn.muted .icon-wrap::after{
     content:'';
     position:absolute;
     left:50%;
@@ -250,9 +310,9 @@ body.overlay-active #game-func-controls{display:none;}
     justify-content:center;
 }
 .game-func-btn:hover{color:#fff;}
-.game-func-btn .material-symbols-outlined{font-size:22px;line-height:1;}
-.game-func-btn.muted .material-symbols-outlined{position:relative;}
-.game-func-btn.muted .material-symbols-outlined::after{
+.game-func-btn .icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;}
+.game-func-btn .func-icon{width:22px;height:22px;display:block;}
+.game-func-btn.muted .icon-wrap::after{
     content:'';
     position:absolute;
     left:50%;
@@ -263,6 +323,56 @@ body.overlay-active #game-func-controls{display:none;}
     transform:translate(-50%,-50%) rotate(-40deg);
     opacity:0.9;
 }
+
+.settings-overlay{
+    background:rgba(0,0,0,0.55);
+    justify-content:center;
+    align-items:flex-end;
+    padding:0 0 16px;
+}
+.settings-sheet{
+    width:min(560px, 100%);
+    border-radius:18px;
+    background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);
+    border:1px solid rgba(255,255,255,0.12);
+    box-shadow:0 20px 60px rgba(0,0,0,0.7);
+    transform:translateY(120%);
+    transition:transform 0.25s ease;
+    overflow:hidden;
+}
+.settings-overlay.visible .settings-sheet{transform:translateY(0);}
+.settings-sheet-title{
+    padding:14px 16px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:3px;
+    color:#e2e8f0;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    text-align:center;
+    font-family:'SimHei','Microsoft YaHei',sans-serif;
+}
+.settings-sheet-items{
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.settings-sheet-item{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.12);
+    background:rgba(255,255,255,0.04);
+    color:#e2e8f0;
+    cursor:pointer;
+    font-family:'SimHei','Microsoft YaHei',sans-serif;
+}
+.settings-sheet-item:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.2);}
+.settings-sheet-item img{width:22px;height:22px;display:block;flex:0 0 22px;}
+.settings-sheet-item .txt{font-size:13px;letter-spacing:2px;}
 .btn{background:linear-gradient(145deg,#2c3e50,#1a252f);border:1px solid #4a5c6a;color:#fff;padding:12px 5px;border-radius:4px;cursor:pointer;transition:0.2s;font-size:13px;text-align:center;position:relative;box-shadow:0 2px 5px rgba(0,0,0,0.3);user-select:none;-webkit-tap-highlight-color:transparent;}
 .btn:active{transform:scale(0.95);}
 .btn:hover:not(:disabled){border-color:var(--highlight);box-shadow:0 0 15px rgba(0,242,255,0.5);background:#34495e;}
@@ -353,7 +463,11 @@ body.overlay-active #game-func-controls{display:none;}
 /* === Level Enter Transition === */
 #level-enter-overlay { overflow:hidden; }
 /* level enter panels — now just a simple full-screen fade-to-black */
-#level-enter-overlay { background: #020617; }
+#level-enter-overlay {
+    background:
+        linear-gradient(rgba(2, 6, 23, 0), rgba(2, 6, 23, 0)),/* 过图的遮罩 */
+        url('assets/images/backgrounds/bg-animation.png') center / cover no-repeat;
+}
 
 /* === Clash Animation v3.5.6 === */
 #clash-overlay {
@@ -487,8 +601,10 @@ body.overlay-active #game-func-controls{display:none;}
 @media (max-width: 768px){
     #game-func-controls{left:18px;bottom:18px;gap:6px;}
     .game-func-btn{padding:4px;}
-    .game-func-btn .material-symbols-outlined{font-size:16px;}
-    .lobby-func-btn .material-symbols-outlined{font-size:20px;}
+    .game-func-btn .icon-wrap{width:16px;height:16px;flex:0 0 16px;}
+    .game-func-btn .func-icon{width:16px;height:16px;}
+    .lobby-func-btn .icon-wrap{width:20px;height:20px;flex:0 0 20px;}
+    .lobby-func-btn .func-icon{width:20px;height:20px;}
     .lobby-func-btn{min-width:100px;}
     .lobby-func-btn .lbl{font-size:11px;}
 
@@ -514,7 +630,8 @@ body.overlay-active #game-func-controls{display:none;}
 }
 @media (max-width: 480px){
     #game-func-controls{left:12px;bottom:12px;gap:8px;}
-    .game-func-btn .material-symbols-outlined{font-size:18px;}
+    .game-func-btn .icon-wrap{width:18px;height:18px;flex:0 0 18px;}
+    .game-func-btn .func-icon{width:18px;height:18px;}
 }
 @media screen and (max-height: 600px) and (orientation: landscape){
     :root{--card-width:58px;--card-height:82px;--mini-card-width:40px;--mini-card-height:56px;}
@@ -531,17 +648,16 @@ body.overlay-active #game-func-controls{display:none;}
 </head>
 <body class="lobby-mode">
 <div id="splash-screen">
-    <svg class="splash-logo" viewBox="0 0 100 100"><path d="M20,80 Q35,60 50,80 T80,80" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,50 Q35,30 50,50 T80,50" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /><path d="M20,20 Q35,0 50,20 T80,20" fill="none" stroke="white" stroke-width="8" stroke-linecap="round" /></svg>
-    <div class="splash-text">FISHER GAME</div>
-    <div style="width: 240px; height: 10px; background: #fff; border-radius: 6px; margin-top: 50px; overflow: hidden; box-shadow: 0 0 15px rgba(255,255,255,0.2); border:2px solid #9ca3af;">
-        <div id="splash-progress" style="width: 0%; height: 100%; background: #000; border-radius: 7px; transition: width 0.1s ease-out;"></div>
+    <img class="splash-logo" src="assets/images/backgrounds/bg-logogame.png" alt="logo">
+    <div class="splash-progress-wrap">
+        <div id="splash-progress"></div>
     </div>
 </div>
 <div id="toast-msg" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);border:1px solid var(--highlight);color:#fff;padding:15px 30px;border-radius:8px;z-index:10000;display:none;text-align:center;pointer-events:none;font-size:16px;box-shadow:0 5px 25px rgba(0,0,0,0.8);">运气差点哦，没有开出道具！</div>
 <div id="msg-modal" class="overlay" style="z-index:9999;">
     <div class="info-panel" style="position:relative;text-align:center;border-color:var(--danger);width:80%;max-width:300px;padding:30px;">
-        <button onclick="document.getElementById('msg-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
-            <span class="material-symbols-outlined">close</span>
+        <button onclick="document.getElementById('msg-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
         </button>
         <div style="font-size:18px;font-weight:bold;color:var(--danger);margin-bottom:25px;" id="msg-modal-text">当前金币不足</div>
         <button class="btn btn-primary" style="width:100px;padding:10px;" onclick="document.getElementById('msg-modal').classList.remove('visible')">确定</button>
@@ -551,8 +667,8 @@ body.overlay-active #game-func-controls{display:none;}
 <!-- Upgrade Notification Modal -->
 <div id="upgrade-modal" class="overlay" style="z-index:10000;">
     <div class="info-panel" style="position:relative;text-align:center;border-color:var(--gold-color);width:80%;max-width:300px;padding:30px;background:#1e293b;">
-        <button onclick="document.getElementById('upgrade-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
-            <span class="material-symbols-outlined">close</span>
+        <button onclick="document.getElementById('upgrade-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
         </button>
         <h3 id="upgrade-modal-title" style="color:var(--gold-color);margin-bottom:15px;font-size:22px;font-weight:bold;"></h3>
         <div id="upgrade-modal-text" style="font-size:14px;color:#ddd;margin-bottom:25px;line-height:1.6;"></div>
@@ -571,8 +687,8 @@ body.overlay-active #game-func-controls{display:none;}
 <!-- 道具出售确认弹窗 -->
 <div id="sell-confirm-modal" class="overlay" style="z-index:200000;">
     <div class="info-panel" style="position:relative;text-align:center;border-color:#f97316;width:80%;max-width:300px;padding:25px;background:#1e293b;">
-        <button onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
-            <span class="material-symbols-outlined">close</span>
+        <button onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
         </button>
         <h3 style="color:#f97316;margin-bottom:15px;font-size:18px;font-weight:bold;">道具出售</h3>
         <div id="sell-confirm-text" style="font-size:13px;color:#ddd;margin-bottom:20px;line-height:1.6;"></div>
@@ -586,8 +702,8 @@ body.overlay-active #game-func-controls{display:none;}
 <!-- General Deck Mod Modal -->
 <div id="deck-mod-modal" class="overlay" style="z-index:10000;">
     <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
-        <button onclick="document.getElementById('deck-mod-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
-            <span class="material-symbols-outlined">close</span>
+        <button onclick="document.getElementById('deck-mod-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
         </button>
         <h3 id="deck-mod-title" style="color:var(--highlight);margin-bottom:10px;"></h3>
         <div id="deck-mod-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;"></div>
@@ -602,8 +718,8 @@ body.overlay-active #game-func-controls{display:none;}
 <!-- Printer specific Modal -->
 <div id="printer-modal" class="overlay" style="z-index:10000;">
     <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
-        <button onclick="document.getElementById('printer-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:8px;top:8px;background:none;border:none;color:#94a3b8;cursor:pointer;">
-            <span class="material-symbols-outlined">close</span>
+        <button onclick="document.getElementById('printer-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
         </button>
         <h3 id="printer-title" style="color:var(--highlight);margin-bottom:10px;">打印机</h3>
         <div id="printer-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;">选择1张背包中的普通道具牌，复制并获得该牌</div>
@@ -616,11 +732,39 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 
 <div id="map-screen">
-    <div id="map-back-btn" class="absolute top-4 left-4 z-50 cursor-pointer text-white/70 hover:text-white transition-colors" onclick="game.returnToLobby()" style="display:none;">
-        <span class="material-symbols-outlined" style="font-size:28px;">arrow_back</span>
+    <div class="map-topbar">
+        <div id="map-back-btn" class="map-back-btn" onclick="game.backToGameplayMap()" style="display:none;">
+            <img src="assets/images/ui/icon-back.png" alt="返回">
+        </div>
+        <div class="map-title">狐狸岛-八层塔楼</div>
     </div>
-    <div class="map-title">无尽塔楼</div>
     <div id="map-scroll-area"></div>
+</div>
+
+<div id="gameplay-map-screen">
+    <div class="gms-topbar">
+        <div class="gms-back-btn" onclick="game.returnToLobby()" title="返回大厅">
+            <img src="assets/images/ui/icon-back.png" alt="返回大厅">
+        </div>
+        <div class="gms-title">地图</div>
+    </div>
+    <div class="gms-stage">
+        <div class="gms-map">
+            <div class="gms-map-inner">
+                <img id="gms-slogo" class="gms-marker gms-slogo" src="assets/images/backgrounds/icon-map-slogo.png" alt="logo">
+                <div id="gms-fox-label" class="gms-marker gms-fox-label">
+                    <div class="name">🐭 灰鼠岛</div>
+                    <img id="gms-fox-unlocked" src="assets/images/backgrounds/icon-map-unlocked.png" alt="">
+                </div>
+                <div id="gms-play1" class="gms-marker gms-play-hit" onclick="game.enterLevelSelectFromGameplayMap()" aria-label="进入关卡选择">
+                    <div class="gms-play-label">🐭 灰鼠岛</div>
+                    <img class="gms-play-icon-img" src="assets/images/backgrounds/icon-map-gameplay1.png" alt="PLAY 1">
+                </div>
+                <img id="gms-lock-1" class="gms-marker gms-lock" src="assets/images/backgrounds/icon-map-unlocked.png" alt="">
+                <img id="gms-lock-2" class="gms-marker gms-lock" src="assets/images/backgrounds/icon-map-unlocked2.png" alt="">
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="lobby-screen">
@@ -637,36 +781,34 @@ body.overlay-active #game-func-controls{display:none;}
     <div class="lobby-content">
         <img src="assets/images/backgrounds/ui-logo.png" id="lobby-logo" class="lobby-logo" alt="logo">
         <div style="display:flex; flex-direction:column; gap:20px; align-items:center; margin-bottom:100px;">
-            <div class="lobby-btn-wrap" onclick="game.startNewGame()">
-                <img src="assets/images/backgrounds/btn-selected state.png" class="lobby-btn-hover" alt="hover">
-                <img src="assets/images/ui/btn-cn-start.png" class="lobby-btn-img" alt="start">
-            </div>
-            <div class="lobby-btn-wrap" id="btn-continue" onclick="game.continueGame()" style="display:none;">
-                <img src="assets/images/backgrounds/btn-selected state.png" class="lobby-btn-hover" alt="hover">
-                <img src="assets/images/ui/btn-cn-continue.png" class="lobby-btn-img" alt="continue">
-            </div>
+            <div class="lobby-btn-text" onclick="game.startNewGame()" style="color: #ffffff; text-shadow: 2px 2px 4px #000000;">开始游戏</div>
+            <div class="lobby-btn-text" id="btn-continue" onclick="game.continueGame()" style="color: #a8d7fa; text-shadow: 2px 2px 4px #000000; display:none;">继续游戏</div>
         </div>
     </div>
     <div id="lobby-func-controls">
         <button class="lobby-func-btn" onclick="game.toggleInfo()" title="牌型说明">
-            <span class="material-symbols-outlined">menu_book</span>
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-cardtype.svg" alt=""></span>
             <span class="lbl">牌型</span>
         </button>
         <button class="lobby-func-btn" id="lobby-audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效">
-            <span class="material-symbols-outlined">music_note</span>
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-music.svg" alt=""></span>
             <span class="lbl">音乐</span>
         </button>
         <button class="lobby-func-btn" onclick="game.openMailbox()" title="邮箱" style="position:relative;">
-            <span class="material-symbols-outlined">mail</span>
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-email.svg" alt=""></span>
             <span id="mail-badge" style="display:none;position:absolute;top:2px;right:10px;width:7px;height:7px;border-radius:50%;background:#f87171;border:1px solid #1a1a2e;"></span>
             <span class="lbl">邮箱</span>
         </button>
         <button class="lobby-func-btn" id="lobby-fs-toggle" onclick="game.toggleFullscreen()" title="全屏切换">
-            <span class="material-symbols-outlined">fullscreen</span>
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-full.svg" alt=""></span>
             <span class="lbl">全屏</span>
         </button>
+    <button class="lobby-func-btn" id="lobby-settings-btn" onclick="game.openSettingsSheet('lobby')" title="设置">
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-settings.svg" alt=""></span>
+        <span class="lbl">设置</span>
+    </button>
     </div>
-    <div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.2</div>
+<div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.5</div>
 </div>
 
 <!-- 邮箱弹窗 -->
@@ -678,7 +820,9 @@ body.overlay-active #game-func-controls{display:none;}
                 <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#94a3b8;"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
                 邮箱
             </div>
-            <button onclick="game.closeMailbox()" style="background:none;border:none;cursor:pointer;color:#94a3b8;font-size:18px;line-height:1;padding:2px 6px;" title="关闭"><span class="material-symbols-outlined">close</span></button>
+            <button onclick="game.closeMailbox()" style="background:none;border:none;cursor:pointer;padding:2px 6px;" title="关闭">
+                <img src="assets/images/ui/icon-close.png" style="width:18px;height:18px;display:block;" alt="关闭">
+            </button>
         </div>
         <!-- 内容区 -->
         <div style="display:flex;flex:1;overflow:hidden;">
@@ -700,16 +844,10 @@ body.overlay-active #game-func-controls{display:none;}
 
 <div id="game-func-controls">
     <button class="game-func-btn" onclick="game.toggleInfo()" title="牌型说明">
-        <span class="material-symbols-outlined">menu_book</span>
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-cardtype.svg" alt=""></span>
     </button>
-    <button class="game-func-btn" id="game-audio-toggle" onclick="game.toggleAudio()" title="切换氛围音效">
-        <span class="material-symbols-outlined">music_note</span>
-    </button>
-    <button class="game-func-btn" onclick="game.showExitConfirm()" title="退出游戏">
-        <span class="material-symbols-outlined">logout</span>
-    </button>
-    <button class="game-func-btn" id="game-fs-toggle" onclick="game.toggleFullscreen()" title="全屏切换">
-        <span class="material-symbols-outlined">fullscreen</span>
+    <button class="game-func-btn" id="game-settings-btn" onclick="game.openSettingsSheet('game')" title="设置">
+        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-settings.svg" alt=""></span>
     </button>
 </div>
 <div id="main-stage">
@@ -749,6 +887,13 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 <div id="overlay-screen" class="overlay flex items-center justify-center min-h-screen p-4 dark"></div>
 
+<div id="settings-sheet-overlay" class="overlay settings-overlay" style="z-index:11000;" onclick="if(event.target===this)game.closeSettingsSheet()">
+    <div class="settings-sheet" onclick="event.stopPropagation()">
+        <div class="settings-sheet-title" id="settings-sheet-title">设置</div>
+        <div class="settings-sheet-items" id="settings-sheet-items"></div>
+    </div>
+</div>
+
 <div id="exit-confirm-modal" class="overlay" style="z-index:12000;" onclick="if(event.target===this)game.hideExitConfirm()">
     <div class="info-panel" style="text-align:center;border-color:rgba(251,191,36,0.45);width:86%;max-width:360px;padding:26px;background:#1e293b;">
         <div style="font-size:16px;font-weight:bold;color:#fff;margin-bottom:12px;">确认保存进度并返回大厅？</div>
@@ -768,7 +913,7 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 
 <!-- Level Enter Transition Overlay -->
-<div id="level-enter-overlay" style="display:none;position:fixed;inset:0;z-index:600;background:#020617;pointer-events:all;">
+<div id="level-enter-overlay" style="display:none;position:fixed;inset:0;z-index:600;pointer-events:all;">
     <canvas id="hook-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
 </div>
 
@@ -808,7 +953,10 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 
 <div id="info-screen" class="overlay" onclick="game.toggleInfo()">
-    <div class="info-panel" onclick="event.stopPropagation()">
+    <div class="info-panel" style="position:relative;" onclick="event.stopPropagation()">
+        <button onclick="game.toggleInfo()" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
+            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
+        </button>
         <h3 style="color:var(--highlight);margin-bottom:15px;text-align:center;">牌型说明</h3>
         <div id="info-content"></div>
         <div class="info-footer">牌型、花色、点数大小说明：<br>同花顺 > 四炸 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 单牌<br>花色大小：黑桃 > 红心 > 方块 > 梅花<br>点数大小：A > K > Q > J > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2<br><span style="color:var(--black-color)">每局获得金币：为本局牌型对应积分的 10%</span></div>
@@ -826,25 +974,94 @@ body.overlay-active #game-func-controls{display:none;}
 
 <script>
 class AtmosphereAudio{
-    constructor(){this.ctx=null;this.masterGain=null;this.bgmGain=null;this.sfxGain=null;this.isPlaying=false;this.oceanNode=null;this.synthInterval=null;this.shopInterval=null;this.notes=[138.59,164.81,185.00,207.65,246.94];}
-    init(){if(!this.ctx){const AudioContext=window.AudioContext||window.webkitAudioContext;this.ctx=new AudioContext();this.masterGain=this.ctx.createGain();this.masterGain.gain.value=0.5;this.masterGain.connect(this.ctx.destination);this.bgmGain=this.ctx.createGain();this.bgmGain.gain.value=1.0;this.bgmGain.connect(this.masterGain);this.sfxGain=this.ctx.createGain();this.sfxGain.gain.value=1.0;this.sfxGain.connect(this.masterGain);}}
+    constructor(){
+        this.ctx=null;
+        this.masterGain=null;
+        this.bgmGain=null; // 对于 BGM，我们将直接控制 bgmElement.volume
+        this.sfxGain=null;
+        this.isPlaying=false;
+        this.bgmElement=null;
+        this.bgmVolume=0.2; // 目标音量
+    }
+    init(){
+        if(!this.ctx){
+            const AudioContext=window.AudioContext||window.webkitAudioContext;
+            this.ctx=new AudioContext();
+            this.masterGain=this.ctx.createGain();
+            this.masterGain.gain.value=0.5;
+            this.masterGain.connect(this.ctx.destination);
+            // SFX 依然使用 Web Audio
+            this.sfxGain=this.ctx.createGain();
+            this.sfxGain.gain.value=1.0;
+            this.sfxGain.connect(this.masterGain);
+            this.loadBgm();
+        }
+    }
+    loadBgm(){
+        if(this.bgmElement) return;
+        this.bgmElement = new Audio();
+        this.bgmElement.src = 'assets/audio/music/bgm-game screen-loop.mp3';
+        this.bgmElement.loop = true;
+        // 注意：不要设置 crossOrigin，也不要 connect 到 Web Audio 节点图
+        // 这样可以绕过 file:// 协议下的 CORS 限制
+        this.bgmElement.volume = this.bgmVolume;
+        
+        if(this.isPlaying) {
+            this.startBgm();
+        }
+    }
+    startBgm(){
+        if(!this.bgmElement) return;
+        this.bgmElement.play().catch(e => console.warn("BGM play deferred until user interaction"));
+    }
+    stopBgm(){
+        if(this.bgmElement){
+            this.bgmElement.pause();
+        }
+    }
     createPinkNoise(){const bufferSize=2*this.ctx.sampleRate;const buffer=this.ctx.createBuffer(1,bufferSize,this.ctx.sampleRate);const output=buffer.getChannelData(0);let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<bufferSize;i++){const white=Math.random()*2-1;b0=0.99886*b0+white*0.0555179;b1=0.99332*b1+white*0.0750759;b2=0.96900*b2+white*0.1538520;b3=0.86650*b3+white*0.3104856;b4=0.55000*b4+white*0.5329522;b5=-0.7616*b5-white*0.0168980;output[i]=b0+b1+b2+b3+b4+b5+b6+white*0.5362;output[i]*=0.11;b6=white*0.115926;}const noise=this.ctx.createBufferSource();noise.buffer=buffer;noise.loop=true;return noise;}
-    startOcean(){const noise=this.createPinkNoise();const filter=this.ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=400;const lfo=this.ctx.createOscillator();lfo.type='sine';lfo.frequency.value=0.15;const lfoGain=this.ctx.createGain();lfoGain.gain.value=300;lfo.connect(lfoGain);lfoGain.connect(filter.frequency);noise.connect(filter);filter.connect(this.bgmGain);noise.start();lfo.start();this.oceanNode={noise,lfo};}
-    playNote(){if(!this.isPlaying)return;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();const note=this.notes[Math.floor(Math.random()*this.notes.length)];const freq=Math.random()>0.7?note*2:note;osc.frequency.value=freq;osc.type='sine';gain.gain.setValueAtTime(0,this.ctx.currentTime);gain.gain.linearRampToValueAtTime(0.15,this.ctx.currentTime+2);gain.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+8);osc.connect(gain);gain.connect(this.bgmGain);osc.start();osc.stop(this.ctx.currentTime+8);}
-    duckBgm(duration){if(!this.bgmGain)return;const t=this.ctx.currentTime;this.bgmGain.gain.cancelScheduledValues(t);this.bgmGain.gain.setValueAtTime(this.bgmGain.gain.value,t);this.bgmGain.gain.linearRampToValueAtTime(0.2,t+0.1);this.bgmGain.gain.linearRampToValueAtTime(1.0,t+duration);}
+    duckBgm(duration){
+        if(!this.bgmElement) return;
+        const currentVol = this.bgmElement.volume;
+        this.bgmElement.volume = currentVol * 0.2;
+        setTimeout(() => {
+            if(this.bgmElement) this.bgmElement.volume = currentVol;
+        }, duration * 1000);
+    }
     playCardSlide(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const noise=this.createPinkNoise();const noiseGain=this.ctx.createGain();const filter=this.ctx.createBiquadFilter();filter.type='bandpass';filter.frequency.setValueAtTime(800,t);filter.frequency.linearRampToValueAtTime(1200,t+0.1);noiseGain.gain.setValueAtTime(1.44,t);noiseGain.gain.exponentialRampToValueAtTime(0.001,t+0.15);noise.connect(filter);filter.connect(noiseGain);noiseGain.connect(this.sfxGain);noise.start(t);noise.stop(t+0.15);const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(400,t);gain.gain.setValueAtTime(0.54,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playTick(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(400,t);gain.gain.setValueAtTime(0.9,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playCoin(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(2000+Math.random()*1000,t);gain.gain.setValueAtTime(0.15,t);gain.gain.exponentialRampToValueAtTime(0.001,t+0.05);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.05);}
     playWin(){if(!this.isPlaying)return;this.duckBgm(3);const t=this.ctx.currentTime;const freqs=[523.25, 659.25, 783.99, 1046.50];freqs.forEach((f,i)=>{const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.value=f;gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(0.3,t+0.1+(i*0.08));gain.gain.exponentialRampToValueAtTime(0.001,t+2.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+2.5);});}
     playLose(){if(!this.isPlaying)return;this.duckBgm(1.5);const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='triangle';osc.frequency.setValueAtTime(150,t);osc.frequency.exponentialRampToValueAtTime(80,t+1.5);gain.gain.setValueAtTime(0.24,t);gain.gain.linearRampToValueAtTime(0,t+1.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+1.5);}
     playClash(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(150,t);osc.frequency.exponentialRampToValueAtTime(30,t+0.4);gain.gain.setValueAtTime(1.5,t);gain.gain.exponentialRampToValueAtTime(0.01,t+0.4);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.4);const noise=this.createPinkNoise();const nGain=this.ctx.createGain();const filter=this.ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.setValueAtTime(800,t);filter.frequency.exponentialRampToValueAtTime(100,t+0.3);nGain.gain.setValueAtTime(2,t);nGain.gain.exponentialRampToValueAtTime(0.01,t+0.3);noise.connect(filter);filter.connect(nGain);nGain.connect(this.sfxGain);noise.start(t);noise.stop(t+0.3);}
-    startShopBgm(){if(!this.isPlaying||this.shopInterval)return;if(this.bgmGain)this.bgmGain.gain.linearRampToValueAtTime(0.1,this.ctx.currentTime+0.5);let notes=[261.63,329.63,392.00,523.25,392.00,329.63];let idx=0;this.shopInterval=setInterval(()=>{const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.type='sine';osc.frequency.value=notes[idx];idx=(idx+1)%notes.length;gain.gain.setValueAtTime(0,this.ctx.currentTime);gain.gain.linearRampToValueAtTime(0.06,this.ctx.currentTime+0.05);gain.gain.exponentialRampToValueAtTime(0.001,this.ctx.currentTime+0.3);osc.connect(gain);gain.connect(this.sfxGain);osc.start();osc.stop(this.ctx.currentTime+0.3);},200);}
-    stopShopBgm(){if(this.shopInterval){clearInterval(this.shopInterval);this.shopInterval=null;}if(this.bgmGain){this.bgmGain.gain.linearRampToValueAtTime(1.0,this.ctx.currentTime+1.0);}}
     playShopOpenSound(){if(!this.isPlaying)return;const t=this.ctx.currentTime;const osc=this.ctx.createOscillator();const gain=this.ctx.createGain();osc.frequency.setValueAtTime(300,t);osc.frequency.exponentialRampToValueAtTime(800,t+0.3);gain.gain.setValueAtTime(0,t);gain.gain.linearRampToValueAtTime(0.18,t+0.1);gain.gain.exponentialRampToValueAtTime(0.001,t+0.5);osc.connect(gain);gain.connect(this.sfxGain);osc.start(t);osc.stop(t+0.5);}
     toggle(){this.init();if(this.ctx.state==='suspended')this.ctx.resume();if(this.isPlaying){this.stop();}else{this.start();}return this.isPlaying;}
-    start(){if(this.isPlaying)return;this.isPlaying=true;this.startOcean();this.playNote();this.synthInterval=setInterval(()=>{if(Math.random()>0.4)this.playNote();},4000);}
-    startWithFade(fadeSecs=3){if(this.isPlaying)return;this.isPlaying=true;this.masterGain.gain.setValueAtTime(0,this.ctx.currentTime);this.masterGain.gain.linearRampToValueAtTime(0.5,this.ctx.currentTime+fadeSecs);this.startOcean();this.playNote();this.synthInterval=setInterval(()=>{if(Math.random()>0.4)this.playNote();},4000);}
-    stop(){this.isPlaying=false;if(this.oceanNode){this.oceanNode.noise.stop();this.oceanNode.lfo.stop();this.oceanNode=null;}if(this.synthInterval)clearInterval(this.synthInterval);this.stopShopBgm();}
+    start(){
+        this.init();
+        if(this.isPlaying)return;
+        this.isPlaying=true;
+        this.startBgm();
+    }
+    startWithFade(fadeSecs=3){
+        this.init();
+        if(this.isPlaying)return;
+        this.isPlaying=true;
+        if(this.bgmElement) {
+            this.bgmElement.volume = 0;
+            let start = Date.now();
+            let timer = setInterval(() => {
+                let progress = (Date.now() - start) / (fadeSecs * 1000);
+                if(progress >= 1) {
+                    this.bgmElement.volume = 0.5;
+                    clearInterval(timer);
+                } else {
+                    this.bgmElement.volume = progress * 0.5;
+                }
+            }, 50);
+        }
+        this.startBgm();
+    }
+    stop(){this.isPlaying=false;this.stopBgm();if(this.synthInterval)clearInterval(this.synthInterval);}
 }
 
 
@@ -915,12 +1132,18 @@ const PokerEngine={
     }
 };
 
+const SAVE_KEY='fishingPokerSave_v3_7_5';
+const LEGACY_SAVE_KEY='fishingPokerSave_v3_7_4';
+
 class Game {
     constructor(){this.resetGlobal();this.initDOM();this.audio=new AtmosphereAudio();this.isAudioOn=true;this.inGame=false;this.initSplash();this.rainConfig={density:80,speed:8,length:15,color:'rgba(174,194,224,0.5)'};}
     initSplash(){
         const splash=document.getElementById('splash-screen');
         const contBtn=document.getElementById('btn-continue');
-        if(localStorage.getItem('fishingPokerSave_v3_7_2')){contBtn.style.display='block';}
+        if(!localStorage.getItem(SAVE_KEY) && localStorage.getItem(LEGACY_SAVE_KEY)){
+            localStorage.setItem(SAVE_KEY, localStorage.getItem(LEGACY_SAVE_KEY));
+        }
+        if(localStorage.getItem(SAVE_KEY)){contBtn.style.display='block';}
         const gfc=document.getElementById('game-func-controls');if(gfc)gfc.style.display='none';
 
         // 浏览器要求：AudioContext 必须在用户手势同步调用栈中 init/resume
@@ -984,7 +1207,7 @@ class Game {
         // phase 改存为 'ROUND_DONE'，以便恢复时知道需要进入下一回合
         const savedPhase = (this.phase === 'SETTLE') ? 'ROUND_DONE' : this.phase;
         const state = {
-            version: '3.7.2', levelIndex: this.levelIndex, playerGold: this.playerGold,
+            version: '3.7.5', levelIndex: this.levelIndex, playerGold: this.playerGold,
             ownedSkills: this.ownedSkills, ownedPassives: this.ownedPassives,
             equippedSkills: this.equippedSkills, equippedPassives: this.equippedPassives,
             skillUsage: this.skillUsage, skillMaxModifiers: this.skillMaxModifiers,
@@ -1018,10 +1241,13 @@ class Game {
             _challengeWon: this._challengeWon || false,
             _challengeRewardId: this._challengeRewardId || null
         };
-        localStorage.setItem('fishingPokerSave_v3_7_2', JSON.stringify(state));
+        localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     }
     loadState() {
-        const saved = localStorage.getItem('fishingPokerSave_v3_7_2');
+        const rawNew = localStorage.getItem(SAVE_KEY);
+        const rawLegacy = localStorage.getItem(LEGACY_SAVE_KEY);
+        const saved = rawNew || rawLegacy;
+        const fromLegacy = !rawNew && !!rawLegacy;
         if(!saved) return false;
         try {
             const state = JSON.parse(saved);
@@ -1077,17 +1303,21 @@ class Game {
             if(state._chousuanMult !== undefined) this._chousuanMult = state._chousuanMult;
             this._challengeWon      = state._challengeWon || false;
             this._challengeRewardId = state._challengeRewardId || null;
+            if(fromLegacy) localStorage.setItem(SAVE_KEY, saved);
             return true;
         } catch(e) { console.error('loadState error:', e); return false; }
     }
     startNewGame() {
-        localStorage.removeItem('fishingPokerSave_v3_7_2');
+        localStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem(LEGACY_SAVE_KEY);
         this.resetGlobal();
         document.getElementById('btn-continue').style.display='none';
-        this.enterMapMode();
+        this.enterGameplayMapMode();
     }
     continueGame() {
         if(this.loadState()) {
+            const gms=document.getElementById('gameplay-map-screen');
+            if(gms)gms.style.display='none';
             document.getElementById('lobby-screen').style.display='none';
             this.stopRain();
             document.body.classList.remove('lobby-mode');
@@ -1164,7 +1394,7 @@ class Game {
     saveMail(){localStorage.setItem('fp_mail',JSON.stringify(this._mailData));}
     getMailList(){
         return[
-            {id:'newcomer',icon:'✉️',title:'致新手的一份信',from:'神秘人',date:'狐狸岛·初日',content:`冒险者：\n欢迎来到狐狸岛，这里充满了机遇，也处处是危险，不要太相信眼前的事物。想要拿到徽章？无尽塔楼就在前方，你去便是！但要注意，留心观察每一层挑战目标，别大意！\n【关卡目标】是通关的重点，在顶部栏左侧可以查看。\n【游戏规则】每人 7 张手牌，放 2 张诱饵牌，接着手中的 5 张手牌可以拿出 3 张与双方放置的 2 张诱饵牌进行组合成最终的 5 张牌，也可以直接出手中的 5 张牌；\n【对局说明】牌型分为同花顺>四炸>葫芦>同花>顺子>三条>两对>单牌 ；不同牌型获得的金币也不同，可以在牌型说明中看到；\n【游玩技巧】关卡中支持使用道具技能，帮助你顺利通关！\n祝你好运！若能顺利登上无尽塔楼8 层，你会再看到我的，【狐狸徽章】就在那！`}
+            {id:'newcomer',icon:'✉️',title:'致新手的一份信',from:'神秘人',date:'上岛·初日',content:`冒险者：\n欢迎您的到来！这里充满了机遇，也处处是危险，不要太相信眼前的事物。想要拿到徽章？没有那么容易，你要注意，留心观察每一关的挑战目标，别大意！\n【关卡目标】是通关的重点，在顶部区域可以查看。\n【游戏规则】每人 7 张手牌，放 2 张诱饵牌，接着手中的 5 张手牌可以拿出 3 张与双方放置的 2 张诱饵牌进行组合成最终的 5 张牌，也可以直接出手中的 5 张牌；\n【对局说明】牌型分为同花顺>四炸>葫芦>同花>顺子>三条>两对>单牌 ；不同牌型获得的金币也不同，可以在牌型说明中看到；\n【游玩技巧】关卡中支持使用道具技能，帮助你顺利通关！\n冒险者，祝你好运，如果还能活着的话！`}
         ];
     }
     updateMailBadge(){
@@ -1220,13 +1450,150 @@ class Game {
     }
     closeMailbox(){document.getElementById('mailbox-modal').style.display='none';}
     // ========== 邮箱系统结束 ==========
+    enterGameplayMapMode(){
+        document.getElementById('lobby-screen').style.display='none';
+        this.stopRain();
+        document.body.classList.remove('lobby-mode');
+        this.showGameplayMap();
+    }
+    showGameplayMap(){
+        const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
+        const map=document.getElementById('map-screen'); if(map) map.style.display='none';
+        const gms=document.getElementById('gameplay-map-screen');
+        const play1=document.getElementById('gms-play1');
+        if(gms){
+            gms.style.display='flex';
+            gms.classList.remove('gms-enter-zoom');
+            gms.classList.remove('gms-ready');
+            if(play1){
+                play1.classList.remove('gms-entered');
+                if(!this._gmsDelayedEnterDone){
+                    this._gmsDelayedEnterDone=true;
+                    play1.classList.add('gms-delayed-enter');
+                    setTimeout(()=>{ play1.classList.add('gms-entered'); },30);
+                    setTimeout(()=>{ play1.classList.remove('gms-delayed-enter'); },1600);
+                }else{
+                    play1.classList.add('gms-entered');
+                }
+            }
+            if(!this._gmsShownOnce){
+                this._gmsShownOnce=true;
+                requestAnimationFrame(()=>{
+                    this.layoutGameplayMap();
+                    requestAnimationFrame(()=>{
+                        this.layoutGameplayMap();
+                        gms.classList.add('gms-ready');
+                        void gms.offsetWidth;
+                        gms.classList.add('gms-enter-zoom');
+                    });
+                });
+            }else{
+                requestAnimationFrame(()=>{
+                    this.layoutGameplayMap();
+                    gms.classList.add('gms-ready');
+                    void gms.offsetWidth;
+                    gms.classList.add('gms-enter-zoom');
+                });
+            }
+        }
+        document.getElementById('header-left-col')?.classList.add('lobby-hide');
+        document.getElementById('header-right-col')?.classList.add('lobby-hide');
+        document.getElementById('info-screen')?.classList.remove('visible');
+        if(!gms) this.layoutGameplayMap();
+    }
+    layoutGameplayMap(){
+        const inner=document.querySelector('#gameplay-map-screen .gms-map-inner');
+        if(!inner) return;
+
+        const designW=1613, designH=900;
+        const rect=inner.getBoundingClientRect();
+        const scale=rect.width/designW;
+
+        const clearPos=(el)=>{
+            el.style.left='auto';
+            el.style.top='auto';
+            el.style.right='auto';
+            el.style.bottom='auto';
+        };
+        const applyTopLeft=(id,cfg)=>{
+            const el=document.getElementById(id);
+            if(!el) return;
+            clearPos(el);
+            el.style.transform='none';
+            el.style.left=(cfg.left*scale)+'px';
+            el.style.top=(cfg.top*scale)+'px';
+            if(cfg.w) el.style.width=(cfg.w*scale)+'px';
+            if(cfg.h) el.style.height=(cfg.h*scale)+'px';
+        };
+        const applyBottomLeft=(id,cfg)=>{
+            const el=document.getElementById(id);
+            if(!el) return;
+            clearPos(el);
+            el.style.transform='none';
+            el.style.left=(cfg.left*scale)+'px';
+            el.style.bottom=(cfg.bottom*scale)+'px';
+            if(cfg.w) el.style.width=(cfg.w*scale)+'px';
+            if(cfg.h) el.style.height=(cfg.h*scale)+'px';
+        };
+        const applyBottomRight=(id,cfg)=>{
+            const el=document.getElementById(id);
+            if(!el) return;
+            clearPos(el);
+            el.style.transform='none';
+            el.style.right=(cfg.right*scale)+'px';
+            el.style.bottom=(cfg.bottom*scale)+'px';
+            if(cfg.w) el.style.width=(cfg.w*scale)+'px';
+            if(cfg.h) el.style.height=(cfg.h*scale)+'px';
+        };
+
+        applyBottomLeft('gms-slogo',{left:50,bottom:40,w:924*0.275,h:167*0.275});
+        /* logo位置 */
+        applyTopLeft('gms-play1',{left:800,top:160});
+        applyTopLeft('gms-lock-1',{left:526,top:384,w:92*0.82,h:92*0.82});
+        applyBottomRight('gms-lock-2',{right:360,bottom:360,w:92*0.82,h:92*0.82});
+/* 坐标位置 */
+        const play1=document.getElementById('gms-play1');
+        if(play1){
+            play1.style.width=(180*scale)+'px';
+            play1.style.height=(180*scale)+'px';
+        }
+        const playImg=play1?.querySelector('img');
+        if(playImg){
+            playImg.style.width='auto';
+            playImg.style.height=(110*scale)+'px';
+            playImg.style.maxWidth='100%';
+            playImg.style.maxHeight='100%';
+        }
+
+        const playLabel=play1?.querySelector('.gms-play-label');
+        if(playLabel){
+            playLabel.style.fontSize=(25*scale)+'px';
+            /* 灰鼠字号 */
+        }
+
+        if(!this._gmsResizeBound){
+            this._gmsResizeBound=true;
+            window.addEventListener('resize',()=>{ if(document.getElementById('gameplay-map-screen')?.style.display!=='none') this.layoutGameplayMap(); });
+        }
+    }
+    enterLevelSelectFromGameplayMap(){
+        const gms=document.getElementById('gameplay-map-screen');
+        if(gms)gms.style.display='none';
+        this.showMap();
+    }
+    backToGameplayMap(){
+        const map=document.getElementById('map-screen');
+        if(map)map.style.display='none';
+        this.showGameplayMap();
+    }
     enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.stopRain();document.body.classList.remove('lobby-mode');this.showMap();}
     showMap(){
         this.saveState();
         const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
+        const gms=document.getElementById('gameplay-map-screen'); if(gms) gms.style.display='none';
         const map=document.getElementById('map-screen');const scroll=document.getElementById('map-scroll-area');scroll.innerHTML='';
         const backBtn=document.getElementById('map-back-btn');
-        if(backBtn){if(this.levelIndex===0)backBtn.style.display='block';else backBtn.style.display='none';}
+        if(backBtn)backBtn.style.display='block';
         for(let f=1;f<=8;f++){
             const group=document.createElement('div');group.className='floor-group';group.innerHTML=`<div class="floor-label">Floor ${f}</div>`;
             const row=document.createElement('div');row.className='nodes-row';
@@ -1307,6 +1674,53 @@ class Game {
         this.showMap();
     }
     setOverlayState(active){if(active)document.body.classList.add('overlay-active');else document.body.classList.remove('overlay-active');}
+    showToast(msg){
+        const t=document.getElementById('toast-msg');
+        if(!t) return;
+        t.innerText=msg;
+        t.style.display='block';
+        clearTimeout(this._toastTimer);
+        this._toastTimer=setTimeout(()=>{t.style.display='none';},2200);
+    }
+    openSettingsSheet(mode){
+        const overlay=document.getElementById('settings-sheet-overlay');
+        const itemsEl=document.getElementById('settings-sheet-items');
+        const titleEl=document.getElementById('settings-sheet-title');
+        if(!overlay||!itemsEl||!titleEl) return;
+
+        const items = (mode==='game') ? [
+            {key:'music',      text:'音乐',   icon:'assets/images/ui/icon-music.svg',      onClick:()=>this.toggleAudio()},
+            {key:'volume',     text:'音量',   icon:'assets/images/ui/icon-volume.svg',     onClick:()=>this.showToast('功能开发中')},
+            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.showToast('功能开发中')},
+            {key:'language',   text:'中英文', icon:'assets/images/ui/icon-language.svg',   onClick:()=>this.showToast('功能开发中')},
+            {key:'email',      text:'邮箱',   icon:'assets/images/ui/icon-email.svg',      onClick:()=>{this.closeSettingsSheet();this.openMailbox();}},
+            {key:'fullscreen', text:'全屏',   icon:'assets/images/ui/icon-full.svg',       onClick:()=>this.toggleFullscreen()},
+            {key:'exit',       text:'退出',   icon:'assets/images/ui/icon-exit.svg',       onClick:()=>{this.closeSettingsSheet();this.showExitConfirm();}},
+        ] : [
+            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.showToast('功能开发中')},
+            {key:'language',   text:'中英文', icon:'assets/images/ui/icon-language.svg',   onClick:()=>this.showToast('功能开发中')},
+            {key:'volume',     text:'音量',   icon:'assets/images/ui/icon-volume.svg',     onClick:()=>this.showToast('功能开发中')},
+        ];
+
+        titleEl.innerText = (mode==='game') ? '设置' : '设置';
+        itemsEl.innerHTML='';
+        items.forEach(it=>{
+            const btn=document.createElement('button');
+            btn.type='button';
+            btn.className='settings-sheet-item';
+            btn.innerHTML=`<img src="${it.icon}" alt=""><span class="txt">${it.text}</span>`;
+            btn.onclick=()=>{it.onClick&&it.onClick();};
+            itemsEl.appendChild(btn);
+        });
+
+        overlay.classList.add('visible');
+        this.setOverlayState(true);
+    }
+    closeSettingsSheet(){
+        const overlay=document.getElementById('settings-sheet-overlay');
+        if(overlay) overlay.classList.remove('visible');
+        this.setOverlayState(false);
+    }
     toggleAudio(){const isPlaying=this.audio.toggle();this.isAudioOn=isPlaying;this.updateAudioBtn(isPlaying);}
     updateAudioBtn(playing){
         const shopBtn=document.getElementById('shop-audio-toggle');
@@ -1330,15 +1744,19 @@ class Game {
     hideExitConfirm(){const m=document.getElementById('exit-confirm-modal');if(m){m.classList.remove('visible');}this.setOverlayState(false);}
     confirmExitToLobby(){this.saveState();this.hideExitConfirm();this.playLevelEnterTransition(()=>{this.returnToLobby(false);});}
     returnToLobby(isClear = false){
-        if (isClear) localStorage.removeItem('fishingPokerSave_v3_7_2');
+        if (isClear){
+            localStorage.removeItem(SAVE_KEY);
+            localStorage.removeItem(LEGACY_SAVE_KEY);
+        }
         this.resetGlobal();
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
         document.getElementById('lobby-screen').style.display='flex';document.getElementById('map-screen').style.display='none';
+        const gms=document.getElementById('gameplay-map-screen'); if(gms)gms.style.display='none';
         document.getElementById('header-left-col').classList.add('lobby-hide');document.getElementById('header-right-col').classList.add('lobby-hide');
         this.inGame=false;
         this.startRain();
         document.body.classList.add('lobby-mode');
-        if(localStorage.getItem('fishingPokerSave_v3_7_2')){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
+        if(localStorage.getItem(SAVE_KEY)){ document.getElementById('btn-continue').style.display='block'; } else { document.getElementById('btn-continue').style.display='none'; }
     }
     getDynamicDesc(id,type,isTooltip=false,isSettle=false){
         if(type==='skill'){let s=SKILLS_DB[id];if(!s)return'';if(id==='huanzhu'&&isTooltip&&s.extDesc)return s.extDesc;return s.desc;}
@@ -1346,7 +1764,7 @@ class Game {
         if(id==='jiangliu'){
             let countToUse=isSettle?this.jiangliuCount-1:this.jiangliuCount;if(countToUse<0)countToUse=0;
             let n=50+(countToUse||0)*50;
-            desc=desc.replace('本回合可得N',`本回合可得<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:16px;height:16px;vertical-align:middle;margin:0 2px;">${n}`);
+            desc=desc.replace('本回合可得N',`本回合可得${n}金币`);
         }
         else if(id==='jiaoshi'){
             let countToUse=isSettle?this.jiaoshiCount-1:this.jiaoshiCount;if(countToUse<0)countToUse=0;
@@ -1611,7 +2029,8 @@ class Game {
         /* ── background (matches game body bg-gradient) ─────── */
         function drawBg(){
             const bg=ctx.createRadialGradient(W/2,H/2,0, W/2,H/2, Math.max(W,H)*0.7);
-            bg.addColorStop(0,'#1a202c'); bg.addColorStop(1,'#000000');
+            bg.addColorStop(0,'rgba(2,6,23,0)');
+            bg.addColorStop(1,'rgba(2,6,23,0.55)');
             ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
         }
 
@@ -1909,10 +2328,12 @@ class Game {
         if(deckCountEl){const total=this.runDeckTemplate?this.runDeckTemplate.length:52;const remain=this.drawPile?this.drawPile.length:0;deckCountEl.innerText=`牌数：${remain} / ${total}`;deckCountEl.style.color=remain===0?'var(--danger)':'#888';}
         this.playerHand.forEach((c,idx)=>{
             const el=document.createElement('div');el.innerHTML=this.htmlCard(c,false,true,false);const dom=el.firstElementChild;
+            dom.setAttribute('data-card-id',c.id);
             if(handCount>=9)dom.style.marginRight=cardMarginRight;
             if(this.justDealt){dom.classList.add('card-deal-anim');dom.style.animationDelay=`${idx*0.15}s`;setTimeout(()=>this.audio.playCardSlide(),idx*150);}
             if(this.selectedCards.includes(c)||(this.animCards&&this.animCards.includes(c))){dom.classList.add(this.skillMode?'skill-selected':'selected');if(handCount>=9)dom.style.marginRight='0px';}
-            if(this.config.rule==='no_hearts'&&c.suit==='♥'&&this.phase==='ACTION'&&this.skillMode===null){dom.style.opacity='0.5';dom.style.cursor='not-allowed';}else{dom.onclick=()=>this.onCardClick(c);}
+            if(this.config.rule==='no_hearts'&&c.suit==='♥'&&this.phase==='ACTION'&&this.skillMode===null){dom.style.opacity='0.5';dom.style.cursor='not-allowed';}
+            else{dom.style.touchAction='none';dom.onclick=()=>{if(dom._suppressClickUntil&&Date.now()<dom._suppressClickUntil)return;this.onCardClick(c);};}
             hC.appendChild(dom);
         });
         if(this.justDealt)setTimeout(()=>this.justDealt=false,1500);
@@ -2493,7 +2914,7 @@ class Game {
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
         this.inGame=false;this.levelIndex++;this.showMap();
     }
-    openShopInventory(){const ov=document.getElementById('overlay-screen');ov.innerHTML='';ov.classList.add('visible');const modal=document.getElementById('shop-screen');modal.style.display='flex';setTimeout(()=>{modal.classList.add('shop-visible');},50);this.audio.playShopOpenSound();this.audio.startShopBgm();this.setOverlayState(true);const packQualityOk=this.getShopQualityFilter();let allPacks=['upgrade','skill','normal','secret','supply','fishnet'].filter(k=>{const q=(PACK_CONFIG[k]&&PACK_CONFIG[k].quality)||'普通';return packQualityOk(q);});this.shuffle(allPacks);let packsCount=2+(this.upgradeCounts['dalibao']?1:0);this.availablePacks=allPacks.slice(0,packsCount);let itemsCount=2+(this.upgradeCounts['huojia']?1:0);this.shopDirectItems=this.generateRandomItems(itemsCount);if(this.equippedPassives.includes('shali')){let freeUpgrade=this.generateRandomItems(1,'upgrade')[0];if(freeUpgrade){freeUpgrade.price=0;this.shopDirectItems.unshift(freeUpgrade);}}
+    openShopInventory(){const ov=document.getElementById('overlay-screen');ov.innerHTML='';ov.classList.add('visible');const modal=document.getElementById('shop-screen');modal.style.display='flex';setTimeout(()=>{modal.classList.add('shop-visible');},50);this.audio.playShopOpenSound();this.setOverlayState(true);const packQualityOk=this.getShopQualityFilter();let allPacks=['upgrade','skill','normal','secret','supply','fishnet'].filter(k=>{const q=(PACK_CONFIG[k]&&PACK_CONFIG[k].quality)||'普通';return packQualityOk(q);});this.shuffle(allPacks);let packsCount=2+(this.upgradeCounts['dalibao']?1:0);this.availablePacks=allPacks.slice(0,packsCount);let itemsCount=2+(this.upgradeCounts['huojia']?1:0);this.shopDirectItems=this.generateRandomItems(itemsCount);if(this.equippedPassives.includes('shali')){let freeUpgrade=this.generateRandomItems(1,'upgrade')[0];if(freeUpgrade){freeUpgrade.price=0;this.shopDirectItems.unshift(freeUpgrade);}}
         if(this.equippedPassives.includes('mixia')){let freePassive=this.generateRandomItems(1,'passive')[0];if(freePassive){freePassive.price=0;this.shopDirectItems.unshift(freePassive);}}
         // 逢缘：第一回合最右手牌是偶数，获得1张免费升级牌
         if(this.equippedPassives.includes('fengyuan')&&this._fengyuanEarned){this._fengyuanEarned=false;let freeUp=this.generateRandomItems(1,'upgrade')[0];if(freeUp){freeUp.price=0;this.shopDirectItems.unshift(freeUp);}}
@@ -2713,7 +3134,7 @@ class Game {
         // 出售按钮（仅普通道具且不是技能类型）
         const sellBtn=document.getElementById('interact-sell-btn');if(sellInfo){sellBtn.style.display='block';const sellGold=sellInfo.sellGold;sellBtn.innerHTML=`售出 (+${sellGold} <img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;vertical-align:middle;">)`;sellBtn.onclick=()=>{bubble.style.display='none';this.showSellConfirm(sellInfo);};}else{sellBtn.style.display='none';}
         bubble.style.display='block';let bw=220,bh=bubble.offsetHeight||160;let finalX=x+15;let finalY=y+15;if(finalX+bw>window.innerWidth)finalX=x-bw-15;if(finalY+bh>window.innerHeight)finalY=y-bh-15;bubble.style.left=finalX+'px';bubble.style.top=finalY+'px';}
-    leaveShop(){const modal=document.getElementById('shop-screen');modal.classList.remove('shop-visible');this.audio.stopShopBgm();setTimeout(()=>{modal.style.display='none';document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.showMap();},500);}
+    leaveShop(){const modal=document.getElementById('shop-screen');modal.classList.remove('shop-visible');setTimeout(()=>{modal.style.display='none';document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.showMap();},500);}
     nextLevelAction(){document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.levelIndex++;this.startLevel();}
     nextRound(){document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);this.currentRound++;this.startRound();}
     activateSkill(k){this.skillMode=k;this.selectedCards=[];this.selectedOppCard=null;this.updateControls();this.renderScene();}
