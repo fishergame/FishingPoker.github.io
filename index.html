@@ -58,9 +58,10 @@ tailwind.config={
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-:root{--bg-gradient:radial-gradient(circle at center,#1a202c 0%,#000000 100%);--card-width:60px;--card-height:86px;--mini-card-width:48px;--mini-card-height:68px;--gold-color:#ffd700;--highlight:#00f2ff;--danger:#ff0055;--rare:#d580ff;--panel-bg:rgba(25,25,30,0.95);--modal-bg:linear-gradient(180deg,#37475a 0%,#232d3a 100%);}
+:root{--bg-gradient:radial-gradient(circle at center,#1a202c 0%,#000000 100%);--card-width:60px;--card-height:86px;--mini-card-width:48px;--mini-card-height:68px;--gold-color:#ffd700;--highlight:#00f2ff;--danger:#ff0055;--rare:#d580ff;--panel-bg:rgba(25,25,30,0.95);--modal-bg:linear-gradient(180deg,#37475a 0%,#232d3a 100%);--gp-ui-scale:1;--gp-top-gap:160px;--gp-hand-bottom:40px;--gp-hand-pad-top:16px;--gp-skill-size:56px;--gp-skill-gap:10px;}
 @font-face{font-family:'AliHei';src:url('assets/fonts/font-bt-Aliheiti-Bold.otf') format('opentype');font-weight:bold;font-style:normal;}
 @font-face{font-family:'HeiTi';src:url('assets/fonts/font-zw-heiti-medium.ttc') format('truetype');font-weight:normal;font-style:normal;}
+@font-face{font-family:'Jaro6pt';src:url('assets/fonts/font-zw-Jaro6pt-Regular.ttf') format('truetype');font-weight:normal;font-style:normal;font-display:swap;}
 @media (min-width: 768px){:root{--card-width:80px;--card-height:112px;}}
 *{margin:0;padding:0;box-sizing:border-box;user-select:none;font-family:'Segoe UI',sans-serif;scrollbar-width:none;}
 ::-webkit-scrollbar{display:none;}
@@ -167,8 +168,8 @@ body, .gms-stage, .gms-map {
 .map-back-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;border:none;border-radius:0;flex:0 0 auto;}
 .map-back-btn img{width:28px;height:28px;display:block;}
 .map-title{text-align:left;padding:0;font-size:22px;color:#fff;letter-spacing:3px;background:transparent;z-index:2;border-bottom:none;font-family:'AliHei',sans-serif;height:auto;display:flex;align-items:center;justify-content:flex-start;}
-#map-scroll-area{position:absolute;left:0;top:0;right:0;bottom:0;overflow-y:auto;padding:20px 20px 40px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
-
+#map-scroll-area{position:absolute;left:0;top:0;right:0;bottom:0;overflow-y:auto;padding:90px 20px 90px;display:flex;flex-direction:column-reverse;align-items:center;gap:50px;scroll-behavior:smooth;}
+/* 关卡入口间距上面 */
 @keyframes gameplayMapEnterZoom{0%{transform:scale(0.98);opacity:0;}100%{transform:scale(1);opacity:1;}}
 /* 入场动效 */
 .gms-enter-zoom{transform-origin:center;animation:gameplayMapEnterZoom 420ms cubic-bezier(0.2,0.9,0.2,1) both;}
@@ -186,13 +187,14 @@ body, .gms-stage, .gms-map {
 @keyframes pulse-node{0%{box-shadow:0 0 10px rgba(0,242,255,0.3);}50%{box-shadow:0 0 25px rgba(0,242,255,0.6);}100%{box-shadow:0 0 10px rgba(0,242,255,0.3);}}
 .map-connector{flex:1;height:3px;background:#333;margin:0 5px;position:relative;border-radius:2px;}
 .map-connector.unlocked{background:linear-gradient(90deg,var(--gold-color),var(--highlight));box-shadow:0 0 5px rgba(0,0,0,0.5);}
-header{height:60px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(51,51,51,0.5);z-index:201;position:relative;transition:transform 0.3s ease-in-out;}
+header{height:60px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;padding:0 20px;background:rgba(0,0,0,0.35);border-bottom:1px solid rgba(255,255,255,0.08);z-index:201;position:relative;transition:transform 0.3s ease-in-out;}
 body.lobby-mode header{display:none;z-index:0;}
 body.overlay-active header{display:none;}
 .header-left{display:flex;flex-direction:column;transition:opacity 0.3s;}
 .level-id{font-size:20px;color:var(--highlight);font-weight:800;letter-spacing:1px;font-family:'AliHei',sans-serif;}
 .level-goal{font-size:12px;color:#bbb;margin-top:2px;font-family:'HeiTi',sans-serif;}
 .lobby-hide{opacity:0;pointer-events:none;}
+body.gameplay-mode #gp-skill-float{opacity:1;pointer-events:auto;}
 .header-center{display:flex;gap:12px;align-items:center;position:absolute;left:50%;transform:translateX(-50%);}
 .icon-btn{width:28px;height:28px;background:rgba(255,255,255,0.25);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.4);transition:0.2s;color:#fff;}
 .icon-btn:hover{border-color:#fff;color:#fff;box-shadow:0 0 10px rgba(255,255,255,0.3);}
@@ -210,24 +212,106 @@ body.overlay-active header{display:none;}
 .gold-pill{color:var(--gold-color);font-weight:bold;font-size:16px;background:rgba(255,215,0,0.1);padding:5px 12px;border-radius:4px;border:1px solid rgba(255,215,0,0.3);display:flex;align-items:center;gap:6px;}
 .gold-icon{width:20px;height:20px;object-fit:contain;vertical-align:middle;}
 .gold-val{color:var(--gold-color);font-weight:bold;}
-#main-stage{flex:1;display:flex;padding:20px;gap:20px;overflow:hidden;align-items:stretch;}
-.panel{background:var(--panel-bg);border:1px solid rgba(255,255,255,0.1);border-radius:12px;display:flex;flex-direction:column;align-items:center;padding:15px;position:relative;}
-.panel-title{font-size:12px;text-transform:uppercase;color:#888;letter-spacing:1px;width:100%;text-align:center;margin-bottom:10px;border-bottom:1px solid #444;padding-bottom:5px;}
-#left-panel{flex:0 0 220px;justify-content:flex-start;position:relative;}
-.avatar{width:70px;height:70px;border-radius:50%;border:3px solid #555;background:#222 center/cover;margin-bottom:10px;box-shadow:0 0 10px rgba(0,0,0,0.5);transition:background-image 0.5s;}
-.opp-speech{position:absolute;left:170px;top:70px;width:auto;max-width:250px;min-width:150px;height:auto;background:rgba(0,0,0,0.9);border:1px solid var(--highlight);border-radius:10px;padding:10px;color:#fff;font-size:12px;line-height:1.4;opacity:0;pointer-events:none;z-index:50;box-shadow:0 5px 15px rgba(0,0,0,0.8);transition:opacity 0.5s;word-break:break-all;}
-.opp-speech::before{content:'';position:absolute;top:15px;left:-8px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:8px solid var(--highlight);}
-.opp-hand-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;}
-#center-panel{flex:1;justify-content:space-between;}
-.baits-container{display:flex;flex-direction:column;gap:20px;width:100%;align-items:center;justify-content:center;flex:1;}
-.bait-row{display:flex;gap:15px;align-items:center;position:relative;justify-content:center;min-height:90px;width:100%;}
-.bait-label{position:static;width:auto;min-width:60px;font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;text-align:right;margin-right:10px;display:flex;flex-direction:column;justify-content:center;}
+#gp-layout{position:fixed;inset:0;display:flex;flex-direction:column;z-index:260;}
+#gp-layout{pointer-events:auto;}
+body:not(.gameplay-mode) #gp-layout{display:none!important;}
+
+header.gp-header{position:relative;height:auto;padding:calc(16px * var(--gp-ui-scale)) calc(20px * var(--gp-ui-scale));background:transparent;border-bottom:none;z-index:300;display:flex;align-items:flex-start;justify-content:space-between;gap:calc(16px * var(--gp-ui-scale));}
+.gp-top-right{display:flex;align-items:flex-start;justify-content:flex-end;gap:calc(16px * var(--gp-ui-scale));min-width:0;}
+
+#header-left-col,#gp-opp-hand-top,#gp-boss{position:static;top:auto;left:auto;right:auto;bottom:auto;transform:none;}
+#gp-opp-hand-top{display:flex;flex-direction:column;align-items:flex-end;flex:0 1 auto;max-width:min(520px, calc(100vw - (20px * var(--gp-ui-scale)) - (20px * var(--gp-ui-scale))));}
+
+#main-stage{flex:1;display:flex;flex-direction:column;gap:calc(14px * var(--gp-ui-scale));padding:calc(14px * var(--gp-ui-scale)) 0 calc(10px * var(--gp-ui-scale));overflow-y:auto;overflow-x:hidden;align-items:center;position:relative;min-height:0;}
+.avatar{width:70px;height:70px;border-radius:50%;border:3px solid rgba(255,255,255,0.22);background:#222 center/cover;margin-bottom:10px;box-shadow:0 0 10px rgba(0,0,0,0.5);transition:background-image 0.5s;}
+.opp-speech{position:absolute;right:78px;top:54px;width:auto;max-width:260px;min-width:150px;height:auto;background:rgba(0,0,0,0.9);border:1px solid var(--highlight);border-radius:10px;padding:10px;color:#fff;font-size:12px;line-height:1.4;opacity:0;pointer-events:none;z-index:50;box-shadow:0 5px 15px rgba(0,0,0,0.8);transition:opacity 0.5s;word-break:break-all;}
+.opp-speech::before{content:'';position:absolute;top:15px;right:-8px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:8px solid var(--highlight);}
 .slot-placeholder{width:var(--card-width);height:var(--card-height);border:2px dashed rgba(255,255,255,0.15);border-radius:6px;background:rgba(0,0,0,0.2);}
-#player-hand-area{margin-top:auto;width:100%;display:flex;justify-content:center;padding-top:20px;border-top:1px solid #444;height:130px;}
-#hand-container{display:flex;gap:8px;align-items:flex-end;}
-#right-panel{flex:0 0 240px;justify-content:space-between;padding-bottom:calc(15px + env(safe-area-inset-bottom));}
+#player-hand-area{width:100%;display:flex;justify-content:center;position:relative;left:auto;transform:none;bottom:auto;padding-top:var(--gp-hand-pad-top);border-top:none;height:calc(var(--card-height) + var(--gp-hand-pad-top));overflow:visible;z-index:auto;}
+#hand-container{display:flex;gap:10px;align-items:flex-end;flex-wrap:nowrap;justify-content:center;overflow:visible;}
+
+body.gameplay-mode header.gp-header,
+body.gameplay-mode header.gp-header *,
+body.gameplay-mode #main-stage,
+body.gameplay-mode #main-stage *,
+body.gameplay-mode #player-hand-area,
+body.gameplay-mode #player-hand-area *,
+body.gameplay-mode #gp-skill-float,
+body.gameplay-mode #gp-skill-float *,
+body.gameplay-mode #gp-opp-hand-top,
+body.gameplay-mode #gp-opp-hand-top *,
+body.gameplay-mode #gp-boss,
+body.gameplay-mode #gp-boss *{font-family:'Jaro6pt','HeiTi','SimHei',sans-serif;}
+
+body.gameplay-mode .gp-pill,
+body.gameplay-mode .gp-bait-title,
+body.gameplay-mode .gp-boss-name{font-family:'Jaro6pt','AliHei','SimHei',sans-serif;font-weight:800;}
+
+.gp-header{gap:16px;}
+.gp-header-left{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1;}
+.gp-header-pills{display:flex;gap:10px;align-items:center;min-width:0;}
+.gp-pill{height:32px;display:inline-flex;align-items:center;padding:0 14px;border-radius:8px;background:rgba(15,23,42,0.7);border:1px solid rgba(255,255,255,0.1);color:#e2e8f0;font-family:'AliHei','SimHei',sans-serif;letter-spacing:1px;white-space:nowrap;}
+.gp-pill-strong{background:rgba(2,6,23,0.75);border-color:rgba(255,255,255,0.14);color:#e2e8f0;}
+.gp-header-goal{font-size:12px;color:#cbd5e1;line-height:1.25;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gp-header-center{flex:1;display:flex;justify-content:center;align-items:center;min-width:0;}
+.gp-opp-hand-row{display:flex;gap:8px;align-items:center;justify-content:flex-end;min-width:0;overflow:hidden;}
+.gp-opp-hand-row .card.mini{width:46px;height:64px;}
+.gp-header-right{display:flex;align-items:center;gap:12px;flex:0 0 auto;position:relative;}
+.gp-boss-avatar{width:54px;height:54px;margin:0;border-width:3px;}
+.gp-boss-name{font-family:'AliHei','SimHei',sans-serif;color:#e2e8f0;letter-spacing:1px;font-size:14px;white-space:nowrap;}
+.gp-header-right-legacy{display:none;}
+
+.gp-table{width:min(1100px, calc(100vw - 80px));max-width:none;padding:0;border-radius:0;background:transparent;border:none;margin:0 auto;}
+.gp-table-inner{display:grid;grid-template-columns:calc(210px * var(--gp-ui-scale)) minmax(0,1fr) calc(310px * var(--gp-ui-scale));gap:calc(18px * var(--gp-ui-scale));align-items:stretch;border-radius:0;border-top:1px solid rgba(255,255,255,0.12);border-bottom:1px solid rgba(255,255,255,0.12);border-left:none;border-right:none;background:linear-gradient(180deg,rgba(0,0,0,0.22),rgba(0,0,0,0.32)),url('assets/images/backgrounds/bg-gameplay-scenespoker.png') repeat center/auto 100%;box-shadow:none;padding:calc(18px * var(--gp-ui-scale)) calc(20px * var(--gp-ui-scale));}
+.gp-table-left{display:flex;align-items:stretch;}
+.gp-stat-box{flex:1;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(2,6,23,0.35);backdrop-filter:blur(6px);display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px 14px;}
+.gp-stat-line{display:flex;align-items:center;justify-content:flex-start;gap:10px;color:#e2e8f0;font-family:'HeiTi','SimHei',sans-serif;font-size:14px;}
+.gp-stat-gold img{width:18px;height:18px;object-fit:contain;opacity:0.9;}
+.gp-stat-gold span{font-weight:900;}
+.gp-table-middle{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;}
+.gp-bait-group{display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;}
+.gp-bait-title{font-family:'AliHei','SimHei',sans-serif;color:#e2e8f0;letter-spacing:1px;font-size:14px;opacity:0.9;}
+.gp-bait-cards{display:flex;gap:16px;align-items:center;justify-content:center;}
+.gp-bait-cards .slot-placeholder{width:var(--card-width);height:var(--card-height);border-radius:8px;border:2px solid rgba(255,255,255,0.14);background:rgba(2,6,23,0.28);}
+.gp-bait-cards .card{width:var(--card-width);height:var(--card-height);border-radius:8px;}
+.gp-bait-cards .card-back-img{border-radius:6px;}
+.gp-table-right{display:flex;align-items:center;justify-content:center;}
+.gp-slots-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;max-width:280px;}
+.gp-slot{aspect-ratio:1/1.4;border-radius:6px;border:1px solid rgba(255,255,255,0.16);background:rgba(2,6,23,0.12);display:flex;align-items:center;justify-content:center;}
+.gp-slot .gp-item-icon{font-size:22px;line-height:1;}
+.gp-btn-lines{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.1;}
+.gp-btn-line1{font-size:inherit;line-height:1.1;}
+.gp-btn-line2{font-size:18px;line-height:1;}
+
+.gp-action-bar{width:min(820px, calc(100vw - 80px));display:flex;flex-direction:column;align-items:center;gap:calc(8px * var(--gp-ui-scale));}
+.gp-action-bar{margin:0 auto;}
+.gp-phase-tip{color:#e2e8f0;font-size:12px;opacity:0.8;text-align:center;}
+.gp-bait-btn{width:calc(239px * var(--gp-ui-scale));height:calc(68px * var(--gp-ui-scale));border-radius:999px;padding:0;font-size:18px;letter-spacing:1px;box-shadow:0 10px 24px rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;}
+.gp-play-group{display:flex;flex-direction:column;gap:calc(10px * var(--gp-ui-scale));width:min(360px, 80vw);}
+
+.gp-skill-float{position:relative;right:auto;bottom:auto;z-index:auto;display:flex;align-items:flex-end;justify-content:flex-end;}
+.gp-skill-float #skill-dock{display:grid;grid-template-columns:repeat(2,var(--gp-skill-size));grid-auto-rows:var(--gp-skill-size);gap:var(--gp-skill-gap);padding:0;margin:0;border:none;justify-content:end;align-content:end;max-height:calc(var(--gp-skill-size) + var(--gp-skill-size) + var(--gp-skill-gap));overflow:hidden;}
+.gp-skill-float .skill-item{width:var(--gp-skill-size);height:var(--gp-skill-size);border-radius:999px;aspect-ratio:auto;background:rgba(15,23,42,0.55);border:1px solid #566573;backdrop-filter:blur(6px);box-shadow:0 16px 30px rgba(0,0,0,0.45);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.gp-skill-float .skill-item:hover:not(.disabled){border-color:rgba(255,255,255,0.35);box-shadow:0 18px 34px rgba(0,0,0,0.55);}
+.gp-skill-float .skill-item.disabled{cursor:default;}
+.gp-skill-float .skill-item > div{pointer-events:none;}
+.gp-skill-float .skill-item div:nth-child(2){display:none;}
+.gp-skill-float .skill-item .skill-count{position:absolute;right:-2px;bottom:-2px;min-width:18px;height:18px;border-radius:999px;background:rgba(2,6,23,0.9);border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;color:#e2e8f0;font-size:10px;font-weight:900;padding:0 4px;}
+.gp-skill-float .skill-item.selected{border:2px solid rgba(255,0,85,0.95);box-shadow:0 0 0 2px rgba(255,0,85,0.25),0 18px 34px rgba(0,0,0,0.6);background:rgba(15,23,42,0.75);color:#e2e8f0;}
 .action-area{width:100%;display:flex;flex-direction:column;gap:10px;flex:1;}
 #skill-dock{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px;padding-top:10px;border-top:1px solid #444;}
+
+#gp-boss{display:flex;flex-direction:column;align-items:center;gap:calc(6px * var(--gp-ui-scale));}
+#gp-boss .gp-boss-avatar{margin-bottom:0;}
+.opp-speech{right:calc(100% + calc(12px * var(--gp-ui-scale)));top:calc(6px * var(--gp-ui-scale));}
+.opp-speech::before{right:auto;left:100%;border-left:none;border-right:8px solid var(--highlight);}
+
+#play-group,#skill-confirm-group,#bet-panel{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:calc(14px * var(--gp-ui-scale));width:auto;}
+#play-group>button.btn,#skill-confirm-group>button.btn,#bet-panel>button.btn{width:calc(239px * var(--gp-ui-scale));height:calc(68px * var(--gp-ui-scale));padding:0;display:flex;align-items:center;justify-content:center;}
+#play-group>div{margin:0 calc(8px * var(--gp-ui-scale));font-size:calc(12px * var(--gp-ui-scale));opacity:0.7;}
+#bet-panel>div:first-child{flex:1 0 100%;}
+
+#gold-display,#bet-display,#opp-count,#round-pill,#deck-count-display,.gold-val,.card-rank{font-family:'Jaro6pt','AliHei','SimHei',sans-serif;}
 .card-deal-anim{animation:cardDeal 0.5s cubic-bezier(0.175,0.885,0.32,1.275) backwards;}
 @keyframes cardDeal{0%{transform:translateY(-50px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
 .card{background:#f0f0f0;border-radius:6px;position:relative;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:2px 2px 5px rgba(0,0,0,0.5);width:var(--card-width);height:var(--card-height);flex-shrink:0;}
@@ -268,13 +352,14 @@ body.overlay-active header{display:none;}
     display:flex;
     flex-direction:row;
     align-items:center;
+    justify-content:center;
     gap:6px;
     font-family:'SimHei','Microsoft YaHei',sans-serif;
 }
 .lobby-func-btn:hover{color:#fff;}
-.lobby-func-btn .icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;}
+.lobby-func-btn .icon-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;flex:0 0 22px;margin-left:10px;}
 .lobby-func-btn .func-icon{width:22px;height:22px;display:block;}
-.lobby-func-btn .lbl{font-size:12px;letter-spacing:2px;white-space:nowrap;}
+.lobby-func-btn .lbl{font-size:12px;letter-spacing:2px;white-space:nowrap;text-align:center;}
 .lobby-func-btn.muted .icon-wrap::after{
     content:'';
     position:absolute;
@@ -287,17 +372,26 @@ body.overlay-active header{display:none;}
     opacity:0.9;
 }
 
-#game-func-controls{
-    position:fixed;
-    left:30px;
-    bottom:30px;
-    display:flex;
-    align-items:center;
-    gap:18px;
-    z-index:1000;
-}
+#game-func-controls{position:relative;left:auto;bottom:auto;display:flex;align-items:center;gap:18px;z-index:auto;}
 body.lobby-mode #game-func-controls{display:none;}
 body.overlay-active #game-func-controls{display:none;}
+body:not(.gameplay-mode) #main-stage,
+body:not(.gameplay-mode) #player-hand-area,
+body:not(.gameplay-mode) #gp-skill-float,
+body:not(.gameplay-mode) #gp-opp-hand-top,
+body:not(.gameplay-mode) #gp-boss,
+body:not(.gameplay-mode) #global-tooltip,
+body:not(.gameplay-mode) #game-func-controls{display:none!important;}
+body.overlay-active #player-hand-area,
+body.overlay-active #gp-skill-float,
+body.overlay-active #gp-opp-hand-top,
+body.overlay-active #gp-boss,
+body.overlay-active #global-tooltip{display:none!important;}
+
+.gp-bottom-bar{flex:0 0 auto;display:grid;grid-template-columns:auto 1fr auto;align-items:end;gap:calc(30px * var(--gp-ui-scale));padding:calc(10px * var(--gp-ui-scale)) calc(30px * var(--gp-ui-scale)) calc(30px * var(--gp-ui-scale) + env(safe-area-inset-bottom));border-top:1px solid rgba(255,255,255,0.12);background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,0.38));z-index:320;}
+.gp-bottom-bar > *{min-width:0;}
+.gp-bottom-bar #player-hand-area{max-width:1100px;margin:0 auto;}
+body.overlay-active .gp-bottom-bar{display:none!important;}
 .game-func-btn{
     background:none;
     border:none;
@@ -332,24 +426,38 @@ body.overlay-active #game-func-controls{display:none;}
 }
 .settings-sheet{
     width:min(560px, 100%);
-    border-radius:18px;
-    background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);
-    border:1px solid rgba(255,255,255,0.12);
-    box-shadow:0 20px 60px rgba(0,0,0,0.7);
+    position:relative;
+    border-radius:4px;
+    background:#050507;
+    border:3px solid #6b7280;
+    padding:3px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.85);
     transform:translateY(120%);
     transition:transform 0.25s ease;
     overflow:hidden;
 }
+.settings-sheet::before{
+    content:'';
+    position:absolute;
+    inset:3px;
+    border-radius:4px;
+    border:1px solid rgba(255,255,255,0.18);
+    background:rgba(0,0,0,0.92);
+    pointer-events:none;
+    z-index:0;
+}
+.settings-sheet > *{position:relative;z-index:1;}
 .settings-overlay.visible .settings-sheet{transform:translateY(0);}
 .settings-sheet-title{
     padding:14px 16px;
-    font-size:14px;
+    font-size:26px;
     font-weight:900;
-    letter-spacing:3px;
-    color:#e2e8f0;
+    letter-spacing:2px;
+    color:#fff;
     border-bottom:1px solid rgba(255,255,255,0.08);
     text-align:center;
-    font-family:'SimHei','Microsoft YaHei',sans-serif;
+    font-family:'AliHei','SimHei','Microsoft YaHei',sans-serif;
+    line-height:1.1;
 }
 .settings-sheet-items{
     padding:14px 16px;
@@ -372,19 +480,118 @@ body.overlay-active #game-func-controls{display:none;}
 }
 .settings-sheet-item:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.2);}
 .settings-sheet-item img{width:22px;height:22px;display:block;flex:0 0 22px;}
-.settings-sheet-item .txt{font-size:13px;letter-spacing:2px;}
+.settings-sheet-item .txt{font-size:18px;letter-spacing:2px;}
 .btn{background:linear-gradient(145deg,#2c3e50,#1a252f);border:1px solid #4a5c6a;color:#fff;padding:12px 5px;border-radius:4px;cursor:pointer;transition:0.2s;font-size:13px;text-align:center;position:relative;box-shadow:0 2px 5px rgba(0,0,0,0.3);user-select:none;-webkit-tap-highlight-color:transparent;}
 .btn:active{transform:scale(0.95);}
 .btn:hover:not(:disabled){border-color:var(--highlight);box-shadow:0 0 15px rgba(0,242,255,0.5);background:#34495e;}
 .btn-primary{background:linear-gradient(145deg,#2980b9,#2c3e50);border:1px solid #3498db;}
+.fp-confirm-btn{background:rgba(39,102,169,0.8);border:3px solid rgba(233,233,233,0.3);border-radius:40px;color:#fff;}
+.fp-confirm-btn:hover:not(:disabled){background:rgba(39,102,169,0.8);border:3px solid rgba(233,233,233,0.3);color:#fff;}
+.fp-cancel-btn{background:rgba(221,231,255,0.8);border:3px solid rgba(233,233,233,0.3);border-radius:40px;color:rgba(0,0,0,0.8);}
+.fp-cancel-btn:hover:not(:disabled){background:rgba(221,231,255,0.8);border:3px solid rgba(233,233,233,0.3);color:rgba(0,0,0,0.8);}
+.fp-btn-with-icon{display:flex;align-items:center;justify-content:center;position:relative;}
+.fp-btn-with-icon .fp-btn-icon{width:22px;height:22px;display:block;position:absolute;left:20px;top:50%;transform:translateY(-50%);}
+.fp-btn-with-icon .fp-btn-text{display:block;width:100%;text-align:center;}
+.fp-modal-content .fp-confirm-btn,
+.fp-modal-content .fp-cancel-btn{height:50px;padding:0 !important;font-size:14px !important;}
+.fp-settle-right .fp-confirm-btn,
+.fp-settle-right .fp-cancel-btn{height:50px;padding:0 !important;font-size:14px !important;}
 .btn:disabled{opacity:0.4;cursor:not-allowed;box-shadow:none;transform:none;}
 .btn-desc{display:block;font-size:10px;opacity:0.7;margin-top:2px;}
-.skill-item{aspect-ratio:3/4;background:#34495e;border-radius:4px;border:1px solid #566573;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:0.2s;}
+.skill-item{aspect-ratio:3/4;background:#34495e;border-radius:4px;border:1px solid #566573;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.skill-item > *{pointer-events:none;}
 .skill-item:hover:not(.disabled){border-color:var(--highlight);box-shadow:0 0 10px var(--highlight);}
 .skill-item.disabled{filter:grayscale(1);opacity:0.3;cursor:default;}
 .skill-count{position:absolute;bottom:2px;right:2px;font-size:9px;background:#000;padding:1px 3px;border-radius:3px;}
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;justify-content:center;align-items:center;z-index:400;opacity:0;pointer-events:none;transition:0.3s;}
 .overlay.visible{opacity:1;pointer-events:all;}
+.fp-modal-card{
+    position:relative;
+    border:3px solid #6b7280;
+    border-radius:4px;
+    background:#050507;
+    padding:3px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.85);
+    max-height:90vh;
+    overflow:hidden;
+}
+.fp-modal-inner{
+    position:relative;
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:4px;
+    background:rgba(0,0,0,0.92);
+    overflow:hidden;
+}
+.fp-modal-inner.fp-modal-decor::before{
+    content:'';
+    position:absolute;
+    inset:-40px -60px auto auto;
+    width:520px;
+    height:520px;
+    background:url('assets/images/backgrounds/bg-star.svg') no-repeat;
+    background-size:contain;
+    opacity:0.12;
+    pointer-events:none;
+    filter:contrast(1.05) brightness(1.1);
+}
+.fp-modal-content{position:relative;z-index:1;}
+.fp-modal-title{font-size:22px;font-weight:900;color:#e5e7eb;line-height:1.1;}
+.fp-modal-body{font-size:14px;color:#cbd5e1;line-height:1.7;}   /* 牌型说明底部文本14px */
+.fp-modal-title.fp-title-ali{
+    font-family:'AliHei','SimHei','Microsoft YaHei',sans-serif;
+    font-size:26px;
+    color:#fff;
+}
+.fp-modal-close{
+    position:absolute;
+    right:10px;
+    top:10px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:6px;
+}
+.fp-modal-close img{width:20px;height:20px;display:block;}
+.fp-settle-split{display:flex;flex:1;min-height:0;}
+.fp-settle-left{
+    width:50%;
+    background:rgba(0,0,0,0.92);
+    padding:26px 22px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    overflow:auto;
+    border-right:1px solid rgba(255,255,255,0.12);
+    position:relative;
+}
+.fp-settle-left.fp-modal-decor::before{
+    content:'';
+    position:absolute;
+    inset:-40px -60px auto auto;
+    width:520px;
+    height:520px;
+    background:url('assets/images/backgrounds/bg-star.svg') no-repeat;
+    background-size:contain;
+    opacity:0.12;
+    pointer-events:none;
+    filter:contrast(1.05) brightness(1.1);
+}
+.fp-settle-right{
+    flex:1;
+    padding:26px 22px;
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+.fp-settle-right.fp-settle-right-win{background:rgba(10, 20, 43, 0.548);}
+.fp-settle-right.fp-settle-right-lose{background:#292a2c;}   /* 回合胜利和失败的底色 */
+.fp-settle-right, .fp-settle-right *{font-size:18px !important;}
+.fp-settle-right .fp-modal-title{font-size:30px !important;}
+@media (max-width: 768px){
+    .fp-settle-split{flex-direction:column;}
+    .fp-settle-left{width:100%;border-right:none;border-bottom:1px solid rgba(255,255,255,0.12);}
+}
 .reward-card{background:#2d3748;border:2px solid #4a5568;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transition:0.3s;box-shadow:0 4px 15px rgba(0,0,0,0.5);position:relative;}
 .reward-card:hover{transform:scale(1.05);border-color:var(--rare);box-shadow:0 0 25px rgba(213,128,255,0.4);}
 .reward-card.disabled{filter:grayscale(1);opacity:0.7;cursor:not-allowed;}
@@ -599,10 +806,10 @@ body.overlay-active #game-func-controls{display:none;}
     100%{opacity:1;transform:var(--scatter-to);}
 }
 @media (max-width: 768px){
-    #game-func-controls{left:18px;bottom:18px;gap:6px;}
-    .game-func-btn{padding:4px;}
-    .game-func-btn .icon-wrap{width:16px;height:16px;flex:0 0 16px;}
-    .game-func-btn .func-icon{width:16px;height:16px;}
+    #game-func-controls{left:auto;bottom:auto;gap:12px;z-index:5;}
+    .game-func-btn{padding:10px;min-width:44px;min-height:44px;}
+    .game-func-btn .icon-wrap{width:22px;height:22px;flex:0 0 22px;}
+    .game-func-btn .func-icon{width:22px;height:22px;}
     .lobby-func-btn .icon-wrap{width:20px;height:20px;flex:0 0 20px;}
     .lobby-func-btn .func-icon{width:20px;height:20px;}
     .lobby-func-btn{min-width:100px;}
@@ -616,7 +823,9 @@ body.overlay-active #game-func-controls{display:none;}
     .card img{border-radius:4px;object-fit:cover;}
     .card.mini img{border-radius:3px;}
     /* 移动端加大手牌和钓鱼牌的尺寸 */
-    :root{--card-width:54px;--card-height:76px;--mini-card-width:44px;--mini-card-height:62px;}
+    :root{--card-width:54px;--card-height:76px;--mini-card-width:44px;--mini-card-height:62px;--gp-skill-size:56px;--gp-skill-gap:10px;}
+    .gp-bottom-bar{gap:30px;padding:10px 30px calc(30px + env(safe-area-inset-bottom));}
+    .gp-skill-float .skill-item div:nth-child(2){display:block;max-width:calc(var(--gp-skill-size) - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.05;}
     #shop-screen{flex-direction:column;gap:15px;padding-top:60px;overflow-y:auto;display:flex;align-items:center;justify-content:flex-start;}
     #shop-left-card{width:95%;height:250px;transform:translateY(-50px);flex-shrink:0;}
     #shop-right-card{width:95%;height:60vh;min-height:450px;transform:translateY(50px);flex-shrink:0;margin-bottom:20px;}
@@ -629,18 +838,20 @@ body.overlay-active #game-func-controls{display:none;}
     #clash-vs { font-size: 40px; }
 }
 @media (max-width: 480px){
-    #game-func-controls{left:12px;bottom:12px;gap:8px;}
-    .game-func-btn .icon-wrap{width:18px;height:18px;flex:0 0 18px;}
-    .game-func-btn .func-icon{width:18px;height:18px;}
+    #game-func-controls{left:auto;bottom:auto;gap:10px;}
 }
 @media screen and (max-height: 600px) and (orientation: landscape){
-    :root{--card-width:58px;--card-height:82px;--mini-card-width:40px;--mini-card-height:56px;}
+    :root{--card-width:58px;--card-height:82px;--mini-card-width:40px;--mini-card-height:56px;--gp-skill-size:56px;--gp-skill-gap:10px;}
     .card.mini .card-rank{font-size:1.2em!important;top:1px!important;left:2px!important;}.card.mini .card-suit{font-size:1.2em!important;top:60%!important;}
     .card-rank{font-size:1.5em!important;top:1px!important;left:3px!important;}.card-suit{font-size:1.5em!important;top:58%!important;}
     .info-panel{width:90%;max-height:85vh;overflow-y:auto;font-size:10px;padding:10px;}.info-footer{font-size:10px!important;}
     .lobby-title-main{font-size:24px;}
     .lobby-title-sub{font-size:20px;margin-bottom:10px;letter-spacing:2px;}.lobby-orientation{font-size:12px;margin-bottom:20px;letter-spacing:2px;}
-    header{height:60px;padding:0 10px;}.level-id{font-size:16px;}.level-goal{font-size:10px;}.info-btn{padding:4px 8px;font-size:10px;}.gold-pill{font-size:12px;padding:3px 8px;}#main-stage{padding:5px;gap:8px;}#left-panel{flex:0 0 130px;padding:8px;}.avatar{width:50px;height:50px;margin-bottom:5px;}.opp-hand-grid{gap:4px;}.panel-title{font-size:10px;margin-bottom:5px;padding-bottom:2px;}.opp-speech{left:110px;top:25px;width:auto;max-width:200px;font-size:10px;padding:6px;border-radius:8px;}#right-panel{flex:0 0 160px;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom));}.btn{padding:8px 2px;font-size:10px;}#skill-dock{margin-top:5px;padding-top:5px;gap:4px;}.skill-item div:first-child{font-size:16px;}.skill-item div:nth-child(2){font-size:9px;transform:scale(0.9);}#center-panel{padding:5px;}.baits-container{gap:3px;padding-bottom:6px;border-bottom:1px solid #444;}.bait-row{min-height:52px;gap:8px;}.bait-label{min-width:40px;font-size:10px;margin-right:5px;}.slot-placeholder{border-width:1px;border-radius:4px;}#player-hand-area{height:85px;padding-top:6px;border-top:none;}.msg-title{font-size:28px;}.msg-subtitle{font-size:14px;margin-bottom:20px;}#shop-screen{flex-direction:row;gap:15px;align-items:center;justify-content:center;}#shop-left-card{width:35%;height:90vh;transform:translateX(-50px);}#shop-right-card{width:60%;height:90vh;transform:translateX(50px);}
+    header{height:60px;padding:0 10px;}.gp-pill{height:28px;padding:0 10px;font-size:12px;}.gp-header-goal{font-size:10px;}.gp-boss-avatar{width:44px;height:44px;}.gp-boss-name{font-size:12px;}#main-stage{gap:10px;padding:6px 0 12px;}.gp-table{width:calc(100vw - 40px);}.gp-table-inner{height:170px;padding:12px;grid-template-columns:170px minmax(0,1fr) 240px;gap:12px;}.gp-stat-box{padding:10px;gap:8px;}.gp-stat-line{font-size:12px;}.gp-table-middle{gap:12px;}.gp-bait-title{font-size:12px;}.gp-bait-cards{gap:12px;}.gp-bait-cards .slot-placeholder,.gp-bait-cards .card{width:var(--card-width);height:var(--card-height);}.gp-slots-grid{max-width:220px;gap:8px;}#player-hand-area{width:100%;max-width:calc(100vw - 40px);height:105px;padding-top:10px;border-top:none;}#hand-container{gap:8px;}.gp-bait-btn{padding:10px 0;font-size:16px;}.gp-skill-float{right:auto;bottom:auto;}
+    .gp-skill-float .skill-item{width:var(--gp-skill-size);height:var(--gp-skill-size);}
+    .gp-skill-float .skill-item div:nth-child(2){display:block;max-width:calc(var(--gp-skill-size) - 10px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.05;}
+    #main-stage{padding:var(--gp-top-gap) 0 calc(var(--card-height) + var(--gp-hand-pad-top) + var(--gp-hand-bottom) + env(safe-area-inset-bottom));}
+    .gp-bait-cards .slot-placeholder,.gp-bait-cards .card{width:var(--card-width);height:var(--card-height);}
     .settle-card-wrap .card { width: 44px !important; height: 62px !important; }
     .settle-card-wrap .card.mini { width: 44px !important; height: 62px !important; }
 }
@@ -655,24 +866,37 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 <div id="toast-msg" style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);border:1px solid var(--highlight);color:#fff;padding:15px 30px;border-radius:8px;z-index:10000;display:none;text-align:center;pointer-events:none;font-size:16px;box-shadow:0 5px 25px rgba(0,0,0,0.8);">运气差点哦，没有开出道具！</div>
 <div id="msg-modal" class="overlay" style="z-index:9999;">
-    <div class="info-panel" style="position:relative;text-align:center;border-color:var(--danger);width:80%;max-width:300px;padding:30px;">
-        <button onclick="document.getElementById('msg-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <div style="font-size:18px;font-weight:bold;color:var(--danger);margin-bottom:25px;" id="msg-modal-text">当前金币不足</div>
-        <button class="btn btn-primary" style="width:100px;padding:10px;" onclick="document.getElementById('msg-modal').classList.remove('visible')">确定</button>
+    <div class="fp-modal-card" style="width:80%;max-width:360px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <button onclick="document.getElementById('msg-modal').classList.remove('visible')" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <div class="fp-modal-body" style="color:var(--danger);font-weight:900;margin-bottom:22px;" id="msg-modal-text">当前金币不足</div>
+                <button class="btn btn-primary fp-confirm-btn" style="width:140px;" onclick="document.getElementById('msg-modal').classList.remove('visible')">确定</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Upgrade Notification Modal -->
 <div id="upgrade-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="position:relative;text-align:center;border-color:var(--gold-color);width:80%;max-width:300px;padding:30px;background:#1e293b;">
-        <button onclick="document.getElementById('upgrade-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <h3 id="upgrade-modal-title" style="color:var(--gold-color);margin-bottom:15px;font-size:22px;font-weight:bold;"></h3>
-        <div id="upgrade-modal-text" style="font-size:14px;color:#ddd;margin-bottom:25px;line-height:1.6;"></div>
-        <button class="btn btn-primary" style="width:120px;padding:10px;" onclick="document.getElementById('upgrade-modal').classList.remove('visible')">确定</button>
+    <div class="fp-modal-card" style="width:80%;max-width:420px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <button onclick="document.getElementById('upgrade-modal').classList.remove('visible')" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <h3 id="upgrade-modal-title" class="fp-modal-title" style="color:var(--gold-color);margin:0 0 14px 0;"></h3>
+                <div id="upgrade-modal-text" class="fp-modal-body" style="margin-bottom:22px;"></div>
+                <div style="display:flex;justify-content:center;">
+                    <button class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="width:200px;" onclick="document.getElementById('upgrade-modal').classList.remove('visible')">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                        <span class="fp-btn-text">确定</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -686,47 +910,77 @@ body.overlay-active #game-func-controls{display:none;}
 
 <!-- 道具出售确认弹窗 -->
 <div id="sell-confirm-modal" class="overlay" style="z-index:200000;">
-    <div class="info-panel" style="position:relative;text-align:center;border-color:#f97316;width:80%;max-width:300px;padding:25px;background:#1e293b;">
-        <button onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <h3 style="color:#f97316;margin-bottom:15px;font-size:18px;font-weight:bold;">道具出售</h3>
-        <div id="sell-confirm-text" style="font-size:13px;color:#ddd;margin-bottom:20px;line-height:1.6;"></div>
-        <div style="display:flex;gap:10px;justify-content:center;">
-            <button class="btn btn-primary" style="width:100px;padding:8px;" id="sell-confirm-ok">确认</button>
-            <button class="btn" style="width:100px;padding:8px;border:1px solid #555;" onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')">取消</button>
+    <div class="fp-modal-card" style="width:86%;max-width:520px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <button onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <h3 class="fp-modal-title" style="color:#f97316;margin:0 0 14px 0;">道具出售</h3>
+                <div id="sell-confirm-text" class="fp-modal-body" style="margin-bottom:18px;"></div>
+                <div style="display:flex;gap:12px;justify-content:center;">
+                    <button class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="width:160px;padding:12px 0;font-size:20px;" id="sell-confirm-ok">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                        <span class="fp-btn-text">确认</span>
+                    </button>
+                    <button class="btn fp-cancel-btn fp-btn-with-icon" style="width:160px;padding:12px 0;font-size:20px;" onclick="document.getElementById('sell-confirm-modal').classList.remove('visible')">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-cancel.svg" alt="">
+                        <span class="fp-btn-text">取消</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- General Deck Mod Modal -->
 <div id="deck-mod-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
-        <button onclick="document.getElementById('deck-mod-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <h3 id="deck-mod-title" style="color:var(--highlight);margin-bottom:10px;"></h3>
-        <div id="deck-mod-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;"></div>
-        <div id="deck-mod-cards" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;min-height:90px;"></div>
-        <div style="display:flex;justify-content:center;gap:20px;">
-            <button id="deck-mod-confirm" class="btn btn-primary" style="width:120px;padding:10px;">确定转变</button>
-            <button id="deck-mod-cancel" class="btn" style="width:120px;padding:10px;">取消</button>
+    <div class="fp-modal-card" style="width:95%;max-width:720px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <button onclick="document.getElementById('deck-mod-modal').classList.remove('visible')" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <h3 id="deck-mod-title" class="fp-modal-title" style="color:var(--highlight);margin:0 0 10px 0;"></h3>
+                <div id="deck-mod-desc" class="fp-modal-body" style="margin-bottom:18px;"></div>
+                <div id="deck-mod-cards" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:18px;min-height:90px;"></div>
+                <div style="display:flex;justify-content:center;gap:14px;">
+                    <button id="deck-mod-confirm" class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="width:200px;padding:12px 0;font-size:20px;">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                        <span class="fp-btn-text">确定转变</span>
+                    </button>
+                    <button id="deck-mod-cancel" class="btn fp-cancel-btn fp-btn-with-icon" style="width:200px;padding:12px 0;font-size:20px;">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-cancel.svg" alt="">
+                        <span class="fp-btn-text">取消</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Printer specific Modal -->
 <div id="printer-modal" class="overlay" style="z-index:10000;">
-    <div class="info-panel" style="position:relative;width:95%;max-width:500px;text-align:center;border-color:var(--highlight);">
-        <button onclick="document.getElementById('printer-modal').classList.remove('visible')" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <h3 id="printer-title" style="color:var(--highlight);margin-bottom:10px;">打印机</h3>
-        <div id="printer-desc" style="font-size:12px;color:#ccc;margin-bottom:20px;line-height:1.5;">选择1张背包中的普通道具牌，复制并获得该牌</div>
-        <div id="printer-cards" class="inv-grid" style="justify-content:center;margin-bottom:20px;min-height:90px;"></div>
-        <div style="display:flex;justify-content:center;gap:20px;">
-            <button id="printer-confirm" class="btn btn-primary" style="width:120px;padding:10px;">确定复制</button>
-            <button id="printer-cancel" class="btn" style="width:120px;padding:10px;" onclick="document.getElementById('printer-modal').classList.remove('visible')">取消</button>
+    <div class="fp-modal-card" style="width:95%;max-width:720px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <button onclick="document.getElementById('printer-modal').classList.remove('visible')" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <h3 id="printer-title" class="fp-modal-title" style="color:var(--highlight);margin:0 0 10px 0;">打印机</h3>
+                <div id="printer-desc" class="fp-modal-body" style="margin-bottom:18px;">选择 1 张背包中的普通道具牌，复制并获得该牌</div>
+                <div id="printer-cards" class="inv-grid" style="justify-content:center;margin-bottom:18px;min-height:90px;"></div>
+                <div style="display:flex;justify-content:center;gap:14px;">
+                    <button id="printer-confirm" class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="width:200px;padding:12px 0;font-size:20px;">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                        <span class="fp-btn-text">确定复制</span>
+                    </button>
+                    <button id="printer-cancel" class="btn fp-cancel-btn fp-btn-with-icon" style="width:200px;padding:12px 0;font-size:20px;" onclick="document.getElementById('printer-modal').classList.remove('visible')">
+                        <img class="fp-btn-icon" src="assets/images/ui/icon-cancel.svg" alt="">
+                        <span class="fp-btn-text">取消</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -734,7 +988,7 @@ body.overlay-active #game-func-controls{display:none;}
 <div id="map-screen">
     <div class="map-topbar">
         <div id="map-back-btn" class="map-back-btn" onclick="game.backToGameplayMap()" style="display:none;">
-            <img src="assets/images/ui/icon-back.png" alt="返回">
+            <img src="assets/images/ui/icon-back.svg" alt="返回">
         </div>
         <div class="map-title">狐狸岛-八层塔楼</div>
     </div>
@@ -744,7 +998,7 @@ body.overlay-active #game-func-controls{display:none;}
 <div id="gameplay-map-screen">
     <div class="gms-topbar">
         <div class="gms-back-btn" onclick="game.returnToLobby()" title="返回大厅">
-            <img src="assets/images/ui/icon-back.png" alt="返回大厅">
+            <img src="assets/images/ui/icon-back.svg" alt="返回大厅">
         </div>
         <div class="gms-title">地图</div>
     </div>
@@ -808,79 +1062,116 @@ body.overlay-active #game-func-controls{display:none;}
         <span class="lbl">设置</span>
     </button>
     </div>
-<div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.7.5</div>
+<div style="position:absolute;bottom:20px;right:20px;color:rgba(255,255,255,0.3);font-family:monospace;">v3.8.2</div>
 </div>
 
 <!-- 邮箱弹窗 -->
-<div id="mailbox-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;" onclick="if(event.target===this)game.closeMailbox()">
-    <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.12);border-radius:12px;width:min(700px,95vw);height:min(480px,85vh);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.8);">
-        <!-- 弹窗标题栏 -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);">
-            <div style="display:flex;align-items:center;gap:8px;color:#e2e8f0;font-size:14px;font-weight:600;">
-                <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#94a3b8;"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                邮箱
+<div id="mailbox-modal" class="overlay" style="z-index:9000;" onclick="if(event.target===this)game.closeMailbox()">
+    <div class="fp-modal-card" style="width:min(900px,95vw);height:min(560px,88vh);display:flex;flex-direction:column;">
+        <div class="fp-modal-inner fp-modal-decor" style="height:100%;display:flex;flex-direction:column;">
+            <div class="fp-modal-content" style="height:100%;display:flex;flex-direction:column;padding:26px 22px;">
+                <button onclick="game.closeMailbox()" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <div class="fp-modal-title fp-title-ali" style="text-align:center;margin:0 0 14px 0;">邮箱</div>
+                <div style="display:flex;flex:1;overflow:hidden;border-top:1px solid rgba(255,255,255,0.12);">
+                    <div id="mail-list" style="width:260px;flex-shrink:0;border-right:1px solid rgba(255,255,255,0.12);overflow-y:auto;padding:10px 0;"></div>
+                    <div id="mail-content" class="fp-modal-body" style="flex:1;overflow-y:auto;padding:18px 18px;"></div>
+                </div>
             </div>
-            <button onclick="game.closeMailbox()" style="background:none;border:none;cursor:pointer;padding:2px 6px;" title="关闭">
-                <img src="assets/images/ui/icon-close.png" style="width:18px;height:18px;display:block;" alt="关闭">
-            </button>
-        </div>
-        <!-- 内容区 -->
-        <div style="display:flex;flex:1;overflow:hidden;">
-            <!-- 左侧列表 -->
-            <div id="mail-list" style="width:220px;flex-shrink:0;border-right:1px solid rgba(255,255,255,0.08);overflow-y:auto;padding:8px 0;"></div>
-            <!-- 右侧内容 -->
-            <div id="mail-content" style="flex:1;overflow-y:auto;padding:20px 22px;color:#cbd5e1;font-size:13.5px;line-height:1.8;"></div>
         </div>
     </div>
 </div>
 
-<header>
-    <div class="header-left lobby-hide" id="header-left-col"><div class="level-id" id="level-id">FLOOR 1-1</div><div class="level-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div></div>
-    <div class="header-right lobby-hide" id="header-right-col">
-        <div class="passive-dock" id="passive-list"></div>
-        <div class="gold-container"><span class="bet-info" id="bet-display">下注: 0</span><div class="gold-pill"><img src="assets/images/ui/icon-money.png" class="gold-icon" alt="金币"><span id="gold-display">0</span></div></div>
-    </div>
-</header>
+<div id="gp-layout">
+    <header class="gp-header">
+        <div class="gp-header-left lobby-hide" id="header-left-col">
+            <div class="gp-header-pills">
+                <div class="gp-pill gp-pill-strong" id="level-id">FLOOR 1-1</div>
+                <div class="gp-pill" id="round-pill">第 1/3 回合</div>
+            </div>
+            <div class="gp-header-goal"><span>关卡目标：</span><span id="level-desc" style="color:#ddd">加载中...</span></div>
+        </div>
+        <div class="gp-top-right">
+            <div class="gp-header-center lobby-hide" id="gp-opp-hand-top">
+                <div class="gp-opp-hand-row" id="opp-hand-container"></div>
+                <span id="opp-count" style="display:none;">0</span>
+            </div>
+            <div class="gp-header-right lobby-hide" id="gp-boss">
+                <div class="avatar gp-boss-avatar" id="opp-avatar"></div>
+                <div class="gp-boss-name" id="opp-name">boss 名称</div>
+                <div class="opp-speech" id="opp-speech"></div>
+            </div>
+        </div>
+        <div class="header-right lobby-hide gp-header-right-legacy" id="header-right-col">
+            <div class="passive-dock" id="passive-list"></div>
+            <div class="gold-container"><span class="bet-info" id="bet-display">下注: 0</span></div>
+        </div>
+    </header>
 
-<div id="game-func-controls">
-    <button class="game-func-btn" onclick="game.toggleInfo()" title="牌型说明">
-        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-cardtype.svg" alt=""></span>
-    </button>
-    <button class="game-func-btn" id="game-settings-btn" onclick="game.openSettingsSheet('game')" title="设置">
-        <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-settings.svg" alt=""></span>
-    </button>
-</div>
-<div id="main-stage">
-    <div class="panel" id="left-panel"><div class="panel-title" id="opp-name">对手</div><div class="avatar" id="opp-avatar"></div><div class="opp-speech" id="opp-speech"></div><div style="font-size:12px;color:#aaa;margin-bottom:5px;">手牌: <span id="opp-count">7</span></div><div class="opp-hand-grid" id="opp-hand-container"></div></div>
-    <div class="panel" id="center-panel">
-        <div class="panel-title">公共牌桌 <span id="deck-count-display" style="font-size:11px;color:#888;font-weight:normal;margin-left:6px;"></span></div>
-        <div class="baits-container"><div class="bait-row"><div class="bait-label">Ta 的<br>诱饵</div><div id="opp-bait-container" style="display:flex;gap:10px"></div></div><div style="height:20px;"></div><div class="bait-row"><div class="bait-label">我的<br>诱饵</div><div id="my-bait-container" style="display:flex;gap:10px"></div></div></div>
-        <div id="player-hand-area"><div id="hand-container"></div></div>
-    </div>
-    <div class="panel" id="right-panel">
-        <div class="panel-title">控制台</div>
-        <div class="action-area">
-            <div id="phase-tip" style="text-align:center;color:#888;font-size:12px;margin-bottom:10px;">准备中...</div>
-            <button id="btn-bait" class="btn btn-primary" style="display:none">放入诱饵 (0/2)</button>
-            <div id="play-group" style="display:none;flex-direction:column;gap:10px;">
-                <button id="btn-combo-opp" class="btn" disabled><span>和 TA 诱饵组合</span></button>
+    <div id="main-stage">
+        <div class="gp-table" id="center-panel">
+            <div class="gp-table-inner">
+                <div class="gp-table-left">
+                    <div class="gp-stat-box">
+                        <div class="gp-stat-line" id="deck-count-display"></div>
+                        <div class="gp-stat-line gp-stat-gold">
+                            <img src="assets/images/ui/icon-money.png" alt="金币">
+                            <span id="gold-display">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gp-table-middle">
+                    <div class="gp-bait-group">
+                        <div class="gp-bait-title">我的 诱饵牌</div>
+                        <div id="my-bait-container" class="gp-bait-cards"></div>
+                    </div>
+                    <div class="gp-bait-group">
+                        <div class="gp-bait-title">TA 的 诱饵牌</div>
+                        <div id="opp-bait-container" class="gp-bait-cards"></div>
+                    </div>
+                </div>
+                <div class="gp-table-right">
+                    <div class="gp-slots-grid" aria-hidden="true">
+                        <div class="gp-slot"></div><div class="gp-slot"></div><div class="gp-slot"></div><div class="gp-slot"></div>
+                        <div class="gp-slot"></div><div class="gp-slot"></div><div class="gp-slot"></div><div class="gp-slot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="gp-action-bar">
+            <div id="phase-tip" class="gp-phase-tip">准备中...</div>
+            <button id="btn-bait" class="btn btn-primary gp-bait-btn" style="display:none">放入诱饵牌 0/2</button>
+            <div id="play-group" class="gp-play-group" style="display:none;">
                 <button id="btn-combo-mine" class="btn" disabled><span>和 我的 诱饵组合</span></button>
+                <button id="btn-combo-opp" class="btn" disabled><span>和 TA 诱饵组合</span></button>
                 <div style="text-align:center;font-size:10px;">OR</div>
                 <button id="btn-play-hand" class="btn" disabled><span>直接出 5 张手牌</span></button>
             </div>
-            <div id="skill-confirm-group" style="display:none;flex-direction:column;gap:5px;">
+            <div id="skill-confirm-group" class="gp-play-group" style="display:none;">
                 <button id="btn-skill-ok" class="btn btn-primary" style="background:var(--rare)">确认施法</button>
                 <button id="btn-skill-no" class="btn">取消</button>
             </div>
-            <div id="bet-panel" style="display:none;flex-direction:column;gap:8px;">
+            <div id="bet-panel" class="gp-play-group" style="display:none;">
                 <div style="text-align:center;color:gold;">幻注: 选择下注额</div>
                 <button class="btn" id="bet-btn-1" onclick="game.placeBet(0)">下注 30%</button>
                 <button class="btn" id="bet-btn-2" onclick="game.placeBet(1)">下注 50%</button>
                 <button class="btn" onclick="game.cancelSkill()">取消</button>
             </div>
         </div>
-        <div style="width:100%;border-top:1px solid #444;padding-top:10px;margin-top:20px;">
-            <div class="panel-title" style="border:none;margin:0;">技能</div>
+    </div>
+
+    <div class="gp-bottom-bar">
+        <div id="game-func-controls">
+            <button class="game-func-btn" onclick="game.toggleInfo()" title="牌型说明">
+                <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-cardtype.svg" alt=""></span>
+            </button>
+            <button class="game-func-btn" id="game-settings-btn" onclick="game.openSettingsSheet('game')" title="设置">
+                <span class="icon-wrap"><img class="func-icon" src="assets/images/ui/icon-settings.svg" alt=""></span>
+            </button>
+        </div>
+        <div id="player-hand-area"><div id="hand-container"></div></div>
+        <div class="gp-skill-float lobby-hide" id="gp-skill-float">
             <div id="skill-dock"></div>
         </div>
     </div>
@@ -895,12 +1186,29 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 
 <div id="exit-confirm-modal" class="overlay" style="z-index:12000;" onclick="if(event.target===this)game.hideExitConfirm()">
-    <div class="info-panel" style="text-align:center;border-color:rgba(251,191,36,0.45);width:86%;max-width:360px;padding:26px;background:#1e293b;">
-        <div style="font-size:16px;font-weight:bold;color:#fff;margin-bottom:12px;">确认保存进度并返回大厅？</div>
-        <div style="font-size:12px;color:#94a3b8;margin-bottom:20px;line-height:1.6;">返回大厅后仍可在大厅点击「继续游戏」恢复进度</div>
-        <div style="display:flex;gap:12px;justify-content:center;">
-            <button class="btn btn-primary" style="width:110px;padding:10px;" onclick="game.confirmExitToLobby()">确认</button>
-            <button class="btn" style="width:110px;padding:10px;border:1px solid #555;" onclick="game.hideExitConfirm()">取消</button>
+    <div class="fp-modal-card" style="width:90%;max-width:680px;">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;text-align:center;">
+                <div class="fp-modal-title" style="margin:0 0 12px 0;">返回大厅？</div>
+                <div class="fp-modal-body" style="margin-bottom:20px;color:#94a3b8;">返回大厅后仍可在大厅点击「继续游戏」恢复进度</div>
+                <div style="display:flex;gap:14px;justify-content:center;">
+                   <!-- 确认按钮 -->
+<button class="btn btn-primary fp-confirm-btn fp-btn-with-icon" 
+        style="width: 200px; padding: 12px 0; font-size: 20px;" 
+        onclick="game.confirmExitToLobby()">
+    <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+    <span class="fp-btn-text">确认</span>
+</button>
+
+<!-- 取消按钮 -->
+<button class="btn fp-cancel-btn fp-btn-with-icon" 
+        style="width: 200px; padding: 12px 0; font-size: 20px;" 
+        onclick="game.hideExitConfirm()">
+    <img class="fp-btn-icon" src="assets/images/ui/icon-cancel.svg" alt="">
+    <span class="fp-btn-text">取消</span>
+</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -953,13 +1261,23 @@ body.overlay-active #game-func-controls{display:none;}
 </div>
 
 <div id="info-screen" class="overlay" onclick="game.toggleInfo()">
-    <div class="info-panel" style="position:relative;" onclick="event.stopPropagation()">
-        <button onclick="game.toggleInfo()" title="关闭" style="position:absolute;right:10px;top:10px;background:none;border:none;cursor:pointer;padding:5px;">
-            <img src="assets/images/ui/icon-close.png" style="width:20px;height:20px;display:block;" alt="关闭">
-        </button>
-        <h3 style="color:var(--highlight);margin-bottom:15px;text-align:center;">牌型说明</h3>
-        <div id="info-content"></div>
-        <div class="info-footer">牌型、花色、点数大小说明：<br>同花顺 > 四炸 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 单牌<br>花色大小：黑桃 > 红心 > 方块 > 梅花<br>点数大小：A > K > Q > J > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2<br><span style="color:var(--black-color)">每局获得金币：为本局牌型对应积分的 10%</span></div>
+    <div class="fp-modal-card" style="width:min(900px,95vw);height:min(430px,88vh)" onclick="event.stopPropagation()">
+        <div class="fp-modal-inner fp-modal-decor">
+            <div class="fp-modal-content" style="padding:26px 22px;">
+                <button onclick="game.toggleInfo()" class="fp-modal-close" title="关闭">
+                    <img src="assets/images/ui/icon-close.svg" alt="关闭">
+                </button>
+                <h3 class="fp-modal-title fp-title-ali" style="text-align:center;margin:0 0 14px 0;">牌型说明</h3>
+                <div id="info-content" class="fp-modal-body"></div>
+                <div class="fp-modal-body" style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);color:#9ca3af;">
+                    牌型、花色、点数大小说明：<br>
+                    同花顺 > 四炸 > 葫芦 > 同花 > 顺子 > 三条 > 两对 > 单牌<br>
+                    花色大小：黑桃 > 红心 > 方块 > 梅花<br>
+                    点数大小：A > K > Q > J > 10 > 9 > 8 > 7 > 6 > 5 > 4 > 3 > 2<br>
+                    <span style="color:var(--black-color)">每局获得金币：为本局牌型对应积分的 10%</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1132,8 +1450,8 @@ const PokerEngine={
     }
 };
 
-const SAVE_KEY='fishingPokerSave_v3_7_5';
-const LEGACY_SAVE_KEY='fishingPokerSave_v3_7_4';
+const SAVE_KEY='fishingPokerSave_v3_8_2';
+const LEGACY_SAVE_KEY='fishingPokerSave_v3_7_5';
 
 class Game {
     constructor(){this.resetGlobal();this.initDOM();this.audio=new AtmosphereAudio();this.isAudioOn=true;this.inGame=false;this.initSplash();this.rainConfig={density:80,speed:8,length:15,color:'rgba(174,194,224,0.5)'};}
@@ -1207,7 +1525,7 @@ class Game {
         // phase 改存为 'ROUND_DONE'，以便恢复时知道需要进入下一回合
         const savedPhase = (this.phase === 'SETTLE') ? 'ROUND_DONE' : this.phase;
         const state = {
-            version: '3.7.5', levelIndex: this.levelIndex, playerGold: this.playerGold,
+            version: '3.8.2', levelIndex: this.levelIndex, playerGold: this.playerGold,
             ownedSkills: this.ownedSkills, ownedPassives: this.ownedPassives,
             equippedSkills: this.equippedSkills, equippedPassives: this.equippedPassives,
             skillUsage: this.skillUsage, skillMaxModifiers: this.skillMaxModifiers,
@@ -1323,14 +1641,19 @@ class Game {
             document.body.classList.remove('lobby-mode');
             // ROUND_DONE：本回合已出牌结算，需要进入下一回合（或若已是最后回合则回地图）
             if(this.inGame && this.phase === 'ROUND_DONE') {
+                this.setGameplayMode(true);
                 document.getElementById('map-screen').style.display='none';
                 document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;
                 document.getElementById('opp-name').innerText=this.opponentName;
                 const freshCfg = LEVEL_CONFIG[this.levelIndex];
                 if(freshCfg) this.config = Object.assign({}, freshCfg, this.config);
                 this.playLevelEnterTransition(()=>{
+                    const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='flex';
                     document.getElementById('header-left-col').classList.remove('lobby-hide');
                     document.getElementById('header-right-col').classList.remove('lobby-hide');
+                    document.getElementById('gp-opp-hand-top')?.classList.remove('lobby-hide');
+                    document.getElementById('gp-boss')?.classList.remove('lobby-hide');
+                    document.getElementById('gp-skill-float')?.classList.remove('lobby-hide');
                     document.getElementById('info-screen').classList.remove('visible');
                     // 判断是否还有下一回合
                     const maxRounds = this.config.rounds || 3;
@@ -1347,14 +1670,19 @@ class Game {
                 });
             } else if(this.inGame && this.phase !== 'SETTLE') {
                 // ── 恢复牌桌场景：先显示洗牌转场 ────────────────────────
+                this.setGameplayMode(true);
                 document.getElementById('map-screen').style.display='none';
                 document.querySelector('.avatar').style.backgroundImage=`url('https://api.dicebear.com/7.x/bottts/svg?seed=${this.opponentName}')`;
                 document.getElementById('opp-name').innerText=this.opponentName;
                 const freshCfg = LEVEL_CONFIG[this.levelIndex];
                 if(freshCfg) this.config = Object.assign({}, freshCfg, this.config);
                 this.playLevelEnterTransition(()=>{
+                    const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='flex';
                     document.getElementById('header-left-col').classList.remove('lobby-hide');
                     document.getElementById('header-right-col').classList.remove('lobby-hide');
+                    document.getElementById('gp-opp-hand-top')?.classList.remove('lobby-hide');
+                    document.getElementById('gp-boss')?.classList.remove('lobby-hide');
+                    document.getElementById('gp-skill-float')?.classList.remove('lobby-hide');
                     document.getElementById('info-screen').classList.remove('visible');
                     if(!this.playerHand || this.playerHand.length === 0) {
                         this.startRound();
@@ -1382,7 +1710,7 @@ class Game {
         } else { this.startNewGame(); }
     }
     shuffle(array){for(let i=array.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[array[i],array[j]]=[array[j],array[i]];}}
-    showLobby(){/* audio lifecycle now managed by initSplash */this.updateMailBadge();this.startRain();document.body.classList.add('lobby-mode');}
+    showLobby(){this.setGameplayMode(false);this.updateMailBadge();this.startRain();document.body.classList.add('lobby-mode');}
     // ========== 邮箱系统 ==========
     get mailData(){
         if(!this._mailData){
@@ -1405,15 +1733,16 @@ class Game {
     }
     openMailbox(){
         const modal=document.getElementById('mailbox-modal');
-        modal.style.display='flex';
+        modal.classList.add('visible');
+        this.setOverlayState(true);
         const mails=this.getMailList();
         const listEl=document.getElementById('mail-list');
         listEl.innerHTML='';
         mails.forEach((m,idx)=>{
             const isRead=this.mailData.read.includes(m.id);
             const item=document.createElement('div');
-            item.style.cssText='padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.15s;';
-            item.innerHTML=`<span style="font-size:16px;flex-shrink:0">${m.icon}</span><div style="min-width:0;"><div style="font-size:12.5px;color:${isRead?'#94a3b8':'#e2e8f0'};font-weight:${isRead?'400':'600'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.title}</div><div style="font-size:11px;color:#64748b;margin-top:2px;">${m.date}</div></div>${!isRead?'<span style="width:6px;height:6px;border-radius:50%;background:#f87171;flex-shrink:0;margin-left:auto;"></span>':''}`;
+            item.style.cssText='padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.08);transition:background 0.15s;';
+            item.innerHTML=`<span style="font-size:30px;flex-shrink:0">${m.icon}</span><div style="min-width:0;"><div style="font-size:18px;color:${isRead?'#94a3b8':'#e5e7eb'};font-weight:${isRead?'400':'900'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.title}</div><div style="font-size:16px;color:#64748b;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m.date}</div></div>${!isRead?'<span style="width:8px;height:8px;border-radius:50%;background:#f87171;flex-shrink:0;margin-left:auto;"></span>':''}`;
             item.addEventListener('mouseenter',()=>{item.style.background='rgba(255,255,255,0.06)';});
             item.addEventListener('mouseleave',()=>{item.style.background=idx===this._mailSelected?'rgba(255,255,255,0.08)':'';});
             item.addEventListener('click',()=>{this.selectMail(m,idx,mails);});
@@ -1446,9 +1775,13 @@ class Game {
         // 渲染内容
         const lines=m.content.split('\n');
         const contentEl=document.getElementById('mail-content');
-        contentEl.innerHTML=`<div style="margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.07);"><div style="color:#e2e8f0;font-size:14px;font-weight:600;margin-bottom:4px;">${m.title}</div><div style="font-size:11.5px;color:#64748b;">${m.from} · ${m.date}</div></div><div style="color:#cbd5e1;font-size:13.5px;line-height:1.9;">${lines.map(l=>l?`<p style="margin:0 0 8px 0;">${l}</p>`:'<p style="margin:0 0 8px 0;">&nbsp;</p>').join('')}</div>`;
+        contentEl.innerHTML=`<div style="margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.12);"><div style="color:#e5e7eb;font-size:20px;font-weight:900;margin-bottom:6px;line-height:1.2;">${m.title}</div><div style="font-size:16px;color:#94a3b8;">${m.from} · ${m.date}</div></div><div style="color:#cbd5e1;font-size:16px;line-height:1.8;">${lines.map(l=>l?`<p style="margin:0 0 12px 0;">${l}</p>`:'<p style="margin:0 0 12px 0;">&nbsp;</p>').join('')}</div>`;
     }
-    closeMailbox(){document.getElementById('mailbox-modal').style.display='none';}
+    closeMailbox(){
+        const modal=document.getElementById('mailbox-modal');
+        if(modal) modal.classList.remove('visible');
+        this.setOverlayState(false);
+    }
     // ========== 邮箱系统结束 ==========
     enterGameplayMapMode(){
         document.getElementById('lobby-screen').style.display='none';
@@ -1457,6 +1790,7 @@ class Game {
         this.showGameplayMap();
     }
     showGameplayMap(){
+        this.setGameplayMode(false);
         const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
         const map=document.getElementById('map-screen'); if(map) map.style.display='none';
         const gms=document.getElementById('gameplay-map-screen');
@@ -1498,6 +1832,9 @@ class Game {
         }
         document.getElementById('header-left-col')?.classList.add('lobby-hide');
         document.getElementById('header-right-col')?.classList.add('lobby-hide');
+        document.getElementById('gp-opp-hand-top')?.classList.add('lobby-hide');
+        document.getElementById('gp-boss')?.classList.add('lobby-hide');
+        document.getElementById('gp-skill-float')?.classList.add('lobby-hide');
         document.getElementById('info-screen')?.classList.remove('visible');
         if(!gms) this.layoutGameplayMap();
     }
@@ -1588,6 +1925,7 @@ class Game {
     }
     enterMapMode(){document.getElementById('lobby-screen').style.display='none';this.stopRain();document.body.classList.remove('lobby-mode');this.showMap();}
     showMap(){
+        this.setGameplayMode(false);
         this.saveState();
         const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='none';
         const gms=document.getElementById('gameplay-map-screen'); if(gms) gms.style.display='none';
@@ -1636,30 +1974,41 @@ class Game {
         const rewardId=(window._challengeRewards&&window._challengeRewards[cfg.id])||'youming';
         const rewardItem=REWARD_POOL.find(x=>x.id===rewardId)||{name:'罕见道具',icon:'🎁',desc:'罕见道具'};
         const ov=document.getElementById('overlay-screen');ov.classList.add('visible');this.setOverlayState(true);
-        ov.innerHTML=`<div style="background:linear-gradient(180deg,#1e293b 0%,#0f172a 100%);border:2px solid #f97316;border-radius:20px;padding:32px 28px;text-align:center;max-width:420px;width:92%;color:#fff;box-shadow:0 0 40px rgba(249,115,22,0.3);font-family:'HeiTi',sans-serif;">
-            <div style="font-size:26px;font-weight:900;color:#f97316;margin-bottom:4px;letter-spacing:2px;font-family:'AliHei',sans-serif;">⚡ 挑战关卡</div>
-            <div style="font-size:13px;color:#94a3b8;margin-bottom:20px;">${cfg.id} · ${cfg.name}</div>
-            <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.3);border-radius:12px;padding:16px;margin-bottom:18px;">
-                <div style="font-size:12px;color:#f97316;font-weight:bold;margin-bottom:10px;letter-spacing:1px;font-family:'AliHei',sans-serif;">⭐ 胜利道具奖励</div>
-                <div style="display:inline-flex;flex-direction:column;align-items:center;gap:6px;background:#2d3748;border:2px solid #d580ff;border-radius:10px;padding:12px 18px;position:relative;">
-                    <span style="font-size:28px;">${rewardItem.icon}</span>
-                    <span style="font-size:13px;font-weight:bold;color:#fff;font-family:'AliHei',sans-serif;">${rewardItem.name}</span>
-                    <span style="position:absolute;top:-8px;right:-8px;background:#f97316;color:#fff;font-size:9px;font-weight:900;padding:2px 6px;border-radius:4px;font-family:'AliHei',sans-serif;">罕见</span>
-                    <span style="font-size:10px;color:#cbd5e1;max-width:180px;line-height:1.4;margin-top:4px;">${this.getDynamicDesc(rewardId, 'passive')}</span>
+        ov.innerHTML=`
+            <div class="fp-modal-card" style="width:min(900px,92vw);">
+                <div class="fp-modal-inner fp-modal-decor">
+                    <div class="fp-modal-content" style="padding:26px 22px;">
+                        <div class="fp-modal-title" style="text-align:center;color:#f97316;margin:0 0 10px 0;">⚡ 挑战关卡</div>
+                        <div class="fp-modal-body" style="text-align:center;color:#94a3b8;margin-bottom:18px;">${cfg.id} · ${cfg.name}</div>
+
+                        <div style="border:1px solid rgba(255,255,255,0.12);border-radius:4px;background:rgba(0,0,0,0.55);padding:16px 14px;margin-bottom:16px;">
+                            <div class="fp-modal-body" style="color:#f97316;font-weight:900;margin-bottom:12px;">⭐ 胜利道具奖励</div>
+                            <div style="display:flex;justify-content:center;">
+                                <div style="display:inline-flex;flex-direction:column;align-items:center;gap:10px;background:#0b1220;border:1px solid rgba(213,128,255,0.6);border-radius:4px;padding:14px 16px;position:relative;max-width:520px;">
+                                    <div style="font-size:34px;line-height:1;">${rewardItem.icon}</div>
+                                    <div class="fp-modal-body" style="font-weight:900;color:#fff;">${rewardItem.name}</div>
+                                    <div style="position:absolute;top:10px;right:10px;border:1px solid rgba(255,255,255,0.16);border-radius:4px;background:rgba(249,115,22,0.9);color:#fff;padding:2px 8px;font-size:20px;font-weight:900;">罕见</div>
+                                    <div class="fp-modal-body" style="color:#cbd5e1;opacity:0.9;text-align:center;">${this.getDynamicDesc(rewardId, 'passive')}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fp-modal-body" style="border:1px solid rgba(255,255,255,0.12);border-radius:4px;background:rgba(0,0,0,0.4);padding:16px 14px;margin-bottom:18px;">
+                            本关卡 <strong style="color:#f97316;">1 局定胜负</strong>，不可使用任何道具，牌型比大小。<br>
+                            🏆 胜利可获得 <strong style="color:#fbbf24;">2000 金币</strong>，钓鱼成功金币奖励翻倍。<br>
+                            🎁 免费领取道具【<strong style="color:#d580ff;">${rewardItem.name}</strong>】。<br>
+                            ❌ 失败无惩罚，继续下一关卡。<br>
+                            ⏭️ 跳过挑战关卡，直接获得 <strong style="color:#fbbf24;">${cfg.skipGold} 金币</strong>。
+                        </div>
+
+                        <div style="display:flex;gap:14px;justify-content:center;">
+                            <button class="btn" style="flex:1;padding:12px 0;font-size:20px;border:1px solid #4b5563;background:transparent;color:#e5e7eb;" onclick="game.skipChallenge(${cfg.skipGold})">跳 过</button>
+                            <button class="btn btn-primary" style="flex:1;padding:12px 0;font-size:20px;background:linear-gradient(180deg,#f97316,#ea580c);border:none;" onclick="game.startChallenge('${cfg.id}','${rewardId}')">前往挑战</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:14px 16px;margin-bottom:20px;font-size:12.5px;line-height:1.9;color:#cbd5e1;text-align:left;">
-                本关卡 <strong style="color:#f97316;">1 局定胜负</strong>，不可使用任何道具，牌型比大小。<br>
-                🏆 胜利可获得 <strong style="color:#fbbf24;">2000 金币</strong>，钓鱼成功金币奖励翻倍。<br>
-                🎁 免费领取道具【<strong style="color:#d580ff;">${rewardItem.name}</strong>】。<br>
-                ❌ 失败无惩罚，继续下一关卡。<br>
-                ⏭️ 跳过挑战关卡，直接获得 <strong style="color:#fbbf24;">${cfg.skipGold} 金币</strong>。
-            </div>
-            <div style="display:flex;gap:12px;justify-content:center;">
-                <button style="flex:1;background:linear-gradient(180deg,#374151,#1f2937);color:#9ca3af;border:1px solid #4b5563;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'AliHei',sans-serif;letter-spacing:2px;" onclick="game.skipChallenge(${cfg.skipGold})">跳 过</button>
-                <button style="flex:1;background:linear-gradient(180deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:13px 0;font-size:15px;font-weight:bold;cursor:pointer;font-family:'AliHei',sans-serif;letter-spacing:2px;" onclick="game.startChallenge('${cfg.id}','${rewardId}')">前往挑战</button>
-            </div>
-        </div>`;
+        `;
     }
     startChallenge(levelId, rewardId){
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
@@ -1674,6 +2023,7 @@ class Game {
         this.showMap();
     }
     setOverlayState(active){if(active)document.body.classList.add('overlay-active');else document.body.classList.remove('overlay-active');}
+    setGameplayMode(active){if(active)document.body.classList.add('gameplay-mode');else document.body.classList.remove('gameplay-mode');}
     showToast(msg){
         const t=document.getElementById('toast-msg');
         if(!t) return;
@@ -1691,13 +2041,13 @@ class Game {
         const items = (mode==='game') ? [
             {key:'music',      text:'音乐',   icon:'assets/images/ui/icon-music.svg',      onClick:()=>this.toggleAudio()},
             {key:'volume',     text:'音量',   icon:'assets/images/ui/icon-volume.svg',     onClick:()=>this.showToast('功能开发中')},
-            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.showToast('功能开发中')},
+            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.openResolutionPicker()},
             {key:'language',   text:'中英文', icon:'assets/images/ui/icon-language.svg',   onClick:()=>this.showToast('功能开发中')},
             {key:'email',      text:'邮箱',   icon:'assets/images/ui/icon-email.svg',      onClick:()=>{this.closeSettingsSheet();this.openMailbox();}},
             {key:'fullscreen', text:'全屏',   icon:'assets/images/ui/icon-full.svg',       onClick:()=>this.toggleFullscreen()},
             {key:'exit',       text:'退出',   icon:'assets/images/ui/icon-exit.svg',       onClick:()=>{this.closeSettingsSheet();this.showExitConfirm();}},
         ] : [
-            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.showToast('功能开发中')},
+            {key:'resolution', text:'分辨率', icon:'assets/images/ui/icon-resolution.svg', onClick:()=>this.openResolutionPicker()},
             {key:'language',   text:'中英文', icon:'assets/images/ui/icon-language.svg',   onClick:()=>this.showToast('功能开发中')},
             {key:'volume',     text:'音量',   icon:'assets/images/ui/icon-volume.svg',     onClick:()=>this.showToast('功能开发中')},
         ];
@@ -1740,19 +2090,65 @@ class Game {
         }
     }
     toggleFullscreen(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(err=>{});}else{if(document.exitFullscreen){document.exitFullscreen();}}}
+    ensureLandscape(){
+        try{
+            if(screen.orientation && screen.orientation.lock){
+                if(document.fullscreenElement){
+                    screen.orientation.lock('landscape').catch(()=>{});
+                }
+            }
+        }catch(e){}
+    }
+    setResolution(w,h){
+        this.designWidth = w;
+        this.designHeight = h;
+        this.updateGameplayUIScale();
+        this.showToast(`${w} × ${h} 分辨率已应用`);
+    }
+    openResolutionPicker(){
+        const itemsEl=document.getElementById('settings-sheet-items');
+        const titleEl=document.getElementById('settings-sheet-title');
+        if(!itemsEl||!titleEl)return;
+        titleEl.innerText='分辨率';
+        const opts=[
+            {w:1280,h:720},
+            {w:1600,h:900},
+            {w:1920,h:1080},
+            {w:1920,h:1200},
+        ];
+        itemsEl.innerHTML='';
+        opts.forEach(o=>{
+            const btn=document.createElement('button');
+            btn.type='button';
+            btn.className='settings-sheet-item';
+            btn.innerHTML=`<img src="assets/images/ui/icon-resolution.svg" alt=""><span class="txt">${o.w} × ${o.h}</span>`;
+            btn.onclick=()=>this.setResolution(o.w,o.h);
+            itemsEl.appendChild(btn);
+        });
+        const back=document.createElement('button');
+        back.type='button';
+        back.className='settings-sheet-item';
+        back.innerHTML=`<img src="assets/images/ui/icon-settings.svg" alt=""><span class="txt">返回</span>`;
+        back.onclick=()=>this.openSettingsSheet('game');
+        itemsEl.appendChild(back);
+    }
     showExitConfirm(){const m=document.getElementById('exit-confirm-modal');if(m){m.classList.add('visible');this.setOverlayState(true);}}
     hideExitConfirm(){const m=document.getElementById('exit-confirm-modal');if(m){m.classList.remove('visible');}this.setOverlayState(false);}
-    confirmExitToLobby(){this.saveState();this.hideExitConfirm();this.playLevelEnterTransition(()=>{this.returnToLobby(false);});}
+    confirmExitToLobby(){this.saveState();this.hideExitConfirm();this.returnToLobby(false);}
     returnToLobby(isClear = false){
         if (isClear){
             localStorage.removeItem(SAVE_KEY);
             localStorage.removeItem(LEGACY_SAVE_KEY);
         }
         this.resetGlobal();
+        this.setGameplayMode(false);
         document.getElementById('overlay-screen').classList.remove('visible');this.setOverlayState(false);
         document.getElementById('lobby-screen').style.display='flex';document.getElementById('map-screen').style.display='none';
         const gms=document.getElementById('gameplay-map-screen'); if(gms)gms.style.display='none';
         document.getElementById('header-left-col').classList.add('lobby-hide');document.getElementById('header-right-col').classList.add('lobby-hide');
+        document.getElementById('gp-opp-hand-top')?.classList.add('lobby-hide');
+        document.getElementById('gp-boss')?.classList.add('lobby-hide');
+        document.getElementById('gp-skill-float')?.classList.add('lobby-hide');
         this.inGame=false;
         this.startRain();
         document.body.classList.add('lobby-mode');
@@ -1859,8 +2255,38 @@ class Game {
         ctx.stroke();
         this._rainAnimId=requestAnimationFrame(()=>this._animateRain());
     }
+    updateGameplayUIScale(){
+        const baseW=this.designWidth||1600;
+        const baseH=this.designHeight||900;
+        const scale=Math.min(window.innerWidth/baseW,window.innerHeight/baseH);
+        const clamped=Math.max(0.6,Math.min(1.35,scale));
+        document.documentElement.style.setProperty('--gp-ui-scale',clamped.toFixed(4));
+        let topGap=Math.max(0,Math.min(150,150*scale));
+        if(document.body.classList.contains('gameplay-mode')){
+            const stage=document.getElementById('main-stage');
+            const center=document.getElementById('center-panel');
+            const action=document.querySelector('.gp-action-bar');
+            const hand=document.getElementById('player-hand-area');
+            if(stage&&center&&action&&hand&&stage.offsetParent!==null&&hand.offsetParent!==null){
+                const stageRect=stage.getBoundingClientRect();
+                const handRect=hand.getBoundingClientRect();
+                const gapStr=(getComputedStyle(stage).gap||'0px').split(' ')[0];
+                const gap=parseFloat(gapStr)||0;
+                const contentH=center.getBoundingClientRect().height+action.getBoundingClientRect().height+gap;
+                const availableH=Math.max(0,handRect.top-stageRect.top);
+                const centered=Math.max(0,(availableH-contentH)/2);
+                topGap=Math.min(240,centered);
+            }
+        }
+        document.documentElement.style.setProperty('--gp-top-gap',Math.round(topGap)+'px');
+    }
     initDOM(){
         this.initRain();
+        this.updateGameplayUIScale();
+        if(!this._gpScaleBound){
+            this._gpScaleBound=true;
+            window.addEventListener('resize',()=>this.updateGameplayUIScale());
+        }
         const logo = document.getElementById('lobby-logo');
         if (logo) {
             logo.addEventListener('mousemove', (e) => {
@@ -1908,12 +2334,15 @@ class Game {
                 tooltip.style.visibility='visible';
             });
         };
-        document.body.addEventListener('mouseover',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target)showTooltip(target);});
-        document.body.addEventListener('mouseout',(e)=>{if(e.target.closest('.passive-icon')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item'))tooltip.style.display='none';});
-        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.card')||e.target.closest('.inv-item');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
+        document.body.addEventListener('mouseover',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.gp-slot')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target)showTooltip(target);});
+        document.body.addEventListener('mouseout',(e)=>{if(e.target.closest('.passive-icon')||e.target.closest('.gp-slot')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item'))tooltip.style.display='none';});
+        document.body.addEventListener('click',(e)=>{const target=e.target.closest('.passive-icon')||e.target.closest('.gp-slot')||e.target.closest('.skill-item')||e.target.closest('.card')||e.target.closest('.inv-item');if(target){showTooltip(target);setTimeout(()=>{if(tooltip.innerText===target.getAttribute('data-desc'))tooltip.style.display='none';},3000);}const bubble=document.getElementById('item-interact-bubble');if(bubble&&bubble.style.display==='block'&&!e.target.closest('#item-interact-bubble')){bubble.style.display='none';}});
     }
     startLevel(){
         this.inGame=true;
+        this.setGameplayMode(true);
+        this.updateGameplayUIScale();
+        this.ensureLandscape();
         this.config=LEVEL_CONFIG[this.levelIndex];
         if(this.config.step===1){this.currentLevelWins=0;this.currentLevelLosses=0;}
         this.currentRound=1;this.levelEarnedGold=0;this.currentTargetGold=this.config.gold;this.douliCount=0;
@@ -1937,8 +2366,12 @@ class Game {
             this.setupPersona();
         }
         this.playLevelEnterTransition(()=>{
+            const gfc=document.getElementById('game-func-controls'); if(gfc) gfc.style.display='flex';
             document.getElementById('header-left-col').classList.remove('lobby-hide');
             document.getElementById('header-right-col').classList.remove('lobby-hide');
+            document.getElementById('gp-opp-hand-top')?.classList.remove('lobby-hide');
+            document.getElementById('gp-boss')?.classList.remove('lobby-hide');
+            document.getElementById('gp-skill-float')?.classList.remove('lobby-hide');
             document.getElementById('info-screen').classList.remove('visible');
             this.updateHeader();
             this.startRound();
@@ -2391,26 +2824,36 @@ class Game {
             el.setAttribute('data-desc',`${s.name}: ${this.getDynamicDesc(k,'skill',true)}`);
             el.setAttribute('data-skill-id',k);
             const icon=s.icon||'🔰';el.innerHTML=`<div style="font-size:20px">${icon}</div><div style="font-size:10px">${s.name}</div>${count!==''?`<div class="skill-count">${count}</div>`:''}`;
-            el.onclick=(e)=>{e.stopPropagation();if(!dis)this.activateSkill(k);}
-            el.style.border='1px solid #566573';div.appendChild(el);
+            el.onclick=()=>{if(!dis)this.activateSkill(k);}
+            div.appendChild(el);
+            if(this.skillMode===k)el.classList.add('selected');
         });
     }
     updateControls(){
         const bait=document.getElementById('btn-bait');const play=document.getElementById('play-group');const skill=document.getElementById('skill-confirm-group');const bet=document.getElementById('bet-panel');const tip=document.getElementById('phase-tip');
         bait.style.display='none';play.style.display='none';skill.style.display='none';bet.style.display='none';
         if(this.skillMode){
+            const sk=SKILLS_DB[this.skillMode];tip.innerText=`${sk&&sk.name?sk.name:''}: ${this.getDynamicDesc(this.skillMode,'skill',true)}`;
             if(this.skillMode==='huanzhu'){let r1=this.betRatios[0];let r2=this.betRatios[1];if(this.equippedPassives.includes('xuanwo')){r1+=0.1;r2+=0.1;}document.querySelector('#bet-panel button:nth-child(2)').innerText=`下注 ${(r1*100).toFixed(0)}%`;document.querySelector('#bet-panel button:nth-child(2)').onclick=()=>this.placeBet(0);document.querySelector('#bet-panel button:nth-child(3)').innerText=`下注 ${(r2*100).toFixed(0)}%`;document.querySelector('#bet-panel button:nth-child(3)').onclick=()=>this.placeBet(1);bet.style.display='flex';return;}
             skill.style.display='flex';
             const ok=document.getElementById('btn-skill-ok');if(['yundu','blast'].includes(this.skillMode))ok.disabled=this.selectedCards.length!==1;else if(this.skillMode==='xuanji')ok.disabled=this.selectedCards.length===0;else ok.disabled=false;
             return;
         }
-        if(this.phase==='BAIT'){tip.innerText='请选择 2 张作为诱饵 (可先用技能)';bait.style.display='block';bait.innerText=`放入诱饵 (${this.selectedCards.length}/2)`;bait.disabled=this.selectedCards.length!==2;}
+        if(this.phase==='BAIT'){tip.innerText='请选择 2 张作为诱饵 (可先用技能)';bait.style.display='flex';bait.innerText=`放入诱饵 (${this.selectedCards.length}/2)`;bait.disabled=this.selectedCards.length!==2;}
         else{
             tip.innerText='组合出牌阶段';play.style.display='flex';const n=this.selectedCards.length;const b1=document.getElementById('btn-combo-opp');const b2=document.getElementById('btn-combo-mine');const b3=document.getElementById('btn-play-hand');
             b1.disabled=b2.disabled=(n!==3);b3.disabled=(n!==5);const isWild=(this.config.rule==='wild_6');
-            if(n===3){const r1=this.evalHandValue([...this.selectedCards,...this.oppBait],isWild);const r2=this.evalHandValue([...this.selectedCards,...this.playerBait],isWild);b1.innerHTML=`和ta组合 出 ${r1.name} <span class="gold-val">(${r1.payout}分)</span>`;b2.innerHTML=`自己组合 出 ${r2.name} <span class="gold-val">(${r2.payout}分)</span>`;}
+            if(n===3){
+                const r1=this.evalHandValue([...this.selectedCards,...this.oppBait],isWild);
+                const r2=this.evalHandValue([...this.selectedCards,...this.playerBait],isWild);
+                b1.innerHTML=`<div class="gp-btn-lines"><div class="gp-btn-line1">和 TA 诱饵组合</div><div class="gp-btn-line2"><span>${r1.name}</span> <span class="gold-val">${r1.payout}分</span></div></div>`;
+                b2.innerHTML=`<div class="gp-btn-lines"><div class="gp-btn-line1">自己组合</div><div class="gp-btn-line2"><span>${r2.name}</span> <span class="gold-val">${r2.payout}分</span></div></div>`;
+            }
             else{b1.innerText='和 TA 诱饵组合';b2.innerText='和 我的 诱饵组合';}
-            if(n===5){const r3=this.evalHandValue(this.selectedCards,isWild);b3.innerHTML=`出 ${r3.name} <span class="gold-val">(${r3.payout}分)</span>`;}
+            if(n===5){
+                const r3=this.evalHandValue(this.selectedCards,isWild);
+                b3.innerHTML=`<div class="gp-btn-lines"><div class="gp-btn-line1">直接出牌</div><div class="gp-btn-line2"><span>${r3.name}</span> <span class="gold-val">${r3.payout}分</span></div></div>`;
+            }
             else{b3.innerText='直接出 5 张手牌';}
         }
     }
@@ -2775,15 +3218,18 @@ class Game {
         // 挑战场按钮：胜利→"前往商城领取奖励"，失败→"前往下一关"
         let nextAction=isEnd?`game.openShopInventory()`:"game.nextRound()";let btnTxt=isEnd?"前往道具商店":"下一回合";
         if(isChallenge&&isEnd&&win){nextAction=`game.openShopInventory()`;btnTxt="前往商城领取奖励";}
-        if(isEnd&&this.levelIndex>=LEVEL_CONFIG.length-1&&win){ov.innerHTML=`<div style="text-align:center; color:gold;"><div style="font-size:60px;">🦊</div><h1 style="font-size:30px; margin-bottom:10px;">无尽塔楼，挑战成功</h1><p>恭喜获得狐狸徽章</p><button class="btn btn-primary btn-lobby" style="width:280px; margin-top:30px;" onclick="game.returnToLobby(true)">返回大厅</button></div>`;return;}
+        if(isEnd&&this.levelIndex>=LEVEL_CONFIG.length-1&&win){
+            ov.innerHTML=`<div class="fp-modal-card" style="width:min(720px,92vw);"><div class="fp-modal-inner fp-modal-decor"><div class="fp-modal-content" style="padding:26px 22px;text-align:center;"><div style="font-size:60px;line-height:1;">🦊</div><div class="fp-modal-title" style="margin:14px 0 10px 0;">无尽塔楼，挑战成功</div><div class="fp-modal-body">恭喜获得狐狸徽章</div><button class="btn btn-primary btn-lobby" style="width:320px;margin-top:22px;padding:12px 0;font-size:20px;" onclick="game.returnToLobby(true)">返回大厅</button></div></div></div>`;
+            return;
+        }
         const itemsStr=myRes.items.length>0?myRes.items.join(', '):'无';
         let progressStr='';
         if(isChallenge){progressStr=win?'挑战成功 🏆':'挑战失败';}
         else if(this.config.target==='accumulate')progressStr=`${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}`;else if(this.config.target==='best_of_3')progressStr=`${this.currentLevelWins}胜 ${this.currentLevelLosses}负`;
         const getHandHtml=(cards, prefix)=>{let html=`<div class="flex flex-wrap gap-2 md:gap-3 justify-center items-center settle-card-wrap">`;const allBait=[...this.playerBait,...this.oppBait];cards.forEach((c, idx)=>{const isB=allBait.some(b=>b.id===c.id);html+=`<div id="${prefix}-card-${idx}" class="card-shadow transform transition-transform rounded-lg flex-shrink-0">${this.htmlCard(c,false,true,isB)}</div>`;});html+=`</div>`;return html;};
         const mainTitle=win?'回合胜利':'回合失败';const titleColorClass=win?'text-cyan-400':'text-rose-400';const titleBgClass=win?'bg-cyan-500/20 border-cyan-500/40 shadow-cyan-900/20':'bg-rose-500/20 border-rose-500/40 shadow-rose-900/20';
-        const myTitleBlock=`<div class="flex items-center justify-center gap-2 w-full">${win?`<div class="bg-victory-orange text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-orange border border-orange-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${titleBgClass} ${titleColorClass} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest shadow-sm m-0">我的牌型：${myRes.name}</div></div>`;
-        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 w-full">${!win?`<div class="bg-defeat-red text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${!win?'bg-rose-500/20 border-rose-500/40 shadow-rose-900/20 text-rose-400':'bg-slate-700/60 border-slate-600/50 text-slate-300'} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest m-0 shadow-sm">对手牌型：${aiRes.name}</div></div>`;
+        const myTitleBlock=`<div class="flex items-center justify-center gap-2 w-full">${win?`<div class="bg-victory-orange text-white font-black px-3 py-1 rounded-sm transform -rotate-3 shadow-glow-orange border border-orange-300 whitespace-nowrap select-none" style="font-size:20px;">WINNER!</div>`:''}<div class="${titleBgClass} ${titleColorClass} font-black border uppercase shadow-sm m-0" style="font-size:20px;padding:10px 12px;border-radius:4px;letter-spacing:2px;">我的牌型：${myRes.name}</div></div>`;
+        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 w-full">${!win?`<div class="bg-defeat-red text-white font-black px-3 py-1 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none" style="font-size:20px;">WINNER!</div>`:''}<div class="${!win?'bg-rose-500/20 border-rose-500/40 shadow-rose-900/20 text-rose-400':'bg-slate-700/60 border-slate-600/50 text-slate-300'} font-black border uppercase m-0 shadow-sm" style="font-size:20px;padding:10px 12px;border-radius:4px;letter-spacing:2px;">对手牌型：${aiRes.name}</div></div>`;
         const heroGradient=win?'from-orange-600 to-orange-400':'from-slate-700 to-slate-600';const heroShadow=win?'shadow-glow-orange':'shadow-none';
         
         let breakdownHtml='';
@@ -2804,12 +3250,59 @@ class Game {
         
         let tagsHTML='';
         if(win){
-            if(fish){tagsHTML+=`<div class="flex-none flex flex-col items-center justify-center gap-0.5 bg-slate-800/80 w-[52px] h-[52px] rounded-lg border border-cyan-400/30 shadow-glow-cyan/20 flex-shrink-0"><span class="text-cyan-400 text-lg leading-none">🎣</span><span class="text-[9px] font-bold text-white tracking-tight whitespace-nowrap" style="user-select:none;">钓鱼成功</span></div>`;}
-            this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&(myRes.items.includes(p.name)||(fish&&p.trigger==='fishhook'))){tagsHTML+=`<div class="flex-none flex flex-col items-center justify-center gap-0.5 bg-slate-800/80 w-[52px] h-[52px] rounded-lg border border-purple-400/30 passive-icon cursor-help flex-shrink-0" data-desc="${p.name}: ${this.getDynamicDesc(pId,'passive',true,true)}"><span class="text-purple-400 text-lg leading-none">${p.icon}</span><span class="text-[9px] font-bold text-white tracking-tight truncate w-full text-center px-1" style="user-select:none;">${p.name}</span></div>`;}});
+            if(fish){tagsHTML+=`<div class="flex-none flex flex-col items-center justify-center gap-1 bg-slate-800/80 w-[96px] h-[96px] rounded-lg border border-cyan-400/30 shadow-glow-cyan/20 flex-shrink-0"><span class="text-cyan-400 leading-none" style="font-size:26px;">🎣</span><span class="font-black text-white whitespace-nowrap select-none">钓鱼成功</span></div>`;}
+            this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&(myRes.items.includes(p.name)||(fish&&p.trigger==='fishhook'))){tagsHTML+=`<div class="flex-none flex flex-col items-center justify-center gap-1 bg-slate-800/80 w-[96px] h-[96px] rounded-lg border border-purple-400/30 passive-icon cursor-help flex-shrink-0" data-desc="${p.name}: ${this.getDynamicDesc(pId,'passive',true,true)}"><span class="text-purple-400 leading-none" style="font-size:26px;">${p.icon}</span><span class="font-black text-white truncate w-full text-center px-2 select-none">${p.name}</span></div>`;}});
         }
         
         ov.innerHTML=`<div class="relative w-[95%] max-w-4xl bg-slate-900 border border-slate-700/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"><div class="flex flex-1 overflow-y-auto overflow-x-hidden flex-col md:flex-row"><div class="w-full md:w-[50%] bg-slate-800/30 p-6 md:p-8 border-b md:border-b-0 md:border-r border-slate-700/30 flex flex-col justify-center gap-4 relative shrink-0"><div class="flex flex-col items-center ${win?'opacity-60':'opacity-100'} w-full mb-4">${aiTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(aiCards, 'ai')}</div></div><div class="flex items-center gap-4 px-6 sm:px-12 my-1 w-full"><div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-600"></div><div class="italic font-black text-slate-500 text-xs tracking-widest" style="user-select:none;">VS</div><div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-600"></div></div><div class="flex flex-col items-center relative z-10 w-full mt-4">${myTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(myCards, 'my')}</div></div></div><div class="flex-1 p-6 flex flex-col bg-slate-900/40"><div class="relative bg-gradient-to-r ${heroGradient} p-4 rounded-xl ${heroShadow} mb-4 overflow-hidden shrink-0"><div class="absolute -right-4 -bottom-4 opacity-10"><span class="text-7xl text-white" style="user-select:none;">✨</span></div><div class="relative z-10 flex justify-between items-center"><div><span class="text-white/70 text-[10px] font-medium uppercase tracking-widest block" style="user-select:none;">Round Result</span><h2 class="text-white text-3xl font-black italic tracking-tighter" style="user-select:none;">${mainTitle}</h2></div><div class="text-right"><span class="text-white/70 text-[10px] font-medium block uppercase" style="user-select:none;">关卡进度</span><span class="text-white text-lg font-black" style="user-select:none;">${progressStr}</span></div></div></div><div class="flex flex-col flex-1 justify-start">${breakdownHtml}</div><div class="flex flex-col sm:flex-row items-center gap-3 mt-4 pt-4 border-t border-slate-700/50 shrink-0"><div class="flex-1 w-full relative"><div class="flex flex-wrap items-center justify-start gap-2 pb-2 pt-1">${tagsHTML}</div></div><div class="hidden sm:block h-8 w-px bg-slate-700 shrink-0"></div><button class="btn btn-primary shrink-0 transition-all active:scale-95" style="width: auto; min-width: 140px; padding: 12px 0; font-size: 14px; flex-shrink: 0; font-family: 'SimHei', sans-serif;" onclick="${nextAction}">${btnTxt}</button></div></div></div><div class="absolute top-0 left-0 w-full h-full pointer-events-none z-[-1]"><div class="absolute top-0 left-1/4 w-48 h-48 bg-cyan-500/5 blur-[50px] rounded-full"></div><div class="absolute bottom-0 right-1/4 w-64 h-64 bg-orange-500/5 blur-[70px] rounded-full"></div></div></div>`;
         
+        const settleRightCls=win?'fp-settle-right-win':'fp-settle-right-lose';
+        ov.innerHTML=`
+            <div class="fp-modal-card" style="width:min(1100px,95vw);">
+                <div class="fp-modal-inner" style="background:transparent;">
+                    <div class="fp-settle-split">
+                        <div class="fp-settle-left fp-modal-decor">
+                            <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:16px;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;${win?'opacity:0.65;':''}">
+                                    ${aiTitleBlock}
+                                    <div style="width:100%;display:flex;justify-content:center;">${getHandHtml(aiCards, 'ai')}</div>
+                                </div>
+                                <div class="fp-modal-body" style="text-align:center;opacity:0.55;font-weight:900;letter-spacing:2px;user-select:none;">VS</div>
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+                                    ${myTitleBlock}
+                                    <div style="width:100%;display:flex;justify-content:center;">${getHandHtml(myCards, 'my')}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fp-settle-right ${settleRightCls}">
+                            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+                                <div>
+                                    <div class="fp-modal-title" style="margin:0;color:#fff;">${mainTitle}</div>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div class="fp-modal-body" style="margin:0;color:rgba(255,255,255,0.75);">关卡进度</div>
+                                    <div class="fp-modal-body" style="margin:0;color:#fff;font-weight:900;">${progressStr}</div>
+                                </div>
+                            </div>
+                            <div style="height:14px;"></div>
+                            <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+                                ${breakdownHtml}
+                            </div>
+                            <div style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.12);display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;">
+                                <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;">${tagsHTML}</div>
+                                <div style="display:flex;gap:12px;align-items:center;">
+                                    <button class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="min-width:220px;" onclick="${nextAction}">
+                                        <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                                        <span class="fp-btn-text">${btnTxt}</span>
+                                    </button>
+                                    ${this.isTestMode?`<button class="btn fp-cancel-btn fp-btn-with-icon" style="min-width:220px;" onclick="game.openShopInventory()"><img class="fp-btn-icon" src="assets/images/ui/icon-cancel.svg" alt=""><span class="fp-btn-text">返回商城</span></button>`:''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
         if(win) {
             let delay = 500;
             setTimeout(() => {
@@ -2892,13 +3385,51 @@ class Game {
         const failBtnText=isChallenge?'前往下一关':'返回大厅';
         const failBtnAction=isChallenge?`game.challengeFailNext()`:`game.returnToLobby(true)`;
         const getHandHtml=(cards)=>{let html=`<div class="flex flex-wrap gap-2 md:gap-3 justify-center items-center fail-panel-card-wrap">`;cards.forEach(c=>{html+=`<div class="card-shadow rounded-lg flex-shrink-0">${this.htmlCard(c,true,true,false)}</div>`;});html+=`</div>`;return html;};
-        const myTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${roundWin?`<div class="bg-victory-orange text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-orange border border-orange-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${roundWin?'bg-cyan-500/20 text-cyan-400 border-cyan-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest m-0 shadow-sm">我的牌型：${myRes.name}</div></div>`;
-        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${!roundWin?`<div class="bg-defeat-red text-white text-[10px] font-black px-2 py-0.5 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none">WINNER!</div>`:''}<div class="${!roundWin?'bg-rose-500/20 text-rose-400 border-rose-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} text-[11px] md:text-xs font-black px-3 py-1 rounded-lg border uppercase tracking-widest shadow-lg m-0">对手牌型：${aiRes.name}</div></div>`;
+        const myTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${roundWin?`<div class="bg-victory-orange text-white font-black px-3 py-1 rounded-sm transform -rotate-3 shadow-glow-orange border border-orange-300 whitespace-nowrap select-none" style="font-size:20px;">WINNER!</div>`:''}<div class="${roundWin?'bg-cyan-500/20 text-cyan-400 border-cyan-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} font-black border uppercase m-0 shadow-sm" style="font-size:20px;padding:10px 12px;border-radius:4px;letter-spacing:2px;">我的牌型：${myRes.name}</div></div>`;
+        const aiTitleBlock=`<div class="flex items-center justify-center gap-2 mb-1 w-full">${!roundWin?`<div class="bg-defeat-red text-white font-black px-3 py-1 rounded-sm transform -rotate-3 shadow-glow-red border border-rose-300 whitespace-nowrap select-none" style="font-size:20px;">WINNER!</div>`:''}<div class="${!roundWin?'bg-rose-500/20 text-rose-400 border-rose-500/40':'bg-slate-700/60 text-slate-300 border-slate-600/50'} font-black border uppercase shadow-lg m-0" style="font-size:20px;padding:10px 12px;border-radius:4px;letter-spacing:2px;">对手牌型：${aiRes.name}</div></div>`;
         const quotes =["就这？我闭着眼打都比你好。","牌都给你了，还能打成这样？","别挣扎了，这把运气真不行。","小丑都在笑你，还不服气吗？","手气这么臭，还是先去洗洗手吧。","这一局是教训，下一局是传奇。","筹码已散尽，勇气请重新集结。","牌运未至，收起残局，静待良机。","无语吧！你的直觉还需磨砺。","迷雾未散，深呼吸，继续前行吧。"];
         const q = quotes[Math.floor(Math.random()*quotes.length)];
         ov.innerHTML=`<div class="relative w-[95%] max-w-4xl bg-slate-900 border border-rose-700/50 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"><div class="flex flex-1 overflow-y-auto overflow-x-hidden flex-col md:flex-row"><div class="w-full md:w-[50%] bg-slate-800/30 p-8 md:p-10 border-b md:border-b-0 md:border-r border-slate-700/30 flex flex-col justify-center gap-4 relative shrink-0 min-h-[300px]"><div class="flex flex-col items-center relative z-10 w-full mb-4 opacity-${roundWin?'100':'60'}">${myTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(myCards)}</div></div><div class="flex items-center gap-4 px-6 sm:px-12 my-1 w-full"><div class="h-px flex-1 bg-gradient-to-r from-transparent to-slate-600"></div><div class="italic font-black text-slate-500 text-xs tracking-widest" style="user-select:none;">VS</div><div class="h-px flex-1 bg-gradient-to-l from-transparent to-slate-600"></div></div><div class="flex flex-col items-center w-full mt-4 opacity-${!roundWin?'100':'60'}">${aiTitleBlock}<div class="relative pt-2 pb-2 w-full flex justify-center origin-center">${getHandHtml(aiCards)}</div></div></div><div class="flex-1 p-8 flex flex-col justify-center items-center bg-slate-900/40 gap-6 relative shrink-0"><div class="flex items-center justify-center mb-2" style="position:relative;width:100px;height:100px;">
 <div id="fail-opp-avatar" style="width:100px;height:100px;border-radius:50%;background-size:cover;background-position:center;border:2px solid rgba(225,29,72,0.6);box-shadow:0 0 18px rgba(225,29,72,0.6);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:36px;background-color:#1e293b;">🤖</div>
 </div><div class="bg-slate-800/80 border border-rose-500/30 text-slate-200 p-4 rounded-xl w-full text-center max-w-[260px] relative shadow-lg"><div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-slate-800 border-t border-l border-rose-500/30 transform rotate-45"></div><div class="font-bold text-[13px] italic relative z-10" style="color:var(--highlight);">"${q}"</div><div class="text-xs opacity-70 mt-3 pt-2 border-t border-slate-700/50" style="user-select:none; color:#f87171;">失败原因: ${reason}</div><div class="text-[10px] opacity-50 mt-1" style="user-select:none;">${progressInfo}</div></div><div class="flex w-full justify-center mt-2"><button class="btn btn-primary transition-all active:scale-95 w-full btn-lobby btn-lobby-primary" style="font-size: 14px; padding: 12px 0;" onclick="${failBtnAction}">${failBtnText}</button></div></div></div></div>`;
+        ov.innerHTML=`
+            <div class="fp-modal-card" style="width:min(1100px,95vw);">
+                <div class="fp-modal-inner" style="background:transparent;">
+                    <div class="fp-settle-split">
+                        <div class="fp-settle-left fp-modal-decor">
+                            <div style="position:relative;z-index:1;display:flex;flex-direction:column;gap:16px;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;opacity:${roundWin?'1':'0.65'};">
+                                    ${myTitleBlock}
+                                    <div style="width:100%;display:flex;justify-content:center;">${getHandHtml(myCards)}</div>
+                                </div>
+                                <div class="fp-modal-body" style="text-align:center;opacity:0.55;font-weight:900;letter-spacing:2px;user-select:none;">VS</div>
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:10px;opacity:${!roundWin?'1':'0.65'};">
+                                    ${aiTitleBlock}
+                                    <div style="width:100%;display:flex;justify-content:center;">${getHandHtml(aiCards)}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fp-settle-right fp-settle-right-lose">
+                            <div class="fp-modal-title" style="margin:0 0 10px 0;color:#fff;">回合失败</div>
+                            <div class="fp-modal-body" style="margin:0 0 18px 0;color:rgba(255,255,255,0.75);">${progressInfo}</div>
+                            <div style="display:flex;flex-direction:column;gap:14px;align-items:center;justify-content:center;flex:1;">
+                                <div id="fail-opp-avatar" style="width:110px;height:110px;border-radius:50%;background-size:cover;background-position:center;border:3px solid rgba(75,85,99,0.8);box-shadow:0 0 18px rgba(0,0,0,0.7);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:40px;background-color:#0b1220;">🤖</div>
+                                <div style="width:min(520px,100%);border:1px solid rgba(255,255,255,0.16);border-radius:4px;background:rgba(0,0,0,0.55);padding:16px 14px;text-align:center;">
+                                    <div class="fp-modal-body" style="color:#e5e7eb;font-weight:900;">"${q}"</div>
+                                    <div class="fp-modal-body" style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.12);color:#fca5a5;">失败原因：${reason}</div>
+                                </div>
+                            </div>
+                            <div style="margin-top:18px;">
+                                <button class="btn btn-primary fp-confirm-btn fp-btn-with-icon" style="width:100%;" onclick="${failBtnAction}">
+                                    <img class="fp-btn-icon" src="assets/images/ui/icon-ok.svg" alt="">
+                                    <span class="fp-btn-text">${failBtnText}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
         // 注入当前关卡对手头像
         const failAvatarEl = document.getElementById('fail-opp-avatar');
         if(failAvatarEl && this.config){
@@ -2963,7 +3494,10 @@ class Game {
         if(itemObj.id==='jihaobi'){descText+='\n\n在牌型结算时包含本张牌，牌型积分+500，同张牌可叠加。';}
         const descDiv=document.getElementById('deck-mod-desc');descDiv.innerText=descText;
         if(itemObj.id==='xuyuanxing'||itemObj.id==='jihaobi'){descDiv.style.textAlign='left';descDiv.style.padding='0 10px';}else{descDiv.style.textAlign='center';descDiv.style.padding='0';}
-        newConfirmBtn.innerText=confirmText;newConfirmBtn.disabled=true;
+        const confirmTextEl=newConfirmBtn.querySelector('.fp-btn-text');
+        if(confirmTextEl) confirmTextEl.innerText=confirmText;
+        else newConfirmBtn.innerText=confirmText;
+        newConfirmBtn.disabled=true;
         this.renderDeckModCards=()=>{cardsContainer.innerHTML='';this.deckModCandidates.forEach(c=>{const el=document.createElement('div');el.className='deck-mod-card-wrap';el.innerHTML=this.htmlCard(c,false,true,false);if(this.deckModSelected.includes(c))el.classList.add('selected');el.onclick=()=>{const idx=this.deckModSelected.indexOf(c);if(idx>-1){this.deckModSelected.splice(idx,1);}else{if(this.deckModSelected.length<this.deckModMax){this.deckModSelected.push(c);}}newConfirmBtn.disabled=this.deckModSelected.length<this.deckModMin;this.renderDeckModCards();};cardsContainer.appendChild(el);});};
         this.renderDeckModCards();
         newConfirmBtn.onclick=()=>{this.applyDeckMod(itemObj.id,this.deckModSelected);modal.classList.remove('visible');};
@@ -3174,22 +3708,44 @@ class Game {
         const isChallenge=this.config&&this.config.challenge;
         const labelTxt=isChallenge?'⚡ 挑战场':(this.config&&this.config.step===1?'胜负场':'积分场');
         document.getElementById('level-id').innerText=`${this.config.id} ${labelTxt}`;document.getElementById('gold-display').innerText=this.playerGold;
+        const rp=document.getElementById('round-pill');
+        if(rp){
+            let totalRounds=(this.config&&this.config.rounds)?this.config.rounds:3;
+            if(isChallenge) totalRounds=1;
+            rp.innerText=`第 ${this.currentRound}/${totalRounds} 回合`;
+        }
         const betDis=document.getElementById('bet-display');if(this.currentBet>0){betDis.style.display='block';betDis.innerText=`下注: ${this.currentBet}`;}else{betDis.style.display='none';}
         const pl=document.getElementById('passive-list');pl.innerHTML='';
         // 挑战场不展示已装备的道具
         if(!isChallenge){
             this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p){const d=document.createElement('div');d.className='passive-icon';d.setAttribute('data-desc',`${p.name||''}: ${this.getDynamicDesc(p.id,'passive',true)}`);d.innerHTML=p.icon;pl.appendChild(d);}});
         }
+        this.renderGameplayItemSlots(isChallenge);
         const g=document.getElementById('level-desc');
         if(isChallenge){g.innerHTML=`<span style="color:#f97316;font-weight:bold;">1局定胜负</span> · 牌型比大小 · <span style="color:#fbbf24;display:inline-flex;align-items:center;gap:2px;">胜利奖励 2000<img src="assets/images/ui/icon-money.png" class="gold-icon" style="width:12px;height:12px;"></span>`;}
-        else if(this.config.target==='best_of_3'){g.innerHTML=`3局2胜 (<span class="gold-val">${this.currentLevelWins}胜/${this.currentLevelLosses}负</span>) - 第${this.currentRound}/3回合 <span style="font-size:10px; color:#aaa; margin-left:5px;">牌型赢过对方即胜</span>`;}
-        else{g.innerHTML=`3回合内积分 ≥ <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span> (${this.currentRound}/3回合)`;}
+        else if(this.config.target==='best_of_3'){g.innerHTML=`3局2胜 (<span class="gold-val">${this.currentLevelWins}胜/${this.currentLevelLosses}负</span>) <span style="font-size:10px; color:#aaa; margin-left:5px;">牌型赢过对方即胜</span>`;}
+        else{g.innerHTML=`3回合内积分 ≥ <span class="gold-val">${Math.floor(this.levelEarnedGold)}/${this.currentTargetGold}</span>`;}
+    }
+    renderGameplayItemSlots(isChallenge){
+        const slots=[...document.querySelectorAll('.gp-slots-grid .gp-slot')];
+        if(slots.length===0)return;
+        slots.forEach(el=>{el.innerHTML='';el.removeAttribute('data-desc');});
+        if(isChallenge)return;
+        const items=this.equippedPassives||[];
+        for(let i=0;i<slots.length;i++){
+            const id=items[i];
+            if(!id)continue;
+            const p=REWARD_POOL.find(x=>x.id===id);
+            if(!p)continue;
+            slots[i].innerHTML=`<div class="gp-item-icon">${p.icon||''}</div>`;
+            slots[i].setAttribute('data-desc',`${p.name||''}: ${this.getDynamicDesc(p.id,'passive',true)}`);
+        }
     }
     toggleInfo(){
         const sc=document.getElementById('info-screen');if(sc.classList.contains('visible')){sc.classList.remove('visible');this.setOverlayState(false);return;}
         this.setOverlayState(true);const ct=document.getElementById('info-content');ct.innerHTML='';const isDefault=!this.inGame;
         // 分两排：上排3张（同花顺、四炸、葫芦），下排6张（同花、顺子、三条、两对、对子、单牌）
-        const row1=[],row2=[];HAND_TYPES_BASE.forEach((t,i)=>{let val=t.base;let act=false;let level=1;if(UPGRADE_MAP[t.name]&&this.upgradeCounts[UPGRADE_MAP[t.name].id]){level+=this.upgradeCounts[UPGRADE_MAP[t.name].id];val=Math.floor(val*Math.pow(UPGRADE_MAP[t.name].mult,this.upgradeCounts[UPGRADE_MAP[t.name].id]));act=true;}if(!isDefault){this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&p.trigger===t.name){if(p.val){val+=p.val;act=true;}}});}const card=`<div style="background:rgba(255,255,255,0.04);border:1px solid ${act?'rgba(251,191,36,0.5)':'rgba(255,255,255,0.12)'};border-radius:8px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0;"><div style="font-size:12px;font-weight:bold;color:#e2e8f0;text-align:center;line-height:1.2;">${t.name}</div><div style="font-size:10px;color:#a855f7;font-weight:bold;">Lv.${level}</div><div style="font-size:11px;color:${act?'var(--gold-color)':'#94a3b8'};font-weight:bold;">${val}<span style="font-size:9px;margin-left:2px;opacity:0.7;">分</span>${act?'<span style="color:var(--gold-color);font-size:10px;"> ↑</span>':''}</div></div>`;if(i<3)row1.push(card);else row2.push(card);});
+        const row1=[],row2=[];HAND_TYPES_BASE.forEach((t,i)=>{let val=t.base;let act=false;let level=1;if(UPGRADE_MAP[t.name]&&this.upgradeCounts[UPGRADE_MAP[t.name].id]){level+=this.upgradeCounts[UPGRADE_MAP[t.name].id];val=Math.floor(val*Math.pow(UPGRADE_MAP[t.name].mult,this.upgradeCounts[UPGRADE_MAP[t.name].id]));act=true;}if(!isDefault){this.equippedPassives.forEach(pId=>{const p=REWARD_POOL.find(x=>x.id===pId);if(p&&p.trigger===t.name){if(p.val){val+=p.val;act=true;}}});}const card=`<div style="background:rgba(255,255,255,0.04);border:1px solid ${act?'rgba(251,191,36,0.5)':'rgba(255,255,255,0.12)'};border-radius:8px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:0;"><div style="font-size:14px;font-weight:bold;color:#e2e8f0;text-align:center;line-height:1.2;">${t.name}</div><div style="font-size:10px;color:#a855f7;font-weight:bold;">Lv.${level}</div><div style="font-size:14px;color:${act?'var(--gold-color)':'#94a3b8'};font-weight:bold;">${val}<span style="font-size:9px;margin-left:2px;opacity:0.7;">分</span>${act?'<span style="color:var(--gold-color);font-size:10px;"> ↑</span>':''}</div></div>`;if(i<3)row1.push(card);else row2.push(card);});
         ct.innerHTML=`<div style="display:flex;gap:5px;margin-bottom:6px;">${row1.join('')}</div><div style="display:flex;gap:5px;">${row2.join('')}</div>`;
         sc.classList.add('visible');
     }
