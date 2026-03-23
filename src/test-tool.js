@@ -17,8 +17,8 @@
     const TEST_CHALLENGE_CFG = {
         id: 'test-challenge',
         floor: 3, step: 3,
-        target: 'best_of_1',
-        gold: 0, rounds: 1,
+        target: 'best_of_3',
+        gold: 0, rounds: 3,
         openHand: false,   // 明牌由 startRound hook 实现
         name: '3-3 挑战场',
         challenge: true,
@@ -74,7 +74,7 @@
             game.playerGold = 99999;
             game.inGame = false;
             // config 设一个安全默认值（避免 renderShopHome 里读 this.config.floor 报错）
-            game.config = { floor: 1, step: 1, id: 'test', target: 'best_of_1', rounds: 1, openHand: true, name: '测试' };
+            game.config = { floor: 1, step: 1, id: 'test', target: 'best_of_3', rounds: 3, openHand: true, name: '测试' };
 
             // 关闭 lobby-screen（从大厅首次进入时它是显示的）
             document.getElementById('lobby-screen').style.display = 'none';
@@ -162,6 +162,8 @@
                 shopModal.style.display = 'none';
                 document.getElementById('overlay-screen').classList.remove('visible');
                 game.setOverlayState(false);
+                if (game.setGameplayMode) game.setGameplayMode(false);
+                else document.body.classList.remove('gameplay-mode');
                 // 回大厅
                 game.resetGlobal();
                 document.getElementById('lobby-screen').style.display = 'flex';
@@ -169,7 +171,7 @@
                 document.getElementById('header-left-col').classList.add('lobby-hide');
                 document.getElementById('header-right-col').classList.add('lobby-hide');
                 var continueBtn = document.getElementById('btn-continue');
-                if (continueBtn) continueBtn.style.display = (localStorage.getItem('fishingPokerSave_v3_7_5') || localStorage.getItem('fishingPokerSave_v3_7_4')) ? 'block' : 'none';
+                if (continueBtn) continueBtn.style.display = (localStorage.getItem('fishingPokerSave_v3_8_2') || localStorage.getItem('fishingPokerSave_v3_7_5')) ? 'block' : 'none';
                 game.inGame = false;
             }, 300);
         }

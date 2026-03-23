@@ -6,11 +6,15 @@
          this.el=document.getElementById('map-screen');
      }
      show(){
+        if(this.game&&this.game.setGameplayMode)this.game.setGameplayMode(false);
          if(this.el)this.el.style.display='flex';
          const lobby=document.getElementById('lobby-screen');
          if(lobby)lobby.style.display='none';
          document.getElementById('header-left-col')?.classList.add('lobby-hide');
          document.getElementById('header-right-col')?.classList.add('lobby-hide');
+        document.getElementById('gp-opp-hand-top')?.classList.add('lobby-hide');
+        document.getElementById('gp-boss')?.classList.add('lobby-hide');
+        document.getElementById('gp-skill-float')?.classList.add('lobby-hide');
          document.body.classList.remove('lobby-mode');
      }
      hide(){

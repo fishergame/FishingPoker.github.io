@@ -23,7 +23,8 @@
          ];
          const backgrounds=[
              'assets/images/backgrounds/bg-login.png',
-             'assets/images/backgrounds/bg-gameselected.jpg'
+            'assets/images/backgrounds/bg-gameselected.jpg',
+            'assets/images/backgrounds/bg-star.svg'
          ];
          return [...ui,...backgrounds,...this._generatePokerList()];
      }
