@@ -25,6 +25,13 @@ UPGRADE_CARDS = [10,15,20,25,30,35,40,45,50,55,
 GROWTH_TARGET = {'传奇':3.0,'史诗':2.74,'稀有':2.48,'普通':2.22}
 GROWTH_G = {q:(t-1)/(LEVEL_CAP-1) for q,t in GROWTH_TARGET.items()}
 
+# 攻击间隔 / 速度 随等级「温和」变快（数值是秒，越小越快）：
+# 满级(30级)时攻击间隔约 -10%、速度约 -8%，幅度很小，仅提升手感、不破坏观感。
+IV_REDUCE_TOTAL  = 0.10
+SPD_REDUCE_TOTAL = 0.08
+IV_K  = IV_REDUCE_TOTAL  / (LEVEL_CAP-1)
+SPD_K = SPD_REDUCE_TOTAL / (LEVEL_CAP-1)
+
 # 技能三档（普通=静态）：解锁等级 + 升级货币 + 5 级强度曲线（相对 Lv1）+ 每级消耗
 SKILL_TIERS = {
  '稀有': dict(unlock=5,  cur='金币',
@@ -233,6 +240,52 @@ SK = {
 }
 
 # ======================================================================
+# 2.5 技能改名（参考皇室战争风格）：中文新名 + 英文名
+# ======================================================================
+# 普通技能按「效果关键词」改名
+COMMON_RENAME = [
+ ('对建筑伤害+30%',        '破城',  'Siege'),
+ ('对地面单位闪避率+20%',  '翔空',  'Skyborne'),
+ ('对空中单位伤害+30%',    '防空',  'Flak'),
+ ('对机械单位伤害+20%',    '破械',  'Tech-Bane'),
+ ('对人类单位伤害+20%',    '慑魂',  'Dread'),
+ ('对亡灵单位伤害+20%',    '灭灵',  'Undead-Bane'),
+ ('对兽族单位伤害+20%',    '猎兽',  'Beast-Bane'),
+ ('远程伤害抗性+20%',      '格挡',  'Deflect'),
+ ('采矿',                  '金矿',  'Gold-Mine'),
+]
+# 稀有/史诗/传奇技能：旧名 -> (新中文, 英文)
+ACTIVE_RENAME = {
+ # 稀有 / 史诗（多卡共用）
+ '神经冲击':('电击','Zap'), '战斗狂热':('狂暴','Rage'), '弱点洞察':('猎杀标记',"Hunter's Mark"),
+ '远程输出':('凝望架势','Deadeye Stance'), '鹰眼':('远视','Longshot'), '弹幕精通':('多重射击','Multishot'),
+ '霜咬':('冰缚','Frostbite'), '震荡刃':('震波','Shockwave'), '猎手冲刺':('嗜血冲刺','Bloodrush'),
+ '荆棘反伤':('尖刺护甲','Spiky Armor'), '神圣庇护':('圣盾庇护','Divine Shield'),
+ '生命粉碎':('处决','Execute'), '复苏领域':('治愈光环','Heal Aura'), '远程射击':('强弓','Power Shot'),
+ '后勤支援':('守护图腾','Aegis Totem'), '不屈堡垒':('背水一战','Last Stand'),
+ '死亡专注':('连击专注','Combo Focus'), '暗影伏击':('潜伏','Ambush'),
+ # 传奇（专属）
+ '龙焰':('烈焰风暴','Fire Storm'), '地狱火':('炼狱火雨','Inferno Rain'), '陨石雨':('天降流星','Meteor'),
+ '裂空':('穿云箭','Piercing Shot'), '超级充能':('超级冲锋','Super Charge'), '召唤熊':('唤熊','Bear Summon'),
+ '亡者军团':('墓园','Graveyard'), '影分身':('镜像分身','Mirror Clone'), '极寒霜爆':('寒冰冻结','Freeze'),
+ '过载':('狂暴超载','Overdrive'), '齐射':('万箭齐发','Barrage'), '死亡光环':('腐蚀光环','Poison Aura'),
+ '撕裂大地':('地震','Earthquake'), '烈焰拳':('烈焰冲拳','Flame Fist'), '生命之泉':('生命之泉','Life Spring'),
+ '石化形态':('石化','Petrify'), '巨石投掷':('投石','Boulder Toss'), '致命射击':('致命狙杀','Lethal Snipe'),
+ '火力':('火力覆盖','Heavy Ordnance'), '蒸汽加速':('蒸汽冲刺','Steam Dash'), '冲锋':('突进冲锋','Charge'),
+ '爆裂吐息':('爆裂吐息','Explosive Breath'), '亡灵复活':('亡者复生','Reanimate'), '击退':('强力击退','Knockback'),
+ '黄金收获':('黄金一击','Gold Strike'), '暗影打击':('暗影突袭','Shadow Strike'), '分裂箭':('分裂箭','Split Arrow'),
+ '盾反射':('盾反','Shield Reflect'), '速射':('急速射击','Rapid Fire'), '旋风':('旋风斩','Whirlwind'),
+ '尸爆':('尸爆','Corpse Explosion'), '远程炸弹':('死亡炸弹','Death Bomb'), '臂力过人':('巨力挥击','Mighty Swing'),
+ '丰饶':('回春','Second Wind'), '箭雨':('箭雨','Arrow Storm'),
+}
+def rename_common(s):
+    eff = s.split('：',1)[1] if '：' in s else s
+    for kw,cn,en in COMMON_RENAME:
+        if kw in s:
+            return cn, en, eff
+    return s.split('：')[0], '', eff      # 兜底
+
+# ======================================================================
 # helpers
 # ======================================================================
 def dps(atk, iv): return atk/iv if iv else 0
@@ -267,10 +320,16 @@ for idx,name,fac,rng,q,hp,atk,pw0,spd,iv,area in CARDS:
     for lv in range(1,LEVEL_CAP+1):
         m=1+g*(lv-1)
         chp=round(hp*m)
-        if atk==0: catk=cpw='-'
-        else: catk=round(atk*m); cpw=power(chp,atk*m,iv)
-        rows_curve.append([idx,name,q,lv,round(m,3),chp,catk,cpw])
-write_csv('03_属性升级曲线.csv',['序号','名称','品质','等级','成长倍率','血量','攻击','战力'],rows_curve)
+        if atk==0:
+            rows_curve.append([idx,name,q,lv,round(m,3),chp,'-','-','-','-'])
+            continue
+        catk=round(atk*m)
+        civ=round(iv*(1-IV_K*(lv-1)),2)      # 攻击间隔随等级温和变快
+        cspd=round(spd*(1-SPD_K*(lv-1)),2)   # 速度随等级温和变快
+        cpw=power(chp,atk*m,civ)
+        rows_curve.append([idx,name,q,lv,round(m,3),chp,catk,cspd,civ,cpw])
+write_csv('03_属性升级曲线.csv',
+          ['序号','名称','品质','等级','成长倍率','血量','攻击','速度','攻击间隔','战力'],rows_curve)
 
 # ======================================================================
 # 5. 升级所需卡牌（解锁1张 + 30级数组，全角色统一）
@@ -290,24 +349,35 @@ write_csv('04_升级所需卡牌(全角色统一).csv',['阶段','所需卡牌',
 # 6. 技能总表（真实技能 + 解锁/货币/5级曲线）
 # ======================================================================
 rows_sk=[]
+rename_log={}   # 旧名 -> (新中文, 英文, 档)
 for idx,name,fac,rng,q,*_ in CARDS:
     s=SK[idx]
     # 普通技能（静态）
     for c in s['common']:
-        rows_sk.append([idx,name,'普通',c,'出生即带','否','—','静态','—','—','—','—','—','—','—'])
+        cn,en,eff=rename_common(c)
+        disp=f'{cn}({en})：{eff}' if en else f'{cn}：{eff}'
+        rename_log.setdefault(c.split('：')[0], (cn,en,'普通'))
+        rows_sk.append([idx,name,'普通',disp,'出生即带','否','—','静态','—','—','—','—','—','—','—'])
     # 稀有/史诗/传奇
     for tier,key in [('稀有','rare'),('史诗','epic'),('传奇','legendary')]:
         info=s.get(key)
         if not info: continue
-        skname,eff=info
+        oldname,eff=info
+        cn,en=ACTIVE_RENAME.get(oldname,(oldname,''))
+        rename_log.setdefault(oldname,(cn,en,tier))
+        disp=f'{cn}({en})：{eff}'
         t=SKILL_TIERS[tier]
         pct=[f'{int(m*100)}%' for m in t['mult']]
-        rows_sk.append([idx,name,tier,f'{skname}：{eff}',
+        rows_sk.append([idx,name,tier,disp,
                         f'卡牌{t["unlock"]}级解锁','是',t['cur'],f'最高{SKILL_MAX_LV}级',
                         pct[0],pct[1],pct[2],pct[3],pct[4],
                         '/'.join(map(str,t['cost'])),'强度%乘到该技能核心数值'])
-write_csv('05_技能总表(真实技能).csv',
+write_csv('05_技能总表(新命名).csv',
           ['序号','卡牌','技能档','技能(名称：效果)','解锁','可升级','升级货币','上限',
            'Lv1','Lv2','Lv3','Lv4','Lv5','升级消耗(2/3/4/5级)','说明'], rows_sk)
+
+# 改名对照表
+rows_rn=[[old,cn,en,tier] for old,(cn,en,tier) in sorted(rename_log.items(), key=lambda x:x[1][2])]
+write_csv('06_技能改名对照.csv',['原技能名','新中文名','英文名','技能档'],rows_rn)
 
 print('DONE. cap=',LEVEL_CAP,' 升满单卡共需卡牌=',cum)
