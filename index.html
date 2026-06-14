@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>代号x — 卡组配置</title>
+  <link rel="stylesheet" href="deck.css">
+</head>
+<body>
+  <div id="deck-app">
+    <header class="deck-header">
+      <h1>出战卡组</h1>
+      <p class="deck-sub">上方 8 张为出战牌 · 点击下方卡牌装备/卸下</p>
+      <div class="quality-legend">
+        <span class="q common">普通</span>
+        <span class="q rare">稀有</span>
+        <span class="q epic">史诗</span>
+        <span class="q legendary">传奇</span>
+      </div>
+    </header>
+
+    <section class="deck-section">
+      <div class="section-title">出战 <span id="deck-count">0/8</span></div>
+      <div class="deck-slots" id="deck-slots"></div>
+    </section>
+
+    <section class="pool-section">
+      <div class="section-title">全部卡牌 <span id="pool-count">37</span></div>
+      <div class="hero-pool" id="hero-pool"></div>
+    </section>
+
+    <aside class="detail-panel hidden" id="detail-panel">
+      <button class="detail-close" id="detail-close" type="button">×</button>
+      <div class="detail-avatar" id="detail-avatar"></div>
+      <h2 id="detail-name"></h2>
+      <span class="detail-quality" id="detail-quality"></span>
+      <dl class="detail-stats" id="detail-stats"></dl>
+    </aside>
+
+    <footer class="deck-footer">
+      <p class="deck-hint" id="deck-hint">点击卡牌查看属性；已装备再点一次卸下</p>
+      <button class="btn-battle" id="btn-battle" type="button">进入战斗</button>
+    </footer>
+  </div>
+
+  <script src="heroes-config.js"></script>
+  <script src="deck.js"></script>
+</body>
+</html>

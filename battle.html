@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>代号x — 局内对战</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="fx-canvas"></canvas>
+
+    <header class="top-bar">
+      <div class="city-hp enemy">
+        <div class="hp-fill-wrap"><div class="hp-fill enemy-hp" id="enemy-hp-fill"></div></div>
+        <span class="hp-num" id="enemy-hp-text">200</span>
+      </div>
+      <div class="timer" id="timer">03:00</div>
+      <div class="city-hp player">
+        <div class="hp-fill-wrap"><div class="hp-fill player-hp" id="player-hp-fill"></div></div>
+        <span class="hp-num" id="player-hp-text">200</span>
+      </div>
+    </header>
+
+    <div class="kill-bar">
+      <span>我方击杀 <strong id="player-kills">0</strong></span>
+      <span id="battle-status" class="status-badge">战斗中</span>
+      <span>敌方击杀 <strong id="enemy-kills">0</strong></span>
+    </div>
+
+    <main class="battlefield">
+      <div class="zone enemy-zone">
+        <div class="board enemy-board" id="enemy-board"></div>
+      </div>
+      <div class="mid-line"></div>
+      <div class="zone player-zone">
+        <div class="board player-board" id="player-board"></div>
+      </div>
+    </main>
+
+    <footer class="bottom-bar">
+      <div class="gold-pill">
+        <span class="coin">⬡</span>
+        <strong id="player-gold">20</strong>
+      </div>
+      <p class="hint" id="hint">开局即战斗：双方同时翻牌，英雄自动进攻</p>
+    </footer>
+
+    <div class="overlay hidden" id="overlay">
+      <div class="modal">
+        <h2 id="result-title">胜利！</h2>
+        <p id="result-desc"></p>
+        <div class="modal-actions">
+          <button id="restart-btn">再来一局</button>
+          <a class="btn-link" href="index.html">调整卡组</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="battle-config.js"></script>
+  <script src="battle-rules.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
