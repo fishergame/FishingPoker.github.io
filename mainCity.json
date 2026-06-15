@@ -1,13 +1,14 @@
 {
-  "version": "2.0.0",
-  "description": "主城养成：翻格升级、砖头消耗、战斗 HP/产金",
+  "version": "2.1.0",
+  "description": "主城养成：翻格升级（单格砖×格数）、战斗 HP/产金",
   "levelMax": 30,
   "gameplay": {
     "upgradeMode": "flipTiles",
-    "tilesPerLevel": 20,
     "tileCostCurrency": "brick",
-    "flipBrickCostFormula": "2 + (mainCityLevel - 1) 每格",
-    "totalBricksFormula": "tilesPerLevel(20) × flipBrickCost",
+    "upgradeLogic": "每升 1 级外扩一圈，逐格翻开；单格耗砖随等级涨，格数随外扩略增",
+    "flipBrickCostFormula": "7 + (mainCityLevel - 1)  // 单格",
+    "tilesPerLevelFormula": "min(14, 8 + floor((mainCityLevel-1)/4))",
+    "totalBricksFormula": "tilesPerLevel × flipBrickCost  // 派生",
     "tileLoot": {
       "decoration": [
         {
@@ -44,84 +45,29 @@
         }
       ],
       "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币"
-    }
+    },
+    "shopBrickPacksRef": "shop.json → zones.basic.brickPacks（钻石四档）"
   },
   "formulas": {
     "hp": "round(1500 * 1.15^(mainCityLevel-1))",
     "goldPerSec": "2.0 + (mainCityLevel-1)*0.5",
-    "flipBrickCost": "2 + (mainCityLevel-1)",
+    "flipBrickCost": "7 + (mainCityLevel-1)",
+    "tilesPerLevel": "min(14, 8 + floor((mainCityLevel-1)/4))",
+    "totalBricksToNext": "tilesPerLevel × flipBrickCost",
     "battleBricksWin": "round(5 * 1.11^(L-1) * arenaMul)",
     "battleGoldWin": "round(28 * 1.11^(L-1) * arenaMul)",
     "loseRewardRatio": 0.4
   },
-  "shopBrickPacks": [
-    {
-      "productId": "brick_pack_s",
-      "name": "砖头×30",
-      "reward": {
-        "type": "brick",
-        "amount": 30
-      },
-      "purchase": {
-        "gold": 350,
-        "diamond": 18
-      },
-      "dailyLimit": 3,
-      "note": "约 L1 胜场 6 场等量"
-    },
-    {
-      "productId": "brick_pack_m",
-      "name": "砖头×80",
-      "reward": {
-        "type": "brick",
-        "amount": 80
-      },
-      "purchase": {
-        "gold": 880,
-        "diamond": 45
-      },
-      "dailyLimit": 2,
-      "note": "约 L1 升一级需求量 2 倍"
-    },
-    {
-      "productId": "brick_pack_l",
-      "name": "砖头×200",
-      "reward": {
-        "type": "brick",
-        "amount": 200
-      },
-      "purchase": {
-        "gold": 2000,
-        "diamond": 98
-      },
-      "dailyLimit": 1,
-      "note": "中后期补仓"
-    },
-    {
-      "productId": "brick_pack_xl",
-      "name": "砖头×500",
-      "reward": {
-        "type": "brick",
-        "amount": 500
-      },
-      "purchase": {
-        "gold": 4500,
-        "diamond": 218
-      },
-      "weeklyLimit": 2,
-      "note": "仅金币或钻石二选一购买"
-    }
-  ],
-  "cumulativeBricksToMax": 9280,
+  "cumulativeBricksToMax": 7252,
   "levels": [
     {
       "level": 1,
       "hp": 1500,
       "goldPerSec": 2.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 2,
-        "totalBricksToNext": 40,
+        "tilesPerLevel": 8,
+        "brickCostPerTile": 7,
+        "totalBricksToNext": 56,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -181,7 +127,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 8.0,
+        "estimatedWinsToLevel": 11.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -194,9 +140,9 @@
       "hp": 1725,
       "goldPerSec": 2.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 3,
-        "totalBricksToNext": 60,
+        "tilesPerLevel": 8,
+        "brickCostPerTile": 8,
+        "totalBricksToNext": 64,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -256,7 +202,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.0,
+        "estimatedWinsToLevel": 10.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -269,9 +215,9 @@
       "hp": 1984,
       "goldPerSec": 3.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 4,
-        "totalBricksToNext": 80,
+        "tilesPerLevel": 8,
+        "brickCostPerTile": 9,
+        "totalBricksToNext": 72,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -331,7 +277,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 13.3,
+        "estimatedWinsToLevel": 12.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -344,9 +290,9 @@
       "hp": 2281,
       "goldPerSec": 3.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 5,
-        "totalBricksToNext": 100,
+        "tilesPerLevel": 8,
+        "brickCostPerTile": 10,
+        "totalBricksToNext": 80,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -406,7 +352,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 14.3,
+        "estimatedWinsToLevel": 11.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -419,9 +365,9 @@
       "hp": 2624,
       "goldPerSec": 4.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 6,
-        "totalBricksToNext": 120,
+        "tilesPerLevel": 9,
+        "brickCostPerTile": 11,
+        "totalBricksToNext": 99,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -481,7 +427,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 15.0,
+        "estimatedWinsToLevel": 12.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -494,9 +440,9 @@
       "hp": 3017,
       "goldPerSec": 4.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 7,
-        "totalBricksToNext": 140,
+        "tilesPerLevel": 9,
+        "brickCostPerTile": 12,
+        "totalBricksToNext": 108,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -556,7 +502,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 15.6,
+        "estimatedWinsToLevel": 12.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -569,9 +515,9 @@
       "hp": 3470,
       "goldPerSec": 5.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 8,
-        "totalBricksToNext": 160,
+        "tilesPerLevel": 9,
+        "brickCostPerTile": 13,
+        "totalBricksToNext": 117,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -631,7 +577,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 16.0,
+        "estimatedWinsToLevel": 11.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -644,9 +590,9 @@
       "hp": 3990,
       "goldPerSec": 5.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 9,
-        "totalBricksToNext": 180,
+        "tilesPerLevel": 9,
+        "brickCostPerTile": 14,
+        "totalBricksToNext": 126,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -706,7 +652,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 15.0,
+        "estimatedWinsToLevel": 10.5,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -719,9 +665,9 @@
       "hp": 4589,
       "goldPerSec": 6.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 10,
-        "totalBricksToNext": 200,
+        "tilesPerLevel": 10,
+        "brickCostPerTile": 15,
+        "totalBricksToNext": 150,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -781,7 +727,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 15.4,
+        "estimatedWinsToLevel": 11.5,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -794,9 +740,9 @@
       "hp": 5277,
       "goldPerSec": 6.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 11,
-        "totalBricksToNext": 220,
+        "tilesPerLevel": 10,
+        "brickCostPerTile": 16,
+        "totalBricksToNext": 160,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -856,7 +802,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 14.7,
+        "estimatedWinsToLevel": 10.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -869,9 +815,9 @@
       "hp": 6068,
       "goldPerSec": 7.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 12,
-        "totalBricksToNext": 240,
+        "tilesPerLevel": 10,
+        "brickCostPerTile": 17,
+        "totalBricksToNext": 170,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -931,7 +877,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 14.1,
+        "estimatedWinsToLevel": 10.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -944,9 +890,9 @@
       "hp": 6979,
       "goldPerSec": 7.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 13,
-        "totalBricksToNext": 260,
+        "tilesPerLevel": 10,
+        "brickCostPerTile": 18,
+        "totalBricksToNext": 180,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -1006,7 +952,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 13.7,
+        "estimatedWinsToLevel": 9.5,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1019,9 +965,9 @@
       "hp": 8025,
       "goldPerSec": 8.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 14,
-        "totalBricksToNext": 280,
+        "tilesPerLevel": 11,
+        "brickCostPerTile": 19,
+        "totalBricksToNext": 209,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1081,7 +1027,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 12.7,
+        "estimatedWinsToLevel": 9.5,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1094,9 +1040,9 @@
       "hp": 9229,
       "goldPerSec": 8.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 15,
-        "totalBricksToNext": 300,
+        "tilesPerLevel": 11,
+        "brickCostPerTile": 20,
+        "totalBricksToNext": 220,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1156,7 +1102,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 12.5,
+        "estimatedWinsToLevel": 9.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1169,9 +1115,9 @@
       "hp": 10614,
       "goldPerSec": 9.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 16,
-        "totalBricksToNext": 320,
+        "tilesPerLevel": 11,
+        "brickCostPerTile": 21,
+        "totalBricksToNext": 231,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1231,7 +1177,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.9,
+        "estimatedWinsToLevel": 8.6,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1244,9 +1190,9 @@
       "hp": 12206,
       "goldPerSec": 9.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 17,
-        "totalBricksToNext": 340,
+        "tilesPerLevel": 11,
+        "brickCostPerTile": 22,
+        "totalBricksToNext": 242,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1306,7 +1252,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.0,
+        "estimatedWinsToLevel": 7.8,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1319,9 +1265,9 @@
       "hp": 14036,
       "goldPerSec": 10.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 18,
-        "totalBricksToNext": 360,
+        "tilesPerLevel": 12,
+        "brickCostPerTile": 23,
+        "totalBricksToNext": 276,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1381,7 +1327,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.3,
+        "estimatedWinsToLevel": 7.9,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1394,9 +1340,9 @@
       "hp": 16142,
       "goldPerSec": 10.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 19,
-        "totalBricksToNext": 380,
+        "tilesPerLevel": 12,
+        "brickCostPerTile": 24,
+        "totalBricksToNext": 288,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1456,7 +1402,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.0,
+        "estimatedWinsToLevel": 7.6,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1469,9 +1415,9 @@
       "hp": 18563,
       "goldPerSec": 11.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 20,
-        "totalBricksToNext": 400,
+        "tilesPerLevel": 12,
+        "brickCostPerTile": 25,
+        "totalBricksToNext": 300,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1531,7 +1477,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 9.1,
+        "estimatedWinsToLevel": 6.8,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1544,9 +1490,9 @@
       "hp": 21348,
       "goldPerSec": 11.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 21,
-        "totalBricksToNext": 420,
+        "tilesPerLevel": 12,
+        "brickCostPerTile": 26,
+        "totalBricksToNext": 312,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1606,7 +1552,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 8.6,
+        "estimatedWinsToLevel": 6.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1619,9 +1565,9 @@
       "hp": 24550,
       "goldPerSec": 12.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 22,
-        "totalBricksToNext": 440,
+        "tilesPerLevel": 13,
+        "brickCostPerTile": 27,
+        "totalBricksToNext": 351,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1681,7 +1627,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 8.0,
+        "estimatedWinsToLevel": 6.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1694,9 +1640,9 @@
       "hp": 28232,
       "goldPerSec": 12.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 23,
-        "totalBricksToNext": 460,
+        "tilesPerLevel": 13,
+        "brickCostPerTile": 28,
+        "totalBricksToNext": 364,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1756,7 +1702,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 7.2,
+        "estimatedWinsToLevel": 5.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1769,9 +1715,9 @@
       "hp": 32467,
       "goldPerSec": 13.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 24,
-        "totalBricksToNext": 480,
+        "tilesPerLevel": 13,
+        "brickCostPerTile": 29,
+        "totalBricksToNext": 377,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1831,7 +1777,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 6.8,
+        "estimatedWinsToLevel": 5.3,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1844,9 +1790,9 @@
       "hp": 37337,
       "goldPerSec": 13.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 25,
-        "totalBricksToNext": 500,
+        "tilesPerLevel": 13,
+        "brickCostPerTile": 30,
+        "totalBricksToNext": 390,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1906,7 +1852,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 6.4,
+        "estimatedWinsToLevel": 5.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1919,9 +1865,9 @@
       "hp": 42938,
       "goldPerSec": 14.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 26,
-        "totalBricksToNext": 520,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 31,
+        "totalBricksToNext": 434,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1981,7 +1927,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.7,
+        "estimatedWinsToLevel": 4.8,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -1994,9 +1940,9 @@
       "hp": 49378,
       "goldPerSec": 14.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 27,
-        "totalBricksToNext": 540,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 32,
+        "totalBricksToNext": 448,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2056,7 +2002,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.3,
+        "estimatedWinsToLevel": 4.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -2069,9 +2015,9 @@
       "hp": 56785,
       "goldPerSec": 15.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 28,
-        "totalBricksToNext": 560,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 33,
+        "totalBricksToNext": 462,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2131,7 +2077,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.0,
+        "estimatedWinsToLevel": 4.1,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -2144,9 +2090,9 @@
       "hp": 65303,
       "goldPerSec": 15.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 29,
-        "totalBricksToNext": 580,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 34,
+        "totalBricksToNext": 476,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2206,7 +2152,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 4.5,
+        "estimatedWinsToLevel": 3.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -2219,9 +2165,9 @@
       "hp": 75098,
       "goldPerSec": 16.0,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 30,
-        "totalBricksToNext": 600,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 35,
+        "totalBricksToNext": 490,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2281,7 +2227,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 4.2,
+        "estimatedWinsToLevel": 3.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {
@@ -2294,9 +2240,9 @@
       "hp": 86363,
       "goldPerSec": 16.5,
       "flip": {
-        "tilesPerLevel": 20,
-        "brickCostPerTile": 31,
-        "totalBricksToNext": 620,
+        "tilesPerLevel": 14,
+        "brickCostPerTile": 36,
+        "totalBricksToNext": 504,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2356,7 +2302,7 @@
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 3.9,
+        "estimatedWinsToLevel": 3.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {

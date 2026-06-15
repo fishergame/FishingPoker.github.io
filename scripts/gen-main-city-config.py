@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Generate mainCity.json + docs/MAIN_CITY_PROGRESSION.md
 
-主城独立养成 v2：
+主城独立养成 v2.1：
 - 战斗：HP ×1.15/级（L1=1500）；产金每秒 +0.5/级（2.0→16.5，仅 .0/.5）
-- 升级：在主城地图翻格，每级 20 格，每格消耗砖头（随等级递增）
+- 升级：翻格外扩一圈；**单格砖头** × **本级格数** = 升级总砖（非「升一级固定总砖」）
 - 对局掉落：金币 + 砖头 + 经验；主城 PvE 建筑额外奖励
 - 对局时长：仍仅由竞技场决定（battleBalance.json）
+- 砖头商店：见 shop.json（基础区 · 钻石四档）
 """
 import json
 import subprocess
@@ -20,8 +21,13 @@ MAIN_CITY_HP_L1 = 1500
 GOLD_PER_SEC_L1 = 2.0
 GOLD_PER_SEC_STEP = 0.5  # 每级 +0.5，仅 x.0 / x.5
 
-TILES_PER_LEVEL = 20
-BRICK_BASE_PER_TILE = 2  # L1 每格 2 砖；之后 +1/级 → cost(L)=L+1
+# 升级：外扩一圈需翻格数（L1 起约 8 格邻接圈，随等级略增）
+TILES_BASE = 8
+TILES_STEP_EVERY = 4  # 每 4 级 +1 格
+TILES_MAX = 14
+
+# 单格翻开消耗砖头（主口径）；L1=7，每级 +1
+BRICK_BASE_PER_TILE = 7
 
 BRICK_BATTLE_BASE = 5
 BRICK_BATTLE_GROWTH = 1.11
@@ -72,15 +78,17 @@ def gold_per_sec(level: int) -> float:
 
 
 def flip_brick_cost(level: int) -> int:
-    """从 level 升到 level+1 时，翻开单格消耗砖头。"""
+    """从 level 升到 level+1 时，翻开**单格**消耗砖头（主口径）。"""
     return BRICK_BASE_PER_TILE + (level - 1)
 
 
 def tiles_to_level_up(level: int) -> int:
-    return TILES_PER_LEVEL
+    """从 level 升到 level+1 时需翻开的格数（外扩一圈）。"""
+    return min(TILES_MAX, TILES_BASE + (level - 1) // TILES_STEP_EVERY)
 
 
 def total_bricks_to_level_up(level: int) -> int:
+    """升级总砖 = 本级格数 × 单格砖（派生，非独立配表）。"""
     return tiles_to_level_up(level) * flip_brick_cost(level)
 
 
@@ -188,44 +196,6 @@ def gen_levels(heroes_map: dict) -> list[dict]:
     return rows
 
 
-def gen_shop_brick_packs() -> list[dict]:
-    """砖头商店：金币/钻石双渠道，单价随包量略优惠。"""
-    return [
-        {
-            "productId": "brick_pack_s",
-            "name": "砖头×30",
-            "reward": {"type": "brick", "amount": 30},
-            "purchase": {"gold": 350, "diamond": 18},
-            "dailyLimit": 3,
-            "note": "约 L1 胜场 6 场等量",
-        },
-        {
-            "productId": "brick_pack_m",
-            "name": "砖头×80",
-            "reward": {"type": "brick", "amount": 80},
-            "purchase": {"gold": 880, "diamond": 45},
-            "dailyLimit": 2,
-            "note": "约 L1 升一级需求量 2 倍",
-        },
-        {
-            "productId": "brick_pack_l",
-            "name": "砖头×200",
-            "reward": {"type": "brick", "amount": 200},
-            "purchase": {"gold": 2000, "diamond": 98},
-            "dailyLimit": 1,
-            "note": "中后期补仓",
-        },
-        {
-            "productId": "brick_pack_xl",
-            "name": "砖头×500",
-            "reward": {"type": "brick", "amount": 500},
-            "purchase": {"gold": 4500, "diamond": 218},
-            "weeklyLimit": 2,
-            "note": "仅金币或钻石二选一购买",
-        },
-    ]
-
-
 def gen_main_city() -> dict:
     heroes = load_heroes()
     heroes_map = {h["id"]: h for h in heroes}
@@ -233,29 +203,32 @@ def gen_main_city() -> dict:
     cumulative_bricks = sum(r["flip"]["totalBricksToNext"] for r in levels[:-1])
 
     return {
-        "version": "2.0.0",
-        "description": "主城养成：翻格升级、砖头消耗、战斗 HP/产金",
+        "version": "2.1.0",
+        "description": "主城养成：翻格升级（单格砖×格数）、战斗 HP/产金",
         "levelMax": LEVEL_MAX,
         "gameplay": {
             "upgradeMode": "flipTiles",
-            "tilesPerLevel": TILES_PER_LEVEL,
             "tileCostCurrency": "brick",
-            "flipBrickCostFormula": f"{BRICK_BASE_PER_TILE} + (mainCityLevel - 1) 每格",
-            "totalBricksFormula": f"tilesPerLevel({TILES_PER_LEVEL}) × flipBrickCost",
+            "upgradeLogic": "每升 1 级外扩一圈，逐格翻开；单格耗砖随等级涨，格数随外扩略增",
+            "flipBrickCostFormula": f"{BRICK_BASE_PER_TILE} + (mainCityLevel - 1)  // 单格",
+            "tilesPerLevelFormula": f"min({TILES_MAX}, {TILES_BASE} + floor((mainCityLevel-1)/{TILES_STEP_EVERY}))",
+            "totalBricksFormula": "tilesPerLevel × flipBrickCost  // 派生",
             "tileLoot": {
                 "decoration": DECOR_CATEGORIES,
                 "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币",
             },
+            "shopBrickPacksRef": "shop.json → zones.basic.brickPacks（钻石四档）",
         },
         "formulas": {
             "hp": f"round({MAIN_CITY_HP_L1} * {STAT_GROWTH}^(mainCityLevel-1))",
             "goldPerSec": f"{GOLD_PER_SEC_L1} + (mainCityLevel-1)*{GOLD_PER_SEC_STEP}",
-            "flipBrickCost": "2 + (mainCityLevel-1)",
+            "flipBrickCost": f"{BRICK_BASE_PER_TILE} + (mainCityLevel-1)",
+            "tilesPerLevel": f"min({TILES_MAX}, {TILES_BASE} + floor((mainCityLevel-1)/{TILES_STEP_EVERY}))",
+            "totalBricksToNext": "tilesPerLevel × flipBrickCost",
             "battleBricksWin": f"round({BRICK_BATTLE_BASE} * {BRICK_BATTLE_GROWTH}^(L-1) * arenaMul)",
             "battleGoldWin": f"round({GOLD_BATTLE_BASE} * {GOLD_BATTLE_GROWTH}^(L-1) * arenaMul)",
             "loseRewardRatio": LOSE_REWARD_RATIO,
         },
-        "shopBrickPacks": gen_shop_brick_packs(),
         "cumulativeBricksToMax": cumulative_bricks,
         "levels": levels,
         "hpByLevel": {str(r["level"]): r["hp"] for r in levels},
@@ -280,8 +253,9 @@ def gen_markdown(data: dict) -> str:
         "",
         "| 模块 | 规则 |",
         "|:---|:---|",
-        "| **升级方式** | 主城地图消耗 **砖头** 翻格；每升 1 级需翻 **20 格** |",
-        "| **单格砖头** | `2 + (当前主城等级 - 1)`，等级越高越贵 |",
+        "| **升级方式** | 外扩一圈逐格翻开；**升级总砖 = 单格砖 × 本级格数** |",
+        "| **本级格数** | 邻接圈约 **8 格** 起，每 4 级 +1，上限 **14** |",
+        "| **单格砖头** | `7 + (当前主城等级 - 1)`，等级越高越贵 |",
         "| **格内掉落** | 多为装饰（植物/景观/城堡/砖头厂/金矿厂）；每级 **2–3 个 PvE 建筑** 可实战 |",
         "| **PvE 奖励** | 胜利额外砖头 ≈ 胜场 ×2.5、金币 ≈ ×2 |",
         "| **PvP 奖励** | 胜利给 砖头 + 金币 + 账号经验；失败给 **40%** |",
@@ -293,8 +267,9 @@ def gen_markdown(data: dict) -> str:
         "```",
         "mainCityHp(L)       = round(1500 × 1.15^(L-1))",
         "goldPerSec(L)       = 2.0 + (L-1) × 0.5",
-        "flipBrickCost(L)    = 2 + (L-1)          // 从 L 升到 L+1 时每格",
-        "bricksToLevelUp(L)  = 20 × flipBrickCost(L)",
+        "flipBrickCost(L)    = 7 + (L-1)          // 单格翻开（主口径）",
+        "tilesPerLevel(L)    = min(14, 8 + floor((L-1)/4))  // 外扩格数",
+        "bricksToLevelUp(L)  = tilesPerLevel(L) × flipBrickCost(L)",
         "battleBricksWin     = round(5 × 1.11^(L-1) × (1+0.06×(场次-1)))",
         "battleGoldWin       = round(28 × 1.11^(L-1) × (1+0.06×(场次-1)))",
         "```",
@@ -325,6 +300,7 @@ def gen_markdown(data: dict) -> str:
 
     lines += [
         "",
+        "> **单格砖** = 翻开一格消耗；**本级格数** = 升这一级需翻几格；**升级总砖** = 二者相乘。",
         "> **估胜场/级** = 升级总砖 ÷ 参考场次胜场砖头（不含 PvE 与商店）。",
         "",
         "---",
@@ -362,19 +338,17 @@ def gen_markdown(data: dict) -> str:
         "",
         "---",
         "",
-        "## 五、商店 · 砖头礼包（金币/钻石）",
+        "## 五、商店 · 砖头礼包（钻石 · 四档）",
         "",
-        "| 商品 | 砖头 | 金币 | 钻石 | 限购 | 说明 |",
+        "配表见 **`shop.json`** → `zones.basic.brickPacks`（仅钻石购买，大包单价更低）。",
+        "",
+        "| 商品 | 砖头 | 钻石 | 单价 | 限购 | 说明 |",
         "|:---|:---:|:---:|:---:|:---:|:---|",
+        "| 砖头×40 | 40 | 25 | 0.63 | 日3 | 约 L1 升级量 70% |",
+        "| 砖头×100 | 100 | 58 | 0.58 | 日2 | 约 L1–L3 一级量 |",
+        "| 砖头×250 | 250 | 128 | 0.51 | 日1 | 中后期补仓 |",
+        "| 砖头×600 | 600 | 268 | 0.45 | 周2 | 大包优惠 |",
     ]
-    for p in data["shopBrickPacks"]:
-        lim = p.get("dailyLimit") or p.get("weeklyLimit")
-        lim_t = f"日{p['dailyLimit']}" if "dailyLimit" in p else f"周{p['weeklyLimit']}"
-        g = p["purchase"].get("gold", "—")
-        d = p["purchase"].get("diamond", "—")
-        lines.append(
-            f"| {p['name']} | {p['reward']['amount']} | {g} | {d} | {lim_t} | {p.get('note', '')} |"
-        )
 
     lines += [
         "",

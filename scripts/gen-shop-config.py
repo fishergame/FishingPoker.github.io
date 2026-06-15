@@ -191,38 +191,41 @@ def gen_shop() -> dict:
     brick_packs = [
         {
             "productId": "brick_pack_s",
-            "name": "砖头×30",
-            "reward": {"type": "brick", "amount": 30},
-            "purchase": {"gold": 350, "diamond": 18},
+            "name": "砖头×40",
+            "reward": {"type": "brick", "amount": 40},
+            "purchase": {"gold": None, "diamond": 25},
             "dailyLimit": 3,
-            "note": "约 L1 胜场 6 场等量；见 mainCity.json",
+            "note": "约 L1 升级量 70%；仅钻石",
         },
         {
             "productId": "brick_pack_m",
-            "name": "砖头×80",
-            "reward": {"type": "brick", "amount": 80},
-            "purchase": {"gold": 880, "diamond": 45},
+            "name": "砖头×100",
+            "reward": {"type": "brick", "amount": 100},
+            "purchase": {"gold": None, "diamond": 58},
             "dailyLimit": 2,
+            "note": "约 L1–L3 一级量",
         },
         {
             "productId": "brick_pack_l",
-            "name": "砖头×200",
-            "reward": {"type": "brick", "amount": 200},
-            "purchase": {"gold": 2000, "diamond": 98},
+            "name": "砖头×250",
+            "reward": {"type": "brick", "amount": 250},
+            "purchase": {"gold": None, "diamond": 128},
             "dailyLimit": 1,
+            "note": "中后期补仓",
         },
         {
             "productId": "brick_pack_xl",
-            "name": "砖头×500",
-            "reward": {"type": "brick", "amount": 500},
-            "purchase": {"gold": 4500, "diamond": 218},
+            "name": "砖头×600",
+            "reward": {"type": "brick", "amount": 600},
+            "purchase": {"gold": None, "diamond": 268},
             "weeklyLimit": 2,
+            "note": "大包单价更低",
         },
     ]
 
     return {
-        "version": "1.1.0",
-        "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石)；价格由品质单价推导",
+        "version": "1.2.0",
+        "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石/砖头)；价格由品质单价推导",
         "zones": {
             "character": {
                 "name": "角色区",
@@ -284,7 +287,8 @@ def gen_shop() -> dict:
                 "diamondRecharge": diamond_tiers,
                 "brickPacks": {
                     "currency": "brick",
-                    "pricingNote": "金币≈11.7/砖；钻石≈1.67/砖（大包略优惠）",
+                    "purchaseCurrency": "diamond",
+                    "pricingNote": "仅钻石；大包单价递减（0.63→0.45 钻/砖）",
                     "packs": brick_packs,
                 },
             },
@@ -292,8 +296,10 @@ def gen_shop() -> dict:
         "pricingReference": {
             "goldPerCard": GOLD_PER,
             "diamondPerCard": DIAMOND_PER,
-            "brickPackGoldPerBrick": round(brick_packs[0]["purchase"]["gold"] / brick_packs[0]["reward"]["amount"], 2),
-            "brickPackDiamondPerBrick": round(brick_packs[0]["purchase"]["diamond"] / brick_packs[0]["reward"]["amount"], 2),
+            "brickPackDiamondPerBrick": {
+                "small": round(brick_packs[0]["purchase"]["diamond"] / brick_packs[0]["reward"]["amount"], 2),
+                "large": round(brick_packs[-1]["purchase"]["diamond"] / brick_packs[-1]["reward"]["amount"], 2),
+            },
             "formula": "总价 = 单价 × 张数；所有每日优惠由此推导",
             "examples": {
                 "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
@@ -477,18 +483,20 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "---",
         "",
-        "## 五、砖头礼包（金币/钻石）",
+        "## 五、砖头礼包（钻石 · 四档）",
         "",
-        "> 主城翻格升级消耗砖头；掉落与 pacing 见 `docs/MAIN_CITY_PROGRESSION.md`",
+        "> 主城翻格升级消耗砖头；数值与 pacing 见 `docs/MAIN_CITY_PROGRESSION.md`",
+        "> **仅钻石购买**，量越大单价越低。",
         "",
-        "| 商品 | 砖头 | 金币 | 钻石 | 限购 |",
+        "| 商品 | 砖头 | 钻石 | 钻/砖 | 限购 |",
         "|:---|:---:|:---:|:---:|:---|",
     ]
     for p in shop["zones"]["basic"]["brickPacks"]["packs"]:
         lim = f"日{p['dailyLimit']}" if "dailyLimit" in p else f"周{p['weeklyLimit']}"
-        lines.append(
-            f"| {p['name']} | {p['reward']['amount']} | {p['purchase']['gold']} | {p['purchase']['diamond']} | {lim} |"
-        )
+        amt = p["reward"]["amount"]
+        dia = p["purchase"]["diamond"]
+        unit = round(dia / amt, 2)
+        lines.append(f"| {p['name']} | {amt} | {dia} | {unit} | {lim} |")
 
     e = economy
     lines += [
