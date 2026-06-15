@@ -1,0 +1,292 @@
+{
+  "version": "1.0.0",
+  "description": "羁绊：4阵营+近战/远程；2/4/6 档激活，4张时同时激活2+4档",
+  "rules": {
+    "deckSize": 8,
+    "excludeHeroIds": [
+      "gold_mine"
+    ],
+    "tierActivation": "atCount4ActivateTier2And4",
+    "maxActiveFactionBonds": 1,
+    "maxActiveRangeBonds": 1,
+    "stacking": "additiveBeforeCap",
+    "cityDamageCapFromBonds": 0.05,
+    "recommendedCityDpsCap": 1.45
+  },
+  "bonds": [
+    {
+      "bondId": "faction_wei",
+      "type": "faction",
+      "name": "魏",
+      "faction": "wei",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.08
+            },
+            {
+              "type": "cityDamagePct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_shu",
+      "type": "faction",
+      "name": "蜀",
+      "faction": "shu",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.08
+            },
+            {
+              "type": "cityDamagePct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_wu",
+      "type": "faction",
+      "name": "吴",
+      "faction": "wu",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.08
+            },
+            {
+              "type": "cityDamagePct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_qun",
+      "type": "faction",
+      "name": "群雄",
+      "faction": "qun",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "unitHpPct",
+              "value": 0.08
+            },
+            {
+              "type": "cityDamagePct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "range_melee",
+      "type": "range",
+      "name": "近战",
+      "range": "melee",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "unitHpPct",
+              "value": 0.06
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "unitHpPct",
+              "value": 0.1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "unitHpPct",
+              "value": 0.15
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.08
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "range_ranged",
+      "type": "range",
+      "name": "远程",
+      "range": "ranged",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.06
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.1
+            },
+            {
+              "type": "atkSpeedPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.15
+            },
+            {
+              "type": "atkSpeedPct",
+              "value": 0.08
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

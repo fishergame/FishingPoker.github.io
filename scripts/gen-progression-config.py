@@ -495,6 +495,8 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §四 |",
         "| **商店与经济** | 每日优惠、通用卡、充值、缺口补足 | [`docs/SHOP_AND_ECONOMY.md`](SHOP_AND_ECONOMY.md) |",
         "| **战斗平衡** | 对局时长、主城血量、攻城模拟 | [`docs/BATTLE_BALANCE.md`](BATTLE_BALANCE.md) |",
+        "| **主城最终表** | 场次×等级全量 HP + 时长 | [`docs/MAIN_CITY_MATCH_FINAL.md`](MAIN_CITY_MATCH_FINAL.md) |",
+        "| **技能/羁绊** | 技能效果、羁绊档位、接入审查 | [`docs/SKILL_BOND_REVIEW.md`](SKILL_BOND_REVIEW.md) |",
         "",
         "---",
         "",

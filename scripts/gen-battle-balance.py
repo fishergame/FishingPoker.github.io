@@ -163,6 +163,10 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
         },
         "skillQualityReference": SKILL_QUALITY_REFERENCE,
         "heroSkillNote": HERO_SKILL_NOTE,
+        "combatCaps": {
+            "recommendedCityDpsMultiplierMax": 1.45,
+            "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_BOND_REVIEW.md",
+        },
         "arenas": arenas,
     }
 
@@ -297,6 +301,92 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
     return "\n".join(lines)
 
 
+def gen_final_table_md(data: dict) -> str:
+    """最终交付用：对局时长 + 全量主城 HP 矩阵。"""
+    arena_names = ["青铜", "白银", "黄金", "铂金", "钻石", "星耀", "大师", "宗师", "王者", "传奇"]
+    lines = [
+        "# 主城血量 · 对局时长（最终表）",
+        "",
+        "> 配表：`battleBalance.json` · 生成：`python3 scripts/gen-battle-balance.py`",
+        "> 运行时：`BattleBalanceConfig.mainCityHp(arenaId, avgDeckLevel)` / `matchDurationSec(arenaId)`",
+        "",
+        "---",
+        "",
+        "## 一、对局时长（按竞技场）",
+        "",
+        "| 场次 | 名称 | 秒 | 显示 |",
+        "|:---:|:---|:---:|:---:|",
+    ]
+    for a in data["arenas"]:
+        aid = a["arenaId"]
+        sec = a["matchDurationSec"]
+        m, s = divmod(sec, 60)
+        lines.append(f"| {aid} | {arena_names[aid-1]} | {sec} | **{m}:{s:02d}** |")
+
+    lines += [
+        "",
+        f"公式：`{data['formulas']['matchDurationSec']}`",
+        "",
+        "---",
+        "",
+        "## 二、主城 HP 公式",
+        "",
+        "```",
+        "mainCityHp = mainCityHpBase[场次] × 1.15^(avgDeckLevel - 1)",
+        "```",
+        "",
+        f"- `mainCityHpBase` 随场次递增（含场次系数 {ARENA_CITY_SCALE_STEP*100:.1f}%/场）",
+        f"- `avgDeckLevel`：出战 8 卡平均等级（1–30）",
+        "",
+        "---",
+        "",
+        "## 三、主城 HP 全表（场次 × 等级）",
+        "",
+    ]
+    header = "| 场次 | " + " | ".join(f"L{lv}" for lv in range(1, 31)) + " |"
+    sep = "|:---:|" + ":---:|" * 30
+    lines.append(header)
+    lines.append(sep)
+    for a in data["arenas"]:
+        hp = a["mainCityHpByLevel"]
+        row = f"| **{a['arenaId']} {arena_names[a['arenaId']-1]}** |"
+        for lv in range(1, 31):
+            row += f" {hp[str(lv)]:,} |"
+        lines.append(row)
+
+    lines += [
+        "",
+        "---",
+        "",
+        "## 四、按等级横向对照（常用）",
+        "",
+        "| 等级 |" + "".join(f" {arena_names[i]} |" for i in range(10)),
+        "|:---:|" + ":---:|" * 10,
+    ]
+    for lv in [1, 5, 10, 15, 20, 25, 30]:
+        row = f"| **L{lv}** |"
+        for a in data["arenas"]:
+            row += f" {a['mainCityHpByLevel'][str(lv)]:,} |"
+        lines.append(row)
+
+    lines += [
+        "",
+        "---",
+        "",
+        "## 五、接入技能/羁绊后的修正",
+        "",
+        "技能或羁绊若增加 `cityDamagePct` / `atkPct`，实际破城时间会缩短。",
+        "建议战斗层将 **对城 DPS 合计倍率上限设为 1.45×**（见 `docs/SKILL_BOND_REVIEW.md`）。",
+        "",
+        "| 场景 | 基础攻城占比 | 技能满羁绊后（估） |",
+        "|:---|:---:|:---:|",
+        "| 默认编队 | 45% 对局时长 | ~30–35% |",
+        "| 满配传奇 | 15–30 秒 | ~10–20 秒 |",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 if __name__ == "__main__":
     heroes = load_heroes()
     heroes_map = {h["id"]: h for h in heroes}
@@ -309,3 +399,7 @@ if __name__ == "__main__":
     md = ROOT / "docs" / "BATTLE_BALANCE.md"
     md.write_text(gen_markdown(data, heroes_map) + "\n", encoding="utf-8")
     print(f"Wrote {md}")
+
+    final_md = ROOT / "docs" / "MAIN_CITY_MATCH_FINAL.md"
+    final_md.write_text(gen_final_table_md(data) + "\n", encoding="utf-8")
+    print(f"Wrote {final_md}")

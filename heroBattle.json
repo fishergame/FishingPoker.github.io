@@ -1,0 +1,840 @@
+{
+  "version": "1.0.0",
+  "description": "英雄战斗元数据：阵营、远近程、技能ID映射",
+  "heroes": {
+    "dragon_knight": {
+      "heroId": "dragon_knight",
+      "name": "龙焰女王",
+      "faction": "shu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_dragon_knight_normal1",
+          "skill_dragon_knight_normal2"
+        ],
+        "epic": [
+          "skill_dragon_knight_epic1",
+          "skill_dragon_knight_epic2"
+        ],
+        "legend": "skill_dragon_knight_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "demon_lord": {
+      "heroId": "demon_lord",
+      "name": "永冬之王",
+      "faction": "wei",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_demon_lord_normal1",
+          "skill_demon_lord_normal2"
+        ],
+        "epic": [
+          "skill_demon_lord_epic1",
+          "skill_demon_lord_epic2"
+        ],
+        "legend": "skill_demon_lord_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "archmage": {
+      "heroId": "archmage",
+      "name": "风暴女巫",
+      "faction": "shu",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_archmage_normal1",
+          "skill_archmage_normal2"
+        ],
+        "epic": [
+          "skill_archmage_epic1",
+          "skill_archmage_epic2"
+        ],
+        "legend": "skill_archmage_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "ranger": {
+      "heroId": "ranger",
+      "name": "荆棘女王",
+      "faction": "shu",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_ranger_normal1",
+          "skill_ranger_normal2"
+        ],
+        "epic": [
+          "skill_ranger_epic1",
+          "skill_ranger_epic2"
+        ],
+        "legend": "skill_ranger_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "royal_knight": {
+      "heroId": "royal_knight",
+      "name": "圣盾领主",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_royal_knight_normal1",
+          "skill_royal_knight_normal2"
+        ],
+        "epic": [
+          "skill_royal_knight_epic1",
+          "skill_royal_knight_epic2"
+        ],
+        "legend": "skill_royal_knight_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "druid": {
+      "heroId": "druid",
+      "name": "北境守护者",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_druid_normal1",
+          "skill_druid_normal2"
+        ],
+        "epic": [
+          "skill_druid_epic1",
+          "skill_druid_epic2"
+        ],
+        "legend": "skill_druid_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "lich_queen": {
+      "heroId": "lich_queen",
+      "name": "幽灵船长",
+      "faction": "shu",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_lich_queen_normal1",
+          "skill_lich_queen_normal2"
+        ],
+        "epic": [
+          "skill_lich_queen_epic1",
+          "skill_lich_queen_epic2"
+        ],
+        "legend": "skill_lich_queen_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "blademaster": {
+      "heroId": "blademaster",
+      "name": "幻影刺客",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_blademaster_normal1",
+          "skill_blademaster_normal2"
+        ],
+        "epic": [
+          "skill_blademaster_epic1",
+          "skill_blademaster_epic2"
+        ],
+        "legend": "skill_blademaster_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "frost_dragon": {
+      "heroId": "frost_dragon",
+      "name": "寒冰巨魔",
+      "faction": "wei",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_frost_dragon_normal1",
+          "skill_frost_dragon_normal2"
+        ],
+        "epic": [
+          "skill_frost_dragon_epic1",
+          "skill_frost_dragon_epic2"
+        ],
+        "legend": "skill_frost_dragon_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "crusher": {
+      "heroId": "crusher",
+      "name": "重装破城者",
+      "faction": "qun",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_crusher_normal1",
+          "skill_crusher_normal2"
+        ],
+        "epic": [
+          "skill_crusher_epic1",
+          "skill_crusher_epic2"
+        ],
+        "legend": "skill_crusher_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "helicopter": {
+      "heroId": "helicopter",
+      "name": "机械飞鹰",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_helicopter_normal1",
+          "skill_helicopter_normal2"
+        ],
+        "epic": [
+          "skill_helicopter_epic1",
+          "skill_helicopter_epic2"
+        ],
+        "legend": "skill_helicopter_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "dread_knight": {
+      "heroId": "dread_knight",
+      "name": "巨斧酋长",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_dread_knight_normal1",
+          "skill_dread_knight_normal2"
+        ],
+        "epic": [
+          "skill_dread_knight_epic1",
+          "skill_dread_knight_epic2"
+        ],
+        "legend": "skill_dread_knight_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "warlord": {
+      "heroId": "warlord",
+      "name": "双头奇美拉",
+      "faction": "shu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_warlord_normal1",
+          "skill_warlord_normal2"
+        ],
+        "epic": [
+          "skill_warlord_epic1",
+          "skill_warlord_epic2"
+        ],
+        "legend": "skill_warlord_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "panda_monk": {
+      "heroId": "panda_monk",
+      "name": "爆破鬼才",
+      "faction": "wei",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_panda_monk_normal1",
+          "skill_panda_monk_normal2"
+        ],
+        "epic": [
+          "skill_panda_monk_epic1",
+          "skill_panda_monk_epic2"
+        ],
+        "legend": "skill_panda_monk_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "shaman": {
+      "heroId": "shaman",
+      "name": "藤蔓萨满",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_shaman_normal1",
+          "skill_shaman_normal2"
+        ],
+        "epic": [
+          "skill_shaman_epic1",
+          "skill_shaman_epic2"
+        ],
+        "legend": "skill_shaman_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "gargoyle": {
+      "heroId": "gargoyle",
+      "name": "鹰女",
+      "faction": "shu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_gargoyle_normal1",
+          "skill_gargoyle_normal2"
+        ],
+        "epic": [
+          "skill_gargoyle_epic1",
+          "skill_gargoyle_epic2"
+        ],
+        "legend": "skill_gargoyle_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "skeleton_giant": {
+      "heroId": "skeleton_giant",
+      "name": "巨石魔像",
+      "faction": "wei",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_skeleton_giant_normal1",
+          "skill_skeleton_giant_normal2"
+        ],
+        "epic": [
+          "skill_skeleton_giant_epic1",
+          "skill_skeleton_giant_epic2"
+        ],
+        "legend": "skill_skeleton_giant_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "sniper": {
+      "heroId": "sniper",
+      "name": "雇佣兵",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_sniper_normal1",
+          "skill_sniper_normal2"
+        ],
+        "epic": [
+          "skill_sniper_epic1",
+          "skill_sniper_epic2"
+        ],
+        "legend": "skill_sniper_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "catapult_tower": {
+      "heroId": "catapult_tower",
+      "name": "炮楼",
+      "faction": "shu",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_catapult_tower_normal1",
+          "skill_catapult_tower_normal2"
+        ],
+        "epic": [
+          "skill_catapult_tower_epic1",
+          "skill_catapult_tower_epic2"
+        ],
+        "legend": "skill_catapult_tower_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "catapult": {
+      "heroId": "catapult",
+      "name": "自爆蜘蛛",
+      "faction": "wei",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_catapult_normal1",
+          "skill_catapult_normal2"
+        ],
+        "epic": [
+          "skill_catapult_epic1",
+          "skill_catapult_epic2"
+        ],
+        "legend": "skill_catapult_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "cavalry": {
+      "heroId": "cavalry",
+      "name": "龙骑士",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_cavalry_normal1",
+          "skill_cavalry_normal2"
+        ],
+        "epic": [
+          "skill_cavalry_epic1",
+          "skill_cavalry_epic2"
+        ],
+        "legend": "skill_cavalry_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "wyrmling": {
+      "heroId": "wyrmling",
+      "name": "火龙",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_wyrmling_normal1",
+          "skill_wyrmling_normal2"
+        ],
+        "epic": [
+          "skill_wyrmling_epic1",
+          "skill_wyrmling_epic2"
+        ],
+        "legend": "skill_wyrmling_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "ballista": {
+      "heroId": "ballista",
+      "name": "弩车",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_ballista_normal1",
+          "skill_ballista_normal2"
+        ],
+        "epic": [
+          "skill_ballista_epic1",
+          "skill_ballista_epic2"
+        ],
+        "legend": "skill_ballista_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "necromancer": {
+      "heroId": "necromancer",
+      "name": "骷髅魔导师",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_necromancer_normal1",
+          "skill_necromancer_normal2"
+        ],
+        "epic": [
+          "skill_necromancer_epic1",
+          "skill_necromancer_epic2"
+        ],
+        "legend": "skill_necromancer_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "spear_orc": {
+      "heroId": "spear_orc",
+      "name": "鱼叉捕猎者",
+      "faction": "wei",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_spear_orc_normal1",
+          "skill_spear_orc_normal2"
+        ],
+        "epic": [
+          "skill_spear_orc_epic1",
+          "skill_spear_orc_epic2"
+        ],
+        "legend": "skill_spear_orc_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "wolf_rider": {
+      "heroId": "wolf_rider",
+      "name": "利爪猎犬",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_wolf_rider_normal1",
+          "skill_wolf_rider_normal2"
+        ],
+        "epic": [
+          "skill_wolf_rider_epic1",
+          "skill_wolf_rider_epic2"
+        ],
+        "legend": "skill_wolf_rider_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "skeleton_knight": {
+      "heroId": "skeleton_knight",
+      "name": "蝙蝠突袭者",
+      "faction": "shu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_skeleton_knight_normal1",
+          "skill_skeleton_knight_normal2"
+        ],
+        "epic": [
+          "skill_skeleton_knight_epic1",
+          "skill_skeleton_knight_epic2"
+        ],
+        "legend": "skill_skeleton_knight_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "archer": {
+      "heroId": "archer",
+      "name": "见习女巫",
+      "faction": "wei",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_archer_normal1",
+          "skill_archer_normal2"
+        ],
+        "epic": [
+          "skill_archer_epic1",
+          "skill_archer_epic2"
+        ],
+        "legend": "skill_archer_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "infantry": {
+      "heroId": "infantry",
+      "name": "重步兵",
+      "faction": "wei",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_infantry_normal1",
+          "skill_infantry_normal2"
+        ],
+        "epic": [
+          "skill_infantry_epic1",
+          "skill_infantry_epic2"
+        ],
+        "legend": "skill_infantry_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "arrow_tower": {
+      "heroId": "arrow_tower",
+      "name": "高射塔",
+      "faction": "wu",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_arrow_tower_normal1",
+          "skill_arrow_tower_normal2"
+        ],
+        "epic": [
+          "skill_arrow_tower_epic1",
+          "skill_arrow_tower_epic2"
+        ],
+        "legend": "skill_arrow_tower_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "bear_warrior": {
+      "heroId": "bear_warrior",
+      "name": "重锤卫士",
+      "faction": "wei",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_bear_warrior_normal1",
+          "skill_bear_warrior_normal2"
+        ],
+        "epic": [
+          "skill_bear_warrior_epic1",
+          "skill_bear_warrior_epic2"
+        ],
+        "legend": "skill_bear_warrior_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "skeleton_warrior": {
+      "heroId": "skeleton_warrior",
+      "name": "骷髅刀盾兵",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_skeleton_warrior_normal1",
+          "skill_skeleton_warrior_normal2"
+        ],
+        "epic": [
+          "skill_skeleton_warrior_epic1",
+          "skill_skeleton_warrior_epic2"
+        ],
+        "legend": "skill_skeleton_warrior_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "goblin": {
+      "heroId": "goblin",
+      "name": "小野猪人",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_goblin_normal1",
+          "skill_goblin_normal2"
+        ],
+        "epic": [
+          "skill_goblin_epic1",
+          "skill_goblin_epic2"
+        ],
+        "legend": "skill_goblin_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "blacksmith": {
+      "heroId": "blacksmith",
+      "name": "长枪教头",
+      "faction": "shu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_blacksmith_normal1",
+          "skill_blacksmith_normal2"
+        ],
+        "epic": [
+          "skill_blacksmith_epic1",
+          "skill_blacksmith_epic2"
+        ],
+        "legend": "skill_blacksmith_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "militia": {
+      "heroId": "militia",
+      "name": "短剑士",
+      "faction": "wu",
+      "range": "melee",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_militia_normal1",
+          "skill_militia_normal2"
+        ],
+        "epic": [
+          "skill_militia_epic1",
+          "skill_militia_epic2"
+        ],
+        "legend": "skill_militia_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "bone_archer": {
+      "heroId": "bone_archer",
+      "name": "火枪手",
+      "faction": "qun",
+      "range": "ranged",
+      "bondEligible": true,
+      "skills": {
+        "normal": [
+          "skill_bone_archer_normal1",
+          "skill_bone_archer_normal2"
+        ],
+        "epic": [
+          "skill_bone_archer_epic1",
+          "skill_bone_archer_epic2"
+        ],
+        "legend": "skill_bone_archer_legend1",
+        "epicUnlockLevels": [
+          8,
+          15
+        ],
+        "legendUnlockLevel": 20
+      }
+    },
+    "gold_mine": {
+      "heroId": "gold_mine",
+      "name": "采矿机",
+      "bondEligible": false,
+      "note": "铸币坊不计入羁绊"
+    }
+  }
+}
