@@ -1,6 +1,6 @@
 {
-  "version": "2.3.0",
-  "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡（40/30/30），交替发放",
+  "version": "2.4.0",
+  "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡；经验曲线×1.42与竞技场8–10段同步",
   "levelMax": 100,
   "defaultLevel": 1,
   "rewardRules": {
@@ -28,15 +28,27 @@
     ],
     "note": "活动新增角色写入 excludeHeroIds，不参与 randomHero 抽取"
   },
-  "expFormula": "round(18 + level * 3 + level^1.42 * 2.2)",
+  "expFormula": "round((18 + level * 3 + level^1.42 * 2.2) * ACCOUNT_EXP_SCALE)",
+  "expScale": 1.42,
   "expSource": "battle",
-  "totalExpToMax": 78769,
-  "estimatedMatches": 1875,
+  "syncTargets": {
+    "note": "55%胜率模拟校准：L90≈8000–8500杯(宗师/王者)，L100≈10000杯(传奇段)",
+    "level90TrophyRange": [
+      7500,
+      9000
+    ],
+    "level100TrophyRange": [
+      9500,
+      11000
+    ]
+  },
+  "totalExpToMax": 111855,
+  "estimatedMatches": 2663,
   "levels": [
     {
       "level": 1,
-      "expRequired": 23,
-      "cumulativeExp": 23,
+      "expRequired": 33,
+      "cumulativeExp": 33,
       "rewardType": "chest",
       "rewards": [
         {
@@ -47,8 +59,8 @@
     },
     {
       "level": 2,
-      "expRequired": 30,
-      "cumulativeExp": 53,
+      "expRequired": 42,
+      "cumulativeExp": 75,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -82,8 +94,8 @@
     },
     {
       "level": 3,
-      "expRequired": 37,
-      "cumulativeExp": 90,
+      "expRequired": 53,
+      "cumulativeExp": 128,
       "rewardType": "chest",
       "rewards": [
         {
@@ -94,8 +106,8 @@
     },
     {
       "level": 4,
-      "expRequired": 46,
-      "cumulativeExp": 136,
+      "expRequired": 65,
+      "cumulativeExp": 193,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -129,8 +141,8 @@
     },
     {
       "level": 5,
-      "expRequired": 55,
-      "cumulativeExp": 191,
+      "expRequired": 78,
+      "cumulativeExp": 271,
       "rewardType": "chest",
       "rewards": [
         {
@@ -141,8 +153,8 @@
     },
     {
       "level": 6,
-      "expRequired": 64,
-      "cumulativeExp": 255,
+      "expRequired": 91,
+      "cumulativeExp": 362,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -176,8 +188,8 @@
     },
     {
       "level": 7,
-      "expRequired": 74,
-      "cumulativeExp": 329,
+      "expRequired": 105,
+      "cumulativeExp": 467,
       "rewardType": "chest",
       "rewards": [
         {
@@ -188,8 +200,8 @@
     },
     {
       "level": 8,
-      "expRequired": 84,
-      "cumulativeExp": 413,
+      "expRequired": 119,
+      "cumulativeExp": 586,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -223,8 +235,8 @@
     },
     {
       "level": 9,
-      "expRequired": 95,
-      "cumulativeExp": 508,
+      "expRequired": 135,
+      "cumulativeExp": 721,
       "rewardType": "chest",
       "rewards": [
         {
@@ -235,8 +247,8 @@
     },
     {
       "level": 10,
-      "expRequired": 106,
-      "cumulativeExp": 614,
+      "expRequired": 150,
+      "cumulativeExp": 871,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -270,8 +282,8 @@
     },
     {
       "level": 11,
-      "expRequired": 117,
-      "cumulativeExp": 731,
+      "expRequired": 166,
+      "cumulativeExp": 1037,
       "rewardType": "chest",
       "rewards": [
         {
@@ -282,8 +294,8 @@
     },
     {
       "level": 12,
-      "expRequired": 129,
-      "cumulativeExp": 860,
+      "expRequired": 183,
+      "cumulativeExp": 1220,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -317,8 +329,8 @@
     },
     {
       "level": 13,
-      "expRequired": 141,
-      "cumulativeExp": 1001,
+      "expRequired": 200,
+      "cumulativeExp": 1420,
       "rewardType": "chest",
       "rewards": [
         {
@@ -329,8 +341,8 @@
     },
     {
       "level": 14,
-      "expRequired": 153,
-      "cumulativeExp": 1154,
+      "expRequired": 218,
+      "cumulativeExp": 1638,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -364,8 +376,8 @@
     },
     {
       "level": 15,
-      "expRequired": 166,
-      "cumulativeExp": 1320,
+      "expRequired": 236,
+      "cumulativeExp": 1874,
       "rewardType": "chest",
       "rewards": [
         {
@@ -376,8 +388,8 @@
     },
     {
       "level": 16,
-      "expRequired": 179,
-      "cumulativeExp": 1499,
+      "expRequired": 254,
+      "cumulativeExp": 2128,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -411,8 +423,8 @@
     },
     {
       "level": 17,
-      "expRequired": 192,
-      "cumulativeExp": 1691,
+      "expRequired": 273,
+      "cumulativeExp": 2401,
       "rewardType": "chest",
       "rewards": [
         {
@@ -423,8 +435,8 @@
     },
     {
       "level": 18,
-      "expRequired": 205,
-      "cumulativeExp": 1896,
+      "expRequired": 292,
+      "cumulativeExp": 2693,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -458,8 +470,8 @@
     },
     {
       "level": 19,
-      "expRequired": 219,
-      "cumulativeExp": 2115,
+      "expRequired": 311,
+      "cumulativeExp": 3004,
       "rewardType": "chest",
       "rewards": [
         {
@@ -470,8 +482,8 @@
     },
     {
       "level": 20,
-      "expRequired": 233,
-      "cumulativeExp": 2348,
+      "expRequired": 331,
+      "cumulativeExp": 3335,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -505,8 +517,8 @@
     },
     {
       "level": 21,
-      "expRequired": 247,
-      "cumulativeExp": 2595,
+      "expRequired": 351,
+      "cumulativeExp": 3686,
       "rewardType": "chest",
       "rewards": [
         {
@@ -517,8 +529,8 @@
     },
     {
       "level": 22,
-      "expRequired": 261,
-      "cumulativeExp": 2856,
+      "expRequired": 371,
+      "cumulativeExp": 4057,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -552,8 +564,8 @@
     },
     {
       "level": 23,
-      "expRequired": 276,
-      "cumulativeExp": 3132,
+      "expRequired": 392,
+      "cumulativeExp": 4449,
       "rewardType": "chest",
       "rewards": [
         {
@@ -564,8 +576,8 @@
     },
     {
       "level": 24,
-      "expRequired": 291,
-      "cumulativeExp": 3423,
+      "expRequired": 413,
+      "cumulativeExp": 4862,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -599,8 +611,8 @@
     },
     {
       "level": 25,
-      "expRequired": 306,
-      "cumulativeExp": 3729,
+      "expRequired": 434,
+      "cumulativeExp": 5296,
       "rewardType": "chest",
       "rewards": [
         {
@@ -611,8 +623,8 @@
     },
     {
       "level": 26,
-      "expRequired": 321,
-      "cumulativeExp": 4050,
+      "expRequired": 455,
+      "cumulativeExp": 5751,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -646,8 +658,8 @@
     },
     {
       "level": 27,
-      "expRequired": 336,
-      "cumulativeExp": 4386,
+      "expRequired": 477,
+      "cumulativeExp": 6228,
       "rewardType": "chest",
       "rewards": [
         {
@@ -658,8 +670,8 @@
     },
     {
       "level": 28,
-      "expRequired": 352,
-      "cumulativeExp": 4738,
+      "expRequired": 499,
+      "cumulativeExp": 6727,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -693,8 +705,8 @@
     },
     {
       "level": 29,
-      "expRequired": 367,
-      "cumulativeExp": 5105,
+      "expRequired": 522,
+      "cumulativeExp": 7249,
       "rewardType": "chest",
       "rewards": [
         {
@@ -705,8 +717,8 @@
     },
     {
       "level": 30,
-      "expRequired": 383,
-      "cumulativeExp": 5488,
+      "expRequired": 544,
+      "cumulativeExp": 7793,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -740,8 +752,8 @@
     },
     {
       "level": 31,
-      "expRequired": 400,
-      "cumulativeExp": 5888,
+      "expRequired": 567,
+      "cumulativeExp": 8360,
       "rewardType": "chest",
       "rewards": [
         {
@@ -752,8 +764,8 @@
     },
     {
       "level": 32,
-      "expRequired": 416,
-      "cumulativeExp": 6304,
+      "expRequired": 590,
+      "cumulativeExp": 8950,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -787,8 +799,8 @@
     },
     {
       "level": 33,
-      "expRequired": 432,
-      "cumulativeExp": 6736,
+      "expRequired": 614,
+      "cumulativeExp": 9564,
       "rewardType": "chest",
       "rewards": [
         {
@@ -799,8 +811,8 @@
     },
     {
       "level": 34,
-      "expRequired": 449,
-      "cumulativeExp": 7185,
+      "expRequired": 638,
+      "cumulativeExp": 10202,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -834,8 +846,8 @@
     },
     {
       "level": 35,
-      "expRequired": 466,
-      "cumulativeExp": 7651,
+      "expRequired": 661,
+      "cumulativeExp": 10863,
       "rewardType": "chest",
       "rewards": [
         {
@@ -846,8 +858,8 @@
     },
     {
       "level": 36,
-      "expRequired": 483,
-      "cumulativeExp": 8134,
+      "expRequired": 686,
+      "cumulativeExp": 11549,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -881,8 +893,8 @@
     },
     {
       "level": 37,
-      "expRequired": 500,
-      "cumulativeExp": 8634,
+      "expRequired": 710,
+      "cumulativeExp": 12259,
       "rewardType": "chest",
       "rewards": [
         {
@@ -893,8 +905,8 @@
     },
     {
       "level": 38,
-      "expRequired": 517,
-      "cumulativeExp": 9151,
+      "expRequired": 734,
+      "cumulativeExp": 12993,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -928,8 +940,8 @@
     },
     {
       "level": 39,
-      "expRequired": 535,
-      "cumulativeExp": 9686,
+      "expRequired": 759,
+      "cumulativeExp": 13752,
       "rewardType": "chest",
       "rewards": [
         {
@@ -940,8 +952,8 @@
     },
     {
       "level": 40,
-      "expRequired": 552,
-      "cumulativeExp": 10238,
+      "expRequired": 784,
+      "cumulativeExp": 14536,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -975,8 +987,8 @@
     },
     {
       "level": 41,
-      "expRequired": 570,
-      "cumulativeExp": 10808,
+      "expRequired": 810,
+      "cumulativeExp": 15346,
       "rewardType": "chest",
       "rewards": [
         {
@@ -987,8 +999,8 @@
     },
     {
       "level": 42,
-      "expRequired": 588,
-      "cumulativeExp": 11396,
+      "expRequired": 835,
+      "cumulativeExp": 16181,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1022,8 +1034,8 @@
     },
     {
       "level": 43,
-      "expRequired": 606,
-      "cumulativeExp": 12002,
+      "expRequired": 861,
+      "cumulativeExp": 17042,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1034,8 +1046,8 @@
     },
     {
       "level": 44,
-      "expRequired": 624,
-      "cumulativeExp": 12626,
+      "expRequired": 887,
+      "cumulativeExp": 17929,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1069,8 +1081,8 @@
     },
     {
       "level": 45,
-      "expRequired": 643,
-      "cumulativeExp": 13269,
+      "expRequired": 913,
+      "cumulativeExp": 18842,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1081,8 +1093,8 @@
     },
     {
       "level": 46,
-      "expRequired": 661,
-      "cumulativeExp": 13930,
+      "expRequired": 939,
+      "cumulativeExp": 19781,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1116,8 +1128,8 @@
     },
     {
       "level": 47,
-      "expRequired": 680,
-      "cumulativeExp": 14610,
+      "expRequired": 966,
+      "cumulativeExp": 20747,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1128,8 +1140,8 @@
     },
     {
       "level": 48,
-      "expRequired": 699,
-      "cumulativeExp": 15309,
+      "expRequired": 992,
+      "cumulativeExp": 21739,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1163,8 +1175,8 @@
     },
     {
       "level": 49,
-      "expRequired": 718,
-      "cumulativeExp": 16027,
+      "expRequired": 1019,
+      "cumulativeExp": 22758,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1175,8 +1187,8 @@
     },
     {
       "level": 50,
-      "expRequired": 737,
-      "cumulativeExp": 16764,
+      "expRequired": 1046,
+      "cumulativeExp": 23804,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1210,8 +1222,8 @@
     },
     {
       "level": 51,
-      "expRequired": 756,
-      "cumulativeExp": 17520,
+      "expRequired": 1074,
+      "cumulativeExp": 24878,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1222,8 +1234,8 @@
     },
     {
       "level": 52,
-      "expRequired": 775,
-      "cumulativeExp": 18295,
+      "expRequired": 1101,
+      "cumulativeExp": 25979,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1257,8 +1269,8 @@
     },
     {
       "level": 53,
-      "expRequired": 795,
-      "cumulativeExp": 19090,
+      "expRequired": 1129,
+      "cumulativeExp": 27108,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1269,8 +1281,8 @@
     },
     {
       "level": 54,
-      "expRequired": 814,
-      "cumulativeExp": 19904,
+      "expRequired": 1157,
+      "cumulativeExp": 28265,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1304,8 +1316,8 @@
     },
     {
       "level": 55,
-      "expRequired": 834,
-      "cumulativeExp": 20738,
+      "expRequired": 1185,
+      "cumulativeExp": 29450,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1316,8 +1328,8 @@
     },
     {
       "level": 56,
-      "expRequired": 854,
-      "cumulativeExp": 21592,
+      "expRequired": 1213,
+      "cumulativeExp": 30663,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1351,8 +1363,8 @@
     },
     {
       "level": 57,
-      "expRequired": 874,
-      "cumulativeExp": 22466,
+      "expRequired": 1241,
+      "cumulativeExp": 31904,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1363,8 +1375,8 @@
     },
     {
       "level": 58,
-      "expRequired": 894,
-      "cumulativeExp": 23360,
+      "expRequired": 1270,
+      "cumulativeExp": 33174,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1398,8 +1410,8 @@
     },
     {
       "level": 59,
-      "expRequired": 915,
-      "cumulativeExp": 24275,
+      "expRequired": 1299,
+      "cumulativeExp": 34473,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1410,8 +1422,8 @@
     },
     {
       "level": 60,
-      "expRequired": 935,
-      "cumulativeExp": 25210,
+      "expRequired": 1328,
+      "cumulativeExp": 35801,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1445,8 +1457,8 @@
     },
     {
       "level": 61,
-      "expRequired": 955,
-      "cumulativeExp": 26165,
+      "expRequired": 1357,
+      "cumulativeExp": 37158,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1457,8 +1469,8 @@
     },
     {
       "level": 62,
-      "expRequired": 976,
-      "cumulativeExp": 27141,
+      "expRequired": 1386,
+      "cumulativeExp": 38544,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1492,8 +1504,8 @@
     },
     {
       "level": 63,
-      "expRequired": 997,
-      "cumulativeExp": 28138,
+      "expRequired": 1415,
+      "cumulativeExp": 39959,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1504,8 +1516,8 @@
     },
     {
       "level": 64,
-      "expRequired": 1018,
-      "cumulativeExp": 29156,
+      "expRequired": 1445,
+      "cumulativeExp": 41404,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1539,8 +1551,8 @@
     },
     {
       "level": 65,
-      "expRequired": 1039,
-      "cumulativeExp": 30195,
+      "expRequired": 1475,
+      "cumulativeExp": 42879,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1551,8 +1563,8 @@
     },
     {
       "level": 66,
-      "expRequired": 1060,
-      "cumulativeExp": 31255,
+      "expRequired": 1505,
+      "cumulativeExp": 44384,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1586,8 +1598,8 @@
     },
     {
       "level": 67,
-      "expRequired": 1081,
-      "cumulativeExp": 32336,
+      "expRequired": 1535,
+      "cumulativeExp": 45919,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1598,8 +1610,8 @@
     },
     {
       "level": 68,
-      "expRequired": 1102,
-      "cumulativeExp": 33438,
+      "expRequired": 1565,
+      "cumulativeExp": 47484,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1633,8 +1645,8 @@
     },
     {
       "level": 69,
-      "expRequired": 1124,
-      "cumulativeExp": 34562,
+      "expRequired": 1596,
+      "cumulativeExp": 49080,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1645,8 +1657,8 @@
     },
     {
       "level": 70,
-      "expRequired": 1145,
-      "cumulativeExp": 35707,
+      "expRequired": 1626,
+      "cumulativeExp": 50706,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1680,8 +1692,8 @@
     },
     {
       "level": 71,
-      "expRequired": 1167,
-      "cumulativeExp": 36874,
+      "expRequired": 1657,
+      "cumulativeExp": 52363,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1692,8 +1704,8 @@
     },
     {
       "level": 72,
-      "expRequired": 1189,
-      "cumulativeExp": 38063,
+      "expRequired": 1688,
+      "cumulativeExp": 54051,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1727,8 +1739,8 @@
     },
     {
       "level": 73,
-      "expRequired": 1211,
-      "cumulativeExp": 39274,
+      "expRequired": 1719,
+      "cumulativeExp": 55770,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1739,8 +1751,8 @@
     },
     {
       "level": 74,
-      "expRequired": 1233,
-      "cumulativeExp": 40507,
+      "expRequired": 1750,
+      "cumulativeExp": 57520,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1774,8 +1786,8 @@
     },
     {
       "level": 75,
-      "expRequired": 1255,
-      "cumulativeExp": 41762,
+      "expRequired": 1782,
+      "cumulativeExp": 59302,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1786,8 +1798,8 @@
     },
     {
       "level": 76,
-      "expRequired": 1277,
-      "cumulativeExp": 43039,
+      "expRequired": 1813,
+      "cumulativeExp": 61115,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1821,8 +1833,8 @@
     },
     {
       "level": 77,
-      "expRequired": 1299,
-      "cumulativeExp": 44338,
+      "expRequired": 1845,
+      "cumulativeExp": 62960,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1833,8 +1845,8 @@
     },
     {
       "level": 78,
-      "expRequired": 1322,
-      "cumulativeExp": 45660,
+      "expRequired": 1877,
+      "cumulativeExp": 64837,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1868,8 +1880,8 @@
     },
     {
       "level": 79,
-      "expRequired": 1344,
-      "cumulativeExp": 47004,
+      "expRequired": 1909,
+      "cumulativeExp": 66746,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1880,8 +1892,8 @@
     },
     {
       "level": 80,
-      "expRequired": 1367,
-      "cumulativeExp": 48371,
+      "expRequired": 1941,
+      "cumulativeExp": 68687,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1915,8 +1927,8 @@
     },
     {
       "level": 81,
-      "expRequired": 1389,
-      "cumulativeExp": 49760,
+      "expRequired": 1973,
+      "cumulativeExp": 70660,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1927,8 +1939,8 @@
     },
     {
       "level": 82,
-      "expRequired": 1412,
-      "cumulativeExp": 51172,
+      "expRequired": 2005,
+      "cumulativeExp": 72665,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -1962,8 +1974,8 @@
     },
     {
       "level": 83,
-      "expRequired": 1435,
-      "cumulativeExp": 52607,
+      "expRequired": 2038,
+      "cumulativeExp": 74703,
       "rewardType": "chest",
       "rewards": [
         {
@@ -1974,8 +1986,8 @@
     },
     {
       "level": 84,
-      "expRequired": 1458,
-      "cumulativeExp": 54065,
+      "expRequired": 2071,
+      "cumulativeExp": 76774,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2009,8 +2021,8 @@
     },
     {
       "level": 85,
-      "expRequired": 1481,
-      "cumulativeExp": 55546,
+      "expRequired": 2104,
+      "cumulativeExp": 78878,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2021,8 +2033,8 @@
     },
     {
       "level": 86,
-      "expRequired": 1505,
-      "cumulativeExp": 57051,
+      "expRequired": 2137,
+      "cumulativeExp": 81015,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2056,8 +2068,8 @@
     },
     {
       "level": 87,
-      "expRequired": 1528,
-      "cumulativeExp": 58579,
+      "expRequired": 2170,
+      "cumulativeExp": 83185,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2068,8 +2080,8 @@
     },
     {
       "level": 88,
-      "expRequired": 1551,
-      "cumulativeExp": 60130,
+      "expRequired": 2203,
+      "cumulativeExp": 85388,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2103,8 +2115,8 @@
     },
     {
       "level": 89,
-      "expRequired": 1575,
-      "cumulativeExp": 61705,
+      "expRequired": 2236,
+      "cumulativeExp": 87624,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2115,8 +2127,8 @@
     },
     {
       "level": 90,
-      "expRequired": 1599,
-      "cumulativeExp": 63304,
+      "expRequired": 2270,
+      "cumulativeExp": 89894,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2150,8 +2162,8 @@
     },
     {
       "level": 91,
-      "expRequired": 1622,
-      "cumulativeExp": 64926,
+      "expRequired": 2304,
+      "cumulativeExp": 92198,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2162,8 +2174,8 @@
     },
     {
       "level": 92,
-      "expRequired": 1646,
-      "cumulativeExp": 66572,
+      "expRequired": 2337,
+      "cumulativeExp": 94535,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2197,8 +2209,8 @@
     },
     {
       "level": 93,
-      "expRequired": 1670,
-      "cumulativeExp": 68242,
+      "expRequired": 2371,
+      "cumulativeExp": 96906,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2209,8 +2221,8 @@
     },
     {
       "level": 94,
-      "expRequired": 1694,
-      "cumulativeExp": 69936,
+      "expRequired": 2405,
+      "cumulativeExp": 99311,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2244,8 +2256,8 @@
     },
     {
       "level": 95,
-      "expRequired": 1718,
-      "cumulativeExp": 71654,
+      "expRequired": 2440,
+      "cumulativeExp": 101751,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2256,8 +2268,8 @@
     },
     {
       "level": 96,
-      "expRequired": 1742,
-      "cumulativeExp": 73396,
+      "expRequired": 2474,
+      "cumulativeExp": 104225,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2291,8 +2303,8 @@
     },
     {
       "level": 97,
-      "expRequired": 1767,
-      "cumulativeExp": 75163,
+      "expRequired": 2509,
+      "cumulativeExp": 106734,
       "rewardType": "chest",
       "rewards": [
         {
@@ -2303,8 +2315,8 @@
     },
     {
       "level": 98,
-      "expRequired": 1791,
-      "cumulativeExp": 76954,
+      "expRequired": 2543,
+      "cumulativeExp": 109277,
       "rewardType": "randomHeroCard",
       "rewards": [
         {
@@ -2338,8 +2350,8 @@
     },
     {
       "level": 99,
-      "expRequired": 1815,
-      "cumulativeExp": 78769,
+      "expRequired": 2578,
+      "cumulativeExp": 111855,
       "rewardType": "chest",
       "rewards": [
         {

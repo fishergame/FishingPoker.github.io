@@ -1,0 +1,318 @@
+{
+  "version": "1.0.0",
+  "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石)",
+  "zones": {
+    "character": {
+      "name": "角色区",
+      "products": [
+        {
+          "productId": "monthly_card",
+          "name": "月卡",
+          "priceCny": 30,
+          "durationDays": 30,
+          "firstBuyBonus": {
+            "diamond": 300
+          },
+          "dailyClaim": {
+            "diamond": 30
+          },
+          "privileges": [
+            "skipAdForDailyRewards",
+            "monthlyCardBadge"
+          ],
+          "renewable": true,
+          "note": "30天累计约1200钻+首购300"
+        },
+        {
+          "productId": "artifact_pack_starter",
+          "name": "神器礼包·启程",
+          "priceCny": 30,
+          "contents": [
+            {
+              "type": "artifactCard",
+              "quality": "epic",
+              "count": 1
+            },
+            {
+              "type": "diamond",
+              "amount": 200
+            }
+          ],
+          "weeklyLimit": 1
+        },
+        {
+          "productId": "hero_pack_premium",
+          "name": "角色礼包",
+          "priceCny": 68,
+          "contents": [
+            {
+              "type": "heroCard",
+              "quality": "legendary",
+              "count": 20
+            },
+            {
+              "type": "heroCard",
+              "quality": "epic",
+              "count": 50
+            },
+            {
+              "type": "heroCard",
+              "quality": "rare",
+              "count": 100
+            }
+          ],
+          "weeklyLimit": 2,
+          "note": "可指定目标英雄兑换"
+        }
+      ]
+    },
+    "basic": {
+      "name": "基础区",
+      "dailyDeals": {
+        "slotCount": 6,
+        "refresh": {
+          "adCooldownHours": 2,
+          "maxAdRefreshesPerDay": 12,
+          "manualRefreshDiamond": 20,
+          "manualRefreshLimitPerDay": 6
+        },
+        "slots": [
+          {
+            "slotId": 1,
+            "name": "钻石小包",
+            "reward": {
+              "type": "diamond",
+              "amount": 29
+            },
+            "purchase": {
+              "gold": null,
+              "diamond": 29
+            },
+            "ad": {
+              "enabled": true,
+              "note": "看广告免费领取"
+            }
+          },
+          {
+            "slotId": 2,
+            "name": "普通卡×30",
+            "reward": {
+              "quality": "common",
+              "count": 30,
+              "goldPrice": 3000,
+              "diamondPrice": 30
+            },
+            "purchase": {
+              "gold": 3000,
+              "diamond": 30
+            },
+            "ad": {
+              "enabled": false
+            }
+          },
+          {
+            "slotId": 3,
+            "name": "普通卡×50",
+            "reward": {
+              "quality": "common",
+              "count": 50,
+              "goldPrice": 5000,
+              "diamondPrice": 50
+            },
+            "purchase": {
+              "gold": 5000,
+              "diamond": 50
+            },
+            "ad": {
+              "enabled": false
+            },
+            "note": "原稿「500金」应为笔误，按100金/张校正为5000"
+          },
+          {
+            "slotId": 4,
+            "name": "稀有卡×15",
+            "reward": {
+              "quality": "rare",
+              "count": 15,
+              "goldPrice": 750,
+              "diamondPrice": 45
+            },
+            "purchase": {
+              "gold": 750,
+              "diamond": 45
+            },
+            "ad": {
+              "enabled": false
+            }
+          },
+          {
+            "slotId": 5,
+            "name": "稀有卡×20",
+            "reward": {
+              "quality": "rare",
+              "count": 20,
+              "goldPrice": 1000,
+              "diamondPrice": 60
+            },
+            "purchase": {
+              "gold": 1000,
+              "diamond": 60
+            },
+            "ad": {
+              "enabled": false
+            }
+          },
+          {
+            "slotId": 6,
+            "name": "史诗卡×5",
+            "reward": {
+              "quality": "epic",
+              "count": 5,
+              "goldPrice": 750,
+              "diamondPrice": 40
+            },
+            "purchase": {
+              "gold": 750,
+              "diamond": 40
+            },
+            "ad": {
+              "enabled": true,
+              "note": "看广告领取5张史诗通用卡"
+            }
+          }
+        ],
+        "rotationPool": [
+          {
+            "slotId": "R1",
+            "name": "传奇卡×2",
+            "reward": {
+              "quality": "legendary",
+              "count": 2,
+              "goldPrice": 800,
+              "diamondPrice": 40
+            },
+            "purchase": {
+              "gold": null,
+              "diamond": 40
+            },
+            "ad": {
+              "enabled": true,
+              "cooldownHours": 4,
+              "note": "高价值广告位，4小时1次"
+            }
+          },
+          {
+            "slotId": "R2",
+            "name": "史诗卡×10",
+            "reward": {
+              "quality": "epic",
+              "count": 10,
+              "goldPrice": 1500,
+              "diamondPrice": 80
+            },
+            "purchase": {
+              "gold": 1500,
+              "diamond": 80
+            },
+            "ad": {
+              "enabled": false
+            }
+          }
+        ]
+      },
+      "universalCardPacks": {
+        "dailyLimitPerSku": 4,
+        "dailyRefreshAt": "04:00",
+        "maxCardsPerQualityPerDay": 120,
+        "packs": [
+          {
+            "productId": "universal_rare_30",
+            "name": "稀有通用卡×30",
+            "quality": "rare",
+            "count": 30,
+            "priceCny": 18,
+            "dailyLimit": 4,
+            "exchangeRule": "兑换为指定英雄稀有卡/碎片"
+          },
+          {
+            "productId": "universal_epic_30",
+            "name": "史诗通用卡×30",
+            "quality": "epic",
+            "count": 30,
+            "priceCny": 18,
+            "dailyLimit": 4,
+            "exchangeRule": "兑换为指定英雄史诗卡/碎片"
+          },
+          {
+            "productId": "universal_legendary_30",
+            "name": "传奇通用卡×30",
+            "quality": "legendary",
+            "count": 30,
+            "priceCny": 18,
+            "dailyLimit": 4,
+            "exchangeRule": "兑换为指定英雄传奇卡/碎片"
+          }
+        ]
+      },
+      "diamondRecharge": [
+        {
+          "tierId": 1,
+          "priceCny": 6,
+          "diamond": 60,
+          "bonus": 0,
+          "label": "一小把"
+        },
+        {
+          "tierId": 2,
+          "priceCny": 12,
+          "diamond": 130,
+          "bonus": 10,
+          "label": "一袋"
+        },
+        {
+          "tierId": 3,
+          "priceCny": 30,
+          "diamond": 330,
+          "bonus": 30,
+          "label": "一箱"
+        },
+        {
+          "tierId": 4,
+          "priceCny": 68,
+          "diamond": 750,
+          "bonus": 90,
+          "label": "一大箱"
+        },
+        {
+          "tierId": 5,
+          "priceCny": 128,
+          "diamond": 1580,
+          "bonus": 220,
+          "label": "宝库"
+        },
+        {
+          "tierId": 6,
+          "priceCny": 328,
+          "diamond": 4280,
+          "bonus": 780,
+          "label": "巨藏"
+        }
+      ]
+    }
+  },
+  "pricingReference": {
+    "goldPerCard": {
+      "common": 100,
+      "rare": 50,
+      "epic": 150,
+      "legendary": 400
+    },
+    "diamondPerCard": {
+      "common": 1,
+      "rare": 3,
+      "epic": 8,
+      "legendary": 20
+    },
+    "note": "每日优惠可用金币或钻石；通用卡仅人民币直购"
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑（金币+钻石+宝箱）",
+  "version": "1.1.0",
+  "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑；高段败扣杯幅度收窄",
   "arenaCount": 10,
   "rules": {
     "trophyMin": 0,
@@ -322,7 +322,7 @@
       "nextArenaTrophy": 1600,
       "battleReward": {
         "trophyWin": 24,
-        "trophyLoss": 12,
+        "trophyLoss": 11,
         "expWin": 40,
         "expLoss": 16,
         "expLossRatio": 0.4,
@@ -441,7 +441,7 @@
       "nextArenaTrophy": 2500,
       "battleReward": {
         "trophyWin": 23,
-        "trophyLoss": 15,
+        "trophyLoss": 13,
         "expWin": 45,
         "expLoss": 18,
         "expLossRatio": 0.4,
@@ -577,7 +577,7 @@
       "nextArenaTrophy": 4000,
       "battleReward": {
         "trophyWin": 22,
-        "trophyLoss": 18,
+        "trophyLoss": 15,
         "expWin": 50,
         "expLoss": 20,
         "expLossRatio": 0.4,
@@ -730,7 +730,7 @@
       "nextArenaTrophy": 6000,
       "battleReward": {
         "trophyWin": 21,
-        "trophyLoss": 20,
+        "trophyLoss": 16,
         "expWin": 55,
         "expLoss": 22,
         "expLossRatio": 0.4,
@@ -900,7 +900,7 @@
       "nextArenaTrophy": 9000,
       "battleReward": {
         "trophyWin": 20,
-        "trophyLoss": 22,
+        "trophyLoss": 18,
         "expWin": 60,
         "expLoss": 24,
         "expLossRatio": 0.4,
@@ -1086,8 +1086,8 @@
       "unlockTrophy": 9000,
       "nextArenaTrophy": null,
       "battleReward": {
-        "trophyWin": 19,
-        "trophyLoss": 25,
+        "trophyWin": 20,
+        "trophyLoss": 20,
         "expWin": 70,
         "expLoss": 28,
         "expLossRatio": 0.4,

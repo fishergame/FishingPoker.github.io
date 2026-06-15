@@ -34,8 +34,14 @@ def split_cards_by_mix(total: int) -> tuple[int, int, int]:
     return low, mid, high
 
 
+# 校准：55% 胜率下 L90≈8000–8500 杯、L100≈10000 杯（与竞技场 8–10 段同步）
+ACCOUNT_EXP_SCALE = 1.42
+
+EXP_FORMULA_BASE = "round((18 + level * 3 + level^1.42 * 2.2) * ACCOUNT_EXP_SCALE)"
+
+
 def exp_for_level(level: int) -> int:
-    return round(18 + level * 3 + (level ** 1.42) * 2.2)
+    return round((18 + level * 3 + (level ** 1.42) * 2.2) * ACCOUNT_EXP_SCALE)
 
 
 def chest_quality_for_level(level: int) -> str:
@@ -158,17 +164,18 @@ def gen_arena():
         (9, "王者", "king", 6000, 9000),
         (10, "传奇", "legend", 9000, None),
     ]
+    # 高段胜杯仍 < 败扣，但差距收窄（传奇 +20/-20，保本胜率 50%）
     battle = [
         (30, 0, 20, 8, "wooden", 50, 500),
         (28, 5, 25, 10, "silver", 80, 800),
         (26, 8, 30, 12, "golden", 120, 1200),
         (25, 10, 35, 14, "platinum", 160, 1600),
-        (24, 12, 40, 16, "diamond", 200, 2000),
-        (23, 15, 45, 18, "diamond", 250, 2500),
-        (22, 18, 50, 20, "epic", 300, 3000),
-        (21, 20, 55, 22, "epic", 350, 3500),
-        (20, 22, 60, 24, "legendary", 400, 4000),
-        (19, 25, 70, 28, "legendary", 500, 5000),
+        (24, 11, 40, 16, "diamond", 200, 2000),
+        (23, 13, 45, 18, "diamond", 250, 2500),
+        (22, 15, 50, 20, "epic", 300, 3000),
+        (21, 16, 55, 22, "epic", 350, 3500),
+        (20, 18, 60, 24, "legendary", 400, 4000),
+        (20, 20, 70, 28, "legendary", 500, 5000),
     ]
     arenas = []
     for (aid, name, tier, unlock, nxt), (tw, tl, ew, el, chest, vg, cap) in zip(meta, battle):
@@ -205,8 +212,8 @@ def gen_arena():
         })
 
     return {
-        "version": "1.0.0",
-        "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑（金币+钻石+宝箱）",
+        "version": "1.1.0",
+        "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑；高段败扣杯幅度收窄",
         "arenaCount": 10,
         "rules": {
             "trophyMin": 0,
@@ -278,8 +285,8 @@ def gen_account_level():
         })
     max_low, max_mid, max_high = account_level_hero_tiers(100)
     return {
-        "version": "2.3.0",
-        "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡（40/30/30），交替发放",
+        "version": "2.4.0",
+        "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡；经验曲线×1.42与竞技场8–10段同步",
         "levelMax": 100,
         "defaultLevel": 1,
         "rewardRules": {
@@ -298,8 +305,14 @@ def gen_account_level():
             "excludeTags": ["event"],
             "note": "活动新增角色写入 excludeHeroIds，不参与 randomHero 抽取",
         },
-        "expFormula": "round(18 + level * 3 + level^1.42 * 2.2)",
+        "expFormula": EXP_FORMULA_BASE,
+        "expScale": ACCOUNT_EXP_SCALE,
         "expSource": "battle",
+        "syncTargets": {
+            "note": "55%胜率模拟校准：L90≈8000–8500杯(宗师/王者)，L100≈10000杯(传奇段)",
+            "level90TrophyRange": [7500, 9000],
+            "level100TrophyRange": [9500, 11000],
+        },
         "totalExpToMax": total_exp,
         "estimatedMatches": round(total_exp / 42),
         "levels": levels,
@@ -452,7 +465,8 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| **竞技场奖励** | 解锁奖励 + 段位内奖杯里程碑 + 对战收益 | **[`docs/ARENA_REWARDS.md`](ARENA_REWARDS.md)**（完整专表） |",
         "| 宝箱产出 | 各品质宝箱内容 | 本文 §二 |",
         "| 英雄升级 | 碎片与金币 | `heroLevel.json` |",
-        "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §五 |",
+        "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §四 |",
+        "| **商店与经济** | 每日优惠、通用卡、充值、缺口补足 | [`docs/SHOP_AND_ECONOMY.md`](SHOP_AND_ECONOMY.md) |",
         "",
         "---",
         "",
