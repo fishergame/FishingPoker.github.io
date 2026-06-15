@@ -13,6 +13,7 @@ const BattleConfig = {
 
   START_GOLD: 20,
   GOLD_PER_SEC: 2,
+  /** 演示默认值；按场次/等级请读 battleBalance.json + BattleBalanceConfig */
   MAIN_CITY_HP: 200,
   MATCH_DURATION_SEC: 180,
 

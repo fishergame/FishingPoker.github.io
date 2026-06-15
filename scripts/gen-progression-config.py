@@ -494,6 +494,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| 英雄升级 | 碎片与金币 | `heroLevel.json` |",
         "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §四 |",
         "| **商店与经济** | 每日优惠、通用卡、充值、缺口补足 | [`docs/SHOP_AND_ECONOMY.md`](SHOP_AND_ECONOMY.md) |",
+        "| **战斗平衡** | 对局时长、主城血量、攻城模拟 | [`docs/BATTLE_BALANCE.md`](BATTLE_BALANCE.md) |",
         "",
         "---",
         "",
