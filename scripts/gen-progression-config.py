@@ -135,18 +135,45 @@ def arena_milestone_rewards(aid: int, node_index: int, node_count: int, progress
     ]
 
 
+def _milestone_trophy_step(span: int, node_count: int) -> int:
+    """按段位跨度与节点数选取「整十/整百」步长。"""
+    avg_gap = span / (node_count + 1)
+    if avg_gap >= 400:
+        return 250
+    if avg_gap >= 150:
+        return 100
+    if avg_gap >= 60:
+        return 50
+    if avg_gap >= 30:
+        return 25
+    return 10
+
+
+def _snap_trophy(value: float, step: int) -> int:
+    return int(round(value / step) * step)
+
+
 def gen_trophy_milestones(aid: int, unlock: int, nxt: int | None, vg: int, chest: str) -> list:
-    """段位内奖励节点数 = arenaId（青铜1个、白银2个…传奇10个），奖杯均匀分布。"""
+    """段位内奖励节点数 = arenaId；奖杯在区间内均匀取点并吸附为整十/整百。"""
     node_count = aid
     upper = nxt if nxt is not None else LEGEND_TROPHY_SOFT_CAP
     span = upper - unlock
+    step = _milestone_trophy_step(span, node_count)
+    max_trophy = upper if upper == LEGEND_TROPHY_SOFT_CAP else upper - step
+
     milestones = []
+    last = unlock
     for i in range(1, node_count + 1):
         progress = i / (node_count + 1)
-        trophy = unlock + round(span * progress)
+        raw = unlock + span * progress
+        trophy = _snap_trophy(raw, step)
+        trophy = max(last + step, trophy)
+        trophy = min(max_trophy, trophy)
+        last = trophy
+        actual_progress = (trophy - unlock) / span if span else 1.0
         milestones.append({
             "trophy": trophy,
-            "rewards": arena_milestone_rewards(aid, i, node_count, progress, vg, chest),
+            "rewards": arena_milestone_rewards(aid, i, node_count, actual_progress, vg, chest),
         })
     return milestones
 
@@ -372,7 +399,7 @@ def gen_arena_rewards_md(arena) -> str:
     lines = [
         "# 竞技场奖励一览（`arena.json`）",
         "",
-        "> **与账号等级奖励无关**：账号升级奖励见 [`PROGRESSION_TABLES.md` §五](PROGRESSION_TABLES.md#五账号等级-1100升级奖励)。",
+        "> **与账号等级奖励无关**：账号升级奖励见 [`PROGRESSION_TABLES.md` §四](PROGRESSION_TABLES.md#四账号等级-1100升级奖励--与竞技场无关)。",
         "> 生成：`python3 scripts/gen-progression-config.py`",
         "",
         "竞技场共有 **两类一次性/里程碑奖励**：",
@@ -424,7 +451,7 @@ def gen_arena_rewards_md(arena) -> str:
         "## 3. 段位内奖杯里程碑（累计奖杯领奖）",
         "",
         "节点数 = **场次编号**（青铜 1 个、白银 2 个 … 传奇 10 个，共 **55** 个节点）。",
-        "奖杯在 `[unlockTrophy, nextArenaTrophy]` 内均匀分布；传奇段无下一场，使用软上限 **"
+        "奖杯在 `[unlockTrophy, nextArenaTrophy]` 内均匀分布，并吸附为 **整十/整百**；传奇段无下一场，使用软上限 **"
         f"{cap}**。",
         "每项奖励：**金币 + 钻石 + 宝箱**（宝箱品质与该场次对战掉落一致）。",
         "",
@@ -505,7 +532,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "",
         "### 1.3 段位内奖杯里程碑（累计奖杯，金币+钻石+宝箱）",
         "",
-        f"节点数 = 场次编号（共 55 个）；传奇软上限 **{cap}**。完整表见 [`ARENA_REWARDS.md`](ARENA_REWARDS.md) §3。",
+        f"节点数 = 场次编号（共 55 个）；奖杯为整十/整百；传奇软上限 **{cap}**。完整表见 [`ARENA_REWARDS.md`](ARENA_REWARDS.md) §3。",
         "",
         "| 场次 | 名称 | 节点 | 累计奖杯 | 奖励 |",
         "|:---:|:---:|:---:|:---:|:---|",
