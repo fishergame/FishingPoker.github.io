@@ -316,7 +316,66 @@
           "bonus": 780,
           "label": "巨藏"
         }
-      ]
+      ],
+      "brickPacks": {
+        "currency": "brick",
+        "pricingNote": "金币≈11.7/砖；钻石≈1.67/砖（大包略优惠）",
+        "packs": [
+          {
+            "productId": "brick_pack_s",
+            "name": "砖头×30",
+            "reward": {
+              "type": "brick",
+              "amount": 30
+            },
+            "purchase": {
+              "gold": 350,
+              "diamond": 18
+            },
+            "dailyLimit": 3,
+            "note": "约 L1 胜场 6 场等量；见 mainCity.json"
+          },
+          {
+            "productId": "brick_pack_m",
+            "name": "砖头×80",
+            "reward": {
+              "type": "brick",
+              "amount": 80
+            },
+            "purchase": {
+              "gold": 880,
+              "diamond": 45
+            },
+            "dailyLimit": 2
+          },
+          {
+            "productId": "brick_pack_l",
+            "name": "砖头×200",
+            "reward": {
+              "type": "brick",
+              "amount": 200
+            },
+            "purchase": {
+              "gold": 2000,
+              "diamond": 98
+            },
+            "dailyLimit": 1
+          },
+          {
+            "productId": "brick_pack_xl",
+            "name": "砖头×500",
+            "reward": {
+              "type": "brick",
+              "amount": 500
+            },
+            "purchase": {
+              "gold": 4500,
+              "diamond": 218
+            },
+            "weeklyLimit": 2
+          }
+        ]
+      }
     }
   },
   "pricingReference": {
@@ -332,6 +391,8 @@
       "epic": 8,
       "legendary": 20
     },
+    "brickPackGoldPerBrick": 11.67,
+    "brickPackDiamondPerBrick": 0.6,
     "formula": "总价 = 单价 × 张数；所有每日优惠由此推导",
     "examples": {
       "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",

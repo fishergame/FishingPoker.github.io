@@ -1,23 +1,190 @@
 {
-  "version": "1.0.0",
-  "description": "主城独立养成：血量与产金随主城等级；对局时长见 battleBalance.json",
+  "version": "2.0.0",
+  "description": "主城养成：翻格升级、砖头消耗、战斗 HP/产金",
   "levelMax": 30,
+  "gameplay": {
+    "upgradeMode": "flipTiles",
+    "tilesPerLevel": 20,
+    "tileCostCurrency": "brick",
+    "flipBrickCostFormula": "2 + (mainCityLevel - 1) 每格",
+    "totalBricksFormula": "tilesPerLevel(20) × flipBrickCost",
+    "tileLoot": {
+      "decoration": [
+        {
+          "id": "plant",
+          "name": "植物树木",
+          "weight": 35,
+          "role": "decoration"
+        },
+        {
+          "id": "landscape",
+          "name": "景观小品",
+          "weight": 25,
+          "role": "decoration"
+        },
+        {
+          "id": "castle_decor",
+          "name": "城堡装饰",
+          "weight": 15,
+          "role": "decoration"
+        },
+        {
+          "id": "brick_factory_decor",
+          "name": "砖头厂（装饰）",
+          "weight": 12,
+          "role": "decoration",
+          "note": "无产砖功能"
+        },
+        {
+          "id": "gold_mine_decor",
+          "name": "金矿厂（装饰）",
+          "weight": 13,
+          "role": "decoration",
+          "note": "无产金功能"
+        }
+      ],
+      "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币"
+    }
+  },
   "formulas": {
     "hp": "round(1500 * 1.15^(mainCityLevel-1))",
-    "goldPerSec": "round(2 * 1.1^(mainCityLevel-1))",
-    "hpGrowthRate": 1.15,
-    "goldGrowthRate": 1.1,
-    "designNote": "L1 HP=1500 约为旧场次×卡组方案的 1/5；与英雄攻击同指数，同等级对局攻城节奏稳定"
+    "goldPerSec": "2.0 + (mainCityLevel-1)*0.5",
+    "flipBrickCost": "2 + (mainCityLevel-1)",
+    "battleBricksWin": "round(5 * 1.11^(L-1) * arenaMul)",
+    "battleGoldWin": "round(28 * 1.11^(L-1) * arenaMul)",
+    "loseRewardRatio": 0.4
   },
+  "shopBrickPacks": [
+    {
+      "productId": "brick_pack_s",
+      "name": "砖头×30",
+      "reward": {
+        "type": "brick",
+        "amount": 30
+      },
+      "purchase": {
+        "gold": 350,
+        "diamond": 18
+      },
+      "dailyLimit": 3,
+      "note": "约 L1 胜场 6 场等量"
+    },
+    {
+      "productId": "brick_pack_m",
+      "name": "砖头×80",
+      "reward": {
+        "type": "brick",
+        "amount": 80
+      },
+      "purchase": {
+        "gold": 880,
+        "diamond": 45
+      },
+      "dailyLimit": 2,
+      "note": "约 L1 升一级需求量 2 倍"
+    },
+    {
+      "productId": "brick_pack_l",
+      "name": "砖头×200",
+      "reward": {
+        "type": "brick",
+        "amount": 200
+      },
+      "purchase": {
+        "gold": 2000,
+        "diamond": 98
+      },
+      "dailyLimit": 1,
+      "note": "中后期补仓"
+    },
+    {
+      "productId": "brick_pack_xl",
+      "name": "砖头×500",
+      "reward": {
+        "type": "brick",
+        "amount": 500
+      },
+      "purchase": {
+        "gold": 4500,
+        "diamond": 218
+      },
+      "weeklyLimit": 2,
+      "note": "仅金币或钻石二选一购买"
+    }
+  ],
+  "cumulativeBricksToMax": 9280,
   "levels": [
     {
       "level": 1,
       "hp": 1500,
-      "goldPerSec": 2,
-      "upgradeGold": 10,
-      "upgradeMaterial": 8,
+      "goldPerSec": 2.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 2,
+        "totalBricksToNext": 40,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 1,
+        "arenaName": "青铜",
+        "matchDurationSec": 90
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 5,
+          "gold": 28,
+          "accountXp": 12
+        },
+        "lose": {
+          "bricks": 2,
+          "gold": 11,
+          "accountXp": 5
+        },
+        "pveBuildingWin": {
+          "bricks": 12,
+          "gold": 56,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 8.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 194.5,
         "siegeSeconds": 7.7
       }
@@ -25,11 +192,74 @@
     {
       "level": 2,
       "hp": 1725,
-      "goldPerSec": 2,
-      "upgradeGold": 34,
-      "upgradeMaterial": 12,
+      "goldPerSec": 2.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 3,
+        "totalBricksToNext": 60,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 1,
+        "arenaName": "青铜",
+        "matchDurationSec": 90
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 6,
+          "gold": 31,
+          "accountXp": 13
+        },
+        "lose": {
+          "bricks": 2,
+          "gold": 12,
+          "accountXp": 5
+        },
+        "pveBuildingWin": {
+          "bricks": 15,
+          "gold": 62,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 10.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 223.7,
         "siegeSeconds": 7.7
       }
@@ -37,11 +267,74 @@
     {
       "level": 3,
       "hp": 1984,
-      "goldPerSec": 2,
-      "upgradeGold": 110,
-      "upgradeMaterial": 16,
+      "goldPerSec": 3.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 4,
+        "totalBricksToNext": 80,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 1,
+        "arenaName": "青铜",
+        "matchDurationSec": 90
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 6,
+          "gold": 34,
+          "accountXp": 15
+        },
+        "lose": {
+          "bricks": 2,
+          "gold": 14,
+          "accountXp": 6
+        },
+        "pveBuildingWin": {
+          "bricks": 15,
+          "gold": 68,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 13.3,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 257.2,
         "siegeSeconds": 7.7
       }
@@ -49,11 +342,74 @@
     {
       "level": 4,
       "hp": 2281,
-      "goldPerSec": 3,
-      "upgradeGold": 234,
-      "upgradeMaterial": 20,
+      "goldPerSec": 3.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 5,
+        "totalBricksToNext": 100,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 2,
+        "arenaName": "白银",
+        "matchDurationSec": 100
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 7,
+          "gold": 41,
+          "accountXp": 17
+        },
+        "lose": {
+          "bricks": 3,
+          "gold": 16,
+          "accountXp": 7
+        },
+        "pveBuildingWin": {
+          "bricks": 18,
+          "gold": 82,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 14.3,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 295.8,
         "siegeSeconds": 7.7
       }
@@ -61,11 +417,74 @@
     {
       "level": 5,
       "hp": 2624,
-      "goldPerSec": 3,
-      "upgradeGold": 404,
-      "upgradeMaterial": 24,
+      "goldPerSec": 4.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 6,
+        "totalBricksToNext": 120,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 2,
+        "arenaName": "白银",
+        "matchDurationSec": 100
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 8,
+          "gold": 45,
+          "accountXp": 18
+        },
+        "lose": {
+          "bricks": 3,
+          "gold": 18,
+          "accountXp": 7
+        },
+        "pveBuildingWin": {
+          "bricks": 20,
+          "gold": 90,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 15.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 340.2,
         "siegeSeconds": 7.7
       }
@@ -73,11 +492,74 @@
     {
       "level": 6,
       "hp": 3017,
-      "goldPerSec": 3,
-      "upgradeGold": 620,
-      "upgradeMaterial": 28,
+      "goldPerSec": 4.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 7,
+        "totalBricksToNext": 140,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 2,
+        "arenaName": "白银",
+        "matchDurationSec": 100
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 9,
+          "gold": 50,
+          "accountXp": 20
+        },
+        "lose": {
+          "bricks": 4,
+          "gold": 20,
+          "accountXp": 8
+        },
+        "pveBuildingWin": {
+          "bricks": 22,
+          "gold": 100,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 15.6,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 391.2,
         "siegeSeconds": 7.7
       }
@@ -85,11 +567,74 @@
     {
       "level": 7,
       "hp": 3470,
-      "goldPerSec": 4,
-      "upgradeGold": 884,
-      "upgradeMaterial": 32,
+      "goldPerSec": 5.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 8,
+        "totalBricksToNext": 160,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 3,
+        "arenaName": "黄金",
+        "matchDurationSec": 110
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 10,
+          "gold": 59,
+          "accountXp": 23
+        },
+        "lose": {
+          "bricks": 4,
+          "gold": 24,
+          "accountXp": 9
+        },
+        "pveBuildingWin": {
+          "bricks": 25,
+          "gold": 118,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 16.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 449.9,
         "siegeSeconds": 7.7
       }
@@ -97,11 +642,74 @@
     {
       "level": 8,
       "hp": 3990,
-      "goldPerSec": 4,
-      "upgradeGold": 1194,
-      "upgradeMaterial": 36,
+      "goldPerSec": 5.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 9,
+        "totalBricksToNext": 180,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 3,
+        "arenaName": "黄金",
+        "matchDurationSec": 110
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 12,
+          "gold": 65,
+          "accountXp": 25
+        },
+        "lose": {
+          "bricks": 5,
+          "gold": 26,
+          "accountXp": 10
+        },
+        "pveBuildingWin": {
+          "bricks": 30,
+          "gold": 130,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 15.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 517.4,
         "siegeSeconds": 7.7
       }
@@ -109,11 +717,74 @@
     {
       "level": 9,
       "hp": 4589,
-      "goldPerSec": 4,
-      "upgradeGold": 1551,
-      "upgradeMaterial": 40,
+      "goldPerSec": 6.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 10,
+        "totalBricksToNext": 200,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 3,
+        "arenaName": "黄金",
+        "matchDurationSec": 110
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 13,
+          "gold": 72,
+          "accountXp": 28
+        },
+        "lose": {
+          "bricks": 5,
+          "gold": 29,
+          "accountXp": 11
+        },
+        "pveBuildingWin": {
+          "bricks": 32,
+          "gold": 144,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 15.4,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 595.0,
         "siegeSeconds": 7.7
       }
@@ -121,11 +792,74 @@
     {
       "level": 10,
       "hp": 5277,
-      "goldPerSec": 5,
-      "upgradeGold": 1955,
-      "upgradeMaterial": 44,
+      "goldPerSec": 6.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 11,
+        "totalBricksToNext": 220,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 4,
+        "arenaName": "铂金",
+        "matchDurationSec": 120
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 15,
+          "gold": 85,
+          "accountXp": 32
+        },
+        "lose": {
+          "bricks": 6,
+          "gold": 34,
+          "accountXp": 13
+        },
+        "pveBuildingWin": {
+          "bricks": 38,
+          "gold": 170,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 14.7,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 684.2,
         "siegeSeconds": 7.7
       }
@@ -133,11 +867,74 @@
     {
       "level": 11,
       "hp": 6068,
-      "goldPerSec": 5,
-      "upgradeGold": 2406,
-      "upgradeMaterial": 48,
+      "goldPerSec": 7.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 12,
+        "totalBricksToNext": 240,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 4,
+        "arenaName": "铂金",
+        "matchDurationSec": 120
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 17,
+          "gold": 94,
+          "accountXp": 35
+        },
+        "lose": {
+          "bricks": 7,
+          "gold": 38,
+          "accountXp": 14
+        },
+        "pveBuildingWin": {
+          "bricks": 42,
+          "gold": 188,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 14.1,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 786.9,
         "siegeSeconds": 7.7
       }
@@ -145,11 +942,74 @@
     {
       "level": 12,
       "hp": 6979,
-      "goldPerSec": 6,
-      "upgradeGold": 2903,
-      "upgradeMaterial": 52,
+      "goldPerSec": 7.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 13,
+        "totalBricksToNext": 260,
+        "pveBuildingCount": 2,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 4,
+        "arenaName": "铂金",
+        "matchDurationSec": 120
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 19,
+          "gold": 104,
+          "accountXp": 38
+        },
+        "lose": {
+          "bricks": 8,
+          "gold": 42,
+          "accountXp": 15
+        },
+        "pveBuildingWin": {
+          "bricks": 48,
+          "gold": 208,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 13.7,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 904.9,
         "siegeSeconds": 7.7
       }
@@ -157,11 +1017,74 @@
     {
       "level": 13,
       "hp": 8025,
-      "goldPerSec": 6,
-      "upgradeGold": 3447,
-      "upgradeMaterial": 56,
+      "goldPerSec": 8.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 14,
+        "totalBricksToNext": 280,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 5,
+        "arenaName": "钻石",
+        "matchDurationSec": 130
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 22,
+          "gold": 121,
+          "accountXp": 44
+        },
+        "lose": {
+          "bricks": 9,
+          "gold": 48,
+          "accountXp": 18
+        },
+        "pveBuildingWin": {
+          "bricks": 55,
+          "gold": 242,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 12.7,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 1040.6,
         "siegeSeconds": 7.7
       }
@@ -169,11 +1092,74 @@
     {
       "level": 14,
       "hp": 9229,
-      "goldPerSec": 7,
-      "upgradeGold": 4038,
-      "upgradeMaterial": 60,
+      "goldPerSec": 8.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 15,
+        "totalBricksToNext": 300,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 5,
+        "arenaName": "钻石",
+        "matchDurationSec": 130
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 24,
+          "gold": 135,
+          "accountXp": 48
+        },
+        "lose": {
+          "bricks": 10,
+          "gold": 54,
+          "accountXp": 19
+        },
+        "pveBuildingWin": {
+          "bricks": 60,
+          "gold": 270,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 12.5,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 1196.7,
         "siegeSeconds": 7.7
       }
@@ -181,11 +1167,74 @@
     {
       "level": 15,
       "hp": 10614,
-      "goldPerSec": 8,
-      "upgradeGold": 4675,
-      "upgradeMaterial": 64,
+      "goldPerSec": 9.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 16,
+        "totalBricksToNext": 320,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 5,
+        "arenaName": "钻石",
+        "matchDurationSec": 130
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 27,
+          "gold": 150,
+          "accountXp": 53
+        },
+        "lose": {
+          "bricks": 11,
+          "gold": 60,
+          "accountXp": 21
+        },
+        "pveBuildingWin": {
+          "bricks": 68,
+          "gold": 300,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 11.9,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 1376.2,
         "siegeSeconds": 7.7
       }
@@ -193,11 +1242,74 @@
     {
       "level": 16,
       "hp": 12206,
-      "goldPerSec": 8,
-      "upgradeGold": 5359,
-      "upgradeMaterial": 68,
+      "goldPerSec": 9.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 17,
+        "totalBricksToNext": 340,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 6,
+        "arenaName": "星耀",
+        "matchDurationSec": 140
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 31,
+          "gold": 174,
+          "accountXp": 60
+        },
+        "lose": {
+          "bricks": 12,
+          "gold": 70,
+          "accountXp": 24
+        },
+        "pveBuildingWin": {
+          "bricks": 78,
+          "gold": 348,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 11.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 1582.7,
         "siegeSeconds": 7.7
       }
@@ -205,11 +1317,74 @@
     {
       "level": 17,
       "hp": 14036,
-      "goldPerSec": 9,
-      "upgradeGold": 6090,
-      "upgradeMaterial": 74,
+      "goldPerSec": 10.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 18,
+        "totalBricksToNext": 360,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 6,
+        "arenaName": "星耀",
+        "matchDurationSec": 140
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 35,
+          "gold": 193,
+          "accountXp": 66
+        },
+        "lose": {
+          "bricks": 14,
+          "gold": 77,
+          "accountXp": 26
+        },
+        "pveBuildingWin": {
+          "bricks": 88,
+          "gold": 386,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 10.3,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 1820.1,
         "siegeSeconds": 7.7
       }
@@ -217,11 +1392,74 @@
     {
       "level": 18,
       "hp": 16142,
-      "goldPerSec": 10,
-      "upgradeGold": 6868,
-      "upgradeMaterial": 80,
+      "goldPerSec": 10.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 19,
+        "totalBricksToNext": 380,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 6,
+        "arenaName": "星耀",
+        "matchDurationSec": 140
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 38,
+          "gold": 215,
+          "accountXp": 73
+        },
+        "lose": {
+          "bricks": 15,
+          "gold": 86,
+          "accountXp": 29
+        },
+        "pveBuildingWin": {
+          "bricks": 95,
+          "gold": 430,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 10.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 2093.1,
         "siegeSeconds": 7.7
       }
@@ -229,11 +1467,74 @@
     {
       "level": 19,
       "hp": 18563,
-      "goldPerSec": 11,
-      "upgradeGold": 7692,
-      "upgradeMaterial": 88,
+      "goldPerSec": 11.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 20,
+        "totalBricksToNext": 400,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 7,
+        "arenaName": "大师",
+        "matchDurationSec": 150
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 44,
+          "gold": 249,
+          "accountXp": 83
+        },
+        "lose": {
+          "bricks": 18,
+          "gold": 100,
+          "accountXp": 33
+        },
+        "pveBuildingWin": {
+          "bricks": 110,
+          "gold": 498,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 9.1,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 2407.0,
         "siegeSeconds": 7.7
       }
@@ -241,11 +1542,74 @@
     {
       "level": 20,
       "hp": 21348,
-      "goldPerSec": 12,
-      "upgradeGold": 8564,
-      "upgradeMaterial": 96,
+      "goldPerSec": 11.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 21,
+        "totalBricksToNext": 420,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 7,
+        "arenaName": "大师",
+        "matchDurationSec": 150
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 49,
+          "gold": 277,
+          "accountXp": 91
+        },
+        "lose": {
+          "bricks": 20,
+          "gold": 111,
+          "accountXp": 36
+        },
+        "pveBuildingWin": {
+          "bricks": 122,
+          "gold": 554,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 8.6,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 2768.1,
         "siegeSeconds": 7.7
       }
@@ -253,11 +1617,74 @@
     {
       "level": 21,
       "hp": 24550,
-      "goldPerSec": 13,
-      "upgradeGold": 9482,
-      "upgradeMaterial": 108,
+      "goldPerSec": 12.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 22,
+        "totalBricksToNext": 440,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 7,
+        "arenaName": "大师",
+        "matchDurationSec": 150
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 55,
+          "gold": 307,
+          "accountXp": 100
+        },
+        "lose": {
+          "bricks": 22,
+          "gold": 123,
+          "accountXp": 40
+        },
+        "pveBuildingWin": {
+          "bricks": 138,
+          "gold": 614,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 8.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 3183.3,
         "siegeSeconds": 7.7
       }
@@ -265,11 +1692,74 @@
     {
       "level": 22,
       "hp": 28232,
-      "goldPerSec": 15,
-      "upgradeGold": 10446,
-      "upgradeMaterial": 120,
+      "goldPerSec": 12.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 23,
+        "totalBricksToNext": 460,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 8,
+        "arenaName": "宗师",
+        "matchDurationSec": 160
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 64,
+          "gold": 356,
+          "accountXp": 114
+        },
+        "lose": {
+          "bricks": 26,
+          "gold": 142,
+          "accountXp": 46
+        },
+        "pveBuildingWin": {
+          "bricks": 160,
+          "gold": 712,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 7.2,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 3660.8,
         "siegeSeconds": 7.7
       }
@@ -277,11 +1767,74 @@
     {
       "level": 23,
       "hp": 32467,
-      "goldPerSec": 16,
-      "upgradeGold": 11458,
-      "upgradeMaterial": 135,
+      "goldPerSec": 13.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 24,
+        "totalBricksToNext": 480,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 8,
+        "arenaName": "宗师",
+        "matchDurationSec": 160
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 71,
+          "gold": 395,
+          "accountXp": 125
+        },
+        "lose": {
+          "bricks": 28,
+          "gold": 158,
+          "accountXp": 50
+        },
+        "pveBuildingWin": {
+          "bricks": 178,
+          "gold": 790,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 6.8,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 4209.9,
         "siegeSeconds": 7.7
       }
@@ -289,11 +1842,74 @@
     {
       "level": 24,
       "hp": 37337,
-      "goldPerSec": 18,
-      "upgradeGold": 12516,
-      "upgradeMaterial": 150,
+      "goldPerSec": 13.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 25,
+        "totalBricksToNext": 500,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 8,
+        "arenaName": "宗师",
+        "matchDurationSec": 160
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 78,
+          "gold": 438,
+          "accountXp": 138
+        },
+        "lose": {
+          "bricks": 31,
+          "gold": 175,
+          "accountXp": 55
+        },
+        "pveBuildingWin": {
+          "bricks": 195,
+          "gold": 876,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 6.4,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 4841.4,
         "siegeSeconds": 7.7
       }
@@ -301,11 +1917,74 @@
     {
       "level": 25,
       "hp": 42938,
-      "goldPerSec": 20,
-      "upgradeGold": 13621,
-      "upgradeMaterial": 168,
+      "goldPerSec": 14.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 26,
+        "totalBricksToNext": 520,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 9,
+        "arenaName": "王者",
+        "matchDurationSec": 170
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 91,
+          "gold": 507,
+          "accountXp": 156
+        },
+        "lose": {
+          "bricks": 36,
+          "gold": 203,
+          "accountXp": 62
+        },
+        "pveBuildingWin": {
+          "bricks": 228,
+          "gold": 1014,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 5.7,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 5567.6,
         "siegeSeconds": 7.7
       }
@@ -313,11 +1992,74 @@
     {
       "level": 26,
       "hp": 49378,
-      "goldPerSec": 22,
-      "upgradeGold": 14773,
-      "upgradeMaterial": 188,
+      "goldPerSec": 14.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 27,
+        "totalBricksToNext": 540,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 9,
+        "arenaName": "王者",
+        "matchDurationSec": 170
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 101,
+          "gold": 563,
+          "accountXp": 172
+        },
+        "lose": {
+          "bricks": 40,
+          "gold": 225,
+          "accountXp": 69
+        },
+        "pveBuildingWin": {
+          "bricks": 252,
+          "gold": 1126,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 5.3,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 6402.7,
         "siegeSeconds": 7.7
       }
@@ -325,11 +2067,74 @@
     {
       "level": 27,
       "hp": 56785,
-      "goldPerSec": 24,
-      "upgradeGold": 15972,
-      "upgradeMaterial": 210,
+      "goldPerSec": 15.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 28,
+        "totalBricksToNext": 560,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 9,
+        "arenaName": "王者",
+        "matchDurationSec": 170
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 112,
+          "gold": 625,
+          "accountXp": 189
+        },
+        "lose": {
+          "bricks": 45,
+          "gold": 250,
+          "accountXp": 76
+        },
+        "pveBuildingWin": {
+          "bricks": 280,
+          "gold": 1250,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 5.0,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 7363.1,
         "siegeSeconds": 7.7
       }
@@ -337,11 +2142,74 @@
     {
       "level": 28,
       "hp": 65303,
-      "goldPerSec": 26,
-      "upgradeGold": 17217,
-      "upgradeMaterial": 235,
+      "goldPerSec": 15.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 29,
+        "totalBricksToNext": 580,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 10,
+        "arenaName": "传奇",
+        "matchDurationSec": 180
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 129,
+          "gold": 722,
+          "accountXp": 214
+        },
+        "lose": {
+          "bricks": 52,
+          "gold": 289,
+          "accountXp": 86
+        },
+        "pveBuildingWin": {
+          "bricks": 322,
+          "gold": 1444,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 4.5,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 8467.6,
         "siegeSeconds": 7.7
       }
@@ -349,11 +2217,74 @@
     {
       "level": 29,
       "hp": 75098,
-      "goldPerSec": 29,
-      "upgradeGold": 18509,
-      "upgradeMaterial": 260,
+      "goldPerSec": 16.0,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 30,
+        "totalBricksToNext": 600,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 10,
+        "arenaName": "传奇",
+        "matchDurationSec": 180
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 143,
+          "gold": 801,
+          "accountXp": 235
+        },
+        "lose": {
+          "bricks": 57,
+          "gold": 320,
+          "accountXp": 94
+        },
+        "pveBuildingWin": {
+          "bricks": 358,
+          "gold": 1602,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 4.2,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 9737.8,
         "siegeSeconds": 7.7
       }
@@ -361,11 +2292,74 @@
     {
       "level": 30,
       "hp": 86363,
-      "goldPerSec": 32,
-      "upgradeGold": null,
-      "upgradeMaterial": null,
+      "goldPerSec": 16.5,
+      "flip": {
+        "tilesPerLevel": 20,
+        "brickCostPerTile": 31,
+        "totalBricksToNext": 620,
+        "pveBuildingCount": 3,
+        "decorPool": [
+          {
+            "id": "plant",
+            "name": "植物树木",
+            "weight": 35,
+            "role": "decoration"
+          },
+          {
+            "id": "landscape",
+            "name": "景观小品",
+            "weight": 25,
+            "role": "decoration"
+          },
+          {
+            "id": "castle_decor",
+            "name": "城堡装饰",
+            "weight": 15,
+            "role": "decoration"
+          },
+          {
+            "id": "brick_factory_decor",
+            "name": "砖头厂（装饰）",
+            "weight": 12,
+            "role": "decoration",
+            "note": "无产砖功能"
+          },
+          {
+            "id": "gold_mine_decor",
+            "name": "金矿厂（装饰）",
+            "weight": 13,
+            "role": "decoration",
+            "note": "无产金功能"
+          }
+        ]
+      },
+      "referenceArena": {
+        "arenaId": 10,
+        "arenaName": "传奇",
+        "matchDurationSec": 180
+      },
+      "battleRewards": {
+        "win": {
+          "bricks": 159,
+          "gold": 889,
+          "accountXp": 259
+        },
+        "lose": {
+          "bricks": 64,
+          "gold": 356,
+          "accountXp": 104
+        },
+        "pveBuildingWin": {
+          "bricks": 398,
+          "gold": 1778,
+          "note": "主城地图 PvE 建筑胜利一次性奖励"
+        }
+      },
+      "pacing": {
+        "estimatedWinsToLevel": 3.9,
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+      },
       "referenceSiege": {
-        "note": "默认编队同等级清场后集火主城的理论秒数",
         "defaultDeckDps": 11198.4,
         "siegeSeconds": 7.7
       }
@@ -404,35 +2398,35 @@
     "30": 86363
   },
   "goldPerSecByLevel": {
-    "1": 2,
-    "2": 2,
-    "3": 2,
-    "4": 3,
-    "5": 3,
-    "6": 3,
-    "7": 4,
-    "8": 4,
-    "9": 4,
-    "10": 5,
-    "11": 5,
-    "12": 6,
-    "13": 6,
-    "14": 7,
-    "15": 8,
-    "16": 8,
-    "17": 9,
-    "18": 10,
-    "19": 11,
-    "20": 12,
-    "21": 13,
-    "22": 15,
-    "23": 16,
-    "24": 18,
-    "25": 20,
-    "26": 22,
-    "27": 24,
-    "28": 26,
-    "29": 29,
-    "30": 32
+    "1": 2.0,
+    "2": 2.5,
+    "3": 3.0,
+    "4": 3.5,
+    "5": 4.0,
+    "6": 4.5,
+    "7": 5.0,
+    "8": 5.5,
+    "9": 6.0,
+    "10": 6.5,
+    "11": 7.0,
+    "12": 7.5,
+    "13": 8.0,
+    "14": 8.5,
+    "15": 9.0,
+    "16": 9.5,
+    "17": 10.0,
+    "18": 10.5,
+    "19": 11.0,
+    "20": 11.5,
+    "21": 12.0,
+    "22": 12.5,
+    "23": 13.0,
+    "24": 13.5,
+    "25": 14.0,
+    "26": 14.5,
+    "27": 15.0,
+    "28": 15.5,
+    "29": 16.0,
+    "30": 16.5
   }
 }

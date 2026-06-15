@@ -188,6 +188,38 @@ def gen_shop() -> dict:
         {"tierId": 6, "priceCny": 328, "diamond": 4280, "bonus": 780, "label": "巨藏"},
     ]
 
+    brick_packs = [
+        {
+            "productId": "brick_pack_s",
+            "name": "砖头×30",
+            "reward": {"type": "brick", "amount": 30},
+            "purchase": {"gold": 350, "diamond": 18},
+            "dailyLimit": 3,
+            "note": "约 L1 胜场 6 场等量；见 mainCity.json",
+        },
+        {
+            "productId": "brick_pack_m",
+            "name": "砖头×80",
+            "reward": {"type": "brick", "amount": 80},
+            "purchase": {"gold": 880, "diamond": 45},
+            "dailyLimit": 2,
+        },
+        {
+            "productId": "brick_pack_l",
+            "name": "砖头×200",
+            "reward": {"type": "brick", "amount": 200},
+            "purchase": {"gold": 2000, "diamond": 98},
+            "dailyLimit": 1,
+        },
+        {
+            "productId": "brick_pack_xl",
+            "name": "砖头×500",
+            "reward": {"type": "brick", "amount": 500},
+            "purchase": {"gold": 4500, "diamond": 218},
+            "weeklyLimit": 2,
+        },
+    ]
+
     return {
         "version": "1.1.0",
         "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石)；价格由品质单价推导",
@@ -250,11 +282,18 @@ def gen_shop() -> dict:
                     "packs": universal_packs,
                 },
                 "diamondRecharge": diamond_tiers,
+                "brickPacks": {
+                    "currency": "brick",
+                    "pricingNote": "金币≈11.7/砖；钻石≈1.67/砖（大包略优惠）",
+                    "packs": brick_packs,
+                },
             },
         },
         "pricingReference": {
             "goldPerCard": GOLD_PER,
             "diamondPerCard": DIAMOND_PER,
+            "brickPackGoldPerBrick": round(brick_packs[0]["purchase"]["gold"] / brick_packs[0]["reward"]["amount"], 2),
+            "brickPackDiamondPerBrick": round(brick_packs[0]["purchase"]["diamond"] / brick_packs[0]["reward"]["amount"], 2),
             "formula": "总价 = 单价 × 张数；所有每日优惠由此推导",
             "examples": {
                 "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
@@ -434,12 +473,29 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
     for t in shop["zones"]["basic"]["diamondRecharge"]:
         lines.append(f"| {t['tierId']} | ¥{t['priceCny']} | {t['diamond']+t['bonus']} |")
 
+    lines += [
+        "",
+        "---",
+        "",
+        "## 五、砖头礼包（金币/钻石）",
+        "",
+        "> 主城翻格升级消耗砖头；掉落与 pacing 见 `docs/MAIN_CITY_PROGRESSION.md`",
+        "",
+        "| 商品 | 砖头 | 金币 | 钻石 | 限购 |",
+        "|:---|:---:|:---:|:---:|:---|",
+    ]
+    for p in shop["zones"]["basic"]["brickPacks"]["packs"]:
+        lim = f"日{p['dailyLimit']}" if "dailyLimit" in p else f"周{p['weeklyLimit']}"
+        lines.append(
+            f"| {p['name']} | {p['reward']['amount']} | {p['purchase']['gold']} | {p['purchase']['diamond']} | {lim} |"
+        )
+
     e = economy
     lines += [
         "",
         "---",
         "",
-        "## 五、经济补足（30天粗算）",
+        "## 六、经济补足（30天粗算）",
         "",
         f"- 核心8卡满级需碎片：**{e['targets']['coreDeckFrag']:,}**",
         "",

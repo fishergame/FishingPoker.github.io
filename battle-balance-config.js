@@ -41,7 +41,7 @@ const BattleBalanceConfig = {
       return MainCityConfig.goldPerSec(mainCityLevel);
     }
     const lv = Math.max(1, Math.min(30, Math.round(mainCityLevel)));
-    return Math.max(1, Math.round(2 * 1.1 ** (lv - 1)));
+    return 2 + (lv - 1) * 0.5;
   },
 };
 

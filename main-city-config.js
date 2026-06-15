@@ -1,19 +1,15 @@
 /**
  * 主城养成配表（mainCity.json）
- * 血量 / 产金随主城等级；对局时长见 battleBalance.json
  */
 const MainCityConfig = {
-  VERSION: '1.0.0',
+  VERSION: '2.0.0',
   LEVEL_MAX: 30,
-  HP_GROWTH: 1.15,
-  GOLD_GROWTH: 1.10,
 
-  /** @type {Record<string, number>} */
   HP_BY_LEVEL: {},
-  /** @type {Record<string, number>} */
   GOLD_PER_SEC_BY_LEVEL: {},
-  /** @type {Array<object>} */
   LEVELS: [],
+  GAMEPLAY: {},
+  SHOP_BRICK_PACKS: [],
 
   hydrateFromJson(data) {
     this.VERSION = data.version;
@@ -21,24 +17,42 @@ const MainCityConfig = {
     this.HP_BY_LEVEL = data.hpByLevel || {};
     this.GOLD_PER_SEC_BY_LEVEL = data.goldPerSecByLevel || {};
     this.LEVELS = data.levels || [];
+    this.GAMEPLAY = data.gameplay || {};
+    this.SHOP_BRICK_PACKS = data.shopBrickPacks || [];
     this.FORMULAS = data.formulas || {};
-  },
-
-  /** @param {number} mainCityLevel 1..30 */
-  hp(mainCityLevel) {
-    const lv = Math.max(1, Math.min(this.LEVEL_MAX, Math.round(mainCityLevel)));
-    return this.HP_BY_LEVEL[String(lv)] ?? 1500;
-  },
-
-  /** @param {number} mainCityLevel 1..30 */
-  goldPerSec(mainCityLevel) {
-    const lv = Math.max(1, Math.min(this.LEVEL_MAX, Math.round(mainCityLevel)));
-    return this.GOLD_PER_SEC_BY_LEVEL[String(lv)] ?? 2;
+    this.CUMULATIVE_BRICKS_TO_MAX = data.cumulativeBricksToMax;
   },
 
   getLevelRow(mainCityLevel) {
     const lv = Math.max(1, Math.min(this.LEVEL_MAX, Math.round(mainCityLevel)));
     return this.LEVELS.find((r) => r.level === lv) || null;
+  },
+
+  hp(mainCityLevel) {
+    const lv = Math.max(1, Math.min(this.LEVEL_MAX, Math.round(mainCityLevel)));
+    return this.HP_BY_LEVEL[String(lv)] ?? 1500;
+  },
+
+  goldPerSec(mainCityLevel) {
+    const lv = Math.max(1, Math.min(this.LEVEL_MAX, Math.round(mainCityLevel)));
+    return this.GOLD_PER_SEC_BY_LEVEL[String(lv)] ?? 2;
+  },
+
+  flipBrickCost(mainCityLevel) {
+    const row = this.getLevelRow(mainCityLevel);
+    return row?.flip?.brickCostPerTile ?? 2 + (mainCityLevel - 1);
+  },
+
+  bricksToLevelUp(mainCityLevel) {
+    const row = this.getLevelRow(mainCityLevel);
+    return row?.flip?.totalBricksToNext ?? 20 * this.flipBrickCost(mainCityLevel);
+  },
+
+  battleRewards(mainCityLevel, arenaId, won = true) {
+    const row = this.getLevelRow(mainCityLevel);
+    if (!row) return null;
+    const key = won ? 'win' : 'lose';
+    return row.battleRewards[key];
   },
 };
 

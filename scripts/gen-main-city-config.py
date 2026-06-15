@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Generate mainCity.json + docs/MAIN_CITY_PROGRESSION.md
 
-主城独立养成（1–30 级）：
-- 血量：与卡牌同用 statGrowthRate 1.15，L1=1500（约为旧青铜场 L1 的 19%）
-- 产金：独立成长 1.10/级，L1=2/秒
-- 对局时长：仍由 battleBalance.json 按竞技场决定
+主城独立养成 v2：
+- 战斗：HP ×1.15/级（L1=1500）；产金每秒 +0.5/级（2.0→16.5，仅 .0/.5）
+- 升级：在主城地图翻格，每级 20 格，每格消耗砖头（随等级递增）
+- 对局掉落：金币 + 砖头 + 经验；主城 PvE 建筑额外奖励
+- 对局时长：仍仅由竞技场决定（battleBalance.json）
 """
 import json
 import subprocess
@@ -13,22 +14,35 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 STAT_GROWTH = 1.15
-GOLD_GROWTH = 1.10
 LEVEL_MAX = 30
 
-# 青铜 L1 体感锚点（用户反馈 ~1500）
 MAIN_CITY_HP_L1 = 1500
-MAIN_CITY_GOLD_L1 = 2
+GOLD_PER_SEC_L1 = 2.0
+GOLD_PER_SEC_STEP = 0.5  # 每级 +0.5，仅 x.0 / x.5
 
-DEFAULT_DECK = [
-    "dragon_knight", "archer", "infantry", "arrow_tower",
-    "bear_warrior", "skeleton_warrior", "gold_mine",
-]
-ATTACK_INTERVAL_BASE = 2.2
-MAX_ATTACK_SPEED = 10
-SIEGE_TIME_RATIO = 0.45
+TILES_PER_LEVEL = 20
+BRICK_BASE_PER_TILE = 2  # L1 每格 2 砖；之后 +1/级 → cost(L)=L+1
+
+BRICK_BATTLE_BASE = 5
+BRICK_BATTLE_GROWTH = 1.11
+GOLD_BATTLE_BASE = 28
+GOLD_BATTLE_GROWTH = 1.11
+XP_BATTLE_BASE = 12
+XP_BATTLE_GROWTH = 1.10
+ARENA_RESOURCE_STEP = 0.06
+LOSE_REWARD_RATIO = 0.4
+PVE_BRICK_MULTIPLIER = 2.5
+PVE_GOLD_MULTIPLIER = 2.0
 
 ARENA_NAMES = ["青铜", "白银", "黄金", "铂金", "钻石", "星耀", "大师", "宗师", "王者", "传奇"]
+
+DECOR_CATEGORIES = [
+    {"id": "plant", "name": "植物树木", "weight": 35, "role": "decoration"},
+    {"id": "landscape", "name": "景观小品", "weight": 25, "role": "decoration"},
+    {"id": "castle_decor", "name": "城堡装饰", "weight": 15, "role": "decoration"},
+    {"id": "brick_factory_decor", "name": "砖头厂（装饰）", "weight": 12, "role": "decoration", "note": "无产砖功能"},
+    {"id": "gold_mine_decor", "name": "金矿厂（装饰）", "weight": 13, "role": "decoration", "note": "无产金功能"},
+]
 
 
 def load_heroes() -> list[dict]:
@@ -41,199 +55,352 @@ def load_heroes() -> list[dict]:
     return json.loads(subprocess.check_output(["node", "-e", script], cwd=ROOT, text=True))
 
 
-def attack_interval(speed: float | None) -> float | None:
-    if speed is None or speed <= 0:
-        return None
-    return ATTACK_INTERVAL_BASE / min(speed, MAX_ATTACK_SPEED)
-
-
-def stat_at_level(base: float, level: int) -> float:
-    return base * (STAT_GROWTH ** (level - 1))
-
-
-def unit_city_dps(hero: dict, level: int) -> float:
-    if hero.get("attack") is None:
-        return 0.0
-    iv = attack_interval(hero.get("attackSpeed"))
-    if not iv:
-        return 0.0
-    return stat_at_level(hero["attack"], level) / iv
-
-
-def deck_city_dps(heroes_map: dict, level: int) -> float:
-    return sum(unit_city_dps(heroes_map[hid], level) for hid in DEFAULT_DECK if hid in heroes_map)
+def load_match_durations() -> dict[int, int]:
+    p = ROOT / "battleBalance.json"
+    if p.exists():
+        data = json.loads(p.read_text())
+        return {a["arenaId"]: a["matchDurationSec"] for a in data.get("arenas", [])}
+    return {i: min(180, 90 + (i - 1) * 10) for i in range(1, 11)}
 
 
 def main_city_hp(level: int) -> int:
     return round(MAIN_CITY_HP_L1 * (STAT_GROWTH ** (level - 1)))
 
 
-def main_city_gold_per_sec(level: int) -> int:
-    return max(1, round(MAIN_CITY_GOLD_L1 * (GOLD_GROWTH ** (level - 1))))
+def gold_per_sec(level: int) -> float:
+    return round(GOLD_PER_SEC_L1 + (level - 1) * GOLD_PER_SEC_STEP, 1)
 
 
-def upgrade_gold_need(level: int) -> int:
-    """主城升级金币（从 level → level+1），略低于普通英雄同档。"""
-    base = round(27.5 * level**2 - 47.5 * level + 25)
-    return max(10, round(base * 0.85))
+def flip_brick_cost(level: int) -> int:
+    """从 level 升到 level+1 时，翻开单格消耗砖头。"""
+    return BRICK_BASE_PER_TILE + (level - 1)
 
 
-def upgrade_material_need(level: int) -> int:
-    """主城升级材料「城砖」（从 level → level+1）。"""
-    base_table = [
-        8, 12, 16, 20, 24, 28, 32, 36, 40, 44,
-        48, 52, 56, 60, 64, 68, 74, 80, 88, 96,
-        108, 120, 135, 150, 168, 188, 210, 235, 260, 290,
+def tiles_to_level_up(level: int) -> int:
+    return TILES_PER_LEVEL
+
+
+def total_bricks_to_level_up(level: int) -> int:
+    return tiles_to_level_up(level) * flip_brick_cost(level)
+
+
+def pve_building_count(level: int) -> int:
+    return 2 if level <= 12 else 3
+
+
+def reference_arena(level: int) -> int:
+    """该主城等级玩家的典型竞技场场次（用于时长/掉落参考）。"""
+    return min(10, max(1, (level + 2) // 3))
+
+
+def arena_multiplier(arena_id: int) -> float:
+    return 1.0 + ARENA_RESOURCE_STEP * (arena_id - 1)
+
+
+def battle_bricks(main_city_level: int, arena_id: int, won: bool = True) -> int:
+    val = BRICK_BATTLE_BASE * (BRICK_BATTLE_GROWTH ** (main_city_level - 1)) * arena_multiplier(arena_id)
+    n = max(1, round(val))
+    return n if won else max(1, round(n * LOSE_REWARD_RATIO))
+
+
+def battle_gold(main_city_level: int, arena_id: int, won: bool = True) -> int:
+    val = GOLD_BATTLE_BASE * (GOLD_BATTLE_GROWTH ** (main_city_level - 1)) * arena_multiplier(arena_id)
+    n = max(5, round(val))
+    return n if won else max(2, round(n * LOSE_REWARD_RATIO))
+
+
+def battle_xp(main_city_level: int, arena_id: int, won: bool = True) -> int:
+    val = XP_BATTLE_BASE * (XP_BATTLE_GROWTH ** (main_city_level - 1)) * (1 + 0.04 * (arena_id - 1))
+    n = max(3, round(val))
+    return n if won else max(1, round(n * LOSE_REWARD_RATIO))
+
+
+def est_wins_to_level(level: int) -> float:
+    need = total_bricks_to_level_up(level)
+    ar = reference_arena(level)
+    per = battle_bricks(level, ar, True)
+    return round(need / per, 1) if per else 0
+
+
+def deck_city_dps_simple(heroes_map: dict, level: int) -> float:
+    deck_ids = [
+        "dragon_knight", "archer", "infantry", "arrow_tower", "bear_warrior", "skeleton_warrior",
     ]
-    return base_table[level - 1] if 1 <= level <= LEVEL_MAX else None
+    total = 0.0
+    for hid in deck_ids:
+        h = heroes_map.get(hid)
+        if not h or not h.get("attack"):
+            continue
+        spd = min(h.get("attackSpeed") or 1, 10)
+        total += h["attack"] * (STAT_GROWTH ** (level - 1)) / (2.2 / spd)
+    return total
 
 
-def match_duration(arena_id: int) -> int:
-    return min(180, 90 + (arena_id - 1) * 10)
-
-
-def gen_main_city(heroes: list[dict]) -> dict:
-    heroes_map = {h["id"]: h for h in heroes}
-    levels = []
+def gen_levels(heroes_map: dict) -> list[dict]:
+    durations = load_match_durations()
+    rows = []
     for lv in range(1, LEVEL_MAX + 1):
+        ar = reference_arena(lv)
+        dps = deck_city_dps_simple(heroes_map, lv)
         hp = main_city_hp(lv)
-        gold = main_city_gold_per_sec(lv)
-        dps = deck_city_dps(heroes_map, lv)
-        siege_sec = hp / dps if dps > 0 else None
-        levels.append({
+        rows.append({
             "level": lv,
             "hp": hp,
-            "goldPerSec": gold,
-            "upgradeGold": upgrade_gold_need(lv) if lv < LEVEL_MAX else None,
-            "upgradeMaterial": upgrade_material_need(lv) if lv < LEVEL_MAX else None,
+            "goldPerSec": gold_per_sec(lv),
+            "flip": {
+                "tilesPerLevel": tiles_to_level_up(lv),
+                "brickCostPerTile": flip_brick_cost(lv),
+                "totalBricksToNext": total_bricks_to_level_up(lv),
+                "pveBuildingCount": pve_building_count(lv),
+                "decorPool": DECOR_CATEGORIES,
+            },
+            "referenceArena": {
+                "arenaId": ar,
+                "arenaName": ARENA_NAMES[ar - 1],
+                "matchDurationSec": durations.get(ar, 180),
+            },
+            "battleRewards": {
+                "win": {
+                    "bricks": battle_bricks(lv, ar, True),
+                    "gold": battle_gold(lv, ar, True),
+                    "accountXp": battle_xp(lv, ar, True),
+                },
+                "lose": {
+                    "bricks": battle_bricks(lv, ar, False),
+                    "gold": battle_gold(lv, ar, False),
+                    "accountXp": battle_xp(lv, ar, False),
+                },
+                "pveBuildingWin": {
+                    "bricks": max(2, round(battle_bricks(lv, ar, True) * PVE_BRICK_MULTIPLIER)),
+                    "gold": max(5, round(battle_gold(lv, ar, True) * PVE_GOLD_MULTIPLIER)),
+                    "note": "主城地图 PvE 建筑胜利一次性奖励",
+                },
+            },
+            "pacing": {
+                "estimatedWinsToLevel": est_wins_to_level(lv),
+                "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+            },
             "referenceSiege": {
-                "note": "默认编队同等级清场后集火主城的理论秒数",
                 "defaultDeckDps": round(dps, 1),
-                "siegeSeconds": round(siege_sec, 1) if siege_sec else None,
+                "siegeSeconds": round(hp / dps, 1) if dps else None,
             },
         })
+    return rows
+
+
+def gen_shop_brick_packs() -> list[dict]:
+    """砖头商店：金币/钻石双渠道，单价随包量略优惠。"""
+    return [
+        {
+            "productId": "brick_pack_s",
+            "name": "砖头×30",
+            "reward": {"type": "brick", "amount": 30},
+            "purchase": {"gold": 350, "diamond": 18},
+            "dailyLimit": 3,
+            "note": "约 L1 胜场 6 场等量",
+        },
+        {
+            "productId": "brick_pack_m",
+            "name": "砖头×80",
+            "reward": {"type": "brick", "amount": 80},
+            "purchase": {"gold": 880, "diamond": 45},
+            "dailyLimit": 2,
+            "note": "约 L1 升一级需求量 2 倍",
+        },
+        {
+            "productId": "brick_pack_l",
+            "name": "砖头×200",
+            "reward": {"type": "brick", "amount": 200},
+            "purchase": {"gold": 2000, "diamond": 98},
+            "dailyLimit": 1,
+            "note": "中后期补仓",
+        },
+        {
+            "productId": "brick_pack_xl",
+            "name": "砖头×500",
+            "reward": {"type": "brick", "amount": 500},
+            "purchase": {"gold": 4500, "diamond": 218},
+            "weeklyLimit": 2,
+            "note": "仅金币或钻石二选一购买",
+        },
+    ]
+
+
+def gen_main_city() -> dict:
+    heroes = load_heroes()
+    heroes_map = {h["id"]: h for h in heroes}
+    levels = gen_levels(heroes_map)
+    cumulative_bricks = sum(r["flip"]["totalBricksToNext"] for r in levels[:-1])
 
     return {
-        "version": "1.0.0",
-        "description": "主城独立养成：血量与产金随主城等级；对局时长见 battleBalance.json",
+        "version": "2.0.0",
+        "description": "主城养成：翻格升级、砖头消耗、战斗 HP/产金",
         "levelMax": LEVEL_MAX,
+        "gameplay": {
+            "upgradeMode": "flipTiles",
+            "tilesPerLevel": TILES_PER_LEVEL,
+            "tileCostCurrency": "brick",
+            "flipBrickCostFormula": f"{BRICK_BASE_PER_TILE} + (mainCityLevel - 1) 每格",
+            "totalBricksFormula": f"tilesPerLevel({TILES_PER_LEVEL}) × flipBrickCost",
+            "tileLoot": {
+                "decoration": DECOR_CATEGORIES,
+                "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币",
+            },
+        },
         "formulas": {
             "hp": f"round({MAIN_CITY_HP_L1} * {STAT_GROWTH}^(mainCityLevel-1))",
-            "goldPerSec": f"round({MAIN_CITY_GOLD_L1} * {GOLD_GROWTH}^(mainCityLevel-1))",
-            "hpGrowthRate": STAT_GROWTH,
-            "goldGrowthRate": GOLD_GROWTH,
-            "designNote": "L1 HP=1500 约为旧场次×卡组方案的 1/5；与英雄攻击同指数，同等级对局攻城节奏稳定",
+            "goldPerSec": f"{GOLD_PER_SEC_L1} + (mainCityLevel-1)*{GOLD_PER_SEC_STEP}",
+            "flipBrickCost": "2 + (mainCityLevel-1)",
+            "battleBricksWin": f"round({BRICK_BATTLE_BASE} * {BRICK_BATTLE_GROWTH}^(L-1) * arenaMul)",
+            "battleGoldWin": f"round({GOLD_BATTLE_BASE} * {GOLD_BATTLE_GROWTH}^(L-1) * arenaMul)",
+            "loseRewardRatio": LOSE_REWARD_RATIO,
         },
+        "shopBrickPacks": gen_shop_brick_packs(),
+        "cumulativeBricksToMax": cumulative_bricks,
         "levels": levels,
-        "hpByLevel": {str(lv): main_city_hp(lv) for lv in range(1, LEVEL_MAX + 1)},
-        "goldPerSecByLevel": {str(lv): main_city_gold_per_sec(lv) for lv in range(1, LEVEL_MAX + 1)},
+        "hpByLevel": {str(r["level"]): r["hp"] for r in levels},
+        "goldPerSecByLevel": {str(r["level"]): r["goldPerSec"] for r in levels},
     }
 
 
-def gen_markdown(data: dict, heroes_map: dict) -> str:
+def fmt_gold(g: float) -> str:
+    return str(int(g)) if g == int(g) else f"{g:.1f}"
+
+
+def gen_markdown(data: dict) -> str:
     lines = [
-        "# 主城养成数值（独立系统）",
+        "# 主城养成数值（翻格 · 砖头 · 统一总表）",
         "",
         "> 配表：`mainCity.json` · 生成：`python3 scripts/gen-main-city-config.py`",
-        "> 运行时：`MainCityConfig.hp(level)` / `goldPerSec(level)`",
-        "> **对局时长**仍按竞技场：`BattleBalanceConfig.matchDurationSec(arenaId)`",
+        "> 对局时长：`battleBalance.json`（仅竞技场）",
         "",
         "---",
         "",
-        "## 一、设计原则",
+        "## 一、玩法摘要",
         "",
-        "| 维度 | 规则 |",
+        "| 模块 | 规则 |",
         "|:---|:---|",
-        f"| **主城血量** | L1 **{MAIN_CITY_HP_L1:,}** × `1.15^(等级-1)`，与卡牌攻击成长对齐 |",
-        f"| **每秒产金** | L1 **{MAIN_CITY_GOLD_L1}** × `1.10^(等级-1)`，成长略低于血量 |",
-        "| **对局时长** | 仅由竞技场决定（青铜 90s → 传奇 180s） |",
-        "| **与旧方案** | 旧青铜 L1 主城 ~7,877；新 L1 **1,500** ≈ **19%**，体感拆城更快 |",
+        "| **升级方式** | 主城地图消耗 **砖头** 翻格；每升 1 级需翻 **20 格** |",
+        "| **单格砖头** | `2 + (当前主城等级 - 1)`，等级越高越贵 |",
+        "| **格内掉落** | 多为装饰（植物/景观/城堡/砖头厂/金矿厂）；每级 **2–3 个 PvE 建筑** 可实战 |",
+        "| **PvE 奖励** | 胜利额外砖头 ≈ 胜场 ×2.5、金币 ≈ ×2 |",
+        "| **PvP 奖励** | 胜利给 砖头 + 金币 + 账号经验；失败给 **40%** |",
+        "| **战斗 HP** | 随主城等级 ×1.15；**产金/秒** 每级 **+0.5**（2.0→16.5） |",
+        "| **对局时长** | 仅看竞技场（青铜 90s → 传奇 180s） |",
         "",
         "### 公式",
         "",
         "```",
-        f"mainCityHp(L)     = round({MAIN_CITY_HP_L1} × 1.15^(L-1))",
-        f"mainCityGoldPerSec = round({MAIN_CITY_GOLD_L1} × 1.10^(L-1))",
-        "matchDuration      = battleBalance.arenas[arenaId].matchDurationSec",
+        "mainCityHp(L)       = round(1500 × 1.15^(L-1))",
+        "goldPerSec(L)       = 2.0 + (L-1) × 0.5",
+        "flipBrickCost(L)    = 2 + (L-1)          // 从 L 升到 L+1 时每格",
+        "bricksToLevelUp(L)  = 20 × flipBrickCost(L)",
+        "battleBricksWin     = round(5 × 1.11^(L-1) × (1+0.06×(场次-1)))",
+        "battleGoldWin       = round(28 × 1.11^(L-1) × (1+0.06×(场次-1)))",
         "```",
+        "",
+        f"**满级累计砖头（L1→L30）**：**{data['cumulativeBricksToMax']:,}**",
         "",
         "---",
         "",
-        "## 二、主城等级全表（L1–L30）",
+        "## 二、统一总表（L1–L30）",
         "",
-        "| 等级 | 主城 HP | 产金/秒 | 升级城砖 | 升级金币 | 默认同级攻城(s) |",
-        "|:---:|:---:|:---:|:---:|:---:|:---:|",
+        "| 等级 | 战斗HP | 产金/s | 单格砖 | 本级格数 | 升级总砖 | PvE数 | 参考场次 | 对局时长 | 胜·砖 | 胜·金 | 负·砖 | 估胜场/级 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
     ]
-    for row in data["levels"]:
-        lv = row["level"]
-        mat = row["upgradeMaterial"] if row["upgradeMaterial"] is not None else "—"
-        gold = f"{row['upgradeGold']:,}" if row["upgradeGold"] is not None else "—"
-        siege = row["referenceSiege"]["siegeSeconds"]
-        siege_s = f"{siege:.1f}" if siege else "—"
+    for r in data["levels"]:
+        lv = r["level"]
+        ar = r["referenceArena"]
+        fl = r["flip"]
+        rw = r["battleRewards"]["win"]
+        rl = r["battleRewards"]["lose"]
+        dur = ar["matchDurationSec"]
+        m, s = divmod(dur, 60)
         lines.append(
-            f"| **L{lv}** | {row['hp']:,} | {row['goldPerSec']} | {mat} | {gold} | {siege_s} |"
+            f"| **L{lv}** | {r['hp']:,} | {fmt_gold(r['goldPerSec'])} | {fl['brickCostPerTile']} "
+            f"| {fl['tilesPerLevel']} | {fl['totalBricksToNext']:,} | {fl['pveBuildingCount']} "
+            f"| {ar['arenaId']} {ar['arenaName']} | {m}:{s:02d} | {rw['bricks']} | {rw['gold']} "
+            f"| {rl['bricks']} | {r['pacing']['estimatedWinsToLevel']} |"
         )
 
     lines += [
         "",
-        "> **默认同级攻城(s)**：默认 6 卡编队、主城等级=卡组等级、已清场后纯拆城理论时间（约 **7.7s** 全等级恒定）。",
+        "> **估胜场/级** = 升级总砖 ÷ 参考场次胜场砖头（不含 PvE 与商店）。",
         "",
         "---",
         "",
         "## 三、关键等级对照",
         "",
-        "| 等级 | 主城 HP | 产金/秒 | 青铜90s被动金 | 传奇180s被动金 |",
-        "|:---:|:---:|:---:|:---:|:---:|",
+        "| 等级 | HP | 产金/s | 升级总砖 | 参考时长 | 胜场砖头 | PvE胜利砖头 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
     ]
     for lv in [1, 5, 10, 15, 20, 25, 30]:
-        row = data["levels"][lv - 1]
-        g = row["goldPerSec"]
+        r = data["levels"][lv - 1]
+        pve = r["battleRewards"]["pveBuildingWin"]
+        ar = r["referenceArena"]
+        m, s = divmod(ar["matchDurationSec"], 60)
         lines.append(
-            f"| **L{lv}** | {row['hp']:,} | {g} | {g * 90:,} | {g * 180:,} |"
+            f"| **L{lv}** | {r['hp']:,} | {fmt_gold(r['goldPerSec'])} "
+            f"| {r['flip']['totalBricksToNext']:,} | {m}:{s:02d} "
+            f"| {r['battleRewards']['win']['bricks']} | {pve['bricks']} |"
         )
 
     lines += [
         "",
         "---",
         "",
-        "## 四、各竞技场 × 主城等级：破城时间占比（估）",
+        "## 四、翻格掉落（装饰 vs PvE）",
         "",
-        "假设清场+翻牌占 **55%** 对局，拆城占 **45%**；默认同级对手。",
-        "",
-        "| 场次 | 时长 | 目标拆城窗 | L1 | L10 | L20 | L30 |",
-        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+        "| 类型 | 说明 | 权重/数量 |",
+        "|:---|:---|:---|",
     ]
-    for aid in [1, 3, 5, 7, 10]:
-        dur = match_duration(aid)
-        target = dur * SIEGE_TIME_RATIO
-        cols = []
-        for lv in [1, 10, 20, 30]:
-            hp = main_city_hp(lv)
-            dps = deck_city_dps(heroes_map, lv)
-            t = hp / dps if dps else 0
-            pct = t / target * 100
-            cols.append(f"{t:.1f}s ({pct:.0f}%)")
-        m, s = divmod(dur, 60)
-        lines.append(f"| {aid} {ARENA_NAMES[aid-1]} | {m}:{s:02d} | {target:.0f}s | {' | '.join(cols)} |")
+    for d in DECOR_CATEGORIES:
+        note = d.get("note", "仅外观")
+        lines.append(f"| {d['name']} | {note} | 装饰池 {d['weight']}% |")
+    lines += [
+        "| **PvE 建筑** | 可发起对战，胜利额外资源 | 每级 2 个（L13 起 3 个） |",
+        "",
+        "---",
+        "",
+        "## 五、商店 · 砖头礼包（金币/钻石）",
+        "",
+        "| 商品 | 砖头 | 金币 | 钻石 | 限购 | 说明 |",
+        "|:---|:---:|:---:|:---:|:---:|:---|",
+    ]
+    for p in data["shopBrickPacks"]:
+        lim = p.get("dailyLimit") or p.get("weeklyLimit")
+        lim_t = f"日{p['dailyLimit']}" if "dailyLimit" in p else f"周{p['weeklyLimit']}"
+        g = p["purchase"].get("gold", "—")
+        d = p["purchase"].get("diamond", "—")
+        lines.append(
+            f"| {p['name']} | {p['reward']['amount']} | {g} | {d} | {lim_t} | {p.get('note', '')} |"
+        )
 
     lines += [
         "",
         "---",
         "",
-        "## 五、与卡牌养成关系",
+        "## 六、对局时长（竞技场 · 不变）",
         "",
-        "- **主城等级**：战斗右侧「主城」页升级，影响 **己方主城 HP** 与 **局内每秒产金**",
-        "- **卡牌等级**：影响翻出单位的攻击/生命，不影响主城 HP",
-        "- **竞技场场次**：只调 **对局总时长**，不调主城 HP",
-        "- PvP 时：双方各自读取自己的主城等级 HP / 产金",
+        "| 场次 | 名称 | 秒 | 显示 |",
+        "|:---:|:---|:---:|:---:|",
+    ]
+    durations = load_match_durations()
+    for aid in range(1, 11):
+        sec = durations.get(aid, 90)
+        m, s = divmod(sec, 60)
+        lines.append(f"| {aid} | {ARENA_NAMES[aid-1]} | {sec} | **{m}:{s:02d}** |")
+
+    lines += [
         "",
         "---",
         "",
-        "## 六、升级消耗（城砖 + 金币）",
+        "## 七、与卡牌/账号关系",
         "",
-        "- 材料「城砖」：主城玩法产出（待接系统），消耗见上表",
-        "- 金币：约为同档普通英雄升级的 **85%**",
-        "- 满级 L30 累计城砖约 **3,200**、金币约 **120,000**（粗算）",
+        "- **主城等级**：右侧「主城」页；翻格耗砖升级 → 提高 **局内 HP + 产金**",
+        "- **卡牌等级**：只影响翻出单位强度",
+        "- **竞技场**：只调 **对局倒计时** 与掉落场次系数",
+        "- **账号经验**：对局胜利/失败均获得（见总表，独立养成线）",
         "",
     ]
     return "\n".join(lines)
@@ -242,14 +409,21 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
 if __name__ == "__main__":
     heroes = load_heroes()
     heroes_map = {h["id"]: h for h in heroes}
-    data = gen_main_city(heroes)
+    data = gen_main_city()
+    # refresh siege reference with heroes_map
+    for row in data["levels"]:
+        lv = row["level"]
+        dps = deck_city_dps_simple(heroes_map, lv)
+        hp = row["hp"]
+        row["referenceSiege"]["defaultDeckDps"] = round(dps, 1)
+        row["referenceSiege"]["siegeSeconds"] = round(hp / dps, 1) if dps else None
 
     (ROOT / "mainCity.json").write_text(
         json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (ROOT / "docs" / "MAIN_CITY_PROGRESSION.md").write_text(
-        gen_markdown(data, heroes_map) + "\n", encoding="utf-8"
+        gen_markdown(data) + "\n", encoding="utf-8"
     )
-    print(f"Wrote mainCity.json, docs/MAIN_CITY_PROGRESSION.md")
-    print(f"L1 HP={data['hpByLevel']['1']}, L30 HP={data['hpByLevel']['30']}")
-    print(f"L1 gold/s={data['goldPerSecByLevel']['1']}, L30={data['goldPerSecByLevel']['30']}")
+    print(f"Wrote mainCity.json v{data['version']}, docs/MAIN_CITY_PROGRESSION.md")
+    print(f"L1: HP={data['hpByLevel']['1']} gold/s={data['goldPerSecByLevel']['1']} bricks/level={data['levels'][0]['flip']['totalBricksToNext']}")
+    print(f"L30: HP={data['hpByLevel']['30']} gold/s={data['goldPerSecByLevel']['30']} cumulative bricks={data['cumulativeBricksToMax']}")
