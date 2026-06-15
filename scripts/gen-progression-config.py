@@ -112,6 +112,39 @@ def level_reward(level: int) -> list:
     return [build_random_single_card(low, mid, high, must_unowned=True)]
 
 
+LEGEND_TROPHY_SOFT_CAP = 12000
+
+
+def arena_milestone_rewards(aid: int, node_index: int, node_count: int, progress: float, vg: int, chest: str) -> list:
+    """
+    段位内奖杯里程碑：金币 + 钻石 + 宝箱（品质随竞技场档位）。
+    节点越靠后、段位越高，数值越高。
+    """
+    gold = round(vg * (0.5 + progress * 1.0 + node_index * 0.12 + aid * 0.06))
+    diamond = round(3 + aid * 4 + node_index * 3 + progress * aid * 3)
+    return [
+        {"type": "gold", "amount": gold},
+        {"type": "diamond", "amount": diamond},
+        {"type": "chest", "chestId": chest},
+    ]
+
+
+def gen_trophy_milestones(aid: int, unlock: int, nxt: int | None, vg: int, chest: str) -> list:
+    """段位内奖励节点数 = arenaId（青铜1个、白银2个…传奇10个），奖杯均匀分布。"""
+    node_count = aid
+    upper = nxt if nxt is not None else LEGEND_TROPHY_SOFT_CAP
+    span = upper - unlock
+    milestones = []
+    for i in range(1, node_count + 1):
+        progress = i / (node_count + 1)
+        trophy = unlock + round(span * progress)
+        milestones.append({
+            "trophy": trophy,
+            "rewards": arena_milestone_rewards(aid, i, node_count, progress, vg, chest),
+        })
+    return milestones
+
+
 def gen_arena():
     meta = [
         (1, "青铜", "bronze", 0, 100),
@@ -139,17 +172,7 @@ def gen_arena():
     ]
     arenas = []
     for (aid, name, tier, unlock, nxt), (tw, tl, ew, el, chest, vg, cap) in zip(meta, battle):
-        milestones = []
-        if nxt:
-            span = nxt - unlock
-            for pct in [0.25, 0.5, 0.75, 1.0]:
-                ms = {
-                    "trophy": unlock + round(span * pct),
-                    "rewards": [{"type": "gold", "amount": round(vg * (1 + pct))}],
-                }
-                if pct == 1.0:
-                    ms["rewards"].append({"type": "chest", "chestId": chest})
-                milestones.append(ms)
+        milestones = gen_trophy_milestones(aid, unlock, nxt, vg, chest)
 
         first_unlock = [
             {"type": "gold", "amount": vg * 5},
@@ -183,10 +206,11 @@ def gen_arena():
 
     return {
         "version": "1.0.0",
-        "description": "10个竞技场：奖杯解锁、对战收益、宝箱掉落",
+        "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑（金币+钻石+宝箱）",
         "arenaCount": 10,
         "rules": {
             "trophyMin": 0,
+            "legendTrophySoftCap": LEGEND_TROPHY_SOFT_CAP,
             "arenaNoDemotion": True,
             "tierNoDemotion": True,
             "trophyLossFormula": "max(0, currentTrophy - trophyLoss)",
@@ -314,11 +338,19 @@ def fmt_reward(rewards: list) -> str:
     for r in rewards:
         if r["type"] == "chest":
             parts.append(f"{CHEST_CN[r['chestId']]}宝箱")
+        elif r["type"] == "gold":
+            parts.append(f"金币{r['amount']}")
+        elif r["type"] == "diamond":
+            parts.append(f"钻石{r['amount']}")
         elif r["type"] == "heroCardPack":
             parts.append(fmt_chest_grant(r))
         elif r["type"] == "randomHeroCard":
             parts.append(fmt_random_card(r))
     return " + ".join(parts) if parts else "—"
+
+
+def fmt_milestone_rewards(rewards: list) -> str:
+    return fmt_reward(rewards)
 
 
 def gen_progression_tables_md(arena, chest, account, hero):
@@ -343,6 +375,29 @@ def gen_progression_tables_md(arena, chest, account, hero):
             f"+{br['trophyWin']} | -{br['trophyLoss']} | {br['expWin']} | {br['expLoss']} | "
             f"{br['victoryGold']} | {br['dailyGoldCap']} | {br['chestDropId']} |"
         )
+
+    lines += [
+        "",
+        "### 段位内奖杯里程碑",
+        "",
+        "每个段位内奖励节点数 = **场次编号**（青铜 1 个、白银 2 个 … 传奇 10 个），",
+        "奖杯在 `[解锁, 下一段/软上限]` 区间内均匀分布；每项奖励含 **金币 + 钻石 + 宝箱**。",
+        "",
+        "| 场次 | 名称 | 节点数 | 奖杯 | 奖励 |",
+        "|:---:|:---:|:---:|:---:|:---|",
+    ]
+    for a in arena["arenas"]:
+        ms_list = a.get("trophyMilestones", [])
+        if not ms_list:
+            lines.append(f"| {a['arenaId']} | {a['name']} | 0 | — | — |")
+            continue
+        for idx, ms in enumerate(ms_list):
+            name_cell = a["name"] if idx == 0 else ""
+            count_cell = str(len(ms_list)) if idx == 0 else ""
+            lines.append(
+                f"| {a['arenaId'] if idx == 0 else ''} | {name_cell} | {count_cell} | "
+                f"{ms['trophy']} | {fmt_milestone_rewards(ms['rewards'])} |"
+            )
 
     lines += [
         "",

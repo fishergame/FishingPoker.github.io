@@ -1,9 +1,10 @@
 {
   "version": "1.0.0",
-  "description": "10个竞技场：奖杯解锁、对战收益、宝箱掉落",
+  "description": "10个竞技场：奖杯解锁、对战收益、段位内里程碑（金币+钻石+宝箱）",
   "arenaCount": 10,
   "rules": {
     "trophyMin": 0,
+    "legendTrophySoftCap": 12000,
     "arenaNoDemotion": true,
     "tierNoDemotion": true,
     "trophyLossFormula": "max(0, currentTrophy - trophyLoss)",
@@ -30,38 +31,15 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 25,
-          "rewards": [
-            {
-              "type": "gold",
-              "amount": 62
-            }
-          ]
-        },
-        {
           "trophy": 50,
           "rewards": [
             {
               "type": "gold",
-              "amount": 75
-            }
-          ]
-        },
-        {
-          "trophy": 75,
-          "rewards": [
+              "amount": 59
+            },
             {
-              "type": "gold",
-              "amount": 88
-            }
-          ]
-        },
-        {
-          "trophy": 100,
-          "rewards": [
-            {
-              "type": "gold",
-              "amount": 100
+              "type": "diamond",
+              "amount": 12
             },
             {
               "type": "chest",
@@ -100,38 +78,32 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 150,
+          "trophy": 167,
           "rewards": [
             {
               "type": "gold",
-              "amount": 100
+              "amount": 86
+            },
+            {
+              "type": "diamond",
+              "amount": 16
+            },
+            {
+              "type": "chest",
+              "chestId": "silver"
             }
           ]
         },
         {
-          "trophy": 200,
+          "trophy": 233,
           "rewards": [
             {
               "type": "gold",
-              "amount": 120
-            }
-          ]
-        },
-        {
-          "trophy": 250,
-          "rewards": [
+              "amount": 122
+            },
             {
-              "type": "gold",
-              "amount": 140
-            }
-          ]
-        },
-        {
-          "trophy": 300,
-          "rewards": [
-            {
-              "type": "gold",
-              "amount": 160
+              "type": "diamond",
+              "amount": 21
             },
             {
               "type": "chest",
@@ -178,7 +150,15 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 150
+              "amount": 126
+            },
+            {
+              "type": "diamond",
+              "amount": 20
+            },
+            {
+              "type": "chest",
+              "chestId": "golden"
             }
           ]
         },
@@ -187,7 +167,15 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 180
+              "amount": 170
+            },
+            {
+              "type": "diamond",
+              "amount": 26
+            },
+            {
+              "type": "chest",
+              "chestId": "golden"
             }
           ]
         },
@@ -196,16 +184,11 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 210
-            }
-          ]
-        },
-        {
-          "trophy": 600,
-          "rewards": [
+              "amount": 215
+            },
             {
-              "type": "gold",
-              "amount": 240
+              "type": "diamond",
+              "amount": 31
             },
             {
               "type": "chest",
@@ -248,38 +231,66 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 700,
+          "trophy": 680,
           "rewards": [
             {
               "type": "gold",
-              "amount": 200
+              "amount": 170
+            },
+            {
+              "type": "diamond",
+              "amount": 24
+            },
+            {
+              "type": "chest",
+              "chestId": "platinum"
             }
           ]
         },
         {
-          "trophy": 800,
+          "trophy": 760,
           "rewards": [
             {
               "type": "gold",
-              "amount": 240
+              "amount": 221
+            },
+            {
+              "type": "diamond",
+              "amount": 30
+            },
+            {
+              "type": "chest",
+              "chestId": "platinum"
             }
           ]
         },
         {
-          "trophy": 900,
+          "trophy": 840,
           "rewards": [
             {
               "type": "gold",
-              "amount": 280
+              "amount": 272
+            },
+            {
+              "type": "diamond",
+              "amount": 35
+            },
+            {
+              "type": "chest",
+              "chestId": "platinum"
             }
           ]
         },
         {
-          "trophy": 1000,
+          "trophy": 920,
           "rewards": [
             {
               "type": "gold",
-              "amount": 320
+              "amount": 323
+            },
+            {
+              "type": "diamond",
+              "amount": 41
             },
             {
               "type": "chest",
@@ -322,11 +333,36 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 1150,
+          "trophy": 1100,
           "rewards": [
             {
               "type": "gold",
-              "amount": 250
+              "amount": 217
+            },
+            {
+              "type": "diamond",
+              "amount": 28
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
+            }
+          ]
+        },
+        {
+          "trophy": 1200,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 275
+            },
+            {
+              "type": "diamond",
+              "amount": 34
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
@@ -335,25 +371,45 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 300
+              "amount": 332
+            },
+            {
+              "type": "diamond",
+              "amount": 40
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
         {
-          "trophy": 1450,
+          "trophy": 1400,
           "rewards": [
             {
               "type": "gold",
-              "amount": 350
+              "amount": 389
+            },
+            {
+              "type": "diamond",
+              "amount": 45
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
         {
-          "trophy": 1600,
+          "trophy": 1500,
           "rewards": [
             {
               "type": "gold",
-              "amount": 400
+              "amount": 447
+            },
+            {
+              "type": "diamond",
+              "amount": 50
             },
             {
               "type": "chest",
@@ -396,38 +452,100 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 1825,
+          "trophy": 1729,
           "rewards": [
             {
               "type": "gold",
-              "amount": 312
+              "amount": 281
+            },
+            {
+              "type": "diamond",
+              "amount": 33
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
         {
-          "trophy": 2050,
+          "trophy": 1857,
           "rewards": [
             {
               "type": "gold",
-              "amount": 375
+              "amount": 346
+            },
+            {
+              "type": "diamond",
+              "amount": 38
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
         {
-          "trophy": 2275,
+          "trophy": 1986,
           "rewards": [
             {
               "type": "gold",
-              "amount": 438
+              "amount": 412
+            },
+            {
+              "type": "diamond",
+              "amount": 44
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
             }
           ]
         },
         {
-          "trophy": 2500,
+          "trophy": 2114,
           "rewards": [
             {
               "type": "gold",
-              "amount": 500
+              "amount": 478
+            },
+            {
+              "type": "diamond",
+              "amount": 49
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
+            }
+          ]
+        },
+        {
+          "trophy": 2243,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 544
+            },
+            {
+              "type": "diamond",
+              "amount": 55
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
+            }
+          ]
+        },
+        {
+          "trophy": 2371,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 609
+            },
+            {
+              "type": "diamond",
+              "amount": 60
             },
             {
               "type": "chest",
@@ -470,11 +588,53 @@
       },
       "trophyMilestones": [
         {
+          "trophy": 2688,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 350
+            },
+            {
+              "type": "diamond",
+              "amount": 37
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
           "trophy": 2875,
           "rewards": [
             {
               "type": "gold",
-              "amount": 375
+              "amount": 423
+            },
+            {
+              "type": "diamond",
+              "amount": 42
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 3062,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 496
+            },
+            {
+              "type": "diamond",
+              "amount": 48
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
@@ -483,7 +643,32 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 450
+              "amount": 570
+            },
+            {
+              "type": "diamond",
+              "amount": 54
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 3438,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 644
+            },
+            {
+              "type": "diamond",
+              "amount": 59
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
@@ -492,16 +677,28 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 525
+              "amount": 717
+            },
+            {
+              "type": "diamond",
+              "amount": 65
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
         {
-          "trophy": 4000,
+          "trophy": 3812,
           "rewards": [
             {
               "type": "gold",
-              "amount": 600
+              "amount": 790
+            },
+            {
+              "type": "diamond",
+              "amount": 70
             },
             {
               "type": "chest",
@@ -544,38 +741,134 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 4500,
+          "trophy": 4222,
           "rewards": [
             {
               "type": "gold",
-              "amount": 438
+              "amount": 424
+            },
+            {
+              "type": "diamond",
+              "amount": 41
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
         {
-          "trophy": 5000,
+          "trophy": 4444,
           "rewards": [
             {
               "type": "gold",
-              "amount": 525
+              "amount": 505
+            },
+            {
+              "type": "diamond",
+              "amount": 46
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
         {
-          "trophy": 5500,
+          "trophy": 4667,
           "rewards": [
             {
               "type": "gold",
-              "amount": 612
+              "amount": 586
+            },
+            {
+              "type": "diamond",
+              "amount": 52
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
             }
           ]
         },
         {
-          "trophy": 6000,
+          "trophy": 4889,
           "rewards": [
             {
               "type": "gold",
-              "amount": 700
+              "amount": 667
+            },
+            {
+              "type": "diamond",
+              "amount": 58
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 5111,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 747
+            },
+            {
+              "type": "diamond",
+              "amount": 63
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 5333,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 828
+            },
+            {
+              "type": "diamond",
+              "amount": 69
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 5556,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 909
+            },
+            {
+              "type": "diamond",
+              "amount": 75
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        },
+        {
+          "trophy": 5778,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 990
+            },
+            {
+              "type": "diamond",
+              "amount": 80
             },
             {
               "type": "chest",
@@ -618,11 +911,70 @@
       },
       "trophyMilestones": [
         {
-          "trophy": 6750,
+          "trophy": 6300,
           "rewards": [
             {
               "type": "gold",
-              "amount": 500
+              "amount": 504
+            },
+            {
+              "type": "diamond",
+              "amount": 45
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 6600,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 592
+            },
+            {
+              "type": "diamond",
+              "amount": 50
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 6900,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 680
+            },
+            {
+              "type": "diamond",
+              "amount": 56
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 7200,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 768
+            },
+            {
+              "type": "diamond",
+              "amount": 62
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
             }
           ]
         },
@@ -631,25 +983,79 @@
           "rewards": [
             {
               "type": "gold",
-              "amount": 600
+              "amount": 856
+            },
+            {
+              "type": "diamond",
+              "amount": 68
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
             }
           ]
         },
         {
-          "trophy": 8250,
+          "trophy": 7800,
           "rewards": [
             {
               "type": "gold",
-              "amount": 700
+              "amount": 944
+            },
+            {
+              "type": "diamond",
+              "amount": 73
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
             }
           ]
         },
         {
-          "trophy": 9000,
+          "trophy": 8100,
           "rewards": [
             {
               "type": "gold",
-              "amount": 800
+              "amount": 1032
+            },
+            {
+              "type": "diamond",
+              "amount": 79
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 8400,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1120
+            },
+            {
+              "type": "diamond",
+              "amount": 85
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 8700,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1208
+            },
+            {
+              "type": "diamond",
+              "amount": 90
             },
             {
               "type": "chest",
@@ -690,7 +1096,178 @@
         "chestDropId": "legendary",
         "chestDropChance": 1.0
       },
-      "trophyMilestones": [],
+      "trophyMilestones": [
+        {
+          "trophy": 9273,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 655
+            },
+            {
+              "type": "diamond",
+              "amount": 49
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 9545,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 761
+            },
+            {
+              "type": "diamond",
+              "amount": 54
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 9818,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 866
+            },
+            {
+              "type": "diamond",
+              "amount": 60
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 10091,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 972
+            },
+            {
+              "type": "diamond",
+              "amount": 66
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 10364,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1077
+            },
+            {
+              "type": "diamond",
+              "amount": 72
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 10636,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1183
+            },
+            {
+              "type": "diamond",
+              "amount": 77
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 10909,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1288
+            },
+            {
+              "type": "diamond",
+              "amount": 83
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 11182,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1394
+            },
+            {
+              "type": "diamond",
+              "amount": 89
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 11455,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1499
+            },
+            {
+              "type": "diamond",
+              "amount": 95
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        },
+        {
+          "trophy": 11727,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 1605
+            },
+            {
+              "type": "diamond",
+              "amount": 100
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        }
+      ],
       "firstUnlockRewards": [
         {
           "type": "gold",
