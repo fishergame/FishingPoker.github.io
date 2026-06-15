@@ -7,14 +7,66 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 STAT_GROWTH = 1.15
-# 技能/羁绊对主城伤害的合计软上限（相对普攻 DPS）
 MAX_CITY_DPS_MULTIPLIER = 1.45
-MAX_BOND_ATK_BONUS = 0.15  # 单羁绊 tier6
 
 FACTIONS = ["wei", "shu", "wu", "qun"]
 FACTION_CN = {"wei": "魏", "shu": "蜀", "wu": "吴", "qun": "群雄"}
 
-# 技能效果类型与推荐数值区间（接入战斗时校验）
+ARCHETYPE_CN = {
+    "clear": "清场",
+    "guard": "守门",
+    "siege": "破城",
+    "tempo": "节奏",
+}
+
+# 翻卡玩法：每英雄定位（清场 / 守门 / 破城 / 节奏）
+HERO_ARCHETYPE: dict[str, str] = {
+    "dragon_knight": "clear",
+    "demon_lord": "clear",
+    "archmage": "clear",
+    "ranger": "siege",
+    "royal_knight": "guard",
+    "druid": "guard",
+    "lich_queen": "clear",
+    "blademaster": "clear",
+    "frost_dragon": "siege",
+    "crusher": "siege",
+    "helicopter": "siege",
+    "dread_knight": "clear",
+    "warlord": "guard",
+    "panda_monk": "clear",
+    "shaman": "clear",
+    "gargoyle": "guard",
+    "skeleton_giant": "guard",
+    "sniper": "siege",
+    "catapult_tower": "siege",
+    "catapult": "clear",
+    "cavalry": "clear",
+    "wyrmling": "clear",
+    "ballista": "siege",
+    "necromancer": "tempo",
+    "spear_orc": "clear",
+    "wolf_rider": "clear",
+    "skeleton_knight": "clear",
+    "archer": "siege",
+    "infantry": "guard",
+    "arrow_tower": "siege",
+    "bear_warrior": "guard",
+    "skeleton_warrior": "guard",
+    "goblin": "tempo",
+    "blacksmith": "guard",
+    "militia": "tempo",
+    "bone_archer": "siege",
+    "gold_mine": "tempo",
+}
+
+QUALITY_SCALE = {
+    "common": 0.88,
+    "rare": 1.0,
+    "epic": 1.08,
+    "legendary": 1.15,
+}
+
 EFFECT_BOUNDS = {
     "atkPct": (0.05, 0.25),
     "atkSpeedPct": (0.05, 0.20),
@@ -24,7 +76,16 @@ EFFECT_BOUNDS = {
     "damageReductionPct": (0.05, 0.20),
     "dotPctPerSec": (0.02, 0.08),
     "lifestealPct": (0.05, 0.15),
+    "deployBurstPct": (0.30, 0.70),
+    "killGold": (5, 25),
+    "flipRefundPct": (0.10, 0.35),
+    "revealAdjacent": (1, 2),
+    "deployGold": (8, 30),
+    "taunt": (1, 1),
+    "executeBonusPct": (0.20, 0.50),
 }
+
+EXECUTE_THRESHOLD = 0.25
 
 BOND_TIER_EFFECTS = {
     "faction": [
@@ -81,6 +142,15 @@ BOND_TIER_EFFECTS = {
     ],
 }
 
+# 清场传奇：部分英雄用处决/剧毒替代部署突袭
+CLEAR_LEGEND_VARIANT = {
+    "blademaster": "execute",
+    "archmage": "dot",
+    "lich_queen": "dot",
+    "panda_monk": "deploy_burst",
+    "catapult": "deploy_burst",
+}
+
 
 def load_heroes() -> list[dict]:
     script = r"""
@@ -100,8 +170,138 @@ def infer_range(hero: dict) -> str:
     return "ranged" if hero["attackRange"] > 2.5 else "melee"
 
 
+def infer_archetype(hero: dict) -> str:
+    hid = hero["id"]
+    if hid in HERO_ARCHETYPE:
+        return HERO_ARCHETYPE[hid]
+    rng = infer_range(hero)
+    if hero["type"] == "resource":
+        return "tempo"
+    if hero["type"] == "building":
+        return "siege"
+    atk = hero.get("attack") or 0
+    hp = hero.get("unitHp") or 0
+    if hp >= 400 or (hp >= 250 and rng == "melee"):
+        return "guard"
+    if (hero.get("attackRange") or 0) >= 5 or atk >= 90:
+        return "siege"
+    return "clear"
+
+
+def scale_value(base: float, quality: str) -> float:
+    return round(base * QUALITY_SCALE.get(quality, 1.0), 3)
+
+
+def build_skill(hero: dict, slot: str, archetype: str) -> dict:
+    hid = hero["id"]
+    q = hero["quality"]
+    rng = infer_range(hero)
+    sid = f"skill_{hid}_{slot}"
+    unlock = {"normal": 1, "epic": 8, "legend": 20}[slot]
+
+    if archetype == "clear":
+        if slot == "normal":
+            name, desc = "猎杀", "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡"
+            effects = [{"type": "atkPct", "value": scale_value(0.07, q)}]
+            phase, target = "always", "self"
+        elif slot == "epic":
+            name, desc = "横扫", "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）"
+            effects = [{"type": "splashPct", "value": scale_value(0.20, q)}]
+            phase, target = "field_only", "enemy_unit_adjacent"
+        else:
+            variant = CLEAR_LEGEND_VARIANT.get(hid, "deploy_burst")
+            if variant == "execute":
+                name, desc = "处决", f"攻击血量低于{int(EXECUTE_THRESHOLD * 100)}%的敌方兵卡时，伤害大幅提升"
+                effects = [
+                    {"type": "executeBonusPct", "value": scale_value(0.35, q), "threshold": EXECUTE_THRESHOLD},
+                ]
+                phase, target = "field_only", "enemy_unit"
+            elif variant == "dot":
+                name, desc = "剧毒", "普攻命中敌方兵卡后施加持续伤害（仅对单位，不对主城）"
+                effects = [{"type": "dotPctPerSec", "value": scale_value(0.05, q)}]
+                phase, target = "field_only", "enemy_unit"
+            else:
+                name, desc = "部署突袭", "翻卡落地时对最近敌方兵卡造成一次爆发伤害"
+                effects = [{"type": "deployBurstPct", "value": scale_value(0.50, q)}]
+                phase, target = "on_deploy", "enemy_unit_nearest"
+
+    elif archetype == "guard":
+        if slot == "normal":
+            name, desc = "坚盾", "提升自身生命，在前线阻挡更久"
+            effects = [{"type": "unitHpPct", "value": scale_value(0.08, q)}]
+            phase, target = "always", "self"
+        elif slot == "epic":
+            name, desc = "铁壁", "受到敌方兵卡攻击时减伤"
+            effects = [{"type": "damageReductionPct", "value": scale_value(0.12, q)}]
+            phase, target = "field_only", "self"
+        else:
+            name, desc = "嘲讽", "敌方兵卡优先攻击本单位，为队友争取攻城窗口"
+            effects = [{"type": "taunt", "value": 1}]
+            phase, target = "always", "self"
+
+    elif archetype == "siege":
+        if slot == "normal":
+            name, desc = "瞄准", "提升攻速，清场后更快转火主城"
+            effects = [{"type": "atkSpeedPct", "value": scale_value(0.08, q)}]
+            phase, target = "always", "self"
+        elif slot == "epic":
+            name, desc = "蓄力", "对敌方兵卡伤害提升，便于打开攻城通道"
+            effects = [{"type": "atkPct", "value": scale_value(0.10, q)}]
+            phase, target = "field_only", "self"
+        else:
+            name, desc = "破城", "场上无敌方兵卡时，对主城伤害大幅提升"
+            effects = [{"type": "cityDamagePct", "value": scale_value(0.12, q)}]
+            phase, target = "siege_only", "enemy_city"
+
+    else:  # tempo
+        if slot == "normal":
+            if hero["type"] == "resource":
+                name, desc = "矿脉", "翻开后获得额外金币"
+                effects = [{"type": "deployGold", "value": int(scale_value(12, q))}]
+                phase, target = "on_deploy", "self"
+            else:
+                name, desc = "轻装", "翻卡费用部分返还，加快铺场节奏"
+                effects = [{"type": "flipRefundPct", "value": scale_value(0.15, q)}]
+                phase, target = "on_deploy", "self"
+        elif slot == "epic":
+            name, desc = "战利", "击杀敌方兵卡后获得金币"
+            effects = [{"type": "killGold", "value": int(scale_value(10, q))}]
+            phase, target = "on_kill", "self"
+        else:
+            name, desc = "扩张", "翻卡落地时额外翻开相邻未翻格预览"
+            effects = [{"type": "revealAdjacent", "value": 1}]
+            phase, target = "on_deploy", "adjacent_cells"
+
+    return {
+        "skillId": sid,
+        "heroId": hid,
+        "slot": slot,
+        "archetype": archetype,
+        "archetypeLabel": ARCHETYPE_CN[archetype],
+        "name": f"{hero['name']}·{name}",
+        "description": desc,
+        "unlockLevel": unlock,
+        "maxLevel": 10,
+        "effects": effects,
+        "scalingPerSkillLevel": 0.02,
+        "phase": phase,
+        "target": target,
+        "tags": [q, rng, hero["type"], archetype],
+    }
+
+
+def gen_skills(heroes: list[dict]) -> list[dict]:
+    skills = []
+    for h in heroes:
+        if h["type"] == "resource" and h["id"] != "gold_mine":
+            continue
+        archetype = infer_archetype(h)
+        for slot in ("normal", "epic", "legend"):
+            skills.append(build_skill(h, slot, archetype))
+    return skills
+
+
 def assign_faction(heroes: list[dict]) -> dict[str, str]:
-    """按 id 哈希均匀分阵营（铸币坊不参与羁绊）。"""
     mapping = {}
     factions_cycle = FACTIONS * 20
     idx = 0
@@ -113,67 +313,6 @@ def assign_faction(heroes: list[dict]) -> dict[str, str]:
     return mapping
 
 
-def skill_template(hero: dict, slot: str, index: int) -> dict:
-    """按品质/远近战生成技能骨架（数值待策划逐英雄微调）。"""
-    hid = hero["id"]
-    q = hero["quality"]
-    rng = infer_range(hero)
-    sid = f"skill_{hid}_{slot}{index}"
-
-    if slot == "normal":
-        if rng == "ranged":
-            effect = {"type": "atkPct", "value": 0.06 if q == "common" else 0.08}
-            desc = "精准：普攻伤害提升"
-        else:
-            effect = {"type": "unitHpPct", "value": 0.05}
-            desc = "坚韧：生命提升"
-    elif slot == "epic":
-        if rng == "ranged":
-            effect = {"type": "splashPct", "value": 0.15 if q in ("common", "rare") else 0.20}
-            desc = "散射：溅射伤害"
-        else:
-            effect = {"type": "damageReductionPct", "value": 0.10}
-            desc = "铁壁：减伤"
-    else:  # legend
-        if hero["type"] == "building":
-            effect = {"type": "cityDamagePct", "value": 0.12}
-            desc = "破城：对主城伤害提升"
-        elif rng == "ranged":
-            effect = {"type": "cityDamagePct", "value": 0.10}
-            desc = "狙击：对主城伤害提升"
-        else:
-            effect = {"type": "atkPct", "value": 0.15}
-            desc = "破军：普攻伤害大幅提升"
-
-    return {
-        "skillId": sid,
-        "heroId": hid,
-        "slot": slot,
-        "slotIndex": index,
-        "name": f"{hero['name']}·{desc.split('：')[0]}",
-        "description": desc,
-        "unlockLevel": 1 if slot == "normal" else (8 if slot == "epic" and index == 1 else 15 if slot == "epic" else 20),
-        "maxLevel": 10,
-        "effects": [effect],
-        "scalingPerSkillLevel": 0.02,
-        "target": "self",
-        "tags": [q, rng, hero["type"]],
-    }
-
-
-def gen_skills(heroes: list[dict]) -> list[dict]:
-    skills = []
-    for h in heroes:
-        if h["type"] == "resource":
-            continue
-        skills.append(skill_template(h, "normal", 1))
-        skills.append(skill_template(h, "normal", 2))
-        skills.append(skill_template(h, "epic", 1))
-        skills.append(skill_template(h, "epic", 2))
-        skills.append(skill_template(h, "legend", 1))
-    return skills
-
-
 def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
     factions = assign_faction(heroes)
     by_hero: dict[str, list] = {}
@@ -183,31 +322,46 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
     entries = {}
     for h in heroes:
         if h["id"] == "gold_mine":
+            hs = by_hero.get(h["id"], [])
+            by_slot = {s["slot"]: s["skillId"] for s in hs}
             entries[h["id"]] = {
                 "heroId": h["id"],
                 "name": h["name"],
+                "archetype": "tempo",
+                "archetypeLabel": "节奏",
                 "bondEligible": False,
                 "note": "铸币坊不计入羁绊",
+                "skills": {
+                    "normal": by_slot.get("normal"),
+                    "epic": by_slot.get("epic"),
+                    "legend": by_slot.get("legend"),
+                    "epicUnlockLevel": 8,
+                    "legendUnlockLevel": 20,
+                },
             }
             continue
         hs = by_hero.get(h["id"], [])
+        by_slot = {s["slot"]: s["skillId"] for s in hs}
+        archetype = infer_archetype(h)
         entries[h["id"]] = {
             "heroId": h["id"],
             "name": h["name"],
             "faction": factions[h["id"]],
             "range": infer_range(h),
+            "archetype": archetype,
+            "archetypeLabel": ARCHETYPE_CN[archetype],
             "bondEligible": True,
             "skills": {
-                "normal": [s["skillId"] for s in hs if s["slot"] == "normal"],
-                "epic": [s["skillId"] for s in hs if s["slot"] == "epic"],
-                "legend": next((s["skillId"] for s in hs if s["slot"] == "legend"), None),
-                "epicUnlockLevels": [8, 15],
+                "normal": by_slot.get("normal"),
+                "epic": by_slot.get("epic"),
+                "legend": by_slot.get("legend"),
+                "epicUnlockLevel": 8,
                 "legendUnlockLevel": 20,
             },
         }
     return {
-        "version": "1.0.0",
-        "description": "英雄战斗元数据：阵营、远近程、技能ID映射",
+        "version": "2.0.0",
+        "description": "英雄战斗元数据：阵营、定位、技能ID（普通/史诗/传奇各一）",
         "heroes": entries,
     }
 
@@ -247,7 +401,7 @@ def gen_bond() -> dict:
             "maxActiveRangeBonds": 1,
             "stacking": "additiveBeforeCap",
             "cityDamageCapFromBonds": 0.05,
-        "recommendedCityDpsCap": 1.45,
+            "recommendedCityDpsCap": MAX_CITY_DPS_MULTIPLIER,
         },
         "bonds": bonds,
     }
@@ -262,94 +416,79 @@ def validate_skills(skills: list[dict]) -> list[str]:
                 errors.append(f"{s['skillId']}: unknown effect {et}")
                 continue
             lo, hi = EFFECT_BOUNDS[et]
-            if not (lo <= e["value"] <= hi):
-                errors.append(f"{s['skillId']}: {et}={e['value']} outside [{lo},{hi}]")
+            val = e["value"]
+            if not (lo <= val <= hi):
+                errors.append(f"{s['skillId']}: {et}={val} outside [{lo},{hi}]")
     return errors
 
 
-def estimate_city_dps_multiplier(bond: dict, skills: list[dict], deck_hero_ids: list[str], hero_battle: dict) -> float:
-    """粗算羁绊+传奇技能对主城 DPS 的加成倍率。"""
-    eligible = [hid for hid in deck_hero_ids if hid and hero_battle["heroes"].get(hid, {}).get("bondEligible")]
-    factions = {}
-    melee = ranged = 0
-    for hid in eligible:
-        meta = hero_battle["heroes"][hid]
-        factions[meta["faction"]] = factions.get(meta["faction"], 0) + 1
-        if meta["range"] == "melee":
-            melee += 1
-        else:
-            ranged += 1
-
-    atk_bonus = city_bonus = 0.0
-    for b in bond["bonds"]:
-        if b["type"] == "faction":
-            cnt = max(factions.get(b["faction"], 0) for factions in [factions]) if False else factions.get(b["faction"], 0)
-            # pick best faction count
-        # simplify: use max faction count
-    max_faction = max(factions.values()) if factions else 0
-    range_cnt = melee if melee >= ranged else ranged
-    range_key = "range_melee" if melee >= ranged else "range_ranged"
-
-    def tier_bonus(bond_id: str, count: int) -> float:
-        b = next(x for x in bond["bonds"] if x["bondId"] == bond_id)
-        bonus = 0.0
-        for tier in b["tiers"]:
-            if count >= tier["count"]:
-                for e in tier["effects"]:
-                    if e["type"] == "atkPct":
-                        bonus = max(bonus, e["value"])
-                    if e["type"] == "cityDamagePct":
-                        nonlocal_city = e["value"]
-        return bonus
-
-    nonlocal_city = 0
-    atk_bonus = tier_bonus(f"faction_{max(factions, key=factions.get)}", max_faction) if factions else 0
-    atk_bonus += tier_bonus(range_key, range_cnt)
-
-    skill_city = 0.0
-    skill_atk = 0.0
-    skill_map = {s["skillId"]: s for s in skills}
-    for hid in eligible:
-        meta = hero_battle["heroes"][hid]
-        leg_id = meta["skills"]["legend"]
-        if leg_id and leg_id in skill_map:
-            for e in skill_map[leg_id]["effects"]:
-                if e["type"] == "cityDamagePct":
-                    skill_city += e["value"]
-                if e["type"] == "atkPct":
-                    skill_atk += e["value"]
-
-    return 1.0 + min(atk_bonus + skill_atk, 0.35) + min(skill_city, 0.25)
-
-
-def gen_review_md(bond, skills, hero_battle, balance_path: Path) -> str:
-    balance = json.loads(balance_path.read_text())
+def gen_review_md(bond, skills, hero_battle) -> str:
     issues = validate_skills(skills)
+    archetype_counts: dict[str, int] = {}
+    for h in hero_battle["heroes"].values():
+        arch = h.get("archetype")
+        if arch:
+            archetype_counts[arch] = archetype_counts.get(arch, 0) + 1
 
     lines = [
-        "# 技能 · 羁绊数值审查（接入前）",
+        "# 技能 · 羁绊数值审查",
         "",
         "> 配表：`skill.json` · `bond.json` · `heroBattle.json`",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
         "",
-        "## 一、当前状态",
+        "## 一、翻卡技能体系（v2）",
         "",
-        "| 模块 | 文件 | 状态 |",
-        "|:---|:---|:---|",
-        "| 主城 HP / 对局时长 | `battleBalance.json` | ✅ 已落地 |",
-        "| 英雄 L1 属性 | `heroes-config.js` | ✅ |",
-        "| 英雄升级 | `heroLevel.json` | ✅ |",
-        "| **羁绊** | `bond.json` | ✅ 初版 |",
-        "| **技能** | `skill.json` | ✅ 骨架（每英雄5槽） |",
-        "| 战斗接入 | `battle-rules.js` | ⚠️ 仍用品质被动模板 |",
+        "**每英雄 3 技能槽：** 普通（L1）· 史诗（L8）· 传奇（L20）；升级逻辑不变（技能最高 10 级，`scalingPerSkillLevel` 2%）。",
+        "",
+        "**四类定位：**",
+        "",
+        "| 定位 | 战术目标 | 普通 | 史诗 | 传奇 |",
+        "|:---|:---|:---|:---|:---|",
+        "| 清场 | 消灭敌方兵卡、打开攻城窗口 | 攻击% | 溅射 | 部署突袭/处决/剧毒 |",
+        "| 守门 | 拖延、保护后排翻卡 | 生命% | 减伤 | 嘲讽 |",
+        "| 破城 | 清场后拆主城 | 攻速% | 对单位攻击% | 对城伤害% |",
+        "| 节奏 | 多翻、多铺 | 返费/部署金 | 击杀返金 | 翻开相邻 |",
+        "",
+        "**定位分布：** "
+        + " · ".join(f"{ARCHETYPE_CN[k]} {v}" for k, v in sorted(archetype_counts.items())),
         "",
         "---",
         "",
-        "## 二、羁绊配置摘要",
+        "## 二、效果类型与 phase",
         "",
-        "**规则：** 2 / 4 / 6 张激活；**4 张时同时激活 2 档+4 档**；采矿机不计入。",
+        "| 效果 type | 区间 | phase 建议 |",
+        "|:---|:---|:---|",
+    ]
+    phase_hints = {
+        "atkPct": "always / field_only",
+        "atkSpeedPct": "always",
+        "splashPct": "field_only",
+        "cityDamagePct": "siege_only",
+        "unitHpPct": "always",
+        "damageReductionPct": "field_only",
+        "dotPctPerSec": "field_only",
+        "deployBurstPct": "on_deploy",
+        "killGold": "on_kill",
+        "flipRefundPct": "on_deploy",
+        "revealAdjacent": "on_deploy",
+        "deployGold": "on_deploy",
+        "taunt": "always",
+        "executeBonusPct": "field_only",
+    }
+    for k, (lo, hi) in EFFECT_BOUNDS.items():
+        hint = phase_hints.get(k, "—")
+        if k in ("killGold", "deployGold", "revealAdjacent", "taunt"):
+            lines.append(f"| `{k}` | {lo}–{hi} | {hint} |")
+        else:
+            lines.append(f"| `{k}` | {int(lo * 100)}%–{int(hi * 100)}% | {hint} |")
+
+    lines += [
+        "",
+        "---",
+        "",
+        "## 三、羁绊摘要",
         "",
         "| 羁绊 | 2张 | 4张 | 6张 |",
         "|:---|:---|:---|:---|",
@@ -357,7 +496,7 @@ def gen_review_md(bond, skills, hero_battle, balance_path: Path) -> str:
     for b in bond["bonds"]:
         t2 = t4 = t6 = "—"
         for t in b["tiers"]:
-            eff = "+".join(f"{e['type']}{int(e['value']*100)}%" for e in t["effects"])
+            eff = "+".join(f"{e['type']}{int(e['value'] * 100)}%" for e in t["effects"])
             if t["count"] == 2:
                 t2 = eff
             elif t["count"] == 4:
@@ -370,56 +509,29 @@ def gen_review_md(bond, skills, hero_battle, balance_path: Path) -> str:
         "",
         "---",
         "",
-        "## 三、技能效果类型与数值边界",
+        "## 四、数值红线",
         "",
-        "| 效果 type | 推荐区间 | 说明 |",
-        "|:---|:---|:---|",
-    ]
-    for k, (lo, hi) in EFFECT_BOUNDS.items():
-        lines.append(f"| `{k}` | {int(lo*100)}%–{int(hi*100)}% | 单技能单条 |")
-
-    lines += [
-        "",
-        "**技能槽：** 普通×2（L1） + 史诗×2（L8/L15） + 传奇×1（L20）",
-        "",
-        "---",
-        "",
-        "## 四、与主城血量的关系（重点）",
-        "",
-        "主城 HP 已按 **1.15^等级** 与攻击同步成长，默认编队清场后攻城约 **45% 对局时长**。",
-        "",
-        "接入技能/羁绊后需额外乘算：",
-        "",
-        "```",
-        "实际攻城DPS ≈ 基础DPS × (1 + 羁绊攻% + 技能攻%) × (1 + 对城伤害%)",
-        "建议合计上限：≤ 1.45×（见 battleBalance.json 建议）",
-        "```",
-        "",
-        "| 风险 | 说明 | 建议 |",
-        "|:---|:---|:---|",
-        "| 羁绊6+远程6双满 | 攻击加成可达 ~27% | 加成用**加算**并 cap 35% |",
-        "| 多传奇「破城」叠加 | 对城伤害线性叠加 | 全队对城加成 cap 25% |",
-        "| 溅射/多段 | 清场更快 → 更早攻城管 | 溅射不对主城生效 |",
-        "| 两套战斗数值 | flip 模板 vs 37 英雄 | 统一读 `heroes-config` + `skill.json` |",
+        "- 对城 DPS 合计建议 ≤ **1.45×**",
+        "- 全队 `cityDamagePct` cap **25%**",
+        "- 攻击类加成 cap **35%**",
+        "- 溅射 / DOT / 部署突袭 **不对主城**",
         "",
     ]
 
     if issues:
         lines += ["### 校验告警", ""]
-        for i in issues[:20]:
+        for i in issues[:30]:
             lines.append(f"- {i}")
         lines.append("")
 
     lines += [
         "---",
         "",
-        "## 五、接入清单（开发）",
+        "## 五、战斗接入",
         "",
-        "1. `battle-rules.js`：伤害结算读取 `heroBattle.json` + `skill.json`",
-        "2. 开战前根据卡组重算 `bond.json` 激活档",
-        "3. 对城伤害单独通道，应用 `cityDamagePct`",
-        "4. 主城 HP / 时长从 `BattleBalanceConfig` 按竞技场读取",
-        "5. 禁用：溅射、DOT 对主城直接生效（仅对单位）",
+        "1. `battle-skill-runtime.js` 汇总技能加成",
+        "2. `battle-rules.js` 按 `phase` 分支结算",
+        "3. 翻卡即从卡组抽英雄，不再用品质随机模板",
         "",
     ]
     return "\n".join(lines)
@@ -431,21 +543,34 @@ if __name__ == "__main__":
     errors = validate_skills(skills)
     if errors:
         print("WARN:", len(errors), "skill validation issues")
+        for e in errors[:10]:
+            print(" ", e)
 
     bond = gen_bond()
     hero_battle = gen_hero_battle(heroes, skills)
 
-    (ROOT / "skill.json").write_text(json.dumps({
-        "version": "1.0.0",
-        "description": "英雄技能：每英雄5槽；效果数值为接入骨架",
-        "effectBounds": EFFECT_BOUNDS,
-        "skillCount": len(skills),
-        "skills": skills,
-    }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "skill.json").write_text(
+        json.dumps(
+            {
+                "version": "2.0.0",
+                "description": "翻卡技能：每英雄普通/史诗/传奇各一；清场/守门/破城/节奏",
+                "archetypes": ARCHETYPE_CN,
+                "effectBounds": EFFECT_BOUNDS,
+                "skillCount": len(skills),
+                "skills": skills,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
     (ROOT / "bond.json").write_text(json.dumps(bond, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "heroBattle.json").write_text(json.dumps(hero_battle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "heroBattle.json").write_text(
+        json.dumps(hero_battle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
 
-    review = gen_review_md(bond, skills, hero_battle, ROOT / "battleBalance.json")
+    review = gen_review_md(bond, skills, hero_battle)
     (ROOT / "docs" / "SKILL_BOND_REVIEW.md").write_text(review + "\n", encoding="utf-8")
-    print("Wrote skill.json, bond.json, heroBattle.json, docs/SKILL_BOND_REVIEW.md")
+    print(f"Wrote {len(skills)} skills for {len(hero_battle['heroes'])} heroes")

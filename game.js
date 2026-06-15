@@ -30,8 +30,16 @@ function init() {
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
   document.getElementById('restart-btn').addEventListener('click', resetGame);
-  resetGame();
-  requestAnimationFrame(gameLoop);
+  R.loadConfig()
+    .then(() => {
+      resetGame();
+      requestAnimationFrame(gameLoop);
+    })
+    .catch((err) => {
+      console.warn('Skill config load failed, using fallback heroes', err);
+      resetGame();
+      requestAnimationFrame(gameLoop);
+    });
 }
 
 function resizeCanvas() {
@@ -102,7 +110,7 @@ function renderSideBoard(container, side) {
         div.innerHTML = `
           <span class="hero-icon">${QUALITY_ICONS[cell.hero.quality]}</span>
           <div class="hero-hp-bar"><div class="hero-hp-fill" style="width:${hpPct}%"></div></div>
-          <span class="hero-label">${cell.hero.name}</span>`;
+          <span class="hero-label">${cell.hero.name}${cell.hero.archetypeLabel ? ` · ${cell.hero.archetypeLabel}` : ''}</span>`;
       } else if (cell.contentType === 'resource' || cell.contentType === 'mystery_gold') {
         div.classList.add('resource-card', `${side}-side`);
         div.textContent = '◆';

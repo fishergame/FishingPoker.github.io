@@ -2,33 +2,46 @@
  * 技能配表（skill.json + heroBattle.json）
  */
 const SkillConfig = {
-  VERSION: '1.0.0',
+  VERSION: '2.0.0',
   EFFECT_BOUNDS: {},
+  SKILLS: {},
+  HERO_BATTLE: {},
+  ARCHETYPES: {},
 
   hydrateFromJson(skillData, heroBattleData) {
     this.VERSION = skillData.version;
     this.EFFECT_BOUNDS = skillData.effectBounds || {};
+    this.ARCHETYPES = skillData.archetypes || {};
     this.SKILLS = Object.fromEntries(skillData.skills.map((s) => [s.skillId, s]));
     this.HERO_BATTLE = heroBattleData.heroes;
   },
 
-  getHeroSkills(heroId) {
-    const meta = this.HERO_BATTLE[heroId];
-    if (!meta || !meta.skills) return [];
-    const ids = [
-      ...(meta.skills.normal || []),
-      ...(meta.skills.epic || []),
-      meta.skills.legend,
-    ].filter(Boolean);
-    return ids.map((id) => this.SKILLS[id]).filter(Boolean);
+  getSkill(skillId) {
+    return this.SKILLS[skillId] || null;
   },
 
-  /** 汇总对城伤害加成（建议战斗层再 cap） */
+  getHeroMeta(heroId) {
+    return this.HERO_BATTLE[heroId] || null;
+  },
+
+  /** 按英雄等级返回已解锁技能（普通 L1 / 史诗 L8 / 传奇 L20） */
+  getHeroSkills(heroId, heroLevel = 30, skillLevels = {}) {
+    const ids = BattleSkillRuntime.getUnlockedSkillIds(heroId, heroLevel);
+    return ids
+      .map((id) => {
+        const sk = this.SKILLS[id];
+        if (!sk) return null;
+        const lv = skillLevels[id] || 1;
+        return { ...sk, level: lv };
+      })
+      .filter(Boolean);
+  },
+
   sumCityDamagePct(skillIds, skillLevels = {}) {
     let sum = 0;
     for (const id of skillIds) {
       const sk = this.SKILLS[id];
-      if (!sk) continue;
+      if (!sk || sk.phase !== 'siege_only') continue;
       const lv = skillLevels[id] || 1;
       for (const e of sk.effects) {
         if (e.type === 'cityDamagePct') {
@@ -36,7 +49,7 @@ const SkillConfig = {
         }
       }
     }
-    return sum;
+    return Math.min(sum, BattleSkillRuntime.CAPS.cityDamagePct);
   },
 };
 
