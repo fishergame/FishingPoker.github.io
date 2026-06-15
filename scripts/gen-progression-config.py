@@ -198,17 +198,19 @@ def gen_arena():
 
 
 def gen_chest():
+    # 钻石：木质起全档必给，每档 +10（参考 CR 前期奖杯路 5→10→50 的递进节奏，宝箱侧用稳定 +10）
+    # wooden 10, silver 20, golden 30, platinum 40, diamond 50, epic 60, legendary 70
     tiers = [
-        ("wooden", "木质宝箱", 5, [20, 50], [0, 0], 5),
-        ("silver", "白银宝箱", 30, [50, 120], [0, 1], 10),
-        ("golden", "黄金宝箱", 120, [100, 250], [1, 3], 20),
-        ("platinum", "铂金宝箱", 240, [200, 500], [2, 5], 30),
-        ("diamond", "钻石宝箱", 480, [400, 800], [5, 10], 50),
-        ("epic", "史诗宝箱", 720, [600, 1200], [8, 15], 80),
-        ("legendary", "传奇宝箱", 1440, [1000, 2000], [15, 30], 100),
+        ("wooden", "木质宝箱", 5, [20, 50], 10, 5),
+        ("silver", "白银宝箱", 30, [50, 120], 20, 10),
+        ("golden", "黄金宝箱", 120, [100, 250], 30, 20),
+        ("platinum", "铂金宝箱", 240, [200, 500], 40, 30),
+        ("diamond", "钻石宝箱", 480, [400, 800], 50, 50),
+        ("epic", "史诗宝箱", 720, [600, 1200], 60, 80),
+        ("legendary", "传奇宝箱", 1440, [1000, 2000], 70, 100),
     ]
     chests = []
-    for cid, name, minutes, gold, diamond, instant_diamond in tiers:
+    for cid, name, minutes, gold, diamond_fixed, instant_diamond in tiers:
         grant = chest_hero_grant(cid)
         low, mid, high = CHEST_HERO_TIERS[cid]
         total = grant["totalCards"]
@@ -221,16 +223,16 @@ def gen_chest():
             "instantOpenDiamond": instant_diamond,
             "rewards": {
                 "gold": {"min": gold[0], "max": gold[1]},
-                "diamond": {"min": diamond[0], "max": diamond[1]},
+                "diamond": {"min": diamond_fixed, "max": diamond_fixed},
                 "heroCardGrant": grant,
                 "description": (
-                    f"共{total}张：低{low}×{low_n}+中{mid}×{mid_n}+高{high}×{high_n}，3名不同英雄"
+                    f"钻石{diamond_fixed}；共{total}张卡：低{low}×{low_n}+中{mid}×{mid_n}+高{high}×{high_n}"
                 ),
             },
         })
     return {
-        "version": "2.2.0",
-        "description": "宝箱：共10张卡分3名不同英雄(40/30/30)；铂金起共20张",
+        "version": "2.3.0",
+        "description": "宝箱：钻石木质10起每档+10；卡牌共10张(铂金起20)分3英雄",
         "slotCount": 4,
         "chests": chests,
     }

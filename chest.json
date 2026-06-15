@@ -1,6 +1,6 @@
 {
-  "version": "2.2.0",
-  "description": "宝箱：共10张卡分3名不同英雄(40/30/30)；铂金起共20张",
+  "version": "2.3.0",
+  "description": "宝箱：钻石木质10起每档+10；卡牌共10张(铂金起20)分3英雄",
   "slotCount": 4,
   "chests": [
     {
@@ -15,8 +15,8 @@
           "max": 50
         },
         "diamond": {
-          "min": 0,
-          "max": 0
+          "min": 10,
+          "max": 10
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -50,7 +50,7 @@
             }
           ]
         },
-        "description": "共10张：低common×4+中common×3+高rare×3，3名不同英雄"
+        "description": "钻石10；共10张卡：低common×4+中common×3+高rare×3"
       }
     },
     {
@@ -65,8 +65,8 @@
           "max": 120
         },
         "diamond": {
-          "min": 0,
-          "max": 1
+          "min": 20,
+          "max": 20
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -100,7 +100,7 @@
             }
           ]
         },
-        "description": "共10张：低common×4+中rare×3+高rare×3，3名不同英雄"
+        "description": "钻石20；共10张卡：低common×4+中rare×3+高rare×3"
       }
     },
     {
@@ -115,8 +115,8 @@
           "max": 250
         },
         "diamond": {
-          "min": 1,
-          "max": 3
+          "min": 30,
+          "max": 30
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -150,7 +150,7 @@
             }
           ]
         },
-        "description": "共10张：低common×4+中rare×3+高epic×3，3名不同英雄"
+        "description": "钻石30；共10张卡：低common×4+中rare×3+高epic×3"
       }
     },
     {
@@ -165,8 +165,8 @@
           "max": 500
         },
         "diamond": {
-          "min": 2,
-          "max": 5
+          "min": 40,
+          "max": 40
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -200,7 +200,7 @@
             }
           ]
         },
-        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
+        "description": "钻石40；共20张卡：低rare×8+中epic×6+高legendary×6"
       }
     },
     {
@@ -215,8 +215,8 @@
           "max": 800
         },
         "diamond": {
-          "min": 5,
-          "max": 10
+          "min": 50,
+          "max": 50
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -250,7 +250,7 @@
             }
           ]
         },
-        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
+        "description": "钻石50；共20张卡：低rare×8+中epic×6+高legendary×6"
       }
     },
     {
@@ -265,8 +265,8 @@
           "max": 1200
         },
         "diamond": {
-          "min": 8,
-          "max": 15
+          "min": 60,
+          "max": 60
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -300,7 +300,7 @@
             }
           ]
         },
-        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
+        "description": "钻石60；共20张卡：低rare×8+中epic×6+高legendary×6"
       }
     },
     {
@@ -315,8 +315,8 @@
           "max": 2000
         },
         "diamond": {
-          "min": 15,
-          "max": 30
+          "min": 70,
+          "max": 70
         },
         "heroCardGrant": {
           "type": "heroCardPack",
@@ -350,7 +350,7 @@
             }
           ]
         },
-        "description": "共20张：低epic×8+中legendary×6+高legendary×6，3名不同英雄"
+        "description": "钻石70；共20张卡：低epic×8+中legendary×6+高legendary×6"
       }
     }
   ]
