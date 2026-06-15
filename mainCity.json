@@ -59,6 +59,272 @@
     "loseRewardRatio": 0.4
   },
   "cumulativeBricksToMax": 7252,
+  "pacingSummary": {
+    "referenceWinRate": 0.6,
+    "totalBricksToMax": 7252,
+    "totalPveBricks": 8995,
+    "netExternalBricks": -1743,
+    "pveOffsetPercent": 124.0,
+    "referencePvpMatches": 108.0,
+    "referenceActiveHours": 3.2,
+    "referenceEndingBank": 2700.0,
+    "referenceDaysAt15PerDay": 7.2,
+    "archetypes": [
+      {
+        "id": "casual",
+        "label": "轻度",
+        "dailyMatches": 5,
+        "winRate": 0.5,
+        "note": "约 15–20 分钟/日",
+        "totalPvpMatches": 117.0,
+        "totalActiveHours": 3.5,
+        "endingBrickBank": 2700.0,
+        "daysToMax": 23.4,
+        "weeksToMax": 3.3
+      },
+      {
+        "id": "regular",
+        "label": "常规",
+        "dailyMatches": 10,
+        "winRate": 0.55,
+        "note": "约 30–35 分钟/日",
+        "totalPvpMatches": 112.0,
+        "totalActiveHours": 3.3,
+        "endingBrickBank": 2700.0,
+        "daysToMax": 11.2,
+        "weeksToMax": 1.6
+      },
+      {
+        "id": "active",
+        "label": "活跃",
+        "dailyMatches": 15,
+        "winRate": 0.6,
+        "note": "约 45–50 分钟/日",
+        "totalPvpMatches": 108.0,
+        "totalActiveHours": 3.2,
+        "endingBrickBank": 2700.0,
+        "daysToMax": 7.2,
+        "weeksToMax": 1.0
+      },
+      {
+        "id": "hardcore",
+        "label": "重度",
+        "dailyMatches": 25,
+        "winRate": 0.65,
+        "note": "约 70–90 分钟/日",
+        "totalPvpMatches": 104.0,
+        "totalActiveHours": 3.1,
+        "endingBrickBank": 2700.0,
+        "daysToMax": 4.2,
+        "weeksToMax": 0.6
+      }
+    ],
+    "levelTrace": [
+      {
+        "level": 1,
+        "flipCost": 56,
+        "pveReturn": 24,
+        "pvpMatches": 8.4,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 2,
+        "flipCost": 64,
+        "pveReturn": 30,
+        "pvpMatches": 7.7,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 3,
+        "flipCost": 72,
+        "pveReturn": 30,
+        "pvpMatches": 9.5,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 4,
+        "flipCost": 80,
+        "pveReturn": 36,
+        "pvpMatches": 8.1,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 5,
+        "flipCost": 99,
+        "pveReturn": 40,
+        "pvpMatches": 9.8,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 6,
+        "flipCost": 108,
+        "pveReturn": 44,
+        "pvpMatches": 9.1,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 7,
+        "flipCost": 117,
+        "pveReturn": 50,
+        "pvpMatches": 8.8,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 8,
+        "flipCost": 126,
+        "pveReturn": 60,
+        "pvpMatches": 7.2,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 9,
+        "flipCost": 150,
+        "pveReturn": 64,
+        "pvpMatches": 8.8,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 10,
+        "flipCost": 160,
+        "pveReturn": 76,
+        "pvpMatches": 7.4,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 11,
+        "flipCost": 170,
+        "pveReturn": 84,
+        "pvpMatches": 6.6,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 12,
+        "flipCost": 180,
+        "pveReturn": 96,
+        "pvpMatches": 5.8,
+        "bankAfter": 0.0
+      },
+      {
+        "level": 13,
+        "flipCost": 209,
+        "pveReturn": 165,
+        "pvpMatches": 3.5,
+        "bankAfter": 15.0
+      },
+      {
+        "level": 14,
+        "flipCost": 220,
+        "pveReturn": 180,
+        "pvpMatches": 2.4,
+        "bankAfter": 20.0
+      },
+      {
+        "level": 15,
+        "flipCost": 231,
+        "pveReturn": 204,
+        "pvpMatches": 2.1,
+        "bankAfter": 36.0
+      },
+      {
+        "level": 16,
+        "flipCost": 242,
+        "pveReturn": 234,
+        "pvpMatches": 1.3,
+        "bankAfter": 58.0
+      },
+      {
+        "level": 17,
+        "flipCost": 276,
+        "pveReturn": 264,
+        "pvpMatches": 0.4,
+        "bankAfter": 57.0
+      },
+      {
+        "level": 18,
+        "flipCost": 288,
+        "pveReturn": 285,
+        "pvpMatches": 0.5,
+        "bankAfter": 69.0
+      },
+      {
+        "level": 19,
+        "flipCost": 300,
+        "pveReturn": 330,
+        "pvpMatches": 0.2,
+        "bankAfter": 105.0
+      },
+      {
+        "level": 20,
+        "flipCost": 312,
+        "pveReturn": 366,
+        "pvpMatches": 0.0,
+        "bankAfter": 159.0
+      },
+      {
+        "level": 21,
+        "flipCost": 351,
+        "pveReturn": 414,
+        "pvpMatches": 0.0,
+        "bankAfter": 222.0
+      },
+      {
+        "level": 22,
+        "flipCost": 364,
+        "pveReturn": 480,
+        "pvpMatches": 0.0,
+        "bankAfter": 338.0
+      },
+      {
+        "level": 23,
+        "flipCost": 377,
+        "pveReturn": 534,
+        "pvpMatches": 0.0,
+        "bankAfter": 495.0
+      },
+      {
+        "level": 24,
+        "flipCost": 390,
+        "pveReturn": 585,
+        "pvpMatches": 0.0,
+        "bankAfter": 690.0
+      },
+      {
+        "level": 25,
+        "flipCost": 434,
+        "pveReturn": 684,
+        "pvpMatches": 0.0,
+        "bankAfter": 940.0
+      },
+      {
+        "level": 26,
+        "flipCost": 448,
+        "pveReturn": 756,
+        "pvpMatches": 0.0,
+        "bankAfter": 1248.0
+      },
+      {
+        "level": 27,
+        "flipCost": 462,
+        "pveReturn": 840,
+        "pvpMatches": 0.0,
+        "bankAfter": 1626.0
+      },
+      {
+        "level": 28,
+        "flipCost": 476,
+        "pveReturn": 966,
+        "pvpMatches": 0.0,
+        "bankAfter": 2116.0
+      },
+      {
+        "level": 29,
+        "flipCost": 490,
+        "pveReturn": 1074,
+        "pvpMatches": 0.0,
+        "bankAfter": 2700.0
+      }
+    ]
+  },
   "levels": [
     {
       "level": 1,
@@ -128,7 +394,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 11.2,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 24,
+        "pvpBricksNeeded": 32,
+        "blendedBricksPerMatch": 3.8,
+        "pvpMatchesAfterPve": 8.4,
+        "activeMinutes": 13.0
       },
       "referenceSiege": {
         "defaultDeckDps": 194.5,
@@ -203,7 +474,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 10.7,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 30,
+        "pvpBricksNeeded": 34,
+        "blendedBricksPerMatch": 4.4,
+        "pvpMatchesAfterPve": 7.7,
+        "activeMinutes": 12.0
       },
       "referenceSiege": {
         "defaultDeckDps": 223.7,
@@ -278,7 +554,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 12.0,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 30,
+        "pvpBricksNeeded": 42,
+        "blendedBricksPerMatch": 4.4,
+        "pvpMatchesAfterPve": 9.5,
+        "activeMinutes": 14.0
       },
       "referenceSiege": {
         "defaultDeckDps": 257.2,
@@ -353,7 +634,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 11.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 36,
+        "pvpBricksNeeded": 44,
+        "blendedBricksPerMatch": 5.4,
+        "pvpMatchesAfterPve": 8.1,
+        "activeMinutes": 14.0
       },
       "referenceSiege": {
         "defaultDeckDps": 295.8,
@@ -428,7 +714,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 12.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 40,
+        "pvpBricksNeeded": 59,
+        "blendedBricksPerMatch": 6.0,
+        "pvpMatchesAfterPve": 9.8,
+        "activeMinutes": 16.0
       },
       "referenceSiege": {
         "defaultDeckDps": 340.2,
@@ -503,7 +794,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 12.0,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 44,
+        "pvpBricksNeeded": 64,
+        "blendedBricksPerMatch": 7.0,
+        "pvpMatchesAfterPve": 9.1,
+        "activeMinutes": 15.0
       },
       "referenceSiege": {
         "defaultDeckDps": 391.2,
@@ -578,7 +874,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 11.7,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 50,
+        "pvpBricksNeeded": 67,
+        "blendedBricksPerMatch": 7.6,
+        "pvpMatchesAfterPve": 8.8,
+        "activeMinutes": 16.0
       },
       "referenceSiege": {
         "defaultDeckDps": 449.9,
@@ -653,7 +954,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 10.5,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 60,
+        "pvpBricksNeeded": 66,
+        "blendedBricksPerMatch": 9.2,
+        "pvpMatchesAfterPve": 7.2,
+        "activeMinutes": 13.0
       },
       "referenceSiege": {
         "defaultDeckDps": 517.4,
@@ -728,7 +1034,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 11.5,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 64,
+        "pvpBricksNeeded": 86,
+        "blendedBricksPerMatch": 9.8,
+        "pvpMatchesAfterPve": 8.8,
+        "activeMinutes": 16.0
       },
       "referenceSiege": {
         "defaultDeckDps": 595.0,
@@ -803,7 +1114,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 10.7,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 76,
+        "pvpBricksNeeded": 84,
+        "blendedBricksPerMatch": 11.4,
+        "pvpMatchesAfterPve": 7.4,
+        "activeMinutes": 15.0
       },
       "referenceSiege": {
         "defaultDeckDps": 684.2,
@@ -878,7 +1194,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 10.0,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 84,
+        "pvpBricksNeeded": 86,
+        "blendedBricksPerMatch": 13.0,
+        "pvpMatchesAfterPve": 6.6,
+        "activeMinutes": 13.0
       },
       "referenceSiege": {
         "defaultDeckDps": 786.9,
@@ -953,7 +1274,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 9.5,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 96,
+        "pvpBricksNeeded": 84,
+        "blendedBricksPerMatch": 14.6,
+        "pvpMatchesAfterPve": 5.8,
+        "activeMinutes": 12.0
       },
       "referenceSiege": {
         "defaultDeckDps": 904.9,
@@ -1028,7 +1354,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 9.5,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 165,
+        "pvpBricksNeeded": 44,
+        "blendedBricksPerMatch": 16.8,
+        "pvpMatchesAfterPve": 2.6,
+        "activeMinutes": 6.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1040.6,
@@ -1103,7 +1434,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 9.2,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 180,
+        "pvpBricksNeeded": 40,
+        "blendedBricksPerMatch": 18.4,
+        "pvpMatchesAfterPve": 2.2,
+        "activeMinutes": 5.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1196.7,
@@ -1178,7 +1514,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 8.6,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 204,
+        "pvpBricksNeeded": 27,
+        "blendedBricksPerMatch": 20.6,
+        "pvpMatchesAfterPve": 1.3,
+        "activeMinutes": 3.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1376.2,
@@ -1253,7 +1594,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 7.8,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 234,
+        "pvpBricksNeeded": 8,
+        "blendedBricksPerMatch": 23.4,
+        "pvpMatchesAfterPve": 0.3,
+        "activeMinutes": 1.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1582.7,
@@ -1328,7 +1674,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 7.9,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 264,
+        "pvpBricksNeeded": 12,
+        "blendedBricksPerMatch": 26.6,
+        "pvpMatchesAfterPve": 0.5,
+        "activeMinutes": 1.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1820.1,
@@ -1403,7 +1754,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 7.6,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 285,
+        "pvpBricksNeeded": 3,
+        "blendedBricksPerMatch": 28.8,
+        "pvpMatchesAfterPve": 0.1,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2093.1,
@@ -1478,7 +1834,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 6.8,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 330,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 33.6,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2407.0,
@@ -1553,7 +1914,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 6.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 366,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 37.4,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2768.1,
@@ -1628,7 +1994,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 6.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 414,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 41.8,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 3183.3,
@@ -1703,7 +2074,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 5.7,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 480,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 48.8,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 3660.8,
@@ -1778,7 +2154,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 5.3,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 534,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 53.8,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 4209.9,
@@ -1853,7 +2234,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 5.0,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 585,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 59.2,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 4841.4,
@@ -1928,7 +2314,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 4.8,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 684,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 69.0,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 5567.6,
@@ -2003,7 +2394,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 4.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 756,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 76.6,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 6402.7,
@@ -2078,7 +2474,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 4.1,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 840,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 85.2,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 7363.1,
@@ -2153,7 +2554,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 3.7,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 966,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 98.2,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 8467.6,
@@ -2228,7 +2634,12 @@
       },
       "pacing": {
         "estimatedWinsToLevel": 3.4,
-        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
+        "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
+        "pveBricksTotal": 1074,
+        "pvpBricksNeeded": 0,
+        "blendedBricksPerMatch": 108.6,
+        "pvpMatchesAfterPve": 0.0,
+        "activeMinutes": 0.0
       },
       "referenceSiege": {
         "defaultDeckDps": 9737.8,
