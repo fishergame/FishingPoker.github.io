@@ -1,26 +1,24 @@
 {
-  "version": "2.1.0",
-  "description": "账号等级：奇数级宝箱 / 偶数级3张不同未拥有英雄，交替发放",
+  "version": "2.3.0",
+  "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡（40/30/30），交替发放",
   "levelMax": 100,
   "defaultLevel": 1,
   "rewardRules": {
     "pattern": "alternate",
     "oddLevel": {
       "type": "chest",
-      "note": "开箱见 chest.json：3名不同英雄+金币+钻石"
+      "note": "开箱见 chest.json"
     },
     "evenLevel": {
-      "type": "heroCardPack",
-      "heroCount": 3,
-      "mustDistinct": true,
+      "type": "randomHeroCard",
+      "count": 1,
       "mustUnowned": true,
-      "cardsPerHero": 1,
       "qualityMix": {
         "low": 40,
         "mid": 30,
         "high": 30
       },
-      "note": "低40%/中30%/高30%各1名不同英雄"
+      "note": "按低40%/中30%/高30%随机一种品质，共1张"
     }
   },
   "heroRewardPool": {
@@ -51,32 +49,30 @@
       "level": 2,
       "expRequired": 30,
       "cumulativeExp": 53,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -100,32 +96,30 @@
       "level": 4,
       "expRequired": 46,
       "cumulativeExp": 136,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -149,32 +143,30 @@
       "level": 6,
       "expRequired": 64,
       "cumulativeExp": 255,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -198,32 +190,30 @@
       "level": 8,
       "expRequired": 84,
       "cumulativeExp": 413,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -247,32 +237,30 @@
       "level": 10,
       "expRequired": 106,
       "cumulativeExp": 614,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -296,32 +284,30 @@
       "level": 12,
       "expRequired": 129,
       "cumulativeExp": 860,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -345,32 +331,30 @@
       "level": 14,
       "expRequired": 153,
       "cumulativeExp": 1154,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -394,32 +378,30 @@
       "level": 16,
       "expRequired": 179,
       "cumulativeExp": 1499,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -443,32 +425,30 @@
       "level": 18,
       "expRequired": 205,
       "cumulativeExp": 1896,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -492,32 +472,30 @@
       "level": 20,
       "expRequired": 233,
       "cumulativeExp": 2348,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "common",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "rare",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "epic",
               "weight": 30
             }
@@ -541,32 +519,30 @@
       "level": 22,
       "expRequired": 261,
       "cumulativeExp": 2856,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -590,32 +566,30 @@
       "level": 24,
       "expRequired": 291,
       "cumulativeExp": 3423,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -639,32 +613,30 @@
       "level": 26,
       "expRequired": 321,
       "cumulativeExp": 4050,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -688,32 +660,30 @@
       "level": 28,
       "expRequired": 352,
       "cumulativeExp": 4738,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -737,32 +707,30 @@
       "level": 30,
       "expRequired": 383,
       "cumulativeExp": 5488,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -786,32 +754,30 @@
       "level": 32,
       "expRequired": 416,
       "cumulativeExp": 6304,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -835,32 +801,30 @@
       "level": 34,
       "expRequired": 449,
       "cumulativeExp": 7185,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -884,32 +848,30 @@
       "level": 36,
       "expRequired": 483,
       "cumulativeExp": 8134,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -933,32 +895,30 @@
       "level": 38,
       "expRequired": 517,
       "cumulativeExp": 9151,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -982,32 +942,30 @@
       "level": 40,
       "expRequired": 552,
       "cumulativeExp": 10238,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1031,32 +989,30 @@
       "level": 42,
       "expRequired": 588,
       "cumulativeExp": 11396,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1080,32 +1036,30 @@
       "level": 44,
       "expRequired": 624,
       "cumulativeExp": 12626,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1129,32 +1083,30 @@
       "level": 46,
       "expRequired": 661,
       "cumulativeExp": 13930,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1178,32 +1130,30 @@
       "level": 48,
       "expRequired": 699,
       "cumulativeExp": 15309,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1227,32 +1177,30 @@
       "level": 50,
       "expRequired": 737,
       "cumulativeExp": 16764,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1276,32 +1224,30 @@
       "level": 52,
       "expRequired": 775,
       "cumulativeExp": 18295,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1325,32 +1271,30 @@
       "level": 54,
       "expRequired": 814,
       "cumulativeExp": 19904,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1374,32 +1318,30 @@
       "level": 56,
       "expRequired": 854,
       "cumulativeExp": 21592,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1423,32 +1365,30 @@
       "level": 58,
       "expRequired": 894,
       "cumulativeExp": 23360,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1472,32 +1412,30 @@
       "level": 60,
       "expRequired": 935,
       "cumulativeExp": 25210,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1521,32 +1459,30 @@
       "level": 62,
       "expRequired": 976,
       "cumulativeExp": 27141,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1570,32 +1506,30 @@
       "level": 64,
       "expRequired": 1018,
       "cumulativeExp": 29156,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1619,32 +1553,30 @@
       "level": 66,
       "expRequired": 1060,
       "cumulativeExp": 31255,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1668,32 +1600,30 @@
       "level": 68,
       "expRequired": 1102,
       "cumulativeExp": 33438,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1717,32 +1647,30 @@
       "level": 70,
       "expRequired": 1145,
       "cumulativeExp": 35707,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "rare",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "epic",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1766,32 +1694,30 @@
       "level": 72,
       "expRequired": 1189,
       "cumulativeExp": 38063,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1815,32 +1741,30 @@
       "level": 74,
       "expRequired": 1233,
       "cumulativeExp": 40507,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1864,32 +1788,30 @@
       "level": 76,
       "expRequired": 1277,
       "cumulativeExp": 43039,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1913,32 +1835,30 @@
       "level": 78,
       "expRequired": 1322,
       "cumulativeExp": 45660,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -1962,32 +1882,30 @@
       "level": 80,
       "expRequired": 1367,
       "cumulativeExp": 48371,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2011,32 +1929,30 @@
       "level": 82,
       "expRequired": 1412,
       "cumulativeExp": 51172,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2060,32 +1976,30 @@
       "level": 84,
       "expRequired": 1458,
       "cumulativeExp": 54065,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2109,32 +2023,30 @@
       "level": 86,
       "expRequired": 1505,
       "cumulativeExp": 57051,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2158,32 +2070,30 @@
       "level": 88,
       "expRequired": 1551,
       "cumulativeExp": 60130,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2207,32 +2117,30 @@
       "level": 90,
       "expRequired": 1599,
       "cumulativeExp": 63304,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2256,32 +2164,30 @@
       "level": 92,
       "expRequired": 1646,
       "cumulativeExp": 66572,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2305,32 +2211,30 @@
       "level": 94,
       "expRequired": 1694,
       "cumulativeExp": 69936,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2354,32 +2258,30 @@
       "level": 96,
       "expRequired": 1742,
       "cumulativeExp": 73396,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2403,32 +2305,30 @@
       "level": 98,
       "expRequired": 1791,
       "cumulativeExp": 76954,
-      "rewardType": "heroCardPack",
+      "rewardType": "randomHeroCard",
       "rewards": [
         {
-          "type": "heroCardPack",
-          "heroCount": 3,
-          "mustDistinct": true,
+          "type": "randomHeroCard",
+          "count": 1,
           "mustUnowned": true,
-          "cardsPerHero": 1,
           "qualityMix": {
             "low": 40,
             "mid": 30,
             "high": 30
           },
-          "qualitySlots": [
+          "qualityOptions": [
             {
-              "slot": "low",
+              "tier": "low",
               "quality": "epic",
               "weight": 40
             },
             {
-              "slot": "mid",
+              "tier": "mid",
               "quality": "legendary",
               "weight": 30
             },
             {
-              "slot": "high",
+              "tier": "high",
               "quality": "legendary",
               "weight": 30
             }
@@ -2451,29 +2351,27 @@
   ],
   "maxLevelReward": [
     {
-      "type": "heroCardPack",
-      "heroCount": 3,
-      "mustDistinct": true,
+      "type": "randomHeroCard",
+      "count": 1,
       "mustUnowned": true,
-      "cardsPerHero": 1,
       "qualityMix": {
         "low": 40,
         "mid": 30,
         "high": 30
       },
-      "qualitySlots": [
+      "qualityOptions": [
         {
-          "slot": "low",
+          "tier": "low",
           "quality": "epic",
           "weight": 40
         },
         {
-          "slot": "mid",
+          "tier": "mid",
           "quality": "legendary",
           "weight": 30
         },
         {
-          "slot": "high",
+          "tier": "high",
           "quality": "legendary",
           "weight": 30
         }
