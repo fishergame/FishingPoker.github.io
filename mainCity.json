@@ -1,0 +1,438 @@
+{
+  "version": "1.0.0",
+  "description": "主城独立养成：血量与产金随主城等级；对局时长见 battleBalance.json",
+  "levelMax": 30,
+  "formulas": {
+    "hp": "round(1500 * 1.15^(mainCityLevel-1))",
+    "goldPerSec": "round(2 * 1.1^(mainCityLevel-1))",
+    "hpGrowthRate": 1.15,
+    "goldGrowthRate": 1.1,
+    "designNote": "L1 HP=1500 约为旧场次×卡组方案的 1/5；与英雄攻击同指数，同等级对局攻城节奏稳定"
+  },
+  "levels": [
+    {
+      "level": 1,
+      "hp": 1500,
+      "goldPerSec": 2,
+      "upgradeGold": 10,
+      "upgradeMaterial": 8,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 194.5,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 2,
+      "hp": 1725,
+      "goldPerSec": 2,
+      "upgradeGold": 34,
+      "upgradeMaterial": 12,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 223.7,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 3,
+      "hp": 1984,
+      "goldPerSec": 2,
+      "upgradeGold": 110,
+      "upgradeMaterial": 16,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 257.2,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 4,
+      "hp": 2281,
+      "goldPerSec": 3,
+      "upgradeGold": 234,
+      "upgradeMaterial": 20,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 295.8,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 5,
+      "hp": 2624,
+      "goldPerSec": 3,
+      "upgradeGold": 404,
+      "upgradeMaterial": 24,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 340.2,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 6,
+      "hp": 3017,
+      "goldPerSec": 3,
+      "upgradeGold": 620,
+      "upgradeMaterial": 28,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 391.2,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 7,
+      "hp": 3470,
+      "goldPerSec": 4,
+      "upgradeGold": 884,
+      "upgradeMaterial": 32,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 449.9,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 8,
+      "hp": 3990,
+      "goldPerSec": 4,
+      "upgradeGold": 1194,
+      "upgradeMaterial": 36,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 517.4,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 9,
+      "hp": 4589,
+      "goldPerSec": 4,
+      "upgradeGold": 1551,
+      "upgradeMaterial": 40,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 595.0,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 10,
+      "hp": 5277,
+      "goldPerSec": 5,
+      "upgradeGold": 1955,
+      "upgradeMaterial": 44,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 684.2,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 11,
+      "hp": 6068,
+      "goldPerSec": 5,
+      "upgradeGold": 2406,
+      "upgradeMaterial": 48,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 786.9,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 12,
+      "hp": 6979,
+      "goldPerSec": 6,
+      "upgradeGold": 2903,
+      "upgradeMaterial": 52,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 904.9,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 13,
+      "hp": 8025,
+      "goldPerSec": 6,
+      "upgradeGold": 3447,
+      "upgradeMaterial": 56,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 1040.6,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 14,
+      "hp": 9229,
+      "goldPerSec": 7,
+      "upgradeGold": 4038,
+      "upgradeMaterial": 60,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 1196.7,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 15,
+      "hp": 10614,
+      "goldPerSec": 8,
+      "upgradeGold": 4675,
+      "upgradeMaterial": 64,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 1376.2,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 16,
+      "hp": 12206,
+      "goldPerSec": 8,
+      "upgradeGold": 5359,
+      "upgradeMaterial": 68,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 1582.7,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 17,
+      "hp": 14036,
+      "goldPerSec": 9,
+      "upgradeGold": 6090,
+      "upgradeMaterial": 74,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 1820.1,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 18,
+      "hp": 16142,
+      "goldPerSec": 10,
+      "upgradeGold": 6868,
+      "upgradeMaterial": 80,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 2093.1,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 19,
+      "hp": 18563,
+      "goldPerSec": 11,
+      "upgradeGold": 7692,
+      "upgradeMaterial": 88,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 2407.0,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 20,
+      "hp": 21348,
+      "goldPerSec": 12,
+      "upgradeGold": 8564,
+      "upgradeMaterial": 96,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 2768.1,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 21,
+      "hp": 24550,
+      "goldPerSec": 13,
+      "upgradeGold": 9482,
+      "upgradeMaterial": 108,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 3183.3,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 22,
+      "hp": 28232,
+      "goldPerSec": 15,
+      "upgradeGold": 10446,
+      "upgradeMaterial": 120,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 3660.8,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 23,
+      "hp": 32467,
+      "goldPerSec": 16,
+      "upgradeGold": 11458,
+      "upgradeMaterial": 135,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 4209.9,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 24,
+      "hp": 37337,
+      "goldPerSec": 18,
+      "upgradeGold": 12516,
+      "upgradeMaterial": 150,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 4841.4,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 25,
+      "hp": 42938,
+      "goldPerSec": 20,
+      "upgradeGold": 13621,
+      "upgradeMaterial": 168,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 5567.6,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 26,
+      "hp": 49378,
+      "goldPerSec": 22,
+      "upgradeGold": 14773,
+      "upgradeMaterial": 188,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 6402.7,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 27,
+      "hp": 56785,
+      "goldPerSec": 24,
+      "upgradeGold": 15972,
+      "upgradeMaterial": 210,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 7363.1,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 28,
+      "hp": 65303,
+      "goldPerSec": 26,
+      "upgradeGold": 17217,
+      "upgradeMaterial": 235,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 8467.6,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 29,
+      "hp": 75098,
+      "goldPerSec": 29,
+      "upgradeGold": 18509,
+      "upgradeMaterial": 260,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 9737.8,
+        "siegeSeconds": 7.7
+      }
+    },
+    {
+      "level": 30,
+      "hp": 86363,
+      "goldPerSec": 32,
+      "upgradeGold": null,
+      "upgradeMaterial": null,
+      "referenceSiege": {
+        "note": "默认编队同等级清场后集火主城的理论秒数",
+        "defaultDeckDps": 11198.4,
+        "siegeSeconds": 7.7
+      }
+    }
+  ],
+  "hpByLevel": {
+    "1": 1500,
+    "2": 1725,
+    "3": 1984,
+    "4": 2281,
+    "5": 2624,
+    "6": 3017,
+    "7": 3470,
+    "8": 3990,
+    "9": 4589,
+    "10": 5277,
+    "11": 6068,
+    "12": 6979,
+    "13": 8025,
+    "14": 9229,
+    "15": 10614,
+    "16": 12206,
+    "17": 14036,
+    "18": 16142,
+    "19": 18563,
+    "20": 21348,
+    "21": 24550,
+    "22": 28232,
+    "23": 32467,
+    "24": 37337,
+    "25": 42938,
+    "26": 49378,
+    "27": 56785,
+    "28": 65303,
+    "29": 75098,
+    "30": 86363
+  },
+  "goldPerSecByLevel": {
+    "1": 2,
+    "2": 2,
+    "3": 2,
+    "4": 3,
+    "5": 3,
+    "6": 3,
+    "7": 4,
+    "8": 4,
+    "9": 4,
+    "10": 5,
+    "11": 5,
+    "12": 6,
+    "13": 6,
+    "14": 7,
+    "15": 8,
+    "16": 8,
+    "17": 9,
+    "18": 10,
+    "19": 11,
+    "20": 12,
+    "21": 13,
+    "22": 15,
+    "23": 16,
+    "24": 18,
+    "25": 20,
+    "26": 22,
+    "27": 24,
+    "28": 26,
+    "29": 29,
+    "30": 32
+  }
+}

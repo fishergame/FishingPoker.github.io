@@ -1,22 +1,15 @@
 /**
- * 战斗平衡配表（对局时长 / 主城血量）
- * JSON 同源：battleBalance.json
+ * 战斗平衡配表（对局时长 → battleBalance.json；主城 HP/产金 → mainCity.json）
  */
 const BattleBalanceConfig = {
-  VERSION: '1.0.0',
-  STAT_GROWTH_RATE: 1.15,
+  VERSION: '2.0.0',
 
-  /** @type {Record<number, { matchDurationSec: number, mainCityHpBase: number, mainCityHpByLevel: Record<string, number> }>} */
+  /** @type {Record<number, { matchDurationSec: number }>} */
   ARENAS: {},
 
-  /**
-   * 由 battleBalance.json 注入；开发时可在页面加载 JSON 后调用 hydrateFromJson
-   */
   hydrateFromJson(data) {
     this.VERSION = data.version;
-    this.STAT_GROWTH_RATE = data.statGrowthRate;
-    this.DEFAULT_DECK = data.defaultDeck;
-    this.SKILL_QUALITY_REFERENCE = data.skillQualityReference;
+    this.MAIN_CITY_CONFIG = data.mainCityConfig || 'mainCity.json';
     this.ARENAS = {};
     for (const a of data.arenas) {
       this.ARENAS[a.arenaId] = a;
@@ -28,11 +21,27 @@ const BattleBalanceConfig = {
     return a ? a.matchDurationSec : 180;
   },
 
-  mainCityHp(arenaId, avgDeckLevel) {
-    const a = this.ARENAS[arenaId];
-    if (!a) return 200;
-    const lv = Math.max(1, Math.min(30, Math.round(avgDeckLevel)));
-    return a.mainCityHpByLevel[String(lv)] ?? a.mainCityHpBase;
+  /**
+   * @deprecated 使用 MainCityConfig.hp(mainCityLevel)
+   * 兼容旧调用：仅按主城等级读取（忽略 arenaId）
+   */
+  mainCityHp(_arenaId, mainCityLevel) {
+    if (typeof MainCityConfig !== 'undefined' && MainCityConfig.HP_BY_LEVEL) {
+      return MainCityConfig.hp(mainCityLevel);
+    }
+    const lv = Math.max(1, Math.min(30, Math.round(mainCityLevel)));
+    return Math.round(1500 * 1.15 ** (lv - 1));
+  },
+
+  /**
+   * @deprecated 使用 MainCityConfig.goldPerSec(mainCityLevel)
+   */
+  mainCityGoldPerSec(mainCityLevel) {
+    if (typeof MainCityConfig !== 'undefined' && MainCityConfig.GOLD_PER_SEC_BY_LEVEL) {
+      return MainCityConfig.goldPerSec(mainCityLevel);
+    }
+    const lv = Math.max(1, Math.min(30, Math.round(mainCityLevel)));
+    return Math.max(1, Math.round(2 * 1.1 ** (lv - 1)));
   },
 };
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate battleBalance.json + docs/BATTLE_BALANCE.md (主城血量 / 对局时长 / 攻城模拟)"""
+"""Generate battleBalance.json + docs/BATTLE_BALANCE.md (对局时长；主城 HP/产金见 mainCity.json)"""
 import json
 import math
 import re
@@ -18,8 +18,10 @@ DEFAULT_DECK = [
 MATCH_DURATION_BASE = 90
 MATCH_DURATION_STEP = 10
 MATCH_DURATION_MAX = 180
-SIEGE_TIME_RATIO = 0.45  # 清场后打主城目标耗时 ≈ 对局时长 × 此比例
-ARENA_CITY_SCALE_STEP = 0.055  # 每场主城基准 +5.5%
+SIEGE_TIME_RATIO = 0.45
+MAIN_CITY_HP_L1 = 1500  # 与 mainCity.json 同步，用于攻城模拟
+MAIN_CITY_GOLD_L1 = 2
+GOLD_GROWTH = 1.10
 
 # 翻牌对战品质被动（已实现于 battle-config.js）
 SKILL_QUALITY_REFERENCE = [
@@ -115,15 +117,12 @@ def match_duration_sec(arena_id: int) -> int:
     return min(MATCH_DURATION_MAX, MATCH_DURATION_BASE + (arena_id - 1) * MATCH_DURATION_STEP)
 
 
-def main_city_hp_base(arena_id: int, default_l1_dps: float) -> int:
-    dur = match_duration_sec(arena_id)
-    siege_target = dur * SIEGE_TIME_RATIO
-    arena_mul = 1.0 + ARENA_CITY_SCALE_STEP * (arena_id - 1)
-    return round(default_l1_dps * siege_target * arena_mul)
+def main_city_hp(main_city_level: int) -> int:
+    return round(MAIN_CITY_HP_L1 * (STAT_GROWTH ** (main_city_level - 1)))
 
 
-def main_city_hp(base: int, level: int) -> int:
-    return round(base * (STAT_GROWTH ** (level - 1)))
+def main_city_gold_per_sec(main_city_level: int) -> int:
+    return max(1, round(MAIN_CITY_GOLD_L1 * (GOLD_GROWTH ** (main_city_level - 1))))
 
 
 def siege_seconds(city_hp: int, dps: float) -> float | None:
@@ -138,28 +137,25 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
 
     arenas = []
     for aid in range(1, 11):
-        base = main_city_hp_base(aid, default_dps_l1)
-        hp_by_level = {str(lv): main_city_hp(base, lv) for lv in range(1, 31)}
         arenas.append({
             "arenaId": aid,
             "matchDurationSec": match_duration_sec(aid),
-            "mainCityHpBase": base,
-            "mainCityHpFormula": "round(mainCityHpBase * 1.15^(avgDeckLevel-1))",
-            "mainCityHpByLevel": hp_by_level,
         })
 
     return {
-        "version": "1.0.0",
-        "description": "对局时长与主城血量：随竞技场场次、卡组平均等级缩放",
+        "version": "2.0.0",
+        "description": "对局时长按竞技场；主城 HP/产金见 mainCity.json",
+        "mainCityConfig": "mainCity.json",
         "statGrowthRate": STAT_GROWTH,
         "defaultDeck": DEFAULT_DECK,
         "deckSize": 8,
         "formulas": {
             "matchDurationSec": f"{MATCH_DURATION_BASE} + (arenaId-1)*{MATCH_DURATION_STEP}, max {MATCH_DURATION_MAX}",
-            "mainCityHpBase": f"defaultDeckL1CityDps({default_dps_l1:.1f}) * matchDuration* {SIEGE_TIME_RATIO} * arenaScale",
-            "mainCityHp": "mainCityHpBase * statGrowthRate^(avgDeckLevel-1)",
-            "unitCityDps": "attack * growth^(L-1) / (2.2/min(attackSpeed,10))",
-            "siegeNote": "清场后全员集火主城时的理论秒数；实际对局含翻牌/清场阶段",
+            "mainCityHp": f"mainCity.json → round({MAIN_CITY_HP_L1} * 1.15^(mainCityLevel-1))",
+            "mainCityGoldPerSec": f"mainCity.json → round({MAIN_CITY_GOLD_L1} * 1.10^(mainCityLevel-1))",
+            "unitCityDps": "attack * growth^(deckLevel-1) / (2.2/min(attackSpeed,10))",
+            "siegeNote": "清场后全员集火主城；主城等级与卡组等级同档时理论拆城约 7.7s",
+            "defaultDeckL1CityDps": round(default_dps_l1, 1),
         },
         "skillQualityReference": SKILL_QUALITY_REFERENCE,
         "heroSkillNote": HERO_SKILL_NOTE,
@@ -222,169 +218,61 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
         "",
         "---",
         "",
-        "## 三、主城血量（随场次 + 卡组等级）",
+        "## 三、主城血量 · 产金（独立养成）",
         "",
-        f"- 基准：`{data['formulas']['mainCityHpBase']}`",
-        f"- 等级：`{data['formulas']['mainCityHp']}`",
-        f"- 设计目标：默认编队清场后，攻城约 **{int(SIEGE_TIME_RATIO*100)}%** 对局时长",
-        "",
-        "### 各场次 L1 / L15 / L30 主城 HP",
-        "",
-        "| 场次 | 时长 | L1 | L15 | L30 |",
-        "|:---:|:---:|:---:|:---:|:---:|",
-    ]
-    for a in data["arenas"]:
-        if a["arenaId"] not in [1, 3, 5, 7, 10]:
-            continue
-        hp = a["mainCityHpByLevel"]
-        m, s = divmod(a["matchDurationSec"], 60)
-        lines.append(
-            f"| {a['arenaId']} | {m}:{s:02d} | {hp['1']:,} | {hp['15']:,} | {hp['30']:,} |"
-        )
-
-    lines += [
-        "",
-        "完整 1–30 级见 `battleBalance.json` → `arenas[].mainCityHpByLevel`。",
+        f"- 主城 HP：`{data['formulas']['mainCityHp']}`",
+        f"- 产金/秒：`{data['formulas']['mainCityGoldPerSec']}`",
+        "- 完整 1–30 级表：**[`docs/MAIN_CITY_PROGRESSION.md`](MAIN_CITY_PROGRESSION.md)** · 配表 `mainCity.json`",
         "",
         "---",
         "",
-        "## 四、攻城模拟（清场后集火主城）",
+        "## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）",
         "",
         f"**默认编队**（6 张可攻击卡 + 采矿机）：`{', '.join(DEFAULT_DECK)}`",
+        f"**L1 编队攻城 DPS**：{data['formulas']['defaultDeckL1CityDps']}",
         "",
-        "### 4.1 默认编队 · 各等级攻城耗时（秒）",
-        "",
-        "| 等级 | 攻城中位 DPS | 青铜主城 | 黄金主城 | 传奇主城 |",
-        "|:---:|:---:|:---:|:---:|:---:|",
+        "| 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |",
+        "|:---:|:---:|:---:|:---:|",
     ]
-    for lv in sim_levels:
-        dps = deck_city_dps(heroes_map, DEFAULT_DECK, max(1, lv))
-        row = [str(lv), f"{dps:.0f}"]
-        for aid in [1, 3, 10]:
-            a = data["arenas"][aid - 1]
-            hp = a["mainCityHpByLevel"][str(max(1, lv))]
-            t = siege_seconds(hp, dps)
-            row.append(f"{t:.0f}s" if t else "—")
-        lines.append("| " + " | ".join(row) + " |")
-
-    max_ids, _ = top_dps_deck(heroes_map, 30)
-    lines += [
-        "",
-        "### 4.2 满配编队（8 张 L30 最高攻城 DPS 传奇）",
-        "",
-        f"卡牌：`{', '.join(max_ids)}`",
-        "",
-        "| 场次 | 主城HP(L30) | 满配DPS | 攻城耗时 | 对局时长 | 能否在时限内破城 |",
-        "|:---:|:---:|:---:|:---:|:---:|:---:|",
-    ]
-    for aid in sim_arenas:
-        a = data["arenas"][aid - 1]
-        lv = 30
-        hp = a["mainCityHpByLevel"][str(lv)]
-        _, dps = top_dps_deck(heroes_map, lv)
+    for lv in [1, 5, 10, 15, 20, 25, 30]:
+        hp = main_city_hp(lv)
+        dps = deck_city_dps(heroes_map, DEFAULT_DECK, lv)
         t = siege_seconds(hp, dps)
-        dur = a["matchDurationSec"]
-        ok = "✅" if t and t < dur * 0.85 else "⚠️"
-        m, s = divmod(dur, 60)
-        lines.append(f"| {aid} | {hp:,} | {dps:.0f} | {t:.1f}s | {m}:{s:02d} | {ok} |")
+        lines.append(f"| L{lv} | {hp:,} | {dps:.0f} | {t:.1f}s |")
 
+    max_ids, max_dps = top_dps_deck(heroes_map, 30)
     lines += [
         "",
-        "### 4.3 解读",
+        "### 满配编队（8 张 L30 最高攻城 DPS）",
         "",
-        "- **等级成长与主城 HP 同用 1.15 指数**，默认编队在各等级下攻城耗时较稳定（约 40–80 秒量级）。",
-        "- **满配传奇 L30** 攻城明显更快（约 15–25 秒），体现养成差距。",
-        "- 实际对局还需加上翻牌、产金、清场时间；总时长由 **计时结束 + 击杀数** 共同决定。",
-        "- `heroes-config.js` 的 `buildingHp` 是**场上建筑卡血量**，与**主城 HP** 不同。",
+        f"卡牌：`{', '.join(max_ids)}` · DPS **{max_dps:.0f}**",
+        f"· 拆 L30 主城（{main_city_hp(30):,} HP）约 **{siege_seconds(main_city_hp(30), max_dps):.1f}s**",
+        "",
+        "### 解读",
+        "",
+        "- 主城 HP 与编队 DPS **同用 1.15 成长**时，理论拆城时间全等级约 **7.7s**（仅清场后集火段）。",
+        "- 实际对局含翻牌、清场、击杀判定；对局总时长由 **竞技场时长** 决定。",
+        "- 产金随主城等级（1.10/级），详见 `mainCity.json`。",
         "",
     ]
     return "\n".join(lines)
 
 
 def gen_final_table_md(data: dict) -> str:
-    """最终交付用：对局时长 + 全量主城 HP 矩阵。"""
-    arena_names = ["青铜", "白银", "黄金", "铂金", "钻石", "星耀", "大师", "宗师", "王者", "传奇"]
-    lines = [
-        "# 主城血量 · 对局时长（最终表）",
+    """重定向至主城独立配表。"""
+    return "\n".join([
+        "# 主城血量 · 对局时长",
         "",
-        "> 配表：`battleBalance.json` · 生成：`python3 scripts/gen-battle-balance.py`",
-        "> 运行时：`BattleBalanceConfig.mainCityHp(arenaId, avgDeckLevel)` / `matchDurationSec(arenaId)`",
+        "> **主城 HP / 产金**已迁至独立养成：`mainCity.json`",
+        "> 详见 **[`docs/MAIN_CITY_PROGRESSION.md`](MAIN_CITY_PROGRESSION.md)**",
         "",
-        "---",
+        "> **对局时长**仍在本文件历史段落 / `battleBalance.json`：",
         "",
-        "## 一、对局时长（按竞技场）",
+        "| 场次 | 青铜 | 白银 | 黄金 | 铂金 | 钻石 | 星耀 | 大师 | 宗师 | 王者 | 传奇 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+        "| 时长 | 1:30 | 1:40 | 1:50 | 2:00 | 2:10 | 2:20 | 2:30 | 2:40 | 2:50 | 3:00 |",
         "",
-        "| 场次 | 名称 | 秒 | 显示 |",
-        "|:---:|:---|:---:|:---:|",
-    ]
-    for a in data["arenas"]:
-        aid = a["arenaId"]
-        sec = a["matchDurationSec"]
-        m, s = divmod(sec, 60)
-        lines.append(f"| {aid} | {arena_names[aid-1]} | {sec} | **{m}:{s:02d}** |")
-
-    lines += [
-        "",
-        f"公式：`{data['formulas']['matchDurationSec']}`",
-        "",
-        "---",
-        "",
-        "## 二、主城 HP 公式",
-        "",
-        "```",
-        "mainCityHp = mainCityHpBase[场次] × 1.15^(avgDeckLevel - 1)",
-        "```",
-        "",
-        f"- `mainCityHpBase` 随场次递增（含场次系数 {ARENA_CITY_SCALE_STEP*100:.1f}%/场）",
-        f"- `avgDeckLevel`：出战 8 卡平均等级（1–30）",
-        "",
-        "---",
-        "",
-        "## 三、主城 HP 全表（场次 × 等级）",
-        "",
-    ]
-    header = "| 场次 | " + " | ".join(f"L{lv}" for lv in range(1, 31)) + " |"
-    sep = "|:---:|" + ":---:|" * 30
-    lines.append(header)
-    lines.append(sep)
-    for a in data["arenas"]:
-        hp = a["mainCityHpByLevel"]
-        row = f"| **{a['arenaId']} {arena_names[a['arenaId']-1]}** |"
-        for lv in range(1, 31):
-            row += f" {hp[str(lv)]:,} |"
-        lines.append(row)
-
-    lines += [
-        "",
-        "---",
-        "",
-        "## 四、按等级横向对照（常用）",
-        "",
-        "| 等级 |" + "".join(f" {arena_names[i]} |" for i in range(10)),
-        "|:---:|" + ":---:|" * 10,
-    ]
-    for lv in [1, 5, 10, 15, 20, 25, 30]:
-        row = f"| **L{lv}** |"
-        for a in data["arenas"]:
-            row += f" {a['mainCityHpByLevel'][str(lv)]:,} |"
-        lines.append(row)
-
-    lines += [
-        "",
-        "---",
-        "",
-        "## 五、接入技能/羁绊后的修正",
-        "",
-        "技能或羁绊若增加 `cityDamagePct` / `atkPct`，实际破城时间会缩短。",
-        "建议战斗层将 **对城 DPS 合计倍率上限设为 1.45×**（见 `docs/SKILL_BOND_REVIEW.md`）。",
-        "",
-        "| 场景 | 基础攻城占比 | 技能满羁绊后（估） |",
-        "|:---|:---:|:---:|",
-        "| 默认编队 | 45% 对局时长 | ~30–35% |",
-        "| 满配传奇 | 15–30 秒 | ~10–20 秒 |",
-        "",
-    ]
-    return "\n".join(lines)
+    ])
 
 
 if __name__ == "__main__":
