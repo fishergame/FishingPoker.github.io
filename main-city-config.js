@@ -2,7 +2,7 @@
  * 主城养成配表（mainCity.json）
  */
 const MainCityConfig = {
-  VERSION: '2.1.0',
+  VERSION: '2.2.0',
   LEVEL_MAX: 30,
 
   HP_BY_LEVEL: {},
@@ -40,7 +40,7 @@ const MainCityConfig = {
 
   flipBrickCost(mainCityLevel) {
     const row = this.getLevelRow(mainCityLevel);
-    return row?.flip?.brickCostPerTile ?? 7 + (mainCityLevel - 1);
+    return row?.flip?.brickCostPerTile ?? 12 + (mainCityLevel - 1) * 3;
   },
 
   tilesPerLevel(mainCityLevel) {

@@ -26,6 +26,23 @@ CHEST_TOTAL_CARDS = 10
 CHEST_TOTAL_CARDS_PLATINUM_PLUS = 20
 
 
+# 砖头经济（主城养成；与 mainCity.json 同步）
+CHEST_BRICK_REWARD = {
+    "wooden": 8,
+    "silver": 14,
+    "golden": 24,
+    "platinum": 40,
+    "diamond": 55,
+    "epic": 75,
+    "legendary": 100,
+}
+
+
+def account_brick_bonus(level: int) -> int:
+    """账号每升 1 级固定奖励砖头（与宝箱/卡牌并列发放）。"""
+    return 6 + (level - 1) // 2
+
+
 def split_cards_by_mix(total: int) -> tuple[int, int, int]:
     """按 40/30/30 分配总卡数，保证相加等于 total。"""
     low = round(total * QUALITY_MIX["low"] / 100)
@@ -111,11 +128,14 @@ def chest_hero_grant(chest_id: str) -> dict:
 
 
 def level_reward(level: int) -> list:
-    """奇数级：品质宝箱；偶数级：1 张随机品质卡牌（40/30/30）。"""
+    """奇数级：砖头+品质宝箱；偶数级：砖头+1 张随机品质卡牌。"""
+    rewards = [{"type": "brick", "amount": account_brick_bonus(level)}]
     if level % 2 == 1:
-        return [{"type": "chest", "chestId": chest_quality_for_level(level)}]
-    low, mid, high = account_level_hero_tiers(level)
-    return [build_random_single_card(low, mid, high, must_unowned=True)]
+        rewards.append({"type": "chest", "chestId": chest_quality_for_level(level)})
+    else:
+        low, mid, high = account_level_hero_tiers(level)
+        rewards.append(build_random_single_card(low, mid, high, must_unowned=True))
+    return rewards
 
 
 LEGEND_TROPHY_SOFT_CAP = 12000
@@ -273,6 +293,7 @@ def gen_chest():
         low, mid, high = CHEST_HERO_TIERS[cid]
         total = grant["totalCards"]
         low_n, mid_n, high_n = split_cards_by_mix(total)
+        brick_amt = CHEST_BRICK_REWARD[cid]
         chests.append({
             "chestId": cid,
             "name": name,
@@ -282,16 +303,19 @@ def gen_chest():
             "rewards": {
                 "gold": {"min": gold[0], "max": gold[1]},
                 "diamond": {"min": diamond_fixed, "max": diamond_fixed},
+                "brick": {"min": brick_amt, "max": brick_amt},
                 "heroCardGrant": grant,
                 "description": (
-                    f"钻石{diamond_fixed}；共{total}张卡：低{low}×{low_n}+中{mid}×{mid_n}+高{high}×{high_n}"
+                    f"钻石{diamond_fixed}；砖头{brick_amt}；共{total}张卡："
+                    f"低{low}×{low_n}+中{mid}×{mid_n}+高{high}×{high_n}"
                 ),
             },
         })
     return {
-        "version": "2.3.0",
-        "description": "宝箱：钻石木质10起每档+10；卡牌共10张(铂金起20)分3英雄",
-        "slotCount": 4,
+        "version": "2.4.0",
+        "description": "宝箱：钻石+砖头+卡牌；木质8砖起，每档递增",
+        "brickRewards": CHEST_BRICK_REWARD,
+        "accountBrickFormula": "6 + floor((level-1)/2)",
         "chests": chests,
     }
 
@@ -312,15 +336,16 @@ def gen_account_level():
         })
     max_low, max_mid, max_high = account_level_hero_tiers(100)
     return {
-        "version": "2.4.0",
-        "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡；经验曲线×1.42与竞技场8–10段同步",
+        "version": "2.5.0",
+        "description": "账号等级：每级砖头+奇数宝箱/偶数随机卡；经验曲线×1.42",
         "levelMax": 100,
         "defaultLevel": 1,
         "rewardRules": {
             "pattern": "alternate",
-            "oddLevel": {"type": "chest", "note": "开箱见 chest.json"},
+            "oddLevel": {"type": "chest", "brickBonus": "见 accountBrickFormula", "note": "开箱见 chest.json"},
             "evenLevel": {
                 "type": "randomHeroCard",
+                "brickBonus": "见 accountBrickFormula",
                 "count": 1,
                 "mustUnowned": True,
                 "qualityMix": QUALITY_MIX,
@@ -332,6 +357,8 @@ def gen_account_level():
             "excludeTags": ["event"],
             "note": "活动新增角色写入 excludeHeroIds，不参与 randomHero 抽取",
         },
+        "accountBrickFormula": "6 + floor((level-1)/2)",
+        "brickPerLevelExamples": {str(lv): account_brick_bonus(lv) for lv in [1, 10, 20, 30, 50, 100]},
         "expFormula": EXP_FORMULA_BASE,
         "expScale": ACCOUNT_EXP_SCALE,
         "expSource": "battle",
@@ -378,6 +405,8 @@ def fmt_reward(rewards: list) -> str:
     for r in rewards:
         if r["type"] == "chest":
             parts.append(f"{CHEST_CN[r['chestId']]}宝箱")
+        elif r["type"] == "brick":
+            parts.append(f"砖头{r['amount']}")
         elif r["type"] == "gold":
             parts.append(f"金币{r['amount']}")
         elif r["type"] == "diamond":
@@ -494,6 +523,8 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| 英雄升级 | 碎片与金币 | `heroLevel.json` |",
         "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §四 |",
         "| **商店与经济** | 每日优惠、通用卡、充值、缺口补足 | [`docs/SHOP_AND_ECONOMY.md`](SHOP_AND_ECONOMY.md) |",
+        "| **主城养成** | 翻格升级、砖头四渠道、满级约1月 | [`docs/MAIN_CITY_PROGRESSION.md`](MAIN_CITY_PROGRESSION.md) · `mainCity.json` |",
+        "| **砖头经济** | 宝箱/账号/对局砖头 | `chest.json` · `accountLevel.json` · 本文 §二/§四 |",
         "| **战斗平衡** | 对局时长、主城血量、攻城模拟 | [`docs/BATTLE_BALANCE.md`](BATTLE_BALANCE.md) |",
         "| **主城最终表** | 场次×等级全量 HP + 时长 | [`docs/MAIN_CITY_MATCH_FINAL.md`](MAIN_CITY_MATCH_FINAL.md) |",
         "| **技能/羁绊** | 技能效果、羁绊档位、接入审查 | [`docs/SKILL_BOND_REVIEW.md`](SKILL_BOND_REVIEW.md) |",
@@ -556,16 +587,19 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "",
         "---",
         "",
-        "## 二、宝箱产出（金币 + 钻石 + 卡牌共10/20张）",
+        "## 二、宝箱产出（金币 + 钻石 + 砖头 + 卡牌共10/20张）",
         "",
         "3名不同英雄；总卡数按低40%/中30%/高30%分配。木质~黄金共**10张**；铂金起共**20张**。",
+        f"**砖头**：各档固定值（木质 **{CHEST_BRICK_REWARD['wooden']}** → 传奇 **{CHEST_BRICK_REWARD['legendary']}**），胜利掉落宝箱时发放。",
         "",
-        "| ID | 名称 | 总卡数 | 低档 | 中档 | 高档 | 金币 | 钻石 |",
-        "|:---|:---|:---:|:---|:---|:---|:---|:---|",
+        "| ID | 名称 | 总卡数 | 低档 | 中档 | 高档 | 金币 | 钻石 | 砖头 |",
+        "|:---|:---|:---:|:---|:---|:---|:---|:---|:---:|",
     ]
     for c in chest["chests"]:
         g = c["rewards"]["gold"]
         d = c["rewards"]["diamond"]
+        bk = c["rewards"].get("brick", {})
+        brick = bk.get("min", "—")
         hg = c["rewards"]["heroCardGrant"]
         slots = hg["qualitySlots"]
         total = hg["totalCards"]
@@ -574,7 +608,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
             cols.append("—")
         lines.append(
             f"| {c['chestId']} | {c['name']} | {total} | {cols[0]} | {cols[1]} | {cols[2]} | "
-            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} |"
+            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} | {brick} |"
         )
 
     lines += [
@@ -590,7 +624,8 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "## 四、账号等级 1→100（升级奖励 · 与竞技场无关）",
         "",
         "**规则（账号经验来自对战，奖励逻辑独立于竞技场奖杯）：**",
-        "- **奇数级**：品质宝箱（共10/20张卡分3名英雄，见 chest.json）",
+        f"- **每级固定**：砖头 `6 + floor((等级-1)/2)`（L1=6，L10=10，L30=20，L50=30）",
+        "- **奇数级**：+ 品质宝箱（含砖头，见 chest.json）",
         "- **偶数级**：**随机1张卡**（低40%/中30%/高30%三档品质抽其一，优先未拥有）",
         "- 活动角色写入 `heroRewardPool.excludeHeroIds`，不参与随机",
         "",
@@ -600,7 +635,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| 等级 | 类型 | 需经验 | 累计经验 | 奖励 |",
         "|:---:|:---:|:---:|:---:|:---|",
     ]
-    type_cn = {"chest": "宝箱", "randomHeroCard": "随机1卡", "heroCardPack": "卡包"}
+    type_cn = {"chest": "宝箱", "randomHeroCard": "随机1卡", "heroCardPack": "卡包", "brick": "砖头+奖励"}
     for lv in account["levels"]:
         rt = lv["rewardType"]
         lines.append(

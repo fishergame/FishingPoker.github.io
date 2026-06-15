@@ -1,12 +1,12 @@
 {
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "主城养成：翻格升级（单格砖×格数）、战斗 HP/产金",
   "levelMax": 30,
   "gameplay": {
     "upgradeMode": "flipTiles",
     "tileCostCurrency": "brick",
     "upgradeLogic": "每升 1 级外扩一圈，逐格翻开；单格耗砖随等级涨，格数随外扩略增",
-    "flipBrickCostFormula": "7 + (mainCityLevel - 1)  // 单格",
+    "flipBrickCostFormula": "12 + (mainCityLevel-1)*3  // 单格",
     "tilesPerLevelFormula": "min(14, 8 + floor((mainCityLevel-1)/4))",
     "totalBricksFormula": "tilesPerLevel × flipBrickCost  // 派生",
     "tileLoot": {
@@ -51,24 +51,48 @@
   "formulas": {
     "hp": "round(1500 * 1.15^(mainCityLevel-1))",
     "goldPerSec": "2.0 + (mainCityLevel-1)*0.5",
-    "flipBrickCost": "7 + (mainCityLevel-1)",
+    "flipBrickCost": "12 + (mainCityLevel-1)*3",
     "tilesPerLevel": "min(14, 8 + floor((mainCityLevel-1)/4))",
     "totalBricksToNext": "tilesPerLevel × flipBrickCost",
     "battleBricksWin": "round(5 * 1.11^(L-1) * arenaMul)",
     "battleGoldWin": "round(28 * 1.11^(L-1) * arenaMul)",
     "loseRewardRatio": 0.4
   },
-  "cumulativeBricksToMax": 7252,
+  "cumulativeBricksToMax": 18858,
   "pacingSummary": {
     "referenceWinRate": 0.6,
-    "totalBricksToMax": 7252,
-    "totalPveBricks": 8995,
-    "netExternalBricks": -1743,
-    "pveOffsetPercent": 124.0,
-    "referencePvpMatches": 108.0,
-    "referenceActiveHours": 3.2,
-    "referenceEndingBank": 2700.0,
-    "referenceDaysAt15PerDay": 7.2,
+    "totalBricksToMax": 18858,
+    "totalPveBricks": 5752,
+    "netExternalBricks": 13106,
+    "pveOffsetPercent": 30.5,
+    "referencePvpMatches": 600.0,
+    "referenceActiveHours": 20.6,
+    "referenceEndingBank": 0.0,
+    "referenceDaysAt15PerDay": 40.0,
+    "fullJourneyReference": {
+      "daysToMax": 27,
+      "totalMatches": 261,
+      "accountLevelAtMax": 30,
+      "income": {
+        "pvp": 6277.0,
+        "chest": 6495.0,
+        "account": 370.0,
+        "pve": 5752.0
+      },
+      "incomeShare": {
+        "pvp": 33.2,
+        "chest": 34.4,
+        "account": 2.0,
+        "pve": 30.4
+      },
+      "reachedMax": true
+    },
+    "brickIncomeSources": [
+      "pvpBattle",
+      "arenaChest",
+      "accountLevel",
+      "mainCityPve"
+    ],
     "archetypes": [
       {
         "id": "casual",
@@ -76,11 +100,26 @@
         "dailyMatches": 5,
         "winRate": 0.5,
         "note": "约 15–20 分钟/日",
-        "totalPvpMatches": 117.0,
-        "totalActiveHours": 3.5,
-        "endingBrickBank": 2700.0,
-        "daysToMax": 23.4,
-        "weeksToMax": 3.3
+        "totalPvpMatches": 652.0,
+        "totalActiveHours": 22.4,
+        "endingBrickBank": 0.0,
+        "daysToMaxPvpOnly": 130.4,
+        "daysToMax": 56,
+        "weeksToMax": 8.0,
+        "totalMatches": 279,
+        "accountLevelAtMax": 30,
+        "income": {
+          "pvp": 6426.0,
+          "chest": 6325.0,
+          "account": 370.0,
+          "pve": 5752.0
+        },
+        "incomeShare": {
+          "pvp": 34.1,
+          "chest": 33.5,
+          "account": 2.0,
+          "pve": 30.5
+        }
       },
       {
         "id": "regular",
@@ -88,11 +127,26 @@
         "dailyMatches": 10,
         "winRate": 0.55,
         "note": "约 30–35 分钟/日",
-        "totalPvpMatches": 112.0,
-        "totalActiveHours": 3.3,
-        "endingBrickBank": 2700.0,
-        "daysToMax": 11.2,
-        "weeksToMax": 1.6
+        "totalPvpMatches": 625.0,
+        "totalActiveHours": 21.5,
+        "endingBrickBank": 0.0,
+        "daysToMaxPvpOnly": 62.5,
+        "daysToMax": 27,
+        "weeksToMax": 3.9,
+        "totalMatches": 261,
+        "accountLevelAtMax": 30,
+        "income": {
+          "pvp": 6277.0,
+          "chest": 6495.0,
+          "account": 370.0,
+          "pve": 5752.0
+        },
+        "incomeShare": {
+          "pvp": 33.2,
+          "chest": 34.4,
+          "account": 2.0,
+          "pve": 30.4
+        }
       },
       {
         "id": "active",
@@ -100,11 +154,26 @@
         "dailyMatches": 15,
         "winRate": 0.6,
         "note": "约 45–50 分钟/日",
-        "totalPvpMatches": 108.0,
-        "totalActiveHours": 3.2,
-        "endingBrickBank": 2700.0,
-        "daysToMax": 7.2,
-        "weeksToMax": 1.0
+        "totalPvpMatches": 600.0,
+        "totalActiveHours": 20.6,
+        "endingBrickBank": 0.0,
+        "daysToMaxPvpOnly": 40.0,
+        "daysToMax": 17,
+        "weeksToMax": 2.4,
+        "totalMatches": 245,
+        "accountLevelAtMax": 29,
+        "income": {
+          "pvp": 6186.0,
+          "chest": 6673.0,
+          "account": 350.0,
+          "pve": 5752.0
+        },
+        "incomeShare": {
+          "pvp": 32.6,
+          "chest": 35.2,
+          "account": 1.8,
+          "pve": 30.3
+        }
       },
       {
         "id": "hardcore",
@@ -112,216 +181,231 @@
         "dailyMatches": 25,
         "winRate": 0.65,
         "note": "约 70–90 分钟/日",
-        "totalPvpMatches": 104.0,
-        "totalActiveHours": 3.1,
-        "endingBrickBank": 2700.0,
-        "daysToMax": 4.2,
-        "weeksToMax": 0.6
+        "totalPvpMatches": 577.0,
+        "totalActiveHours": 19.8,
+        "endingBrickBank": 0.0,
+        "daysToMaxPvpOnly": 23.1,
+        "daysToMax": 10,
+        "weeksToMax": 1.4,
+        "totalMatches": 230,
+        "accountLevelAtMax": 29,
+        "income": {
+          "pvp": 6037.0,
+          "chest": 6799.0,
+          "account": 350.0,
+          "pve": 5752.0
+        },
+        "incomeShare": {
+          "pvp": 31.9,
+          "chest": 35.9,
+          "account": 1.8,
+          "pve": 30.4
+        }
       }
     ],
     "levelTrace": [
       {
         "level": 1,
-        "flipCost": 56,
-        "pveReturn": 24,
-        "pvpMatches": 8.4,
+        "flipCost": 96,
+        "pveReturn": 16,
+        "pvpMatches": 21.1,
         "bankAfter": 0.0
       },
       {
         "level": 2,
-        "flipCost": 64,
-        "pveReturn": 30,
-        "pvpMatches": 7.7,
+        "flipCost": 120,
+        "pveReturn": 20,
+        "pvpMatches": 22.7,
         "bankAfter": 0.0
       },
       {
         "level": 3,
-        "flipCost": 72,
-        "pveReturn": 30,
-        "pvpMatches": 9.5,
+        "flipCost": 144,
+        "pveReturn": 20,
+        "pvpMatches": 28.2,
         "bankAfter": 0.0
       },
       {
         "level": 4,
-        "flipCost": 80,
-        "pveReturn": 36,
-        "pvpMatches": 8.1,
+        "flipCost": 168,
+        "pveReturn": 22,
+        "pvpMatches": 27.0,
         "bankAfter": 0.0
       },
       {
         "level": 5,
-        "flipCost": 99,
-        "pveReturn": 40,
-        "pvpMatches": 9.8,
+        "flipCost": 216,
+        "pveReturn": 26,
+        "pvpMatches": 31.7,
         "bankAfter": 0.0
       },
       {
         "level": 6,
-        "flipCost": 108,
-        "pveReturn": 44,
-        "pvpMatches": 9.1,
+        "flipCost": 243,
+        "pveReturn": 28,
+        "pvpMatches": 30.7,
         "bankAfter": 0.0
       },
       {
         "level": 7,
-        "flipCost": 117,
-        "pveReturn": 50,
-        "pvpMatches": 8.8,
+        "flipCost": 270,
+        "pveReturn": 32,
+        "pvpMatches": 31.3,
         "bankAfter": 0.0
       },
       {
         "level": 8,
-        "flipCost": 126,
-        "pveReturn": 60,
-        "pvpMatches": 7.2,
+        "flipCost": 297,
+        "pveReturn": 38,
+        "pvpMatches": 28.2,
         "bankAfter": 0.0
       },
       {
         "level": 9,
-        "flipCost": 150,
-        "pveReturn": 64,
-        "pvpMatches": 8.8,
+        "flipCost": 360,
+        "pveReturn": 42,
+        "pvpMatches": 32.4,
         "bankAfter": 0.0
       },
       {
         "level": 10,
-        "flipCost": 160,
-        "pveReturn": 76,
-        "pvpMatches": 7.4,
+        "flipCost": 390,
+        "pveReturn": 48,
+        "pvpMatches": 30.0,
         "bankAfter": 0.0
       },
       {
         "level": 11,
-        "flipCost": 170,
-        "pveReturn": 84,
-        "pvpMatches": 6.6,
+        "flipCost": 420,
+        "pveReturn": 54,
+        "pvpMatches": 28.2,
         "bankAfter": 0.0
       },
       {
         "level": 12,
-        "flipCost": 180,
-        "pveReturn": 96,
-        "pvpMatches": 5.8,
+        "flipCost": 450,
+        "pveReturn": 60,
+        "pvpMatches": 26.7,
         "bankAfter": 0.0
       },
       {
         "level": 13,
-        "flipCost": 209,
-        "pveReturn": 165,
-        "pvpMatches": 3.5,
-        "bankAfter": 15.0
+        "flipCost": 528,
+        "pveReturn": 105,
+        "pvpMatches": 25.2,
+        "bankAfter": 0.0
       },
       {
         "level": 14,
-        "flipCost": 220,
-        "pveReturn": 180,
-        "pvpMatches": 2.4,
-        "bankAfter": 20.0
+        "flipCost": 561,
+        "pveReturn": 114,
+        "pvpMatches": 24.3,
+        "bankAfter": 0.0
       },
       {
         "level": 15,
-        "flipCost": 231,
-        "pveReturn": 204,
-        "pvpMatches": 2.1,
-        "bankAfter": 36.0
+        "flipCost": 594,
+        "pveReturn": 129,
+        "pvpMatches": 22.6,
+        "bankAfter": 0.0
       },
       {
         "level": 16,
-        "flipCost": 242,
-        "pveReturn": 234,
-        "pvpMatches": 1.3,
-        "bankAfter": 58.0
+        "flipCost": 627,
+        "pveReturn": 150,
+        "pvpMatches": 20.4,
+        "bankAfter": 0.0
       },
       {
         "level": 17,
-        "flipCost": 276,
-        "pveReturn": 264,
-        "pvpMatches": 0.4,
-        "bankAfter": 57.0
+        "flipCost": 720,
+        "pveReturn": 168,
+        "pvpMatches": 20.8,
+        "bankAfter": 0.0
       },
       {
         "level": 18,
-        "flipCost": 288,
-        "pveReturn": 285,
-        "pvpMatches": 0.5,
-        "bankAfter": 69.0
+        "flipCost": 756,
+        "pveReturn": 183,
+        "pvpMatches": 19.9,
+        "bankAfter": 0.0
       },
       {
         "level": 19,
-        "flipCost": 300,
-        "pveReturn": 330,
-        "pvpMatches": 0.2,
-        "bankAfter": 105.0
+        "flipCost": 792,
+        "pveReturn": 210,
+        "pvpMatches": 17.3,
+        "bankAfter": 0.0
       },
       {
         "level": 20,
-        "flipCost": 312,
-        "pveReturn": 366,
-        "pvpMatches": 0.0,
-        "bankAfter": 159.0
+        "flipCost": 828,
+        "pveReturn": 234,
+        "pvpMatches": 15.9,
+        "bankAfter": 0.0
       },
       {
         "level": 21,
-        "flipCost": 351,
-        "pveReturn": 414,
-        "pvpMatches": 0.0,
-        "bankAfter": 222.0
+        "flipCost": 936,
+        "pveReturn": 264,
+        "pvpMatches": 16.1,
+        "bankAfter": 0.0
       },
       {
         "level": 22,
-        "flipCost": 364,
-        "pveReturn": 480,
-        "pvpMatches": 0.0,
-        "bankAfter": 338.0
+        "flipCost": 975,
+        "pveReturn": 306,
+        "pvpMatches": 13.7,
+        "bankAfter": 0.0
       },
       {
         "level": 23,
-        "flipCost": 377,
-        "pveReturn": 534,
-        "pvpMatches": 0.0,
-        "bankAfter": 495.0
+        "flipCost": 1014,
+        "pveReturn": 342,
+        "pvpMatches": 12.5,
+        "bankAfter": 0.0
       },
       {
         "level": 24,
-        "flipCost": 390,
-        "pveReturn": 585,
-        "pvpMatches": 0.0,
-        "bankAfter": 690.0
+        "flipCost": 1053,
+        "pveReturn": 375,
+        "pvpMatches": 11.5,
+        "bankAfter": 0.0
       },
       {
         "level": 25,
-        "flipCost": 434,
-        "pveReturn": 684,
-        "pvpMatches": 0.0,
-        "bankAfter": 940.0
+        "flipCost": 1176,
+        "pveReturn": 438,
+        "pvpMatches": 10.7,
+        "bankAfter": 0.0
       },
       {
         "level": 26,
-        "flipCost": 448,
-        "pveReturn": 756,
-        "pvpMatches": 0.0,
-        "bankAfter": 1248.0
+        "flipCost": 1218,
+        "pveReturn": 486,
+        "pvpMatches": 9.6,
+        "bankAfter": 0.0
       },
       {
         "level": 27,
-        "flipCost": 462,
-        "pveReturn": 840,
-        "pvpMatches": 0.0,
-        "bankAfter": 1626.0
+        "flipCost": 1260,
+        "pveReturn": 537,
+        "pvpMatches": 8.5,
+        "bankAfter": 0.0
       },
       {
         "level": 28,
-        "flipCost": 476,
-        "pveReturn": 966,
-        "pvpMatches": 0.0,
-        "bankAfter": 2116.0
+        "flipCost": 1302,
+        "pveReturn": 618,
+        "pvpMatches": 7.0,
+        "bankAfter": 0.0
       },
       {
         "level": 29,
-        "flipCost": 490,
-        "pveReturn": 1074,
-        "pvpMatches": 0.0,
-        "bankAfter": 2700.0
+        "flipCost": 1344,
+        "pveReturn": 687,
+        "pvpMatches": 6.0,
+        "bankAfter": 0.0
       }
     ]
   },
@@ -332,8 +416,8 @@
       "goldPerSec": 2.0,
       "flip": {
         "tilesPerLevel": 8,
-        "brickCostPerTile": 7,
-        "totalBricksToNext": 56,
+        "brickCostPerTile": 12,
+        "totalBricksToNext": 96,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -387,19 +471,19 @@
           "accountXp": 5
         },
         "pveBuildingWin": {
-          "bricks": 12,
+          "bricks": 8,
           "gold": 56,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.2,
+        "estimatedWinsToLevel": 19.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 24,
-        "pvpBricksNeeded": 32,
+        "pveBricksTotal": 16,
+        "pvpBricksNeeded": 80,
         "blendedBricksPerMatch": 3.8,
-        "pvpMatchesAfterPve": 8.4,
-        "activeMinutes": 13.0
+        "pvpMatchesAfterPve": 21.1,
+        "activeMinutes": 32.0
       },
       "referenceSiege": {
         "defaultDeckDps": 194.5,
@@ -412,8 +496,8 @@
       "goldPerSec": 2.5,
       "flip": {
         "tilesPerLevel": 8,
-        "brickCostPerTile": 8,
-        "totalBricksToNext": 64,
+        "brickCostPerTile": 15,
+        "totalBricksToNext": 120,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -467,19 +551,19 @@
           "accountXp": 5
         },
         "pveBuildingWin": {
-          "bricks": 15,
+          "bricks": 10,
           "gold": 62,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.7,
+        "estimatedWinsToLevel": 20.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 30,
-        "pvpBricksNeeded": 34,
+        "pveBricksTotal": 20,
+        "pvpBricksNeeded": 100,
         "blendedBricksPerMatch": 4.4,
-        "pvpMatchesAfterPve": 7.7,
-        "activeMinutes": 12.0
+        "pvpMatchesAfterPve": 22.7,
+        "activeMinutes": 34.0
       },
       "referenceSiege": {
         "defaultDeckDps": 223.7,
@@ -492,8 +576,8 @@
       "goldPerSec": 3.0,
       "flip": {
         "tilesPerLevel": 8,
-        "brickCostPerTile": 9,
-        "totalBricksToNext": 72,
+        "brickCostPerTile": 18,
+        "totalBricksToNext": 144,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -547,19 +631,19 @@
           "accountXp": 6
         },
         "pveBuildingWin": {
-          "bricks": 15,
+          "bricks": 10,
           "gold": 68,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 12.0,
+        "estimatedWinsToLevel": 24.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 30,
-        "pvpBricksNeeded": 42,
+        "pveBricksTotal": 20,
+        "pvpBricksNeeded": 124,
         "blendedBricksPerMatch": 4.4,
-        "pvpMatchesAfterPve": 9.5,
-        "activeMinutes": 14.0
+        "pvpMatchesAfterPve": 28.2,
+        "activeMinutes": 42.0
       },
       "referenceSiege": {
         "defaultDeckDps": 257.2,
@@ -572,8 +656,8 @@
       "goldPerSec": 3.5,
       "flip": {
         "tilesPerLevel": 8,
-        "brickCostPerTile": 10,
-        "totalBricksToNext": 80,
+        "brickCostPerTile": 21,
+        "totalBricksToNext": 168,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -627,19 +711,19 @@
           "accountXp": 7
         },
         "pveBuildingWin": {
-          "bricks": 18,
+          "bricks": 11,
           "gold": 82,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.4,
+        "estimatedWinsToLevel": 24.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 36,
-        "pvpBricksNeeded": 44,
+        "pveBricksTotal": 22,
+        "pvpBricksNeeded": 146,
         "blendedBricksPerMatch": 5.4,
-        "pvpMatchesAfterPve": 8.1,
-        "activeMinutes": 14.0
+        "pvpMatchesAfterPve": 27.0,
+        "activeMinutes": 45.0
       },
       "referenceSiege": {
         "defaultDeckDps": 295.8,
@@ -652,8 +736,8 @@
       "goldPerSec": 4.0,
       "flip": {
         "tilesPerLevel": 9,
-        "brickCostPerTile": 11,
-        "totalBricksToNext": 99,
+        "brickCostPerTile": 24,
+        "totalBricksToNext": 216,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -707,19 +791,19 @@
           "accountXp": 7
         },
         "pveBuildingWin": {
-          "bricks": 20,
+          "bricks": 13,
           "gold": 90,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 12.4,
+        "estimatedWinsToLevel": 27.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 40,
-        "pvpBricksNeeded": 59,
+        "pveBricksTotal": 26,
+        "pvpBricksNeeded": 190,
         "blendedBricksPerMatch": 6.0,
-        "pvpMatchesAfterPve": 9.8,
-        "activeMinutes": 16.0
+        "pvpMatchesAfterPve": 31.7,
+        "activeMinutes": 53.0
       },
       "referenceSiege": {
         "defaultDeckDps": 340.2,
@@ -732,8 +816,8 @@
       "goldPerSec": 4.5,
       "flip": {
         "tilesPerLevel": 9,
-        "brickCostPerTile": 12,
-        "totalBricksToNext": 108,
+        "brickCostPerTile": 27,
+        "totalBricksToNext": 243,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -787,19 +871,19 @@
           "accountXp": 8
         },
         "pveBuildingWin": {
-          "bricks": 22,
+          "bricks": 14,
           "gold": 100,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 12.0,
+        "estimatedWinsToLevel": 27.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 44,
-        "pvpBricksNeeded": 64,
+        "pveBricksTotal": 28,
+        "pvpBricksNeeded": 215,
         "blendedBricksPerMatch": 7.0,
-        "pvpMatchesAfterPve": 9.1,
-        "activeMinutes": 15.0
+        "pvpMatchesAfterPve": 30.7,
+        "activeMinutes": 51.0
       },
       "referenceSiege": {
         "defaultDeckDps": 391.2,
@@ -812,8 +896,8 @@
       "goldPerSec": 5.0,
       "flip": {
         "tilesPerLevel": 9,
-        "brickCostPerTile": 13,
-        "totalBricksToNext": 117,
+        "brickCostPerTile": 30,
+        "totalBricksToNext": 270,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -867,19 +951,19 @@
           "accountXp": 9
         },
         "pveBuildingWin": {
-          "bricks": 25,
+          "bricks": 16,
           "gold": 118,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.7,
+        "estimatedWinsToLevel": 27.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 50,
-        "pvpBricksNeeded": 67,
+        "pveBricksTotal": 32,
+        "pvpBricksNeeded": 238,
         "blendedBricksPerMatch": 7.6,
-        "pvpMatchesAfterPve": 8.8,
-        "activeMinutes": 16.0
+        "pvpMatchesAfterPve": 31.3,
+        "activeMinutes": 57.0
       },
       "referenceSiege": {
         "defaultDeckDps": 449.9,
@@ -892,8 +976,8 @@
       "goldPerSec": 5.5,
       "flip": {
         "tilesPerLevel": 9,
-        "brickCostPerTile": 14,
-        "totalBricksToNext": 126,
+        "brickCostPerTile": 33,
+        "totalBricksToNext": 297,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -947,19 +1031,19 @@
           "accountXp": 10
         },
         "pveBuildingWin": {
-          "bricks": 30,
+          "bricks": 19,
           "gold": 130,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.5,
+        "estimatedWinsToLevel": 24.8,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 60,
-        "pvpBricksNeeded": 66,
+        "pveBricksTotal": 38,
+        "pvpBricksNeeded": 259,
         "blendedBricksPerMatch": 9.2,
-        "pvpMatchesAfterPve": 7.2,
-        "activeMinutes": 13.0
+        "pvpMatchesAfterPve": 28.2,
+        "activeMinutes": 52.0
       },
       "referenceSiege": {
         "defaultDeckDps": 517.4,
@@ -972,8 +1056,8 @@
       "goldPerSec": 6.0,
       "flip": {
         "tilesPerLevel": 10,
-        "brickCostPerTile": 15,
-        "totalBricksToNext": 150,
+        "brickCostPerTile": 36,
+        "totalBricksToNext": 360,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -1027,19 +1111,19 @@
           "accountXp": 11
         },
         "pveBuildingWin": {
-          "bricks": 32,
+          "bricks": 21,
           "gold": 144,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 11.5,
+        "estimatedWinsToLevel": 27.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 64,
-        "pvpBricksNeeded": 86,
+        "pveBricksTotal": 42,
+        "pvpBricksNeeded": 318,
         "blendedBricksPerMatch": 9.8,
-        "pvpMatchesAfterPve": 8.8,
-        "activeMinutes": 16.0
+        "pvpMatchesAfterPve": 32.4,
+        "activeMinutes": 59.0
       },
       "referenceSiege": {
         "defaultDeckDps": 595.0,
@@ -1052,8 +1136,8 @@
       "goldPerSec": 6.5,
       "flip": {
         "tilesPerLevel": 10,
-        "brickCostPerTile": 16,
-        "totalBricksToNext": 160,
+        "brickCostPerTile": 39,
+        "totalBricksToNext": 390,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -1107,19 +1191,19 @@
           "accountXp": 13
         },
         "pveBuildingWin": {
-          "bricks": 38,
+          "bricks": 24,
           "gold": 170,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.7,
+        "estimatedWinsToLevel": 26.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 76,
-        "pvpBricksNeeded": 84,
+        "pveBricksTotal": 48,
+        "pvpBricksNeeded": 342,
         "blendedBricksPerMatch": 11.4,
-        "pvpMatchesAfterPve": 7.4,
-        "activeMinutes": 15.0
+        "pvpMatchesAfterPve": 30.0,
+        "activeMinutes": 60.0
       },
       "referenceSiege": {
         "defaultDeckDps": 684.2,
@@ -1132,8 +1216,8 @@
       "goldPerSec": 7.0,
       "flip": {
         "tilesPerLevel": 10,
-        "brickCostPerTile": 17,
-        "totalBricksToNext": 170,
+        "brickCostPerTile": 42,
+        "totalBricksToNext": 420,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -1187,19 +1271,19 @@
           "accountXp": 14
         },
         "pveBuildingWin": {
-          "bricks": 42,
+          "bricks": 27,
           "gold": 188,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 10.0,
+        "estimatedWinsToLevel": 24.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 84,
-        "pvpBricksNeeded": 86,
+        "pveBricksTotal": 54,
+        "pvpBricksNeeded": 366,
         "blendedBricksPerMatch": 13.0,
-        "pvpMatchesAfterPve": 6.6,
-        "activeMinutes": 13.0
+        "pvpMatchesAfterPve": 28.2,
+        "activeMinutes": 56.0
       },
       "referenceSiege": {
         "defaultDeckDps": 786.9,
@@ -1212,8 +1296,8 @@
       "goldPerSec": 7.5,
       "flip": {
         "tilesPerLevel": 10,
-        "brickCostPerTile": 18,
-        "totalBricksToNext": 180,
+        "brickCostPerTile": 45,
+        "totalBricksToNext": 450,
         "pveBuildingCount": 2,
         "decorPool": [
           {
@@ -1267,19 +1351,19 @@
           "accountXp": 15
         },
         "pveBuildingWin": {
-          "bricks": 48,
+          "bricks": 30,
           "gold": 208,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 9.5,
+        "estimatedWinsToLevel": 23.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 96,
-        "pvpBricksNeeded": 84,
+        "pveBricksTotal": 60,
+        "pvpBricksNeeded": 390,
         "blendedBricksPerMatch": 14.6,
-        "pvpMatchesAfterPve": 5.8,
-        "activeMinutes": 12.0
+        "pvpMatchesAfterPve": 26.7,
+        "activeMinutes": 53.0
       },
       "referenceSiege": {
         "defaultDeckDps": 904.9,
@@ -1292,8 +1376,8 @@
       "goldPerSec": 8.0,
       "flip": {
         "tilesPerLevel": 11,
-        "brickCostPerTile": 19,
-        "totalBricksToNext": 209,
+        "brickCostPerTile": 48,
+        "totalBricksToNext": 528,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1347,19 +1431,19 @@
           "accountXp": 18
         },
         "pveBuildingWin": {
-          "bricks": 55,
+          "bricks": 35,
           "gold": 242,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 9.5,
+        "estimatedWinsToLevel": 24.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 165,
-        "pvpBricksNeeded": 44,
+        "pveBricksTotal": 105,
+        "pvpBricksNeeded": 423,
         "blendedBricksPerMatch": 16.8,
-        "pvpMatchesAfterPve": 2.6,
-        "activeMinutes": 6.0
+        "pvpMatchesAfterPve": 25.2,
+        "activeMinutes": 55.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1040.6,
@@ -1372,8 +1456,8 @@
       "goldPerSec": 8.5,
       "flip": {
         "tilesPerLevel": 11,
-        "brickCostPerTile": 20,
-        "totalBricksToNext": 220,
+        "brickCostPerTile": 51,
+        "totalBricksToNext": 561,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1427,19 +1511,19 @@
           "accountXp": 19
         },
         "pveBuildingWin": {
-          "bricks": 60,
+          "bricks": 38,
           "gold": 270,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 9.2,
+        "estimatedWinsToLevel": 23.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 180,
-        "pvpBricksNeeded": 40,
+        "pveBricksTotal": 114,
+        "pvpBricksNeeded": 447,
         "blendedBricksPerMatch": 18.4,
-        "pvpMatchesAfterPve": 2.2,
-        "activeMinutes": 5.0
+        "pvpMatchesAfterPve": 24.3,
+        "activeMinutes": 53.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1196.7,
@@ -1452,8 +1536,8 @@
       "goldPerSec": 9.0,
       "flip": {
         "tilesPerLevel": 11,
-        "brickCostPerTile": 21,
-        "totalBricksToNext": 231,
+        "brickCostPerTile": 54,
+        "totalBricksToNext": 594,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1507,19 +1591,19 @@
           "accountXp": 21
         },
         "pveBuildingWin": {
-          "bricks": 68,
+          "bricks": 43,
           "gold": 300,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 8.6,
+        "estimatedWinsToLevel": 22.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 204,
-        "pvpBricksNeeded": 27,
+        "pveBricksTotal": 129,
+        "pvpBricksNeeded": 465,
         "blendedBricksPerMatch": 20.6,
-        "pvpMatchesAfterPve": 1.3,
-        "activeMinutes": 3.0
+        "pvpMatchesAfterPve": 22.6,
+        "activeMinutes": 49.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1376.2,
@@ -1532,8 +1616,8 @@
       "goldPerSec": 9.5,
       "flip": {
         "tilesPerLevel": 11,
-        "brickCostPerTile": 22,
-        "totalBricksToNext": 242,
+        "brickCostPerTile": 57,
+        "totalBricksToNext": 627,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1587,19 +1671,19 @@
           "accountXp": 24
         },
         "pveBuildingWin": {
-          "bricks": 78,
+          "bricks": 50,
           "gold": 348,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 7.8,
+        "estimatedWinsToLevel": 20.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 234,
-        "pvpBricksNeeded": 8,
+        "pveBricksTotal": 150,
+        "pvpBricksNeeded": 477,
         "blendedBricksPerMatch": 23.4,
-        "pvpMatchesAfterPve": 0.3,
-        "activeMinutes": 1.0
+        "pvpMatchesAfterPve": 20.4,
+        "activeMinutes": 48.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1582.7,
@@ -1612,8 +1696,8 @@
       "goldPerSec": 10.0,
       "flip": {
         "tilesPerLevel": 12,
-        "brickCostPerTile": 23,
-        "totalBricksToNext": 276,
+        "brickCostPerTile": 60,
+        "totalBricksToNext": 720,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1667,19 +1751,19 @@
           "accountXp": 26
         },
         "pveBuildingWin": {
-          "bricks": 88,
+          "bricks": 56,
           "gold": 386,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 7.9,
+        "estimatedWinsToLevel": 20.6,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 264,
-        "pvpBricksNeeded": 12,
+        "pveBricksTotal": 168,
+        "pvpBricksNeeded": 552,
         "blendedBricksPerMatch": 26.6,
-        "pvpMatchesAfterPve": 0.5,
-        "activeMinutes": 1.0
+        "pvpMatchesAfterPve": 20.8,
+        "activeMinutes": 49.0
       },
       "referenceSiege": {
         "defaultDeckDps": 1820.1,
@@ -1692,8 +1776,8 @@
       "goldPerSec": 10.5,
       "flip": {
         "tilesPerLevel": 12,
-        "brickCostPerTile": 24,
-        "totalBricksToNext": 288,
+        "brickCostPerTile": 63,
+        "totalBricksToNext": 756,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1747,19 +1831,19 @@
           "accountXp": 29
         },
         "pveBuildingWin": {
-          "bricks": 95,
+          "bricks": 61,
           "gold": 430,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 7.6,
+        "estimatedWinsToLevel": 19.9,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 285,
-        "pvpBricksNeeded": 3,
+        "pveBricksTotal": 183,
+        "pvpBricksNeeded": 573,
         "blendedBricksPerMatch": 28.8,
-        "pvpMatchesAfterPve": 0.1,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 19.9,
+        "activeMinutes": 46.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2093.1,
@@ -1772,8 +1856,8 @@
       "goldPerSec": 11.0,
       "flip": {
         "tilesPerLevel": 12,
-        "brickCostPerTile": 25,
-        "totalBricksToNext": 300,
+        "brickCostPerTile": 66,
+        "totalBricksToNext": 792,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1827,19 +1911,19 @@
           "accountXp": 33
         },
         "pveBuildingWin": {
-          "bricks": 110,
+          "bricks": 70,
           "gold": 498,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 6.8,
+        "estimatedWinsToLevel": 18.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 330,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 210,
+        "pvpBricksNeeded": 582,
         "blendedBricksPerMatch": 33.6,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 17.3,
+        "activeMinutes": 43.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2407.0,
@@ -1852,8 +1936,8 @@
       "goldPerSec": 11.5,
       "flip": {
         "tilesPerLevel": 12,
-        "brickCostPerTile": 26,
-        "totalBricksToNext": 312,
+        "brickCostPerTile": 69,
+        "totalBricksToNext": 828,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1907,19 +1991,19 @@
           "accountXp": 36
         },
         "pveBuildingWin": {
-          "bricks": 122,
+          "bricks": 78,
           "gold": 554,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 6.4,
+        "estimatedWinsToLevel": 16.9,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 366,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 234,
+        "pvpBricksNeeded": 594,
         "blendedBricksPerMatch": 37.4,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 15.9,
+        "activeMinutes": 40.0
       },
       "referenceSiege": {
         "defaultDeckDps": 2768.1,
@@ -1932,8 +2016,8 @@
       "goldPerSec": 12.0,
       "flip": {
         "tilesPerLevel": 13,
-        "brickCostPerTile": 27,
-        "totalBricksToNext": 351,
+        "brickCostPerTile": 72,
+        "totalBricksToNext": 936,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -1987,19 +2071,19 @@
           "accountXp": 40
         },
         "pveBuildingWin": {
-          "bricks": 138,
+          "bricks": 88,
           "gold": 614,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 6.4,
+        "estimatedWinsToLevel": 17.0,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 414,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 264,
+        "pvpBricksNeeded": 672,
         "blendedBricksPerMatch": 41.8,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 16.1,
+        "activeMinutes": 40.0
       },
       "referenceSiege": {
         "defaultDeckDps": 3183.3,
@@ -2012,8 +2096,8 @@
       "goldPerSec": 12.5,
       "flip": {
         "tilesPerLevel": 13,
-        "brickCostPerTile": 28,
-        "totalBricksToNext": 364,
+        "brickCostPerTile": 75,
+        "totalBricksToNext": 975,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2067,19 +2151,19 @@
           "accountXp": 46
         },
         "pveBuildingWin": {
-          "bricks": 160,
+          "bricks": 102,
           "gold": 712,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.7,
+        "estimatedWinsToLevel": 15.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 480,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 306,
+        "pvpBricksNeeded": 669,
         "blendedBricksPerMatch": 48.8,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 13.7,
+        "activeMinutes": 37.0
       },
       "referenceSiege": {
         "defaultDeckDps": 3660.8,
@@ -2092,8 +2176,8 @@
       "goldPerSec": 13.0,
       "flip": {
         "tilesPerLevel": 13,
-        "brickCostPerTile": 29,
-        "totalBricksToNext": 377,
+        "brickCostPerTile": 78,
+        "totalBricksToNext": 1014,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2147,19 +2231,19 @@
           "accountXp": 50
         },
         "pveBuildingWin": {
-          "bricks": 178,
+          "bricks": 114,
           "gold": 790,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.3,
+        "estimatedWinsToLevel": 14.3,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 534,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 342,
+        "pvpBricksNeeded": 672,
         "blendedBricksPerMatch": 53.8,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 12.5,
+        "activeMinutes": 33.0
       },
       "referenceSiege": {
         "defaultDeckDps": 4209.9,
@@ -2172,8 +2256,8 @@
       "goldPerSec": 13.5,
       "flip": {
         "tilesPerLevel": 13,
-        "brickCostPerTile": 30,
-        "totalBricksToNext": 390,
+        "brickCostPerTile": 81,
+        "totalBricksToNext": 1053,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2227,19 +2311,19 @@
           "accountXp": 55
         },
         "pveBuildingWin": {
-          "bricks": 195,
+          "bricks": 125,
           "gold": 876,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 5.0,
+        "estimatedWinsToLevel": 13.5,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 585,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 375,
+        "pvpBricksNeeded": 678,
         "blendedBricksPerMatch": 59.2,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 11.5,
+        "activeMinutes": 31.0
       },
       "referenceSiege": {
         "defaultDeckDps": 4841.4,
@@ -2252,8 +2336,8 @@
       "goldPerSec": 14.0,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 31,
-        "totalBricksToNext": 434,
+        "brickCostPerTile": 84,
+        "totalBricksToNext": 1176,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2307,19 +2391,19 @@
           "accountXp": 62
         },
         "pveBuildingWin": {
-          "bricks": 228,
+          "bricks": 146,
           "gold": 1014,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 4.8,
+        "estimatedWinsToLevel": 12.9,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 684,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 438,
+        "pvpBricksNeeded": 738,
         "blendedBricksPerMatch": 69.0,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 10.7,
+        "activeMinutes": 30.0
       },
       "referenceSiege": {
         "defaultDeckDps": 5567.6,
@@ -2332,8 +2416,8 @@
       "goldPerSec": 14.5,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 32,
-        "totalBricksToNext": 448,
+        "brickCostPerTile": 87,
+        "totalBricksToNext": 1218,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2387,19 +2471,19 @@
           "accountXp": 69
         },
         "pveBuildingWin": {
-          "bricks": 252,
+          "bricks": 162,
           "gold": 1126,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 4.4,
+        "estimatedWinsToLevel": 12.1,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 756,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 486,
+        "pvpBricksNeeded": 732,
         "blendedBricksPerMatch": 76.6,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 9.6,
+        "activeMinutes": 27.0
       },
       "referenceSiege": {
         "defaultDeckDps": 6402.7,
@@ -2412,8 +2496,8 @@
       "goldPerSec": 15.0,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 33,
-        "totalBricksToNext": 462,
+        "brickCostPerTile": 90,
+        "totalBricksToNext": 1260,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2467,19 +2551,19 @@
           "accountXp": 76
         },
         "pveBuildingWin": {
-          "bricks": 280,
+          "bricks": 179,
           "gold": 1250,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 4.1,
+        "estimatedWinsToLevel": 11.2,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 840,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 537,
+        "pvpBricksNeeded": 723,
         "blendedBricksPerMatch": 85.2,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 8.5,
+        "activeMinutes": 24.0
       },
       "referenceSiege": {
         "defaultDeckDps": 7363.1,
@@ -2492,8 +2576,8 @@
       "goldPerSec": 15.5,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 34,
-        "totalBricksToNext": 476,
+        "brickCostPerTile": 93,
+        "totalBricksToNext": 1302,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2547,19 +2631,19 @@
           "accountXp": 86
         },
         "pveBuildingWin": {
-          "bricks": 322,
+          "bricks": 206,
           "gold": 1444,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 3.7,
+        "estimatedWinsToLevel": 10.1,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 966,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 618,
+        "pvpBricksNeeded": 684,
         "blendedBricksPerMatch": 98.2,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 7.0,
+        "activeMinutes": 21.0
       },
       "referenceSiege": {
         "defaultDeckDps": 8467.6,
@@ -2572,8 +2656,8 @@
       "goldPerSec": 16.0,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 35,
-        "totalBricksToNext": 490,
+        "brickCostPerTile": 96,
+        "totalBricksToNext": 1344,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2627,19 +2711,19 @@
           "accountXp": 94
         },
         "pveBuildingWin": {
-          "bricks": 358,
+          "bricks": 229,
           "gold": 1602,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 3.4,
+        "estimatedWinsToLevel": 9.4,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店",
-        "pveBricksTotal": 1074,
-        "pvpBricksNeeded": 0,
+        "pveBricksTotal": 687,
+        "pvpBricksNeeded": 657,
         "blendedBricksPerMatch": 108.6,
-        "pvpMatchesAfterPve": 0.0,
-        "activeMinutes": 0.0
+        "pvpMatchesAfterPve": 6.0,
+        "activeMinutes": 18.0
       },
       "referenceSiege": {
         "defaultDeckDps": 9737.8,
@@ -2652,8 +2736,8 @@
       "goldPerSec": 16.5,
       "flip": {
         "tilesPerLevel": 14,
-        "brickCostPerTile": 36,
-        "totalBricksToNext": 504,
+        "brickCostPerTile": 99,
+        "totalBricksToNext": 1386,
         "pveBuildingCount": 3,
         "decorPool": [
           {
@@ -2707,13 +2791,13 @@
           "accountXp": 104
         },
         "pveBuildingWin": {
-          "bricks": 398,
+          "bricks": 254,
           "gold": 1778,
           "note": "主城地图 PvE 建筑胜利一次性奖励"
         }
       },
       "pacing": {
-        "estimatedWinsToLevel": 3.2,
+        "estimatedWinsToLevel": 8.7,
         "note": "仅按参考场次胜场砖头粗算，不含 PvE/商店"
       },
       "referenceSiege": {

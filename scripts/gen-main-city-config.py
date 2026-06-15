@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate mainCity.json + docs/MAIN_CITY_PROGRESSION.md
 
-主城独立养成 v2.1：
+主城独立养成 v2.2：
 - 战斗：HP ×1.15/级（L1=1500）；产金每秒 +0.5/级（2.0→16.5，仅 .0/.5）
 - 升级：翻格外扩一圈；**单格砖头** × **本级格数** = 升级总砖（非「升一级固定总砖」）
 - 对局掉落：金币 + 砖头 + 经验；主城 PvE 建筑额外奖励
@@ -26,8 +26,9 @@ TILES_BASE = 8
 TILES_STEP_EVERY = 4  # 每 4 级 +1 格
 TILES_MAX = 14
 
-# 单格翻开消耗砖头（主口径）；L1=7，每级 +1
-BRICK_BASE_PER_TILE = 7
+# 单格翻开消耗：12 + 3×(等级-1)；L1=12，L10=39，L30=99
+BRICK_BASE_PER_TILE = 12
+BRICK_PER_TILE_STEP = 3
 
 BRICK_BATTLE_BASE = 5
 BRICK_BATTLE_GROWTH = 1.11
@@ -37,7 +38,7 @@ XP_BATTLE_BASE = 12
 XP_BATTLE_GROWTH = 1.10
 ARENA_RESOURCE_STEP = 0.06
 LOSE_REWARD_RATIO = 0.4
-PVE_BRICK_MULTIPLIER = 2.5
+PVE_BRICK_MULTIPLIER = 1.6  # 下调，避免后期 PvE 返还溢出
 PVE_GOLD_MULTIPLIER = 2.0
 
 ARENA_NAMES = ["青铜", "白银", "黄金", "铂金", "钻石", "星耀", "大师", "宗师", "王者", "传奇"]
@@ -79,7 +80,7 @@ def gold_per_sec(level: int) -> float:
 
 def flip_brick_cost(level: int) -> int:
     """从 level 升到 level+1 时，翻开**单格**消耗砖头（主口径）。"""
-    return BRICK_BASE_PER_TILE + (level - 1)
+    return BRICK_BASE_PER_TILE + (level - 1) * BRICK_PER_TILE_STEP
 
 
 def tiles_to_level_up(level: int) -> int:
@@ -199,6 +200,135 @@ def simulate_level_flips(
     return matches, active_sec, bank
 
 
+def load_chest_bricks() -> dict[str, int]:
+    p = ROOT / "chest.json"
+    if not p.exists():
+        return {}
+    data = json.loads(p.read_text(encoding="utf-8"))
+    out = {}
+    for c in data.get("chests", []):
+        brick = c.get("rewards", {}).get("brick", {})
+        out[c["chestId"]] = brick.get("min", brick.get("amount", 0))
+    return out
+
+
+def load_account_level_exp() -> list[dict]:
+    p = ROOT / "accountLevel.json"
+    if not p.exists():
+        return []
+    return json.loads(p.read_text(encoding="utf-8")).get("levels", [])
+
+
+def load_arena_battle_rewards() -> dict[int, dict]:
+    p = ROOT / "arena.json"
+    if not p.exists():
+        return {}
+    data = json.loads(p.read_text(encoding="utf-8"))
+    return {a["arenaId"]: a["battleReward"] for a in data.get("arenas", [])}
+
+
+def account_brick_bonus(account_level: int) -> int:
+    """账号升级奖励中的固定砖头（见 gen-progression-config.py）。"""
+    return 6 + (account_level - 1) // 2
+
+
+def pve_tile_indices(tiles: int, pve_n: int) -> set[int]:
+    pve_tiles = set()
+    if pve_n > 0:
+        for k in range(1, pve_n + 1):
+            idx = round(k * tiles / (pve_n + 1))
+            pve_tiles.add(max(1, min(tiles, idx)))
+    return pve_tiles
+
+
+def simulate_journey_full(
+    levels: list[dict],
+    daily_matches: int,
+    win_rate: float,
+    chest_bricks: dict[str, int],
+    account_levels: list[dict],
+    arena_battle: dict[int, dict],
+) -> dict:
+    """日循环：PvP 砖 + 宝箱砖 + 账号升级砖 + PvE 返还 → 逐格翻主城。"""
+    upgrade_rows = [r for r in levels if r["level"] < LEVEL_MAX]
+    city_idx = 0
+    tile_idx = 0
+    city_lv = 1
+    bank = 0.0
+    days = 0
+    matches = 0
+    income = {"pvp": 0.0, "chest": 0.0, "account": 0.0, "pve": 0.0}
+
+    account_lv = 1
+    account_exp = 0.0
+    exp_idx = 0
+    exp_to_next = account_levels[0]["expRequired"] if account_levels else 999999
+
+    while city_lv < LEVEL_MAX and days < 150:
+        days += 1
+        for _ in range(daily_matches):
+            matches += 1
+            ar = reference_arena(city_lv)
+            br = arena_battle.get(ar, {})
+            w_b = battle_bricks(city_lv, ar, True)
+            l_b = battle_bricks(city_lv, ar, False)
+            gain = win_rate * w_b + (1 - win_rate) * l_b
+            bank += gain
+            income["pvp"] += gain
+
+            chest_id = br.get("chestDropId", "wooden")
+            c_gain = chest_bricks.get(chest_id, 0) * win_rate
+            bank += c_gain
+            income["chest"] += c_gain
+
+            exp_gain = win_rate * br.get("expWin", 20) + (1 - win_rate) * br.get("expLoss", 8)
+            account_exp += exp_gain
+            while account_levels and account_lv <= len(account_levels) and account_exp >= exp_to_next:
+                account_exp -= exp_to_next
+                bonus = account_brick_bonus(account_lv)
+                bank += bonus
+                income["account"] += bonus
+                account_lv += 1
+                if account_lv <= len(account_levels):
+                    exp_to_next = account_levels[account_lv - 1]["expRequired"]
+
+            while city_idx < len(upgrade_rows):
+                row = upgrade_rows[city_idx]
+                tiles = row["flip"]["tilesPerLevel"]
+                tile_cost = row["flip"]["brickCostPerTile"]
+                pve_n = row["flip"]["pveBuildingCount"]
+                pve_per = row["battleRewards"]["pveBuildingWin"]["bricks"]
+                pve_set = pve_tile_indices(tiles, pve_n)
+                if tile_idx >= tiles:
+                    city_idx += 1
+                    tile_idx = 0
+                    city_lv += 1
+                    if city_lv >= LEVEL_MAX or city_idx >= len(upgrade_rows):
+                        break
+                    continue
+                if bank < tile_cost:
+                    break
+                bank -= tile_cost
+                tile_idx += 1
+                if tile_idx in pve_set:
+                    bank += pve_per
+                    income["pve"] += pve_per
+            if city_lv >= LEVEL_MAX:
+                break
+        if city_lv >= LEVEL_MAX:
+            break
+
+    total_in = sum(income.values())
+    return {
+        "daysToMax": days if city_lv >= LEVEL_MAX else None,
+        "totalMatches": matches,
+        "accountLevelAtMax": account_lv,
+        "income": {k: round(v, 0) for k, v in income.items()},
+        "incomeShare": {k: round(100 * v / total_in, 1) if total_in else 0 for k, v in income.items()},
+        "reachedMax": city_lv >= LEVEL_MAX,
+    }
+
+
 def simulate_full_progression(levels: list[dict]) -> dict:
     """L1→L30：逐格翻砖 + 砖头银行逐级模拟。"""
     upgrade_rows = [r for r in levels if r["level"] < LEVEL_MAX]
@@ -232,17 +362,30 @@ def simulate_full_progression(levels: list[dict]) -> dict:
         }
 
     ref = run_bank_sim(REFERENCE_WIN_RATE)
+    chest_bricks = load_chest_bricks()
+    account_levels = load_account_level_exp()
+    arena_battle = load_arena_battle_rewards()
+
     archetypes = []
     for a in PLAYER_ARCHETYPES:
-        sim = run_bank_sim(a["winRate"])
-        days = round(sim["totalPvpMatches"] / a["dailyMatches"], 1)
+        sim_pvp = run_bank_sim(a["winRate"])
+        full = simulate_journey_full(
+            levels, a["dailyMatches"], a["winRate"],
+            chest_bricks, account_levels, arena_battle,
+        )
+        days_pvp_only = round(sim_pvp["totalPvpMatches"] / a["dailyMatches"], 1)
         archetypes.append({
             **a,
-            "totalPvpMatches": sim["totalPvpMatches"],
-            "totalActiveHours": sim["totalActiveHours"],
-            "endingBrickBank": sim["endingBank"],
-            "daysToMax": days,
-            "weeksToMax": round(days / 7, 1),
+            "totalPvpMatches": sim_pvp["totalPvpMatches"],
+            "totalActiveHours": sim_pvp["totalActiveHours"],
+            "endingBrickBank": sim_pvp["endingBank"],
+            "daysToMaxPvpOnly": days_pvp_only,
+            "daysToMax": full["daysToMax"],
+            "weeksToMax": round(full["daysToMax"] / 7, 1) if full["daysToMax"] else None,
+            "totalMatches": full["totalMatches"],
+            "accountLevelAtMax": full["accountLevelAtMax"],
+            "income": full["income"],
+            "incomeShare": full["incomeShare"],
         })
 
     # 含 PvE 抵扣后的「净外部砖」= 累计升级砖 - PvE 返还（可为负，表示 PvE 溢出）
@@ -258,6 +401,10 @@ def simulate_full_progression(levels: list[dict]) -> dict:
         "referenceActiveHours": ref["totalActiveHours"],
         "referenceEndingBank": ref["endingBank"],
         "referenceDaysAt15PerDay": round(ref["totalPvpMatches"] / 15, 1),
+        "fullJourneyReference": simulate_journey_full(
+            levels, 10, 0.55, chest_bricks, account_levels, arena_battle,
+        ),
+        "brickIncomeSources": ["pvpBattle", "arenaChest", "accountLevel", "mainCityPve"],
         "archetypes": archetypes,
         "levelTrace": ref["levelTrace"],
     }
@@ -357,14 +504,14 @@ def gen_main_city() -> dict:
     pacing_summary = simulate_full_progression(levels)
 
     return {
-        "version": "2.1.0",
+        "version": "2.2.0",
         "description": "主城养成：翻格升级（单格砖×格数）、战斗 HP/产金",
         "levelMax": LEVEL_MAX,
         "gameplay": {
             "upgradeMode": "flipTiles",
             "tileCostCurrency": "brick",
             "upgradeLogic": "每升 1 级外扩一圈，逐格翻开；单格耗砖随等级涨，格数随外扩略增",
-            "flipBrickCostFormula": f"{BRICK_BASE_PER_TILE} + (mainCityLevel - 1)  // 单格",
+            "flipBrickCostFormula": f"{BRICK_BASE_PER_TILE} + (mainCityLevel-1)*{BRICK_PER_TILE_STEP}  // 单格",
             "tilesPerLevelFormula": f"min({TILES_MAX}, {TILES_BASE} + floor((mainCityLevel-1)/{TILES_STEP_EVERY}))",
             "totalBricksFormula": "tilesPerLevel × flipBrickCost  // 派生",
             "tileLoot": {
@@ -376,7 +523,7 @@ def gen_main_city() -> dict:
         "formulas": {
             "hp": f"round({MAIN_CITY_HP_L1} * {STAT_GROWTH}^(mainCityLevel-1))",
             "goldPerSec": f"{GOLD_PER_SEC_L1} + (mainCityLevel-1)*{GOLD_PER_SEC_STEP}",
-            "flipBrickCost": f"{BRICK_BASE_PER_TILE} + (mainCityLevel-1)",
+            "flipBrickCost": f"{BRICK_BASE_PER_TILE} + (mainCityLevel-1)*{BRICK_PER_TILE_STEP}",
             "tilesPerLevel": f"min({TILES_MAX}, {TILES_BASE} + floor((mainCityLevel-1)/{TILES_STEP_EVERY}))",
             "totalBricksToNext": "tilesPerLevel × flipBrickCost",
             "battleBricksWin": f"round({BRICK_BATTLE_BASE} * {BRICK_BATTLE_GROWTH}^(L-1) * arenaMul)",
@@ -411,9 +558,9 @@ def gen_markdown(data: dict) -> str:
         "|:---|:---|",
         "| **升级方式** | 外扩一圈逐格翻开；**升级总砖 = 单格砖 × 本级格数** |",
         "| **本级格数** | 邻接圈约 **8 格** 起，每 4 级 +1，上限 **14** |",
-        "| **单格砖头** | `7 + (当前主城等级 - 1)`，等级越高越贵 |",
-        "| **格内掉落** | 多为装饰（植物/景观/城堡/砖头厂/金矿厂）；每级 **2–3 个 PvE 建筑** 可实战 |",
-        "| **PvE 奖励** | 胜利额外砖头 ≈ 胜场 ×2.5、金币 ≈ ×2 |",
+        "| **单格砖头** | `12 + (当前主城等级 - 1) × 3`，L1=12 砖/格 |",
+        "| **砖头来源** | 对局胜负 + **竞技场宝箱** + **账号升级** + 主城 PvE |",
+        "| **PvE 奖励** | 胜利额外砖头 ≈ 胜场 ×**1.6**、金币 ≈ ×2 |",
         "| **PvP 奖励** | 胜利给 砖头 + 金币 + 账号经验；失败给 **40%** |",
         "| **战斗 HP** | 随主城等级 ×1.15；**产金/秒** 每级 **+0.5**（2.0→16.5） |",
         "| **对局时长** | 仅看竞技场（青铜 90s → 传奇 180s） |",
@@ -423,7 +570,7 @@ def gen_markdown(data: dict) -> str:
         "```",
         "mainCityHp(L)       = round(1500 × 1.15^(L-1))",
         "goldPerSec(L)       = 2.0 + (L-1) × 0.5",
-        "flipBrickCost(L)    = 7 + (L-1)          // 单格翻开（主口径）",
+        "flipBrickCost(L)    = 12 + (L-1) × 3       // 单格翻开（主口径）",
         "tilesPerLevel(L)    = min(14, 8 + floor((L-1)/4))  // 外扩格数",
         "bricksToLevelUp(L)  = tilesPerLevel(L) × flipBrickCost(L)",
         "battleBricksWin     = round(5 × 1.11^(L-1) × (1+0.06×(场次-1)))",
@@ -432,7 +579,7 @@ def gen_markdown(data: dict) -> str:
         "",
         f"**满级累计砖头（L1→L30）**：**{data['cumulativeBricksToMax']:,}**（PvE 全清可返还约 **{ps['totalPveBricks']:,}** 砖，折合抵扣 **{ps['pveOffsetPercent']}%**）",
         "",
-        f"**参考满级耗时（胜率 {int(ps['referenceWinRate']*100)}%，砖头银行模拟）**：约 **{ps['referencePvpMatches']:.0f} 场** PvP · **{ps['referenceActiveHours']} 小时**纯对局 · 按 15 场/日 ≈ **{ps['referenceDaysAt15PerDay']} 天**",
+        f"**参考满级（常规 · 10 场/日 · 55% 胜 · 含宝箱/账号/PvE）**：约 **{ps['fullJourneyReference']['daysToMax']} 天** · {ps['fullJourneyReference']['totalMatches']} 场 · 账号约 L{ps['fullJourneyReference']['accountLevelAtMax']}",
         "",
         "---",
         "",
@@ -471,34 +618,75 @@ def gen_markdown(data: dict) -> str:
         "> **PvE·砖** = 本级 PvE 建筑全清一次性返还；**60%场/级** = 砖头银行模拟下为凑够本级翻格需打的 PvP 场；**本级·分** = 上述场次 × 参考对局时长。",
         "> 不含商店购砖、不含账号经验线；失败砖头为胜利的 40%。",
         "",
-        "### 满级耗时 · 玩家画像（L1→L30）",
+        "### 满级耗时 · 玩家画像（全渠道砖头 · L1→L30）",
         "",
-        "| 画像 | 日场次 | 胜率 | 日游玩 | 总 PvP 场 | 纯对局时长 | 满级天数 | 满级周数 |",
-        "|:---|:---:|:---:|:---|:---:|:---:|:---:|:---:|",
+        "| 画像 | 日场次 | 胜率 | 满级天数 | 总场次 | 账号级 | PvP砖% | 宝箱砖% | 账号砖% | PvE砖% |",
+        "|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
     ]
     for a in ps["archetypes"]:
+        sh = a.get("incomeShare", {})
         lines.append(
-            f"| **{a['label']}** | {a['dailyMatches']} | {int(a['winRate']*100)}% | {a['note']} "
-            f"| {a['totalPvpMatches']:.0f} | {a['totalActiveHours']}h | **{a['daysToMax']}** | {a['weeksToMax']} |"
+            f"| **{a['label']}** | {a['dailyMatches']} | {int(a['winRate']*100)}% "
+            f"| **{a['daysToMax']}** | {a.get('totalMatches', '—')} | {a.get('accountLevelAtMax', '—')} "
+            f"| {sh.get('pvp', '—')} | {sh.get('chest', '—')} | {sh.get('account', '—')} | {sh.get('pve', '—')} |"
         )
 
+    reg = next(a for a in ps["archetypes"] if a["id"] == "regular")
     lines += [
         "",
         "### 曲线评价（设计自检）",
         "",
         "| 维度 | 结论 | 说明 |",
         "|:---|:---|:---|",
-        "| **早期（L1–L10）** | 节奏稳定 | 每级约 **8–10 场** PvP（60% 胜），轻度约 **1.5–2 天/级** |",
-        "| **中期（L11–L15）** | 逐步加快 | 每级 **2–7 场**，PvE 返还占比升高 |",
-        "| **后期（L16–L30）** | 银行溢出 | 余砖可覆盖升级，**几乎不需额外 PvP**；满级结余约 **{:.0f} 砖** |".format(ps["referenceEndingBank"]),
-        f"| **PvE 抵扣** | 返还 > 消耗（后期溢出） | 全旅程 PvE 返还 {ps['totalPveBricks']:,} 砖 > 升级消耗 {ps['totalBricksToMax']:,} 砖；**L16 起单级 PvE 即可覆盖本级** |",
-        "| **实际瓶颈** | 前期 PvP + 清图节奏 | 砖头需先攒后花；满级 PvP 约 **{:.0f} 场**（60% 胜） |".format(ps["referencePvpMatches"]),
-        "| **与产金线** | 并行不冲突 | 产金被动累积，砖头需主动对战；满级产金 16.5/s 为长期收益 |",
-        "| **付费补齐** | 可选加速 | 钻石四档日限约 790 砖（全买），≈ 1–2 级量，不替代长线游玩 |",
+        f"| **满级节奏** | **≈1 个月** | 常规玩家（10 场/日）约 **{reg['daysToMax']} 天**满级，符合目标 |",
+        "| **砖头来源** | 四渠道均衡 | PvP ≈33% · 宝箱 ≈34% · PvE ≈30% · 账号 ≈2%（稳定补充） |",
+        "| **早期（L1–L10）** | 稳定 | 单级升级 96–240 砖；约 2–3 天/级（常规） |",
+        "| **中后期** | 宝箱+P vP 成长 | 场次升高、胜场砖增加，后期 PvE 覆盖部分本级消耗 |",
+        "| **与卡牌线** | 并行 | 主城 1 月满级 vs 卡牌核心满级数月；定位更快副养成 |",
+        "| **付费补齐** | 可选 | 钻石四档日限约 790 砖，约 0.5–1 级，不破坏月满节奏 |",
         "",
         "---",
         "",
-        "## 三、关键等级对照",
+        "## 三、砖头产出分布",
+        "",
+        "### 3.1 对局胜负（已有 · `mainCity.json`）",
+        "",
+        "见 §二总表 **胜·砖 / 负·砖**；失败 = 胜利 × 40%。",
+        "",
+        "### 3.2 竞技场宝箱（`chest.json` · 胜利掉落）",
+        "",
+        "| 宝箱 | 木质 | 白银 | 黄金 | 铂金 | 钻石 | 史诗 | 传奇 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+    ]
+    chest_data = json.loads((ROOT / "chest.json").read_text(encoding="utf-8")) if (ROOT / "chest.json").exists() else {}
+    brick_row = "| **砖头** |"
+    for cid in ["wooden", "silver", "golden", "platinum", "diamond", "epic", "legendary"]:
+        amt = "—"
+        for c in chest_data.get("chests", []):
+            if c["chestId"] == cid:
+                amt = str(c["rewards"].get("brick", {}).get("min", "—"))
+                break
+        brick_row += f" {amt} |"
+    lines.append(brick_row)
+    lines += [
+        "",
+        "> 胜利必掉对应场次宝箱（`arena.json` → `chestDropId`），开箱时与金币/钻石/卡牌一并发放。",
+        "",
+        "### 3.3 账号等级（`accountLevel.json` · 每级固定）",
+        "",
+        "**公式**：`6 + floor((账号等级 - 1) / 2)`，与奇数宝箱/偶数卡牌**同时发放**。",
+        "",
+        "| 账号等级 | 1 | 5 | 10 | 15 | 20 | 25 | 30 | 50 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+        "| **砖头** | 6 | 8 | 10 | 13 | 15 | 18 | 20 | 30 |",
+        "",
+        "### 3.4 主城 PvE 建筑",
+        "",
+        "见总表 **PvE·砖** = 本级 PvE 建筑全清返还；倍率 **胜场砖 × 1.6**。",
+        "",
+        "---",
+        "",
+        "## 四、关键等级对照",
         "",
         "| 等级 | HP | 产金/s | 升级总砖 | 参考时长 | 胜场砖头 | PvE胜利砖头 |",
         "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
@@ -518,7 +706,7 @@ def gen_markdown(data: dict) -> str:
         "",
         "---",
         "",
-        "## 四、翻格掉落（装饰 vs PvE）",
+        "## 五、翻格掉落（装饰 vs PvE）",
         "",
         "| 类型 | 说明 | 权重/数量 |",
         "|:---|:---|:---|",
@@ -531,13 +719,13 @@ def gen_markdown(data: dict) -> str:
         "",
         "---",
         "",
-        "## 五、商店 · 砖头礼包（钻石 · 四档）",
+        "## 六、商店 · 砖头礼包（钻石 · 四档）",
         "",
         "配表见 **`shop.json`** → `zones.basic.brickPacks`（仅钻石购买，大包单价更低）。",
         "",
         "| 商品 | 砖头 | 钻石 | 单价 | 限购 | 说明 |",
         "|:---|:---:|:---:|:---:|:---:|:---|",
-        "| 砖头×40 | 40 | 25 | 0.63 | 日3 | 约 L1 升级量 70% |",
+        "| 砖头×40 | 40 | 25 | 0.63 | 日3 | 约 L1 升级量 40% |",
         "| 砖头×100 | 100 | 58 | 0.58 | 日2 | 约 L1–L3 一级量 |",
         "| 砖头×250 | 250 | 128 | 0.51 | 日1 | 中后期补仓 |",
         "| 砖头×600 | 600 | 268 | 0.45 | 周2 | 大包优惠 |",
@@ -547,7 +735,7 @@ def gen_markdown(data: dict) -> str:
         "",
         "---",
         "",
-        "## 六、对局时长（竞技场 · 不变）",
+        "## 七、对局时长（竞技场 · 不变）",
         "",
         "| 场次 | 名称 | 秒 | 显示 |",
         "|:---:|:---|:---:|:---:|",
@@ -562,25 +750,49 @@ def gen_markdown(data: dict) -> str:
         "",
         "---",
         "",
-        "## 七、与卡牌/账号关系",
+        "## 八、与卡牌/账号关系",
         "",
         "- **主城等级**：右侧「主城」页；翻格耗砖升级 → 提高 **局内 HP + 产金**",
         "- **卡牌等级**：只影响翻出单位强度",
         "- **竞技场**：只调 **对局倒计时** 与掉落场次系数",
-        "- **账号经验**：对局胜利/失败均获得（见总表，独立养成线）",
+        "- **账号升级**：每级额外发砖头（见 §三.3），与宝箱/卡牌并列",
         "",
         "---",
         "",
-        "## 八、满级推演（`pacingSummary`）",
+        "## 九、满级推演（`pacingSummary`）",
         "",
         "| 指标 | 数值 |",
         "|:---|:---|",
         f"| 累计升级砖 | {ps['totalBricksToMax']:,} |",
-        f"| PvE 全清返还 | {ps['totalPveBricks']:,}（抵扣 {ps['pveOffsetPercent']}%） |",
-        f"| 净外部砖（算术差） | {ps['netExternalBricks']:,} |",
-        f"| 参考总 PvP 场（60% 胜 · 银行模拟） | {ps['referencePvpMatches']:.0f} 场 |",
-        f"| 参考纯对局时长 | {ps['referenceActiveHours']} 小时 |",
-        f"| 满级后砖头结余 | {ps['referenceEndingBank']:,} |",
+        f"| 常规玩家满级天数 | **{reg['daysToMax']} 天**（10 场/日 · 55% 胜） |",
+        f"| 满级时账号等级 | 约 L{ps['fullJourneyReference']['accountLevelAtMax']} |",
+        f"| 满级总对局场次 | {ps['fullJourneyReference']['totalMatches']} |",
+        "",
+        "**满级旅程砖头收入（常规玩家）**：",
+        "",
+        "| 渠道 | 砖头 | 占比 |",
+        "|:---|:---:|:---:|",
+    ]
+    inc = reg.get("income", {})
+    ish = reg.get("incomeShare", {})
+    for key, label in [("pvp", "对局胜负"), ("chest", "竞技场宝箱"), ("account", "账号升级"), ("pve", "主城 PvE")]:
+        lines.append(f"| {label} | {inc.get(key, 0):,.0f} | {ish.get(key, 0)}% |")
+    lines += [
+        "",
+        "---",
+        "",
+        "## 十、汇总调整表（本轮数值变更）",
+        "",
+        "| 模块 | 文件 | 调整项 | 原值 | 新值 | 目的 |",
+        "|:---|:---|:---|:---|:---|:---|",
+        "| 主城翻格 | `mainCity.json` | 单格砖公式 | `7+(L-1)` | **`12+(L-1)×3`** | 拉长久期；L1=12/格 |",
+        "| 主城翻格 | `mainCity.json` | L1 升级总砖 | 56 | **96** | 8 格 × 12 砖 |",
+        "| 主城翻格 | `mainCity.json` | 满级累计砖 | 7,252 | **18,858** | 对齐约 1 月满级 |",
+        "| 主城 PvE | `mainCity.json` | 胜利砖倍率 | ×2.5 | **×1.6** | 抑制后期白嫖溢出 |",
+        "| 竞技场宝箱 | `chest.json` | 各档砖头 | 无 | **8~100** | 胜利开箱产砖 |",
+        "| 账号等级 | `accountLevel.json` | 每级砖头 | 无 | **`6+⌊(L-1)/2⌋`** | 升级里程碑补充 |",
+        "| 商店 | `shop.json` | 砖头购买 | 金币+钻石 | **钻石四档** | 付费可选加速 |",
+        "| 节奏 | 模拟 | 常规满级 | ~11 天 | **~27 天** | 目标约 1 个月 |",
         "",
     ]
     return "\n".join(lines)

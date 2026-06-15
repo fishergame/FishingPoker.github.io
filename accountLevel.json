@@ -1,16 +1,18 @@
 {
-  "version": "2.4.0",
-  "description": "账号等级：奇数级宝箱 / 偶数级1张随机品质卡；经验曲线×1.42与竞技场8–10段同步",
+  "version": "2.5.0",
+  "description": "账号等级：每级砖头+奇数宝箱/偶数随机卡；经验曲线×1.42",
   "levelMax": 100,
   "defaultLevel": 1,
   "rewardRules": {
     "pattern": "alternate",
     "oddLevel": {
       "type": "chest",
+      "brickBonus": "见 accountBrickFormula",
       "note": "开箱见 chest.json"
     },
     "evenLevel": {
       "type": "randomHeroCard",
+      "brickBonus": "见 accountBrickFormula",
       "count": 1,
       "mustUnowned": true,
       "qualityMix": {
@@ -27,6 +29,15 @@
       "event"
     ],
     "note": "活动新增角色写入 excludeHeroIds，不参与 randomHero 抽取"
+  },
+  "accountBrickFormula": "6 + floor((level-1)/2)",
+  "brickPerLevelExamples": {
+    "1": 6,
+    "10": 10,
+    "20": 15,
+    "30": 20,
+    "50": 30,
+    "100": 55
   },
   "expFormula": "round((18 + level * 3 + level^1.42 * 2.2) * ACCOUNT_EXP_SCALE)",
   "expScale": 1.42,
@@ -49,8 +60,12 @@
       "level": 1,
       "expRequired": 33,
       "cumulativeExp": 33,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 6
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -61,8 +76,12 @@
       "level": 2,
       "expRequired": 42,
       "cumulativeExp": 75,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 6
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -96,8 +115,12 @@
       "level": 3,
       "expRequired": 53,
       "cumulativeExp": 128,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 7
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -108,8 +131,12 @@
       "level": 4,
       "expRequired": 65,
       "cumulativeExp": 193,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 7
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -143,8 +170,12 @@
       "level": 5,
       "expRequired": 78,
       "cumulativeExp": 271,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 8
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -155,8 +186,12 @@
       "level": 6,
       "expRequired": 91,
       "cumulativeExp": 362,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 8
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -190,8 +225,12 @@
       "level": 7,
       "expRequired": 105,
       "cumulativeExp": 467,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 9
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -202,8 +241,12 @@
       "level": 8,
       "expRequired": 119,
       "cumulativeExp": 586,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 9
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -237,8 +280,12 @@
       "level": 9,
       "expRequired": 135,
       "cumulativeExp": 721,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 10
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -249,8 +296,12 @@
       "level": 10,
       "expRequired": 150,
       "cumulativeExp": 871,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 10
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -284,8 +335,12 @@
       "level": 11,
       "expRequired": 166,
       "cumulativeExp": 1037,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 11
+        },
         {
           "type": "chest",
           "chestId": "wooden"
@@ -296,8 +351,12 @@
       "level": 12,
       "expRequired": 183,
       "cumulativeExp": 1220,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 11
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -331,8 +390,12 @@
       "level": 13,
       "expRequired": 200,
       "cumulativeExp": 1420,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 12
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -343,8 +406,12 @@
       "level": 14,
       "expRequired": 218,
       "cumulativeExp": 1638,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 12
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -378,8 +445,12 @@
       "level": 15,
       "expRequired": 236,
       "cumulativeExp": 1874,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 13
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -390,8 +461,12 @@
       "level": 16,
       "expRequired": 254,
       "cumulativeExp": 2128,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 13
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -425,8 +500,12 @@
       "level": 17,
       "expRequired": 273,
       "cumulativeExp": 2401,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 14
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -437,8 +516,12 @@
       "level": 18,
       "expRequired": 292,
       "cumulativeExp": 2693,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 14
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -472,8 +555,12 @@
       "level": 19,
       "expRequired": 311,
       "cumulativeExp": 3004,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 15
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -484,8 +571,12 @@
       "level": 20,
       "expRequired": 331,
       "cumulativeExp": 3335,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 15
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -519,8 +610,12 @@
       "level": 21,
       "expRequired": 351,
       "cumulativeExp": 3686,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 16
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -531,8 +626,12 @@
       "level": 22,
       "expRequired": 371,
       "cumulativeExp": 4057,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 16
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -566,8 +665,12 @@
       "level": 23,
       "expRequired": 392,
       "cumulativeExp": 4449,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 17
+        },
         {
           "type": "chest",
           "chestId": "silver"
@@ -578,8 +681,12 @@
       "level": 24,
       "expRequired": 413,
       "cumulativeExp": 4862,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 17
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -613,8 +720,12 @@
       "level": 25,
       "expRequired": 434,
       "cumulativeExp": 5296,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 18
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -625,8 +736,12 @@
       "level": 26,
       "expRequired": 455,
       "cumulativeExp": 5751,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 18
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -660,8 +775,12 @@
       "level": 27,
       "expRequired": 477,
       "cumulativeExp": 6228,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 19
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -672,8 +791,12 @@
       "level": 28,
       "expRequired": 499,
       "cumulativeExp": 6727,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 19
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -707,8 +830,12 @@
       "level": 29,
       "expRequired": 522,
       "cumulativeExp": 7249,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 20
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -719,8 +846,12 @@
       "level": 30,
       "expRequired": 544,
       "cumulativeExp": 7793,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 20
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -754,8 +885,12 @@
       "level": 31,
       "expRequired": 567,
       "cumulativeExp": 8360,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 21
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -766,8 +901,12 @@
       "level": 32,
       "expRequired": 590,
       "cumulativeExp": 8950,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 21
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -801,8 +940,12 @@
       "level": 33,
       "expRequired": 614,
       "cumulativeExp": 9564,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 22
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -813,8 +956,12 @@
       "level": 34,
       "expRequired": 638,
       "cumulativeExp": 10202,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 22
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -848,8 +995,12 @@
       "level": 35,
       "expRequired": 661,
       "cumulativeExp": 10863,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 23
+        },
         {
           "type": "chest",
           "chestId": "golden"
@@ -860,8 +1011,12 @@
       "level": 36,
       "expRequired": 686,
       "cumulativeExp": 11549,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 23
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -895,8 +1050,12 @@
       "level": 37,
       "expRequired": 710,
       "cumulativeExp": 12259,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 24
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -907,8 +1066,12 @@
       "level": 38,
       "expRequired": 734,
       "cumulativeExp": 12993,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 24
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -942,8 +1105,12 @@
       "level": 39,
       "expRequired": 759,
       "cumulativeExp": 13752,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 25
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -954,8 +1121,12 @@
       "level": 40,
       "expRequired": 784,
       "cumulativeExp": 14536,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 25
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -989,8 +1160,12 @@
       "level": 41,
       "expRequired": 810,
       "cumulativeExp": 15346,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 26
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -1001,8 +1176,12 @@
       "level": 42,
       "expRequired": 835,
       "cumulativeExp": 16181,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 26
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1036,8 +1215,12 @@
       "level": 43,
       "expRequired": 861,
       "cumulativeExp": 17042,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 27
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -1048,8 +1231,12 @@
       "level": 44,
       "expRequired": 887,
       "cumulativeExp": 17929,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 27
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1083,8 +1270,12 @@
       "level": 45,
       "expRequired": 913,
       "cumulativeExp": 18842,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 28
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -1095,8 +1286,12 @@
       "level": 46,
       "expRequired": 939,
       "cumulativeExp": 19781,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 28
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1130,8 +1325,12 @@
       "level": 47,
       "expRequired": 966,
       "cumulativeExp": 20747,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 29
+        },
         {
           "type": "chest",
           "chestId": "platinum"
@@ -1142,8 +1341,12 @@
       "level": 48,
       "expRequired": 992,
       "cumulativeExp": 21739,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 29
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1177,8 +1380,12 @@
       "level": 49,
       "expRequired": 1019,
       "cumulativeExp": 22758,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 30
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1189,8 +1396,12 @@
       "level": 50,
       "expRequired": 1046,
       "cumulativeExp": 23804,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 30
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1224,8 +1435,12 @@
       "level": 51,
       "expRequired": 1074,
       "cumulativeExp": 24878,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 31
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1236,8 +1451,12 @@
       "level": 52,
       "expRequired": 1101,
       "cumulativeExp": 25979,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 31
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1271,8 +1490,12 @@
       "level": 53,
       "expRequired": 1129,
       "cumulativeExp": 27108,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 32
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1283,8 +1506,12 @@
       "level": 54,
       "expRequired": 1157,
       "cumulativeExp": 28265,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 32
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1318,8 +1545,12 @@
       "level": 55,
       "expRequired": 1185,
       "cumulativeExp": 29450,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 33
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1330,8 +1561,12 @@
       "level": 56,
       "expRequired": 1213,
       "cumulativeExp": 30663,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 33
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1365,8 +1600,12 @@
       "level": 57,
       "expRequired": 1241,
       "cumulativeExp": 31904,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 34
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1377,8 +1616,12 @@
       "level": 58,
       "expRequired": 1270,
       "cumulativeExp": 33174,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 34
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1412,8 +1655,12 @@
       "level": 59,
       "expRequired": 1299,
       "cumulativeExp": 34473,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 35
+        },
         {
           "type": "chest",
           "chestId": "diamond"
@@ -1424,8 +1671,12 @@
       "level": 60,
       "expRequired": 1328,
       "cumulativeExp": 35801,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 35
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1459,8 +1710,12 @@
       "level": 61,
       "expRequired": 1357,
       "cumulativeExp": 37158,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 36
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1471,8 +1726,12 @@
       "level": 62,
       "expRequired": 1386,
       "cumulativeExp": 38544,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 36
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1506,8 +1765,12 @@
       "level": 63,
       "expRequired": 1415,
       "cumulativeExp": 39959,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 37
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1518,8 +1781,12 @@
       "level": 64,
       "expRequired": 1445,
       "cumulativeExp": 41404,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 37
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1553,8 +1820,12 @@
       "level": 65,
       "expRequired": 1475,
       "cumulativeExp": 42879,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 38
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1565,8 +1836,12 @@
       "level": 66,
       "expRequired": 1505,
       "cumulativeExp": 44384,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 38
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1600,8 +1875,12 @@
       "level": 67,
       "expRequired": 1535,
       "cumulativeExp": 45919,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 39
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1612,8 +1891,12 @@
       "level": 68,
       "expRequired": 1565,
       "cumulativeExp": 47484,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 39
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1647,8 +1930,12 @@
       "level": 69,
       "expRequired": 1596,
       "cumulativeExp": 49080,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 40
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1659,8 +1946,12 @@
       "level": 70,
       "expRequired": 1626,
       "cumulativeExp": 50706,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 40
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1694,8 +1985,12 @@
       "level": 71,
       "expRequired": 1657,
       "cumulativeExp": 52363,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 41
+        },
         {
           "type": "chest",
           "chestId": "epic"
@@ -1706,8 +2001,12 @@
       "level": 72,
       "expRequired": 1688,
       "cumulativeExp": 54051,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 41
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1741,8 +2040,12 @@
       "level": 73,
       "expRequired": 1719,
       "cumulativeExp": 55770,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 42
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1753,8 +2056,12 @@
       "level": 74,
       "expRequired": 1750,
       "cumulativeExp": 57520,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 42
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1788,8 +2095,12 @@
       "level": 75,
       "expRequired": 1782,
       "cumulativeExp": 59302,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 43
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1800,8 +2111,12 @@
       "level": 76,
       "expRequired": 1813,
       "cumulativeExp": 61115,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 43
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1835,8 +2150,12 @@
       "level": 77,
       "expRequired": 1845,
       "cumulativeExp": 62960,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 44
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1847,8 +2166,12 @@
       "level": 78,
       "expRequired": 1877,
       "cumulativeExp": 64837,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 44
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1882,8 +2205,12 @@
       "level": 79,
       "expRequired": 1909,
       "cumulativeExp": 66746,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 45
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1894,8 +2221,12 @@
       "level": 80,
       "expRequired": 1941,
       "cumulativeExp": 68687,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 45
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1929,8 +2260,12 @@
       "level": 81,
       "expRequired": 1973,
       "cumulativeExp": 70660,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 46
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1941,8 +2276,12 @@
       "level": 82,
       "expRequired": 2005,
       "cumulativeExp": 72665,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 46
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -1976,8 +2315,12 @@
       "level": 83,
       "expRequired": 2038,
       "cumulativeExp": 74703,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 47
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -1988,8 +2331,12 @@
       "level": 84,
       "expRequired": 2071,
       "cumulativeExp": 76774,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 47
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2023,8 +2370,12 @@
       "level": 85,
       "expRequired": 2104,
       "cumulativeExp": 78878,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 48
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2035,8 +2386,12 @@
       "level": 86,
       "expRequired": 2137,
       "cumulativeExp": 81015,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 48
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2070,8 +2425,12 @@
       "level": 87,
       "expRequired": 2170,
       "cumulativeExp": 83185,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 49
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2082,8 +2441,12 @@
       "level": 88,
       "expRequired": 2203,
       "cumulativeExp": 85388,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 49
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2117,8 +2480,12 @@
       "level": 89,
       "expRequired": 2236,
       "cumulativeExp": 87624,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 50
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2129,8 +2496,12 @@
       "level": 90,
       "expRequired": 2270,
       "cumulativeExp": 89894,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 50
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2164,8 +2535,12 @@
       "level": 91,
       "expRequired": 2304,
       "cumulativeExp": 92198,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 51
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2176,8 +2551,12 @@
       "level": 92,
       "expRequired": 2337,
       "cumulativeExp": 94535,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 51
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2211,8 +2590,12 @@
       "level": 93,
       "expRequired": 2371,
       "cumulativeExp": 96906,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 52
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2223,8 +2606,12 @@
       "level": 94,
       "expRequired": 2405,
       "cumulativeExp": 99311,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 52
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2258,8 +2645,12 @@
       "level": 95,
       "expRequired": 2440,
       "cumulativeExp": 101751,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 53
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2270,8 +2661,12 @@
       "level": 96,
       "expRequired": 2474,
       "cumulativeExp": 104225,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 53
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2305,8 +2700,12 @@
       "level": 97,
       "expRequired": 2509,
       "cumulativeExp": 106734,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 54
+        },
         {
           "type": "chest",
           "chestId": "legendary"
@@ -2317,8 +2716,12 @@
       "level": 98,
       "expRequired": 2543,
       "cumulativeExp": 109277,
-      "rewardType": "randomHeroCard",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 54
+        },
         {
           "type": "randomHeroCard",
           "count": 1,
@@ -2352,8 +2755,12 @@
       "level": 99,
       "expRequired": 2578,
       "cumulativeExp": 111855,
-      "rewardType": "chest",
+      "rewardType": "brick",
       "rewards": [
+        {
+          "type": "brick",
+          "amount": 55
+        },
         {
           "type": "chest",
           "chestId": "legendary"
