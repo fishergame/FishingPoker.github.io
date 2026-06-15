@@ -8,15 +8,24 @@ ROOT = Path(__file__).resolve().parents[1]
 # 活动/新增角色不进随机未拥有池，由配表维护
 DEFAULT_EXCLUDE_HERO_IDS: list[str] = []
 
-CHEST_HERO_GRANT = {
-    "wooden": ("common", 10),
-    "silver": ("common", 10),
-    "golden": ("rare", 10),
-    "platinum": ("rare", 10),
-    "diamond": ("epic", 10),
-    "epic": ("epic", 10),
-    "legendary": ("legendary", 10),
+# 三档品质比例：低 40% / 中 30% / 高 30%（固定 3 名不同英雄各一档）
+QUALITY_MIX = {"low": 40, "mid": 30, "high": 30}
+
+# 各宝箱三档品质（low, mid, high）；铂金起 cardsPerHero 翻倍
+CHEST_HERO_TIERS = {
+    "wooden": ("common", "common", "rare"),
+    "silver": ("common", "rare", "rare"),
+    "golden": ("common", "rare", "epic"),
+    "platinum": ("rare", "epic", "legendary"),
+    "diamond": ("rare", "epic", "legendary"),
+    "epic": ("rare", "epic", "legendary"),
+    "legendary": ("epic", "legendary", "legendary"),
 }
+CHEST_CARDS_PER_HERO = {
+    "wooden": 5, "silver": 5, "golden": 5,
+    "platinum": 10, "diamond": 10, "epic": 10, "legendary": 10,
+}
+PLATINUM_PLUS = {"platinum", "diamond", "epic", "legendary"}
 
 
 def exp_for_level(level: int) -> int:
@@ -39,27 +48,48 @@ def chest_quality_for_level(level: int) -> str:
     return "legendary"
 
 
-def random_hero_quality_for_level(level: int) -> str:
+def account_level_hero_tiers(level: int) -> tuple[str, str, str]:
+    """账号偶数级：三档品质（低/中/高）随等级提升。"""
     if level <= 20:
-        return "common"
+        return ("common", "rare", "epic")
     if level <= 45:
-        return "rare"
+        return ("rare", "epic", "legendary")
     if level <= 70:
-        return "epic"
-    return "legendary"
+        return ("rare", "epic", "legendary")
+    return ("epic", "legendary", "legendary")
+
+
+def build_hero_card_pack(
+    low_q: str, mid_q: str, high_q: str,
+    cards_per_hero: int,
+    must_unowned: bool = False,
+) -> dict:
+    return {
+        "type": "heroCardPack",
+        "heroCount": 3,
+        "mustDistinct": True,
+        "mustUnowned": must_unowned,
+        "cardsPerHero": cards_per_hero,
+        "qualityMix": QUALITY_MIX,
+        "qualitySlots": [
+            {"slot": "low", "quality": low_q, "weight": QUALITY_MIX["low"]},
+            {"slot": "mid", "quality": mid_q, "weight": QUALITY_MIX["mid"]},
+            {"slot": "high", "quality": high_q, "weight": QUALITY_MIX["high"]},
+        ],
+    }
+
+
+def chest_hero_grant(chest_id: str) -> dict:
+    low, mid, high = CHEST_HERO_TIERS[chest_id]
+    return build_hero_card_pack(low, mid, high, CHEST_CARDS_PER_HERO[chest_id], must_unowned=False)
 
 
 def level_reward(level: int) -> list:
-    """奇数级：品质宝箱；偶数级：随机未拥有英雄（按品质）。"""
+    """奇数级：品质宝箱；偶数级：3 张不同未拥有英雄（低/中/高各一）。"""
     if level % 2 == 1:
-        chest_id = chest_quality_for_level(level)
-        return [{"type": "chest", "chestId": chest_id}]
-    return [{
-        "type": "randomHero",
-        "quality": random_hero_quality_for_level(level),
-        "count": 1,
-        "mustUnowned": True,
-    }]
+        return [{"type": "chest", "chestId": chest_quality_for_level(level)}]
+    low, mid, high = account_level_hero_tiers(level)
+    return [build_hero_card_pack(low, mid, high, cards_per_hero=1, must_unowned=True)]
 
 
 def gen_arena():
@@ -159,7 +189,10 @@ def gen_chest():
     ]
     chests = []
     for cid, name, minutes, gold, diamond, instant_diamond in tiers:
-        grant_quality, grant_count = CHEST_HERO_GRANT[cid]
+        grant = chest_hero_grant(cid)
+        low, mid, high = CHEST_HERO_TIERS[cid]
+        n = CHEST_CARDS_PER_HERO[cid]
+        doubled = "（铂金+翻倍）" if cid in PLATINUM_PLUS else ""
         chests.append({
             "chestId": cid,
             "name": name,
@@ -169,17 +202,15 @@ def gen_chest():
             "rewards": {
                 "gold": {"min": gold[0], "max": gold[1]},
                 "diamond": {"min": diamond[0], "max": diamond[1]},
-                "heroCardGrant": {
-                    "mode": "singleHero",
-                    "quality": grant_quality,
-                    "count": grant_count,
-                    "description": f"随机1名{grant_quality}英雄，获得该英雄卡牌×{grant_count}（用于升级）",
-                },
+                "heroCardGrant": grant,
+                "description": (
+                    f"3名不同英雄：低{low}/中{mid}/高{high}，各×{n}{doubled}"
+                ),
             },
         })
     return {
-        "version": "2.0.0",
-        "description": "宝箱：金币+钻石+指定品质英雄卡牌×10（单英雄）",
+        "version": "2.1.0",
+        "description": "宝箱：金币+钻石+3名不同英雄卡牌（低40%/中30%/高30%）；铂金起每人×10",
         "slotCount": 4,
         "chests": chests,
     }
@@ -199,15 +230,24 @@ def gen_account_level():
             "rewardType": reward[0]["type"],
             "rewards": reward,
         })
+    max_low, max_mid, max_high = account_level_hero_tiers(100)
     return {
-        "version": "2.0.0",
-        "description": "账号等级奖励：奇数级=品质宝箱，偶数级=随机未拥有英雄，交替发放",
+        "version": "2.1.0",
+        "description": "账号等级：奇数级宝箱 / 偶数级3张不同未拥有英雄，交替发放",
         "levelMax": 100,
         "defaultLevel": 1,
         "rewardRules": {
             "pattern": "alternate",
-            "oddLevel": {"type": "chest", "note": "按等级段提升宝箱品质，见 chest.json"},
-            "evenLevel": {"type": "randomHero", "mustUnowned": True, "note": "按等级段提升英雄品质"},
+            "oddLevel": {"type": "chest", "note": "开箱见 chest.json：3名不同英雄+金币+钻石"},
+            "evenLevel": {
+                "type": "heroCardPack",
+                "heroCount": 3,
+                "mustDistinct": True,
+                "mustUnowned": True,
+                "cardsPerHero": 1,
+                "qualityMix": QUALITY_MIX,
+                "note": "低40%/中30%/高30%各1名不同英雄",
+            },
         },
         "heroRewardPool": {
             "excludeHeroIds": DEFAULT_EXCLUDE_HERO_IDS,
@@ -220,7 +260,7 @@ def gen_account_level():
         "estimatedMatches": round(total_exp / 42),
         "levels": levels,
         "maxLevelReward": [
-            {"type": "randomHero", "quality": "legendary", "count": 1, "mustUnowned": True},
+            build_hero_card_pack(max_low, max_mid, max_high, cards_per_hero=1, must_unowned=True),
         ],
     }
 
@@ -234,15 +274,22 @@ CHEST_CN = {
 }
 
 
+def fmt_pack(r: dict) -> str:
+    slots = r.get("qualitySlots", [])
+    qs = "/".join(QUALITY_CN[s["quality"]] for s in slots)
+    n = r.get("cardsPerHero", 1)
+    suffix = "（未拥有）" if r.get("mustUnowned") else ""
+    per = f"各×{n}" if n > 1 else "各×1"
+    return f"3名不同英雄[{qs}]{per}{suffix}"
+
+
 def fmt_reward(rewards: list) -> str:
     parts = []
     for r in rewards:
         if r["type"] == "chest":
             parts.append(f"{CHEST_CN[r['chestId']]}宝箱")
-        elif r["type"] == "randomHero":
-            q = QUALITY_CN[r["quality"]]
-            suffix = "（未拥有）" if r.get("mustUnowned") else ""
-            parts.append(f"随机{q}英雄×{r['count']}{suffix}")
+        elif r["type"] in ("heroCardPack", "randomHero"):
+            parts.append(fmt_pack(r))
     return " + ".join(parts) if parts else "—"
 
 
@@ -273,20 +320,23 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "",
         "---",
         "",
-        "## 二、宝箱产出（金币 + 钻石 + 单英雄卡牌×10）",
+        "## 二、宝箱产出（金币 + 钻石 + 3名不同英雄）",
         "",
-        "| ID | 名称 | 开启 | 金币 | 钻石 | 卡牌赠送 | 秒开钻 |",
-        "|:---|:---|:---:|:---|:---|:---|:---:|",
+        "低/中/高比例 40%/30%/30%；木质~黄金各×5，**铂金起×10（翻倍）**。",
+        "",
+        "| ID | 名称 | 开启 | 金币 | 钻石 | 低/中/高品质 | 每人卡数 | 秒开钻 |",
+        "|:---|:---|:---:|:---|:---|:---|:---:|:---:|",
     ]
     for c in chest["chests"]:
         g = c["rewards"]["gold"]
         d = c["rewards"]["diamond"]
         hg = c["rewards"]["heroCardGrant"]
-        q = QUALITY_CN[hg["quality"]]
+        slots = hg["qualitySlots"]
+        qs = "/".join(QUALITY_CN[s["quality"]] for s in slots)
+        n = hg["cardsPerHero"]
         lines.append(
             f"| {c['chestId']} | {c['name']} | {c['unlockMinutes']}分 | "
-            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} | "
-            f"随机{q}英雄×{hg['count']} | {c['instantOpenDiamond']} |"
+            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} | {qs} | ×{n} | {c['instantOpenDiamond']} |"
         )
 
     lines += [
@@ -302,8 +352,8 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "## 四、账号等级 1→100（交替奖励）",
         "",
         "**规则：**",
-        "- **奇数级**（1→2, 3→4…）：品质宝箱（开箱得金币+钻石+某英雄×10）",
-        "- **偶数级**（2→3, 4→5…）：随机 **1 张未拥有** 英雄（品质随等级提升）",
+        "- **奇数级**：品质宝箱（金币+钻石+**3名不同英雄**，见 chest.json）",
+        "- **偶数级**：**3张不同未拥有英雄**（低40%/中30%/高30%各1名，各×1）",
         "- 活动角色写入 `heroRewardPool.excludeHeroIds`，不参与随机",
         "",
         f"- 经验公式：`{account['expFormula']}`",
@@ -312,7 +362,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| 等级 | 类型 | 需经验 | 累计经验 | 奖励 |",
         "|:---:|:---:|:---:|:---:|:---|",
     ]
-    type_cn = {"chest": "宝箱", "randomHero": "随机英雄"}
+    type_cn = {"chest": "宝箱", "heroCardPack": "3卡包", "randomHero": "3卡包"}
     for lv in account["levels"]:
         lines.append(
             f"| {lv['level']}→{lv['level']+1} | {type_cn[lv['rewardType']]} | "

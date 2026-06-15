@@ -1,6 +1,6 @@
 {
-  "version": "2.0.0",
-  "description": "宝箱：金币+钻石+指定品质英雄卡牌×10（单英雄）",
+  "version": "2.1.0",
+  "description": "宝箱：金币+钻石+3名不同英雄卡牌（低40%/中30%/高30%）；铂金起每人×10",
   "slotCount": 4,
   "chests": [
     {
@@ -19,11 +19,35 @@
           "max": 0
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "common",
-          "count": 10,
-          "description": "随机1名common英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 5,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "common",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "common",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "rare",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低common/中common/高rare，各×5"
       }
     },
     {
@@ -42,11 +66,35 @@
           "max": 1
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "common",
-          "count": 10,
-          "description": "随机1名common英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 5,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "common",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "rare",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "rare",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低common/中rare/高rare，各×5"
       }
     },
     {
@@ -65,11 +113,35 @@
           "max": 3
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "rare",
-          "count": 10,
-          "description": "随机1名rare英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 5,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "common",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "rare",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "epic",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低common/中rare/高epic，各×5"
       }
     },
     {
@@ -88,11 +160,35 @@
           "max": 5
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "rare",
-          "count": 10,
-          "description": "随机1名rare英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 10,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "rare",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "epic",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "legendary",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
       }
     },
     {
@@ -111,11 +207,35 @@
           "max": 10
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "epic",
-          "count": 10,
-          "description": "随机1名epic英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 10,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "rare",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "epic",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "legendary",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
       }
     },
     {
@@ -134,11 +254,35 @@
           "max": 15
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "epic",
-          "count": 10,
-          "description": "随机1名epic英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 10,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "rare",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "epic",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "legendary",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
       }
     },
     {
@@ -157,11 +301,35 @@
           "max": 30
         },
         "heroCardGrant": {
-          "mode": "singleHero",
-          "quality": "legendary",
-          "count": 10,
-          "description": "随机1名legendary英雄，获得该英雄卡牌×10（用于升级）"
-        }
+          "type": "heroCardPack",
+          "heroCount": 3,
+          "mustDistinct": true,
+          "mustUnowned": false,
+          "cardsPerHero": 10,
+          "qualityMix": {
+            "low": 40,
+            "mid": 30,
+            "high": 30
+          },
+          "qualitySlots": [
+            {
+              "slot": "low",
+              "quality": "epic",
+              "weight": 40
+            },
+            {
+              "slot": "mid",
+              "quality": "legendary",
+              "weight": 30
+            },
+            {
+              "slot": "high",
+              "quality": "legendary",
+              "weight": 30
+            }
+          ]
+        },
+        "description": "3名不同英雄：低epic/中legendary/高legendary，各×10（铂金+翻倍）"
       }
     }
   ]
