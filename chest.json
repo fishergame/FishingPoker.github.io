@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "宝箱品质与开启时间、产出配置",
+  "version": "2.0.0",
+  "description": "宝箱：金币+钻石+指定品质英雄卡牌×10（单英雄）",
   "slotCount": 4,
   "chests": [
     {
@@ -18,11 +18,11 @@
           "min": 0,
           "max": 0
         },
-        "cards": {
-          "common": {
-            "min": 2,
-            "max": 4
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "common",
+          "count": 10,
+          "description": "随机1名common英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -41,15 +41,11 @@
           "min": 0,
           "max": 1
         },
-        "cards": {
-          "common": {
-            "min": 4,
-            "max": 8
-          },
-          "rare": {
-            "min": 0,
-            "max": 1
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "common",
+          "count": 10,
+          "description": "随机1名common英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -68,15 +64,11 @@
           "min": 1,
           "max": 3
         },
-        "cards": {
-          "common": {
-            "min": 6,
-            "max": 10
-          },
-          "rare": {
-            "min": 1,
-            "max": 2
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "rare",
+          "count": 10,
+          "description": "随机1名rare英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -95,15 +87,11 @@
           "min": 2,
           "max": 5
         },
-        "cards": {
-          "rare": {
-            "min": 2,
-            "max": 4
-          },
-          "epic": {
-            "min": 0,
-            "max": 1
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "rare",
+          "count": 10,
+          "description": "随机1名rare英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -122,15 +110,11 @@
           "min": 5,
           "max": 10
         },
-        "cards": {
-          "rare": {
-            "min": 4,
-            "max": 6
-          },
-          "epic": {
-            "min": 1,
-            "max": 2
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "epic",
+          "count": 10,
+          "description": "随机1名epic英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -149,15 +133,11 @@
           "min": 8,
           "max": 15
         },
-        "cards": {
-          "epic": {
-            "min": 2,
-            "max": 4
-          },
-          "legendary": {
-            "min": 0,
-            "max": 1
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "epic",
+          "count": 10,
+          "description": "随机1名epic英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     },
@@ -176,15 +156,11 @@
           "min": 15,
           "max": 30
         },
-        "cards": {
-          "epic": {
-            "min": 3,
-            "max": 5
-          },
-          "legendary": {
-            "min": 1,
-            "max": 2
-          }
+        "heroCardGrant": {
+          "mode": "singleHero",
+          "quality": "legendary",
+          "count": 10,
+          "description": "随机1名legendary英雄，获得该英雄卡牌×10（用于升级）"
         }
       }
     }

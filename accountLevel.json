@@ -1,8 +1,27 @@
 {
-  "version": "1.0.0",
-  "description": "账号英雄等级 1-100：经验曲线与升级奖励",
+  "version": "2.0.0",
+  "description": "账号等级奖励：奇数级=品质宝箱，偶数级=随机未拥有英雄，交替发放",
   "levelMax": 100,
   "defaultLevel": 1,
+  "rewardRules": {
+    "pattern": "alternate",
+    "oddLevel": {
+      "type": "chest",
+      "note": "按等级段提升宝箱品质，见 chest.json"
+    },
+    "evenLevel": {
+      "type": "randomHero",
+      "mustUnowned": true,
+      "note": "按等级段提升英雄品质"
+    }
+  },
+  "heroRewardPool": {
+    "excludeHeroIds": [],
+    "excludeTags": [
+      "event"
+    ],
+    "note": "活动新增角色写入 excludeHeroIds，不参与 randomHero 抽取"
+  },
   "expFormula": "round(18 + level * 3 + level^1.42 * 2.2)",
   "expSource": "battle",
   "totalExpToMax": 78769,
@@ -12,15 +31,11 @@
       "level": 1,
       "expRequired": 23,
       "cumulativeExp": 23,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 70
+          "type": "chest",
+          "chestId": "wooden"
         }
       ]
     },
@@ -28,15 +43,13 @@
       "level": 2,
       "expRequired": 30,
       "cumulativeExp": 53,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 90
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -44,15 +57,11 @@
       "level": 3,
       "expRequired": 37,
       "cumulativeExp": 90,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 110
+          "type": "chest",
+          "chestId": "wooden"
         }
       ]
     },
@@ -60,15 +69,13 @@
       "level": 4,
       "expRequired": 46,
       "cumulativeExp": 136,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 130
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -76,6 +83,7 @@
       "level": 5,
       "expRequired": 55,
       "cumulativeExp": 191,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
@@ -87,15 +95,13 @@
       "level": 6,
       "expRequired": 64,
       "cumulativeExp": 255,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 170
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -103,133 +109,7 @@
       "level": 7,
       "expRequired": 74,
       "cumulativeExp": 329,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 2
-        },
-        {
-          "type": "gold",
-          "amount": 190
-        }
-      ]
-    },
-    {
-      "level": 8,
-      "expRequired": 84,
-      "cumulativeExp": 413,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 210
-        }
-      ]
-    },
-    {
-      "level": 9,
-      "expRequired": 95,
-      "cumulativeExp": 508,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 230
-        }
-      ]
-    },
-    {
-      "level": 10,
-      "expRequired": 106,
-      "cumulativeExp": 614,
-      "rewards": [
-        {
-          "type": "chest",
-          "chestId": "silver"
-        },
-        {
-          "type": "gold",
-          "amount": 500
-        }
-      ]
-    },
-    {
-      "level": 11,
-      "expRequired": 117,
-      "cumulativeExp": 731,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 270
-        }
-      ]
-    },
-    {
-      "level": 12,
-      "expRequired": 129,
-      "cumulativeExp": 860,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 290
-        }
-      ]
-    },
-    {
-      "level": 13,
-      "expRequired": 141,
-      "cumulativeExp": 1001,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 310
-        }
-      ]
-    },
-    {
-      "level": 14,
-      "expRequired": 153,
-      "cumulativeExp": 1154,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 330
-        }
-      ]
-    },
-    {
-      "level": 15,
-      "expRequired": 166,
-      "cumulativeExp": 1320,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
@@ -238,152 +118,76 @@
       ]
     },
     {
-      "level": 16,
-      "expRequired": 179,
-      "cumulativeExp": 1499,
+      "level": 8,
+      "expRequired": 84,
+      "cumulativeExp": 413,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 370
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
     {
-      "level": 17,
-      "expRequired": 192,
-      "cumulativeExp": 1691,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 390
-        }
-      ]
-    },
-    {
-      "level": 18,
-      "expRequired": 205,
-      "cumulativeExp": 1896,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 410
-        }
-      ]
-    },
-    {
-      "level": 19,
-      "expRequired": 219,
-      "cumulativeExp": 2115,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 430
-        }
-      ]
-    },
-    {
-      "level": 20,
-      "expRequired": 233,
-      "cumulativeExp": 2348,
+      "level": 9,
+      "expRequired": 95,
+      "cumulativeExp": 508,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
-          "chestId": "golden"
-        },
-        {
-          "type": "gold",
-          "amount": 1000
+          "chestId": "wooden"
         }
       ]
     },
     {
-      "level": 21,
-      "expRequired": 247,
-      "cumulativeExp": 2595,
+      "level": 10,
+      "expRequired": 106,
+      "cumulativeExp": 614,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 470
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
     {
-      "level": 22,
-      "expRequired": 261,
-      "cumulativeExp": 2856,
+      "level": 11,
+      "expRequired": 117,
+      "cumulativeExp": 731,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 490
+          "type": "chest",
+          "chestId": "wooden"
         }
       ]
     },
     {
-      "level": 23,
-      "expRequired": 276,
-      "cumulativeExp": 3132,
+      "level": 12,
+      "expRequired": 129,
+      "cumulativeExp": 860,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 510
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
     {
-      "level": 24,
-      "expRequired": 291,
-      "cumulativeExp": 3423,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 530
-        }
-      ]
-    },
-    {
-      "level": 25,
-      "expRequired": 306,
-      "cumulativeExp": 3729,
+      "level": 13,
+      "expRequired": 141,
+      "cumulativeExp": 1001,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
@@ -392,18 +196,172 @@
       ]
     },
     {
+      "level": 14,
+      "expRequired": 153,
+      "cumulativeExp": 1154,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "common",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 15,
+      "expRequired": 166,
+      "cumulativeExp": 1320,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "silver"
+        }
+      ]
+    },
+    {
+      "level": 16,
+      "expRequired": 179,
+      "cumulativeExp": 1499,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "common",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 17,
+      "expRequired": 192,
+      "cumulativeExp": 1691,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "silver"
+        }
+      ]
+    },
+    {
+      "level": 18,
+      "expRequired": 205,
+      "cumulativeExp": 1896,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "common",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 19,
+      "expRequired": 219,
+      "cumulativeExp": 2115,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "silver"
+        }
+      ]
+    },
+    {
+      "level": 20,
+      "expRequired": 233,
+      "cumulativeExp": 2348,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "common",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 21,
+      "expRequired": 247,
+      "cumulativeExp": 2595,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "silver"
+        }
+      ]
+    },
+    {
+      "level": 22,
+      "expRequired": 261,
+      "cumulativeExp": 2856,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 23,
+      "expRequired": 276,
+      "cumulativeExp": 3132,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "silver"
+        }
+      ]
+    },
+    {
+      "level": 24,
+      "expRequired": 291,
+      "cumulativeExp": 3423,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 25,
+      "expRequired": 306,
+      "cumulativeExp": 3729,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "golden"
+        }
+      ]
+    },
+    {
       "level": 26,
       "expRequired": 321,
       "cumulativeExp": 4050,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 570
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -411,15 +369,11 @@
       "level": 27,
       "expRequired": 336,
       "cumulativeExp": 4386,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 590
+          "type": "chest",
+          "chestId": "golden"
         }
       ]
     },
@@ -427,15 +381,13 @@
       "level": 28,
       "expRequired": 352,
       "cumulativeExp": 4738,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 610
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -443,15 +395,11 @@
       "level": 29,
       "expRequired": 367,
       "cumulativeExp": 5105,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 630
+          "type": "chest",
+          "chestId": "golden"
         }
       ]
     },
@@ -459,14 +407,13 @@
       "level": 30,
       "expRequired": 383,
       "cumulativeExp": 5488,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "chest",
-          "chestId": "platinum"
-        },
-        {
-          "type": "gold",
-          "amount": 1500
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -474,15 +421,11 @@
       "level": 31,
       "expRequired": 400,
       "cumulativeExp": 5888,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 670
+          "type": "chest",
+          "chestId": "golden"
         }
       ]
     },
@@ -490,15 +433,13 @@
       "level": 32,
       "expRequired": 416,
       "cumulativeExp": 6304,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 690
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -506,15 +447,11 @@
       "level": 33,
       "expRequired": 432,
       "cumulativeExp": 6736,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 710
+          "type": "chest",
+          "chestId": "golden"
         }
       ]
     },
@@ -522,15 +459,13 @@
       "level": 34,
       "expRequired": 449,
       "cumulativeExp": 7185,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 730
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -538,6 +473,7 @@
       "level": 35,
       "expRequired": 466,
       "cumulativeExp": 7651,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
@@ -549,15 +485,13 @@
       "level": 36,
       "expRequired": 483,
       "cumulativeExp": 8134,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 770
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -565,287 +499,7 @@
       "level": 37,
       "expRequired": 500,
       "cumulativeExp": 8634,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 790
-        }
-      ]
-    },
-    {
-      "level": 38,
-      "expRequired": 517,
-      "cumulativeExp": 9151,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 810
-        }
-      ]
-    },
-    {
-      "level": 39,
-      "expRequired": 535,
-      "cumulativeExp": 9686,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 830
-        }
-      ]
-    },
-    {
-      "level": 40,
-      "expRequired": 552,
-      "cumulativeExp": 10238,
-      "rewards": [
-        {
-          "type": "chest",
-          "chestId": "diamond"
-        },
-        {
-          "type": "gold",
-          "amount": 2000
-        }
-      ]
-    },
-    {
-      "level": 41,
-      "expRequired": 570,
-      "cumulativeExp": 10808,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 870
-        }
-      ]
-    },
-    {
-      "level": 42,
-      "expRequired": 588,
-      "cumulativeExp": 11396,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 890
-        }
-      ]
-    },
-    {
-      "level": 43,
-      "expRequired": 606,
-      "cumulativeExp": 12002,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 910
-        }
-      ]
-    },
-    {
-      "level": 44,
-      "expRequired": 624,
-      "cumulativeExp": 12626,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 930
-        }
-      ]
-    },
-    {
-      "level": 45,
-      "expRequired": 643,
-      "cumulativeExp": 13269,
-      "rewards": [
-        {
-          "type": "chest",
-          "chestId": "golden"
-        }
-      ]
-    },
-    {
-      "level": 46,
-      "expRequired": 661,
-      "cumulativeExp": 13930,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 970
-        }
-      ]
-    },
-    {
-      "level": 47,
-      "expRequired": 680,
-      "cumulativeExp": 14610,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 990
-        }
-      ]
-    },
-    {
-      "level": 48,
-      "expRequired": 699,
-      "cumulativeExp": 15309,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "common",
-          "count": 6
-        },
-        {
-          "type": "gold",
-          "amount": 1010
-        }
-      ]
-    },
-    {
-      "level": 49,
-      "expRequired": 718,
-      "cumulativeExp": 16027,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 6
-        },
-        {
-          "type": "gold",
-          "amount": 1030
-        }
-      ]
-    },
-    {
-      "level": 50,
-      "expRequired": 737,
-      "cumulativeExp": 16764,
-      "rewards": [
-        {
-          "type": "chest",
-          "chestId": "epic"
-        },
-        {
-          "type": "gold",
-          "amount": 2500
-        }
-      ]
-    },
-    {
-      "level": 51,
-      "expRequired": 756,
-      "cumulativeExp": 17520,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "epic",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 1070
-        }
-      ]
-    },
-    {
-      "level": 52,
-      "expRequired": 775,
-      "cumulativeExp": 18295,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 1090
-        }
-      ]
-    },
-    {
-      "level": 53,
-      "expRequired": 795,
-      "cumulativeExp": 19090,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "rare",
-          "count": 3
-        },
-        {
-          "type": "gold",
-          "amount": 1110
-        }
-      ]
-    },
-    {
-      "level": 54,
-      "expRequired": 814,
-      "cumulativeExp": 19904,
-      "rewards": [
-        {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1130
-        }
-      ]
-    },
-    {
-      "level": 55,
-      "expRequired": 834,
-      "cumulativeExp": 20738,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
@@ -854,18 +508,250 @@
       ]
     },
     {
+      "level": 38,
+      "expRequired": 517,
+      "cumulativeExp": 9151,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 39,
+      "expRequired": 535,
+      "cumulativeExp": 9686,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        }
+      ]
+    },
+    {
+      "level": 40,
+      "expRequired": 552,
+      "cumulativeExp": 10238,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 41,
+      "expRequired": 570,
+      "cumulativeExp": 10808,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        }
+      ]
+    },
+    {
+      "level": 42,
+      "expRequired": 588,
+      "cumulativeExp": 11396,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 43,
+      "expRequired": 606,
+      "cumulativeExp": 12002,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        }
+      ]
+    },
+    {
+      "level": 44,
+      "expRequired": 624,
+      "cumulativeExp": 12626,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "rare",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 45,
+      "expRequired": 643,
+      "cumulativeExp": 13269,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        }
+      ]
+    },
+    {
+      "level": 46,
+      "expRequired": 661,
+      "cumulativeExp": 13930,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 47,
+      "expRequired": 680,
+      "cumulativeExp": 14610,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        }
+      ]
+    },
+    {
+      "level": 48,
+      "expRequired": 699,
+      "cumulativeExp": 15309,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 49,
+      "expRequired": 718,
+      "cumulativeExp": 16027,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        }
+      ]
+    },
+    {
+      "level": 50,
+      "expRequired": 737,
+      "cumulativeExp": 16764,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 51,
+      "expRequired": 756,
+      "cumulativeExp": 17520,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        }
+      ]
+    },
+    {
+      "level": 52,
+      "expRequired": 775,
+      "cumulativeExp": 18295,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 53,
+      "expRequired": 795,
+      "cumulativeExp": 19090,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        }
+      ]
+    },
+    {
+      "level": 54,
+      "expRequired": 814,
+      "cumulativeExp": 19904,
+      "rewardType": "randomHero",
+      "rewards": [
+        {
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
+        }
+      ]
+    },
+    {
+      "level": 55,
+      "expRequired": 834,
+      "cumulativeExp": 20738,
+      "rewardType": "chest",
+      "rewards": [
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        }
+      ]
+    },
+    {
       "level": 56,
       "expRequired": 854,
       "cumulativeExp": 21592,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1170
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -873,15 +759,11 @@
       "level": 57,
       "expRequired": 874,
       "cumulativeExp": 22466,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1190
+          "type": "chest",
+          "chestId": "diamond"
         }
       ]
     },
@@ -889,15 +771,13 @@
       "level": 58,
       "expRequired": 894,
       "cumulativeExp": 23360,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1210
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -905,15 +785,11 @@
       "level": 59,
       "expRequired": 915,
       "cumulativeExp": 24275,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1230
+          "type": "chest",
+          "chestId": "diamond"
         }
       ]
     },
@@ -921,14 +797,13 @@
       "level": 60,
       "expRequired": 935,
       "cumulativeExp": 25210,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "chest",
-          "chestId": "epic"
-        },
-        {
-          "type": "gold",
-          "amount": 3000
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -936,15 +811,11 @@
       "level": 61,
       "expRequired": 955,
       "cumulativeExp": 26165,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1270
+          "type": "chest",
+          "chestId": "epic"
         }
       ]
     },
@@ -952,15 +823,13 @@
       "level": 62,
       "expRequired": 976,
       "cumulativeExp": 27141,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1290
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -968,15 +837,11 @@
       "level": 63,
       "expRequired": 997,
       "cumulativeExp": 28138,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1310
+          "type": "chest",
+          "chestId": "epic"
         }
       ]
     },
@@ -984,15 +849,13 @@
       "level": 64,
       "expRequired": 1018,
       "cumulativeExp": 29156,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1330
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1000,10 +863,11 @@
       "level": 65,
       "expRequired": 1039,
       "cumulativeExp": 30195,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
-          "chestId": "diamond"
+          "chestId": "epic"
         }
       ]
     },
@@ -1011,15 +875,13 @@
       "level": 66,
       "expRequired": 1060,
       "cumulativeExp": 31255,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1370
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1027,15 +889,11 @@
       "level": 67,
       "expRequired": 1081,
       "cumulativeExp": 32336,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1390
+          "type": "chest",
+          "chestId": "epic"
         }
       ]
     },
@@ -1043,15 +901,13 @@
       "level": 68,
       "expRequired": 1102,
       "cumulativeExp": 33438,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1410
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1059,15 +915,11 @@
       "level": 69,
       "expRequired": 1124,
       "cumulativeExp": 34562,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1430
+          "type": "chest",
+          "chestId": "epic"
         }
       ]
     },
@@ -1075,14 +927,13 @@
       "level": 70,
       "expRequired": 1145,
       "cumulativeExp": 35707,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "chest",
-          "chestId": "legendary"
-        },
-        {
-          "type": "gold",
-          "amount": 3500
+          "type": "randomHero",
+          "quality": "epic",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1090,15 +941,11 @@
       "level": 71,
       "expRequired": 1167,
       "cumulativeExp": 36874,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1470
+          "type": "chest",
+          "chestId": "epic"
         }
       ]
     },
@@ -1106,15 +953,13 @@
       "level": 72,
       "expRequired": 1189,
       "cumulativeExp": 38063,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 1490
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1122,15 +967,11 @@
       "level": 73,
       "expRequired": 1211,
       "cumulativeExp": 39274,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 1510
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1138,15 +979,13 @@
       "level": 74,
       "expRequired": 1233,
       "cumulativeExp": 40507,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "rare",
-          "count": 5
-        },
-        {
-          "type": "gold",
-          "amount": 1530
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1154,10 +993,11 @@
       "level": 75,
       "expRequired": 1255,
       "cumulativeExp": 41762,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
-          "chestId": "diamond"
+          "chestId": "legendary"
         }
       ]
     },
@@ -1165,15 +1005,13 @@
       "level": 76,
       "expRequired": 1277,
       "cumulativeExp": 43039,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "legendary",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1570
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1181,15 +1019,11 @@
       "level": 77,
       "expRequired": 1299,
       "cumulativeExp": 44338,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1590
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1197,15 +1031,13 @@
       "level": 78,
       "expRequired": 1322,
       "cumulativeExp": 45660,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1610
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1213,15 +1045,11 @@
       "level": 79,
       "expRequired": 1344,
       "cumulativeExp": 47004,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1630
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1229,14 +1057,13 @@
       "level": 80,
       "expRequired": 1367,
       "cumulativeExp": 48371,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "chest",
-          "chestId": "legendary"
-        },
-        {
-          "type": "gold",
-          "amount": 4000
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1244,15 +1071,11 @@
       "level": 81,
       "expRequired": 1389,
       "cumulativeExp": 49760,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1670
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1260,15 +1083,13 @@
       "level": 82,
       "expRequired": 1412,
       "cumulativeExp": 51172,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1690
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1276,15 +1097,11 @@
       "level": 83,
       "expRequired": 1435,
       "cumulativeExp": 52607,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1710
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1292,15 +1109,13 @@
       "level": 84,
       "expRequired": 1458,
       "cumulativeExp": 54065,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "legendary",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1730
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1308,10 +1123,11 @@
       "level": 85,
       "expRequired": 1481,
       "cumulativeExp": 55546,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
-          "chestId": "epic"
+          "chestId": "legendary"
         }
       ]
     },
@@ -1319,15 +1135,13 @@
       "level": 86,
       "expRequired": 1505,
       "cumulativeExp": 57051,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1770
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1335,15 +1149,11 @@
       "level": 87,
       "expRequired": 1528,
       "cumulativeExp": 58579,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1790
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1351,15 +1161,13 @@
       "level": 88,
       "expRequired": 1551,
       "cumulativeExp": 60130,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "legendary",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1810
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1367,15 +1175,11 @@
       "level": 89,
       "expRequired": 1575,
       "cumulativeExp": 61705,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1830
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1383,14 +1187,13 @@
       "level": 90,
       "expRequired": 1599,
       "cumulativeExp": 63304,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "chest",
-          "chestId": "legendary"
-        },
-        {
-          "type": "gold",
-          "amount": 4500
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1398,15 +1201,11 @@
       "level": 91,
       "expRequired": 1622,
       "cumulativeExp": 64926,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1870
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1414,15 +1213,13 @@
       "level": 92,
       "expRequired": 1646,
       "cumulativeExp": 66572,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "legendary",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1890
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1430,15 +1227,11 @@
       "level": 93,
       "expRequired": 1670,
       "cumulativeExp": 68242,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1910
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1446,15 +1239,13 @@
       "level": 94,
       "expRequired": 1694,
       "cumulativeExp": 69936,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1930
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1462,10 +1253,11 @@
       "level": 95,
       "expRequired": 1718,
       "cumulativeExp": 71654,
+      "rewardType": "chest",
       "rewards": [
         {
           "type": "chest",
-          "chestId": "epic"
+          "chestId": "legendary"
         }
       ]
     },
@@ -1473,15 +1265,13 @@
       "level": 96,
       "expRequired": 1742,
       "cumulativeExp": 73396,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
+          "type": "randomHero",
           "quality": "legendary",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1970
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1489,15 +1279,11 @@
       "level": 97,
       "expRequired": 1767,
       "cumulativeExp": 75163,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 1990
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     },
@@ -1505,15 +1291,13 @@
       "level": 98,
       "expRequired": 1791,
       "cumulativeExp": 76954,
+      "rewardType": "randomHero",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 2010
+          "type": "randomHero",
+          "quality": "legendary",
+          "count": 1,
+          "mustUnowned": true
         }
       ]
     },
@@ -1521,27 +1305,21 @@
       "level": 99,
       "expRequired": 1815,
       "cumulativeExp": 78769,
+      "rewardType": "chest",
       "rewards": [
         {
-          "type": "card",
-          "quality": "epic",
-          "count": 4
-        },
-        {
-          "type": "gold",
-          "amount": 2030
+          "type": "chest",
+          "chestId": "legendary"
         }
       ]
     }
   ],
   "maxLevelReward": [
     {
-      "type": "chest",
-      "chestId": "legendary"
-    },
-    {
-      "type": "gold",
-      "amount": 5000
+      "type": "randomHero",
+      "quality": "legendary",
+      "count": 1,
+      "mustUnowned": true
     }
   ]
 }
