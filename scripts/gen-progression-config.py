@@ -190,6 +190,10 @@ def gen_account_level():
         "totalExpToMax": total_exp,
         "estimatedMatches": round(total_exp / 42),
         "levels": levels,
+        "maxLevelReward": [
+            {"type": "chest", "chestId": "legendary"},
+            {"type": "gold", "amount": 5000},
+        ],
     }
 
 

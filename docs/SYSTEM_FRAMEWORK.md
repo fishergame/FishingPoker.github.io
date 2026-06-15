@@ -248,4 +248,9 @@ testgame/
 | `heroCardCost.json` | 升级所需碎片数、金币数 |
 | `shopProducts.json` | 卡包价格（钻石/广告） |
 | `battleReward.json` | 各竞技场胜利金币、奖杯增量 |
+| `arena.json` | **已落地** 10 竞技场奖杯/经验/金币 |
+| `accountLevel.json` | **已落地** 账号 1–100 级经验与奖励 |
+| `chest.json` | **已落地** 7 档宝箱产出 |
+| `heroLevel.json` | **已落地** 英雄升级碎片与分品质金币 |
+| `docs/PROGRESSION_TABLES.md` | **可读汇总表**（上述配表 Markdown 版） |
 | `season.json` | 赛季起止、重置比例、奖励 |

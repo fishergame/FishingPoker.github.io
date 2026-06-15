@@ -1533,5 +1533,15 @@
         }
       ]
     }
+  ],
+  "maxLevelReward": [
+    {
+      "type": "chest",
+      "chestId": "legendary"
+    },
+    {
+      "type": "gold",
+      "amount": 5000
+    }
   ]
 }
