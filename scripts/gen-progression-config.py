@@ -392,12 +392,13 @@ def gen_progression_tables_md(arena, chest, account, hero):
     ]
     type_cn = {"chest": "宝箱", "randomHeroCard": "随机1卡", "heroCardPack": "卡包"}
     for lv in account["levels"]:
+        rt = lv["rewardType"]
         lines.append(
-            f"| {lv['level']}→{lv['level']+1} | {type_cn[lv['rewardType']]} | "
+            f"| {lv['level']}→{lv['level']+1} | {type_cn.get(rt, rt)} | "
             f"{lv['expRequired']} | {lv['cumulativeExp']:,} | {fmt_reward(lv['rewards'])} |"
         )
     lines.append(
-        f"| **100 MAX** | 随机英雄 | — | {account['totalExpToMax']:,} | "
+        f"| **100 MAX** | 随机1卡 | — | {account['totalExpToMax']:,} | "
         f"{fmt_reward(account['maxLevelReward'])} |"
     )
     lines.append("")
