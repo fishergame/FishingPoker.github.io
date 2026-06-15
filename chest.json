@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "description": "宝箱：金币+钻石+3名不同英雄卡牌（低40%/中30%/高30%）；铂金起每人×10",
+  "version": "2.2.0",
+  "description": "宝箱：共10张卡分3名不同英雄(40/30/30)；铂金起共20张",
   "slotCount": 4,
   "chests": [
     {
@@ -23,7 +23,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 5,
+          "totalCards": 10,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -33,21 +33,24 @@
             {
               "slot": "low",
               "quality": "common",
+              "cardCount": 4,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "common",
+              "cardCount": 3,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "rare",
+              "cardCount": 3,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低common/中common/高rare，各×5"
+        "description": "共10张：低common×4+中common×3+高rare×3，3名不同英雄"
       }
     },
     {
@@ -70,7 +73,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 5,
+          "totalCards": 10,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -80,21 +83,24 @@
             {
               "slot": "low",
               "quality": "common",
+              "cardCount": 4,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "rare",
+              "cardCount": 3,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "rare",
+              "cardCount": 3,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低common/中rare/高rare，各×5"
+        "description": "共10张：低common×4+中rare×3+高rare×3，3名不同英雄"
       }
     },
     {
@@ -117,7 +123,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 5,
+          "totalCards": 10,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -127,21 +133,24 @@
             {
               "slot": "low",
               "quality": "common",
+              "cardCount": 4,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "rare",
+              "cardCount": 3,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "epic",
+              "cardCount": 3,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低common/中rare/高epic，各×5"
+        "description": "共10张：低common×4+中rare×3+高epic×3，3名不同英雄"
       }
     },
     {
@@ -164,7 +173,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 10,
+          "totalCards": 20,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -174,21 +183,24 @@
             {
               "slot": "low",
               "quality": "rare",
+              "cardCount": 8,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "epic",
+              "cardCount": 6,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "legendary",
+              "cardCount": 6,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
+        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
       }
     },
     {
@@ -211,7 +223,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 10,
+          "totalCards": 20,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -221,21 +233,24 @@
             {
               "slot": "low",
               "quality": "rare",
+              "cardCount": 8,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "epic",
+              "cardCount": 6,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "legendary",
+              "cardCount": 6,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
+        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
       }
     },
     {
@@ -258,7 +273,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 10,
+          "totalCards": 20,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -268,21 +283,24 @@
             {
               "slot": "low",
               "quality": "rare",
+              "cardCount": 8,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "epic",
+              "cardCount": 6,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "legendary",
+              "cardCount": 6,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低rare/中epic/高legendary，各×10（铂金+翻倍）"
+        "description": "共20张：低rare×8+中epic×6+高legendary×6，3名不同英雄"
       }
     },
     {
@@ -305,7 +323,7 @@
           "heroCount": 3,
           "mustDistinct": true,
           "mustUnowned": false,
-          "cardsPerHero": 10,
+          "totalCards": 20,
           "qualityMix": {
             "low": 40,
             "mid": 30,
@@ -315,21 +333,24 @@
             {
               "slot": "low",
               "quality": "epic",
+              "cardCount": 8,
               "weight": 40
             },
             {
               "slot": "mid",
               "quality": "legendary",
+              "cardCount": 6,
               "weight": 30
             },
             {
               "slot": "high",
               "quality": "legendary",
+              "cardCount": 6,
               "weight": 30
             }
           ]
         },
-        "description": "3名不同英雄：低epic/中legendary/高legendary，各×10（铂金+翻倍）"
+        "description": "共20张：低epic×8+中legendary×6+高legendary×6，3名不同英雄"
       }
     }
   ]

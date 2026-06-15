@@ -11,7 +11,7 @@ DEFAULT_EXCLUDE_HERO_IDS: list[str] = []
 # 三档品质比例：低 40% / 中 30% / 高 30%（固定 3 名不同英雄各一档）
 QUALITY_MIX = {"low": 40, "mid": 30, "high": 30}
 
-# 各宝箱三档品质（low, mid, high）；铂金起 cardsPerHero 翻倍
+# 各宝箱三档品质（low, mid, high）
 CHEST_HERO_TIERS = {
     "wooden": ("common", "common", "rare"),
     "silver": ("common", "rare", "rare"),
@@ -21,11 +21,17 @@ CHEST_HERO_TIERS = {
     "epic": ("rare", "epic", "legendary"),
     "legendary": ("epic", "legendary", "legendary"),
 }
-CHEST_CARDS_PER_HERO = {
-    "wooden": 5, "silver": 5, "golden": 5,
-    "platinum": 10, "diamond": 10, "epic": 10, "legendary": 10,
-}
 PLATINUM_PLUS = {"platinum", "diamond", "epic", "legendary"}
+CHEST_TOTAL_CARDS = 10
+CHEST_TOTAL_CARDS_PLATINUM_PLUS = 20
+
+
+def split_cards_by_mix(total: int) -> tuple[int, int, int]:
+    """按 40/30/30 分配总卡数，保证相加等于 total。"""
+    low = round(total * QUALITY_MIX["low"] / 100)
+    mid = round(total * QUALITY_MIX["mid"] / 100)
+    high = total - low - mid
+    return low, mid, high
 
 
 def exp_for_level(level: int) -> int:
@@ -63,25 +69,47 @@ def build_hero_card_pack(
     low_q: str, mid_q: str, high_q: str,
     cards_per_hero: int,
     must_unowned: bool = False,
+    total_cards: int | None = None,
 ) -> dict:
+    """账号偶数级：3 名不同未拥有英雄，各 1 张。"""
     return {
         "type": "heroCardPack",
         "heroCount": 3,
         "mustDistinct": True,
         "mustUnowned": must_unowned,
-        "cardsPerHero": cards_per_hero,
+        "totalCards": 3,
+        "cardsPerHero": 1,
         "qualityMix": QUALITY_MIX,
         "qualitySlots": [
-            {"slot": "low", "quality": low_q, "weight": QUALITY_MIX["low"]},
-            {"slot": "mid", "quality": mid_q, "weight": QUALITY_MIX["mid"]},
-            {"slot": "high", "quality": high_q, "weight": QUALITY_MIX["high"]},
+            {"slot": "low", "quality": low_q, "cardCount": 1, "weight": QUALITY_MIX["low"]},
+            {"slot": "mid", "quality": mid_q, "cardCount": 1, "weight": QUALITY_MIX["mid"]},
+            {"slot": "high", "quality": high_q, "cardCount": 1, "weight": QUALITY_MIX["high"]},
         ],
     }
 
 
 def chest_hero_grant(chest_id: str) -> dict:
-    low, mid, high = CHEST_HERO_TIERS[chest_id]
-    return build_hero_card_pack(low, mid, high, CHEST_CARDS_PER_HERO[chest_id], must_unowned=False)
+    """
+    宝箱：共 10 张卡（铂金起 20 张），按 40/30/30 分给 3 名不同英雄。
+    例：10 张 = 低 4 + 中 3 + 高 3；20 张 = 低 8 + 中 6 + 高 6。
+  每档 1 名英雄，承担该档全部张数。
+    """
+    low_q, mid_q, high_q = CHEST_HERO_TIERS[chest_id]
+    total = CHEST_TOTAL_CARDS_PLATINUM_PLUS if chest_id in PLATINUM_PLUS else CHEST_TOTAL_CARDS
+    low_n, mid_n, high_n = split_cards_by_mix(total)
+    return {
+        "type": "heroCardPack",
+        "heroCount": 3,
+        "mustDistinct": True,
+        "mustUnowned": False,
+        "totalCards": total,
+        "qualityMix": QUALITY_MIX,
+        "qualitySlots": [
+            {"slot": "low", "quality": low_q, "cardCount": low_n, "weight": QUALITY_MIX["low"]},
+            {"slot": "mid", "quality": mid_q, "cardCount": mid_n, "weight": QUALITY_MIX["mid"]},
+            {"slot": "high", "quality": high_q, "cardCount": high_n, "weight": QUALITY_MIX["high"]},
+        ],
+    }
 
 
 def level_reward(level: int) -> list:
@@ -191,8 +219,8 @@ def gen_chest():
     for cid, name, minutes, gold, diamond, instant_diamond in tiers:
         grant = chest_hero_grant(cid)
         low, mid, high = CHEST_HERO_TIERS[cid]
-        n = CHEST_CARDS_PER_HERO[cid]
-        doubled = "（铂金+翻倍）" if cid in PLATINUM_PLUS else ""
+        total = grant["totalCards"]
+        low_n, mid_n, high_n = split_cards_by_mix(total)
         chests.append({
             "chestId": cid,
             "name": name,
@@ -204,13 +232,13 @@ def gen_chest():
                 "diamond": {"min": diamond[0], "max": diamond[1]},
                 "heroCardGrant": grant,
                 "description": (
-                    f"3名不同英雄：低{low}/中{mid}/高{high}，各×{n}{doubled}"
+                    f"共{total}张：低{low}×{low_n}+中{mid}×{mid_n}+高{high}×{high_n}，3名不同英雄"
                 ),
             },
         })
     return {
-        "version": "2.1.0",
-        "description": "宝箱：金币+钻石+3名不同英雄卡牌（低40%/中30%/高30%）；铂金起每人×10",
+        "version": "2.2.0",
+        "description": "宝箱：共10张卡分3名不同英雄(40/30/30)；铂金起共20张",
         "slotCount": 4,
         "chests": chests,
     }
@@ -276,11 +304,12 @@ CHEST_CN = {
 
 def fmt_pack(r: dict) -> str:
     slots = r.get("qualitySlots", [])
-    qs = "/".join(QUALITY_CN[s["quality"]] for s in slots)
-    n = r.get("cardsPerHero", 1)
+    parts = []
+    for s in slots:
+        parts.append(f"{QUALITY_CN[s['quality']]}×{s['cardCount']}")
     suffix = "（未拥有）" if r.get("mustUnowned") else ""
-    per = f"各×{n}" if n > 1 else "各×1"
-    return f"3名不同英雄[{qs}]{per}{suffix}"
+    total = r.get("totalCards", sum(s["cardCount"] for s in slots))
+    return f"共{total}张[{ '/'.join(parts) }]3名不同英雄{suffix}"
 
 
 def fmt_reward(rewards: list) -> str:
@@ -320,23 +349,25 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "",
         "---",
         "",
-        "## 二、宝箱产出（金币 + 钻石 + 3名不同英雄）",
+        "## 二、宝箱产出（金币 + 钻石 + 卡牌共10/20张）",
         "",
-        "低/中/高比例 40%/30%/30%；木质~黄金各×5，**铂金起×10（翻倍）**。",
+        "3名不同英雄；总卡数按低40%/中30%/高30%分配。木质~黄金共**10张**；铂金起共**20张**。",
         "",
-        "| ID | 名称 | 开启 | 金币 | 钻石 | 低/中/高品质 | 每人卡数 | 秒开钻 |",
-        "|:---|:---|:---:|:---|:---|:---|:---:|:---:|",
+        "| ID | 名称 | 总卡数 | 低档 | 中档 | 高档 | 金币 | 钻石 |",
+        "|:---|:---|:---:|:---|:---|:---|:---|:---|",
     ]
     for c in chest["chests"]:
         g = c["rewards"]["gold"]
         d = c["rewards"]["diamond"]
         hg = c["rewards"]["heroCardGrant"]
         slots = hg["qualitySlots"]
-        qs = "/".join(QUALITY_CN[s["quality"]] for s in slots)
-        n = hg["cardsPerHero"]
+        total = hg["totalCards"]
+        cols = [f"{QUALITY_CN[s['quality']]}×{s['cardCount']}" for s in slots]
+        while len(cols) < 3:
+            cols.append("—")
         lines.append(
-            f"| {c['chestId']} | {c['name']} | {c['unlockMinutes']}分 | "
-            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} | {qs} | ×{n} | {c['instantOpenDiamond']} |"
+            f"| {c['chestId']} | {c['name']} | {total} | {cols[0]} | {cols[1]} | {cols[2]} | "
+            f"{g['min']}-{g['max']} | {d['min']}-{d['max']} |"
         )
 
     lines += [
