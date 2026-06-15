@@ -5,23 +5,77 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# 稀有 50 金/张 → 史诗 ×3、传奇 ×8（金币）；钻石约 1 钻 ≈ 1.5 金
+# 品质单价（金币/钻石每卡）— 全店唯一基准
 GOLD_PER = {"common": 100, "rare": 50, "epic": 150, "legendary": 400}
 DIAMOND_PER = {"common": 1, "rare": 3, "epic": 8, "legendary": 20}
 
 HERO_COUNT = 37
-FRAG_PER_HERO = 4565  # heroLevel.json fragmentNeed sum
+FRAG_PER_HERO = 4565
 DECK_SIZE = 8
 
+QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 
-def card_offer(quality: str, count: int, **extra) -> dict:
+
+def price_gold(quality: str, count: int) -> int:
+    return GOLD_PER[quality] * count
+
+
+def price_diamond(quality: str, count: int) -> int:
+    return DIAMOND_PER[quality] * count
+
+
+def card_reward(quality: str, count: int) -> dict:
     return {
         "quality": quality,
         "count": count,
-        "goldPrice": GOLD_PER[quality] * count,
-        "diamondPrice": DIAMOND_PER[quality] * count,
-        **extra,
+        "goldPrice": price_gold(quality, count),
+        "diamondPrice": price_diamond(quality, count),
     }
+
+
+def card_purchase(
+    quality: str,
+    count: int,
+    *,
+    allow_gold: bool = True,
+    allow_diamond: bool = True,
+) -> dict:
+    return {
+        "gold": price_gold(quality, count) if allow_gold else None,
+        "diamond": price_diamond(quality, count) if allow_diamond else None,
+    }
+
+
+def validate_shop(shop: dict) -> list[str]:
+    """校验所有卡牌商品价格是否与 pricingReference 一致。"""
+    errors: list[str] = []
+    ref_g = shop["pricingReference"]["goldPerCard"]
+    ref_d = shop["pricingReference"]["diamondPerCard"]
+
+    def check(label: str, quality: str, count: int, purchase: dict, reward: dict) -> None:
+        eg = ref_g[quality] * count
+        ed = ref_d[quality] * count
+        if reward.get("goldPrice") != eg:
+            errors.append(f"{label} reward.goldPrice {reward.get('goldPrice')} != {eg}")
+        if reward.get("diamondPrice") != ed:
+            errors.append(f"{label} reward.diamondPrice {reward.get('diamondPrice')} != {ed}")
+        if purchase.get("gold") is not None and purchase["gold"] != eg:
+            errors.append(f"{label} purchase.gold {purchase['gold']} != {eg} ({QUALITY_CN[quality]}×{count})")
+        if purchase.get("diamond") is not None and purchase["diamond"] != ed:
+            errors.append(f"{label} purchase.diamond {purchase['diamond']} != {ed}")
+
+    daily = shop["zones"]["basic"]["dailyDeals"]
+    for s in daily["slots"]:
+        r = s["reward"]
+        if r.get("type") == "diamond":
+            continue
+        check(f"slot{s['slotId']}", r["quality"], r["count"], s["purchase"], r)
+
+    for s in daily["rotationPool"]:
+        r = s["reward"]
+        check(s["slotId"], r["quality"], r["count"], s["purchase"], r)
+
+    return errors
 
 
 def gen_shop() -> dict:
@@ -36,56 +90,62 @@ def gen_shop() -> dict:
         {
             "slotId": 2,
             "name": "普通卡×30",
-            "reward": card_offer("common", 30),
-            "purchase": {"gold": 3000, "diamond": 30},
+            "reward": card_reward("common", 30),
+            "purchase": card_purchase("common", 30),
             "ad": {"enabled": False},
         },
         {
             "slotId": 3,
             "name": "普通卡×50",
-            "reward": card_offer("common", 50),
-            "purchase": {"gold": 5000, "diamond": 50},
+            "reward": card_reward("common", 50),
+            "purchase": card_purchase("common", 50),
             "ad": {"enabled": False},
-            "note": "原稿「500金」应为笔误，按100金/张校正为5000",
+            "note": "原稿「500金」应为笔误，按100金/张=5000",
         },
         {
             "slotId": 4,
             "name": "稀有卡×15",
-            "reward": card_offer("rare", 15),
-            "purchase": {"gold": 750, "diamond": 45},
+            "reward": card_reward("rare", 15),
+            "purchase": card_purchase("rare", 15),
             "ad": {"enabled": False},
         },
         {
             "slotId": 5,
             "name": "稀有卡×20",
-            "reward": card_offer("rare", 20),
-            "purchase": {"gold": 1000, "diamond": 60},
+            "reward": card_reward("rare", 20),
+            "purchase": card_purchase("rare", 20),
             "ad": {"enabled": False},
         },
         {
             "slotId": 6,
             "name": "史诗卡×5",
-            "reward": card_offer("epic", 5),
-            "purchase": {"gold": 750, "diamond": 40},
-            "ad": {"enabled": True, "note": "看广告领取5张史诗通用卡"},
+            "reward": card_reward("epic", 5),
+            "purchase": card_purchase("epic", 5),
+            "ad": {"enabled": True, "note": "看广告领取；金币/钻石价=150×5=750金 / 8×5=40钻"},
         },
     ]
 
-    # 轮换第7档（刷新时随机出现，不占固定6格时可作奖池）
     daily_rotation = [
         {
             "slotId": "R1",
             "name": "传奇卡×2",
-            "reward": card_offer("legendary", 2),
-            "purchase": {"gold": None, "diamond": 40},
-            "ad": {"enabled": True, "cooldownHours": 4, "note": "高价值广告位，4小时1次"},
+            "reward": card_reward("legendary", 2),
+            "purchase": card_purchase("legendary", 2, allow_gold=False),
+            "ad": {"enabled": True, "cooldownHours": 4, "note": "40钻=20×2；金币档400×2=800（仅钻石购买）"},
         },
         {
             "slotId": "R2",
             "name": "史诗卡×10",
-            "reward": card_offer("epic", 10),
-            "purchase": {"gold": 1500, "diamond": 80},
+            "reward": card_reward("epic", 10),
+            "purchase": card_purchase("epic", 10),
             "ad": {"enabled": False},
+        },
+        {
+            "slotId": "R3",
+            "name": "传奇卡×5",
+            "reward": card_reward("legendary", 5),
+            "purchase": card_purchase("legendary", 5, allow_gold=False),
+            "ad": {"enabled": True, "cooldownHours": 6, "note": "100钻=20×5；非750（750为史诗×5）"},
         },
     ]
 
@@ -129,8 +189,8 @@ def gen_shop() -> dict:
     ]
 
     return {
-        "version": "1.0.0",
-        "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石)",
+        "version": "1.1.0",
+        "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石)；价格由品质单价推导",
         "zones": {
             "character": {
                 "name": "角色区",
@@ -195,34 +255,25 @@ def gen_shop() -> dict:
         "pricingReference": {
             "goldPerCard": GOLD_PER,
             "diamondPerCard": DIAMOND_PER,
-            "note": "每日优惠可用金币或钻石；通用卡仅人民币直购",
+            "formula": "总价 = 单价 × 张数；所有每日优惠由此推导",
+            "examples": {
+                "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
+                "legendary5": "传奇×5 = 400×5 = 2000金 / 20×5 = 100钻",
+            },
+            "note": "每日优惠可用金币或钻石；传奇轮换位默认仅钻石购买；通用卡仅人民币直购",
         },
     }
 
 
 def estimate_economy(shop: dict) -> dict:
-    """30天粗算：纯战斗 / 广告党 / 小氪 / 中氪"""
-    # 战斗线 (55% WR, 20局/天)
-    battle_cards_day = 20 * 10  # 粗算均质木质~10张/胜
+    battle_cards_day = 20 * 10
     battle_month = battle_cards_day * 30
-
-    daily = shop["zones"]["basic"]["dailyDeals"]
-    ad_ref = daily["refresh"]["maxAdRefreshesPerDay"]
-    # 广告党：每日优惠全买金币档 + 广告钻/史诗/传奇轮换
-    ad_diamond_day = 29 + ad_ref * 0.3 * 29  # 约30%刷新出钻 slot
-    ad_cards_day = 5 + 2 * 0.5  # 史诗广告5 + 传奇轮换期望1
-    ad_gold_deals = 15 + 20  # 稀有卡
-    ad_month_cards = (ad_cards_day + ad_gold_deals) * 30
-
-    # 小氪：月卡 + 每日1档18元稀有
-    small_rare_month = 30 * 30  # 900 rare/month
-
-    # 中氪：月卡 + 角色包4次/月
+    ad_month_cards = (5 + 20 + 35 * 0.3) * 30  # 史诗广告+稀有+传奇轮换期望
+    small_rare_month = 30 * 30
     pack = shop["zones"]["character"]["products"][2]["contents"]
     pack_month = sum(c["count"] for c in pack) * 4
-
-    all_heroes_frag = FRAG_PER_HERO * HERO_COUNT
     deck_frag = FRAG_PER_HERO * DECK_SIZE
+    all_heroes_frag = FRAG_PER_HERO * HERO_COUNT
 
     return {
         "targets": {
@@ -239,7 +290,6 @@ def estimate_economy(shop: dict) -> dict:
             "mid_payer_packx4": battle_month + pack_month,
         },
         "gapAnalysis": {
-            "note": "1卡=1碎片粗算；实际重复卡需有转化/溢出价值",
             "monthsToCoreDeck8F2P": round(deck_frag / battle_month, 1),
             "monthsToCoreDeck8Ad": round(deck_frag / (battle_month + ad_month_cards), 1),
             "monthsToCoreDeck8SmallPayer": round(deck_frag / (battle_month + small_rare_month), 1),
@@ -247,12 +297,40 @@ def estimate_economy(shop: dict) -> dict:
     }
 
 
+def _fmt_price_row(quality: str, count: int, purchase: dict) -> str:
+    g = purchase.get("gold")
+    d = purchase.get("diamond")
+    g_s = str(g) if g is not None else "—"
+    d_s = str(d) if d is not None else "—"
+    unit_g = GOLD_PER[quality]
+    unit_d = DIAMOND_PER[quality]
+    return f"| {QUALITY_CN[quality]}×{count} | {unit_g} | {unit_d} | {g_s} | {d_s} |"
+
+
 def gen_shop_md(shop: dict, economy: dict) -> str:
+    ex = shop["pricingReference"]["examples"]
     lines = [
         "# 商店配置与经济补足分析",
         "",
-        "> 配表：`shop.json` · 生成：`python3 scripts/gen-shop-config.py`",
-        "> 与 [`docs/ARENA_REWARDS.md`](ARENA_REWARDS.md)（竞技场）和 [`docs/PROGRESSION_TABLES.md`](PROGRESSION_TABLES.md) §四（账号等级）分离",
+        "> 配表：`shop.json` v" + shop["version"] + " · 生成：`python3 scripts/gen-shop-config.py`",
+        "",
+        "---",
+        "",
+        "## 品质单价（全店唯一基准）",
+        "",
+        "| 品质 | 金币/张 | 钻石/张 |",
+        "|:---|:---:|:---:|",
+    ]
+    for q in ("common", "rare", "epic", "legendary"):
+        lines.append(f"| {QUALITY_CN[q]} | {GOLD_PER[q]} | {DIAMOND_PER[q]} |")
+
+    lines += [
+        "",
+        "**换算示例：**",
+        f"- {ex['epic5']}（每日优惠第6格）",
+        f"- {ex['legendary5']}（轮换池传奇×5）",
+        "",
+        "> ⚠️ **750 金 = 史诗×5，不是传奇×5。** 传奇×5 应为 **2000 金 / 100 钻**。",
         "",
         "---",
         "",
@@ -270,7 +348,7 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
                 if c["type"] == "diamond":
                     parts.append(f"钻石{c['amount']}")
                 else:
-                    parts.append(f"{c.get('quality','')}{c['count']}张")
+                    parts.append(f"{QUALITY_CN.get(c.get('quality',''), c.get('quality',''))}{c['count']}张")
             content = " + ".join(parts)
         else:
             content = "—"
@@ -281,57 +359,68 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "---",
         "",
-        "## 二、基础区 · 每日优惠（6格）",
+        "## 二、每日优惠（6格）",
         "",
-        f"广告刷新 CD **{shop['zones']['basic']['dailyDeals']['refresh']['adCooldownHours']}小时**（日上限约12次）；可用 **20钻** 手动刷新（日限6次）。",
+        f"广告刷新 CD **{shop['zones']['basic']['dailyDeals']['refresh']['adCooldownHours']}小时**；手动刷新 **20钻**（日限6次）。",
         "",
-        "| 格 | 商品 | 金币价 | 钻石价 | 广告 |",
-        "|:---:|:---|:---:|:---:|:---:|",
+        "| 格 | 商品 | 金币价 | 钻石价 | 广告 | 验算 |",
+        "|:---:|:---|:---:|:---:|:---:|:---|",
     ]
     for s in shop["zones"]["basic"]["dailyDeals"]["slots"]:
         r = s["reward"]
         if r.get("type") == "diamond":
-            lines.append(f"| {s['slotId']} | 钻石×{r['amount']} | — | {r['amount']} | ✅ |")
+            lines.append(f"| {s['slotId']} | 钻石×{r['amount']} | — | {r['amount']} | ✅ | — |")
         else:
-            g = s["purchase"].get("gold")
-            d = s["purchase"].get("diamond")
+            q, n = r["quality"], r["count"]
+            g, d = s["purchase"].get("gold"), s["purchase"].get("diamond")
             ad = "✅" if s["ad"].get("enabled") else "—"
-            lines.append(f"| {s['slotId']} | {s['name']} | {g or '—'} | {d} | {ad} |")
+            calc = f"{GOLD_PER[q]}×{n}={GOLD_PER[q]*n}"
+            lines.append(f"| {s['slotId']} | {s['name']} | {g} | {d} | {ad} | {calc} |")
 
     lines += [
         "",
-        "### 轮换高价值位（刷新随机）",
+        "### 轮换池",
         "",
-        "| 商品 | 钻石价 | 广告 |",
-        "|:---|:---:|:---:|",
+        "| 商品 | 金币价 | 钻石价 | 广告 | 验算 |",
+        "|:---|:---:|:---:|:---:|:---|",
     ]
     for s in shop["zones"]["basic"]["dailyDeals"]["rotationPool"]:
+        r = s["reward"]
+        q, n = r["quality"], r["count"]
+        g = s["purchase"].get("gold")
+        d = s["purchase"].get("diamond")
         ad = "✅" if s["ad"].get("enabled") else "—"
-        lines.append(f"| {s['name']} | {s['purchase']['diamond']} | {ad} |")
+        g_s = str(g) if g is not None else "—"
+        calc = f"{GOLD_PER[q]}×{n}={GOLD_PER[q]*n}"
+        lines.append(f"| {s['name']} | {g_s} | {d} | {ad} | {calc} |")
 
     lines += [
         "",
-        "### 品质定价参考",
+        "### 全商品验算表",
         "",
-        "| 品质 | 金币/张 | 钻石/张 |",
-        "|:---|:---:|:---:|",
+        "| 商品 | 金/张 | 钻/张 | 总金币 | 总钻石 |",
+        "|:---|:---:|:---:|:---:|:---:|",
     ]
-    for q, g in shop["pricingReference"]["goldPerCard"].items():
-        d = shop["pricingReference"]["diamondPerCard"][q]
-        cn = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}[q]
-        lines.append(f"| {cn} | {g} | {d} |")
+    for s in shop["zones"]["basic"]["dailyDeals"]["slots"]:
+        r = s["reward"]
+        if r.get("type") == "diamond":
+            continue
+        lines.append(_fmt_price_row(r["quality"], r["count"], s["purchase"]))
+    for s in shop["zones"]["basic"]["dailyDeals"]["rotationPool"]:
+        r = s["reward"]
+        lines.append(_fmt_price_row(r["quality"], r["count"], s["purchase"]))
 
     lines += [
         "",
         "---",
         "",
-        "## 三、通用卡直购（¥18 / 30张，每品质日限4次）",
+        "## 三、通用卡直购（¥18/30张，每品质日限4次）",
         "",
-        "| SKU | 内容 | 日上限 | 日满购 |",
-        "|:---|:---|:---:|:---:|",
+        "| SKU | 日满购 |",
+        "|:---|:---:|",
     ]
     for p in shop["zones"]["basic"]["universalCardPacks"]["packs"]:
-        lines.append(f"| {p['name']} | ¥{p['priceCny']} | {p['dailyLimit']}次 | {p['count']*p['dailyLimit']}张 |")
+        lines.append(f"| {p['name']} | {p['count']*p['dailyLimit']}张 |")
 
     lines += [
         "",
@@ -339,39 +428,26 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "## 四、钻石充值（6档）",
         "",
-        "| 档位 | 价格 | 钻石 | 赠送 | 合计 |",
-        "|:---:|:---:|:---:|:---:|:---:|",
+        "| 档位 | 价格 | 合计钻石 |",
+        "|:---:|:---:|:---:|",
     ]
     for t in shop["zones"]["basic"]["diamondRecharge"]:
-        total = t["diamond"] + t["bonus"]
-        lines.append(f"| {t['tierId']} | ¥{t['priceCny']} | {t['diamond']} | +{t['bonus']} | **{total}** |")
+        lines.append(f"| {t['tierId']} | ¥{t['priceCny']} | {t['diamond']+t['bonus']} |")
 
     e = economy
     lines += [
         "",
         "---",
         "",
-        "## 五、能否补上养成缺口？（30天粗算）",
+        "## 五、经济补足（30天粗算）",
         "",
-        f"- 37英雄全满需碎片（1卡=1片）：**{e['targets']['allHeroesFrag']:,}**",
-        f"- 核心8卡编队满级需：**{e['targets']['coreDeckFrag']:,}**",
+        f"- 核心8卡满级需碎片：**{e['targets']['coreDeckFrag']:,}**",
         "",
-        "| 玩家类型 | 月获卡牌(粗算) | 说明 |",
-        "|:---|:---:|:---|",
-        f"| 纯战斗 F2P | ~{e['monthlyCardsEstimate']['f2p_battleOnly']:,} | 20胜/天 |",
-        f"| 战斗+广告 | ~{e['monthlyCardsEstimate']['ad_player']:,} | 含每日广告优惠 |",
-        f"| 小氪(月卡+¥18/天稀有) | ~{e['monthlyCardsEstimate']['small_payer_18daily']:,} | 拉平稀有缺口 |",
-        f"| 中氪(月卡+角色包×4/月) | ~{e['monthlyCardsEstimate']['mid_payer_packx4']:,} | 传奇/史诗爆发 |",
-        "",
-        "| 目标 | F2P | 广告党 | 小氪 |",
-        "|:---|:---:|:---:|:---:|",
-        f"| 核心8卡满级(月) | ~{e['gapAnalysis']['monthsToCoreDeck8F2P']} | ~{e['gapAnalysis']['monthsToCoreDeck8Ad']} | ~{e['gapAnalysis']['monthsToCoreDeck8SmallPayer']} |",
-        "",
-        "**结论：**",
-        "- 商店主要补 **稀有→传奇** 长线缺口，战斗线负责 **金币+经验+奖杯**",
-        "- F2P 约 **2–3个月** 可养满核心8卡（合理）",
-        "- 全37英雄满级是 **年级别** 目标，需角色包/通用传奇直购",
-        "- 广告党与小氪差距主要体现在 **高品级卡速度**，符合「拉开差距」目标",
+        "| 玩家 | 月获卡(粗算) | 核心8卡满级 |",
+        "|:---|:---:|:---:|",
+        f"| F2P | ~{e['monthlyCardsEstimate']['f2p_battleOnly']:,} | ~{e['gapAnalysis']['monthsToCoreDeck8F2P']}月 |",
+        f"| 广告党 | ~{int(e['monthlyCardsEstimate']['ad_player']):,} | ~{e['gapAnalysis']['monthsToCoreDeck8Ad']}月 |",
+        f"| 小氪 | ~{e['monthlyCardsEstimate']['small_payer_18daily']:,} | ~{e['gapAnalysis']['monthsToCoreDeck8SmallPayer']}月 |",
         "",
     ]
     return "\n".join(lines)
@@ -379,11 +455,14 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
 
 if __name__ == "__main__":
     shop = gen_shop()
-    economy = estimate_economy(shop)
+    errors = validate_shop(shop)
+    if errors:
+        raise SystemExit("定价校验失败:\n" + "\n".join(errors))
 
+    economy = estimate_economy(shop)
     shop_path = ROOT / "shop.json"
     shop_path.write_text(json.dumps(shop, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {shop_path}")
+    print(f"Wrote {shop_path} (pricing OK)")
 
     md_path = ROOT / "docs" / "SHOP_AND_ECONOMY.md"
     md_path.write_text(gen_shop_md(shop, economy) + "\n", encoding="utf-8")
