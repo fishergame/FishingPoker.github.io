@@ -1,0 +1,710 @@
+{
+  "version": "1.0.0",
+  "description": "10个竞技场：奖杯解锁、对战收益、宝箱掉落",
+  "arenaCount": 10,
+  "rules": {
+    "trophyMin": 0,
+    "arenaNoDemotion": true,
+    "tierNoDemotion": true,
+    "trophyLossFormula": "max(0, currentTrophy - trophyLoss)",
+    "matchmakingArena": "maxArenaUnlocked",
+    "seasonResetRatio": 0.2
+  },
+  "arenas": [
+    {
+      "arenaId": 1,
+      "name": "青铜",
+      "tier": "bronze",
+      "unlockTrophy": 0,
+      "nextArenaTrophy": 100,
+      "battleReward": {
+        "trophyWin": 30,
+        "trophyLoss": 0,
+        "expWin": 20,
+        "expLoss": 8,
+        "expLossRatio": 0.4,
+        "victoryGold": 50,
+        "dailyGoldCap": 500,
+        "chestDropId": "wooden",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 25,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 62
+            }
+          ]
+        },
+        {
+          "trophy": 50,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 75
+            }
+          ]
+        },
+        {
+          "trophy": 75,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 88
+            }
+          ]
+        },
+        {
+          "trophy": 100,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 100
+            },
+            {
+              "type": "chest",
+              "chestId": "wooden"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 250
+        },
+        {
+          "type": "chest",
+          "chestId": "wooden"
+        }
+      ]
+    },
+    {
+      "arenaId": 2,
+      "name": "白银",
+      "tier": "silver",
+      "unlockTrophy": 100,
+      "nextArenaTrophy": 300,
+      "battleReward": {
+        "trophyWin": 28,
+        "trophyLoss": 5,
+        "expWin": 25,
+        "expLoss": 10,
+        "expLossRatio": 0.4,
+        "victoryGold": 80,
+        "dailyGoldCap": 800,
+        "chestDropId": "silver",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 150,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 100
+            }
+          ]
+        },
+        {
+          "trophy": 200,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 120
+            }
+          ]
+        },
+        {
+          "trophy": 250,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 140
+            }
+          ]
+        },
+        {
+          "trophy": 300,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 160
+            },
+            {
+              "type": "chest",
+              "chestId": "silver"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 400
+        },
+        {
+          "type": "chest",
+          "chestId": "silver"
+        },
+        {
+          "type": "feature",
+          "featureId": "artifact"
+        }
+      ]
+    },
+    {
+      "arenaId": 3,
+      "name": "黄金",
+      "tier": "gold",
+      "unlockTrophy": 300,
+      "nextArenaTrophy": 600,
+      "battleReward": {
+        "trophyWin": 26,
+        "trophyLoss": 8,
+        "expWin": 30,
+        "expLoss": 12,
+        "expLossRatio": 0.4,
+        "victoryGold": 120,
+        "dailyGoldCap": 1200,
+        "chestDropId": "golden",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 375,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 150
+            }
+          ]
+        },
+        {
+          "trophy": 450,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 180
+            }
+          ]
+        },
+        {
+          "trophy": 525,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 210
+            }
+          ]
+        },
+        {
+          "trophy": 600,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 240
+            },
+            {
+              "type": "chest",
+              "chestId": "golden"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 600
+        },
+        {
+          "type": "chest",
+          "chestId": "golden"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 4,
+      "name": "铂金",
+      "tier": "platinum",
+      "unlockTrophy": 600,
+      "nextArenaTrophy": 1000,
+      "battleReward": {
+        "trophyWin": 25,
+        "trophyLoss": 10,
+        "expWin": 35,
+        "expLoss": 14,
+        "expLossRatio": 0.4,
+        "victoryGold": 160,
+        "dailyGoldCap": 1600,
+        "chestDropId": "platinum",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 700,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 200
+            }
+          ]
+        },
+        {
+          "trophy": 800,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 240
+            }
+          ]
+        },
+        {
+          "trophy": 900,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 280
+            }
+          ]
+        },
+        {
+          "trophy": 1000,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 320
+            },
+            {
+              "type": "chest",
+              "chestId": "platinum"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 800
+        },
+        {
+          "type": "chest",
+          "chestId": "platinum"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 5,
+      "name": "钻石",
+      "tier": "diamond",
+      "unlockTrophy": 1000,
+      "nextArenaTrophy": 1600,
+      "battleReward": {
+        "trophyWin": 24,
+        "trophyLoss": 12,
+        "expWin": 40,
+        "expLoss": 16,
+        "expLossRatio": 0.4,
+        "victoryGold": 200,
+        "dailyGoldCap": 2000,
+        "chestDropId": "diamond",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 1150,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 250
+            }
+          ]
+        },
+        {
+          "trophy": 1300,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 300
+            }
+          ]
+        },
+        {
+          "trophy": 1450,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 350
+            }
+          ]
+        },
+        {
+          "trophy": 1600,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 400
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 1000
+        },
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 6,
+      "name": "星耀",
+      "tier": "star",
+      "unlockTrophy": 1600,
+      "nextArenaTrophy": 2500,
+      "battleReward": {
+        "trophyWin": 23,
+        "trophyLoss": 15,
+        "expWin": 45,
+        "expLoss": 18,
+        "expLossRatio": 0.4,
+        "victoryGold": 250,
+        "dailyGoldCap": 2500,
+        "chestDropId": "diamond",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 1825,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 312
+            }
+          ]
+        },
+        {
+          "trophy": 2050,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 375
+            }
+          ]
+        },
+        {
+          "trophy": 2275,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 438
+            }
+          ]
+        },
+        {
+          "trophy": 2500,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 500
+            },
+            {
+              "type": "chest",
+              "chestId": "diamond"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 1250
+        },
+        {
+          "type": "chest",
+          "chestId": "diamond"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 7,
+      "name": "大师",
+      "tier": "master",
+      "unlockTrophy": 2500,
+      "nextArenaTrophy": 4000,
+      "battleReward": {
+        "trophyWin": 22,
+        "trophyLoss": 18,
+        "expWin": 50,
+        "expLoss": 20,
+        "expLossRatio": 0.4,
+        "victoryGold": 300,
+        "dailyGoldCap": 3000,
+        "chestDropId": "epic",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 2875,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 375
+            }
+          ]
+        },
+        {
+          "trophy": 3250,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 450
+            }
+          ]
+        },
+        {
+          "trophy": 3625,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 525
+            }
+          ]
+        },
+        {
+          "trophy": 4000,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 600
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 1500
+        },
+        {
+          "type": "chest",
+          "chestId": "epic"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 8,
+      "name": "宗师",
+      "tier": "grandmaster",
+      "unlockTrophy": 4000,
+      "nextArenaTrophy": 6000,
+      "battleReward": {
+        "trophyWin": 21,
+        "trophyLoss": 20,
+        "expWin": 55,
+        "expLoss": 22,
+        "expLossRatio": 0.4,
+        "victoryGold": 350,
+        "dailyGoldCap": 3500,
+        "chestDropId": "epic",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 4500,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 438
+            }
+          ]
+        },
+        {
+          "trophy": 5000,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 525
+            }
+          ]
+        },
+        {
+          "trophy": 5500,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 612
+            }
+          ]
+        },
+        {
+          "trophy": 6000,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 700
+            },
+            {
+              "type": "chest",
+              "chestId": "epic"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 1750
+        },
+        {
+          "type": "chest",
+          "chestId": "epic"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 9,
+      "name": "王者",
+      "tier": "king",
+      "unlockTrophy": 6000,
+      "nextArenaTrophy": 9000,
+      "battleReward": {
+        "trophyWin": 20,
+        "trophyLoss": 22,
+        "expWin": 60,
+        "expLoss": 24,
+        "expLossRatio": 0.4,
+        "victoryGold": 400,
+        "dailyGoldCap": 4000,
+        "chestDropId": "legendary",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [
+        {
+          "trophy": 6750,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 500
+            }
+          ]
+        },
+        {
+          "trophy": 7500,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 600
+            }
+          ]
+        },
+        {
+          "trophy": 8250,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 700
+            }
+          ]
+        },
+        {
+          "trophy": 9000,
+          "rewards": [
+            {
+              "type": "gold",
+              "amount": 800
+            },
+            {
+              "type": "chest",
+              "chestId": "legendary"
+            }
+          ]
+        }
+      ],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 2000
+        },
+        {
+          "type": "chest",
+          "chestId": "legendary"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    },
+    {
+      "arenaId": 10,
+      "name": "传奇",
+      "tier": "legend",
+      "unlockTrophy": 9000,
+      "nextArenaTrophy": null,
+      "battleReward": {
+        "trophyWin": 19,
+        "trophyLoss": 25,
+        "expWin": 70,
+        "expLoss": 28,
+        "expLossRatio": 0.4,
+        "victoryGold": 500,
+        "dailyGoldCap": 5000,
+        "chestDropId": "legendary",
+        "chestDropChance": 1.0
+      },
+      "trophyMilestones": [],
+      "firstUnlockRewards": [
+        {
+          "type": "gold",
+          "amount": 2500
+        },
+        {
+          "type": "chest",
+          "chestId": "legendary"
+        },
+        {
+          "type": "pickOne",
+          "optionCount": 3
+        }
+      ]
+    }
+  ]
+}

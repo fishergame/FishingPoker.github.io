@@ -1,0 +1,192 @@
+{
+  "version": "1.0.0",
+  "description": "宝箱品质与开启时间、产出配置",
+  "slotCount": 4,
+  "chests": [
+    {
+      "chestId": "wooden",
+      "name": "木质宝箱",
+      "unlockMinutes": 5,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 5,
+      "rewards": {
+        "gold": {
+          "min": 20,
+          "max": 50
+        },
+        "diamond": {
+          "min": 0,
+          "max": 0
+        },
+        "cards": {
+          "common": {
+            "min": 2,
+            "max": 4
+          }
+        }
+      }
+    },
+    {
+      "chestId": "silver",
+      "name": "白银宝箱",
+      "unlockMinutes": 30,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 10,
+      "rewards": {
+        "gold": {
+          "min": 50,
+          "max": 120
+        },
+        "diamond": {
+          "min": 0,
+          "max": 1
+        },
+        "cards": {
+          "common": {
+            "min": 4,
+            "max": 8
+          },
+          "rare": {
+            "min": 0,
+            "max": 1
+          }
+        }
+      }
+    },
+    {
+      "chestId": "golden",
+      "name": "黄金宝箱",
+      "unlockMinutes": 120,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 20,
+      "rewards": {
+        "gold": {
+          "min": 100,
+          "max": 250
+        },
+        "diamond": {
+          "min": 1,
+          "max": 3
+        },
+        "cards": {
+          "common": {
+            "min": 6,
+            "max": 10
+          },
+          "rare": {
+            "min": 1,
+            "max": 2
+          }
+        }
+      }
+    },
+    {
+      "chestId": "platinum",
+      "name": "铂金宝箱",
+      "unlockMinutes": 240,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 30,
+      "rewards": {
+        "gold": {
+          "min": 200,
+          "max": 500
+        },
+        "diamond": {
+          "min": 2,
+          "max": 5
+        },
+        "cards": {
+          "rare": {
+            "min": 2,
+            "max": 4
+          },
+          "epic": {
+            "min": 0,
+            "max": 1
+          }
+        }
+      }
+    },
+    {
+      "chestId": "diamond",
+      "name": "钻石宝箱",
+      "unlockMinutes": 480,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 50,
+      "rewards": {
+        "gold": {
+          "min": 400,
+          "max": 800
+        },
+        "diamond": {
+          "min": 5,
+          "max": 10
+        },
+        "cards": {
+          "rare": {
+            "min": 4,
+            "max": 6
+          },
+          "epic": {
+            "min": 1,
+            "max": 2
+          }
+        }
+      }
+    },
+    {
+      "chestId": "epic",
+      "name": "史诗宝箱",
+      "unlockMinutes": 720,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 80,
+      "rewards": {
+        "gold": {
+          "min": 600,
+          "max": 1200
+        },
+        "diamond": {
+          "min": 8,
+          "max": 15
+        },
+        "cards": {
+          "epic": {
+            "min": 2,
+            "max": 4
+          },
+          "legendary": {
+            "min": 0,
+            "max": 1
+          }
+        }
+      }
+    },
+    {
+      "chestId": "legendary",
+      "name": "传奇宝箱",
+      "unlockMinutes": 1440,
+      "adReduceMinutes": 30,
+      "instantOpenDiamond": 100,
+      "rewards": {
+        "gold": {
+          "min": 1000,
+          "max": 2000
+        },
+        "diamond": {
+          "min": 15,
+          "max": 30
+        },
+        "cards": {
+          "epic": {
+            "min": 3,
+            "max": 5
+          },
+          "legendary": {
+            "min": 1,
+            "max": 2
+          }
+        }
+      }
+    }
+  ]
+}
