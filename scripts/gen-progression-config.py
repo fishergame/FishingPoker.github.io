@@ -346,7 +346,91 @@ def fmt_reward(rewards: list) -> str:
             parts.append(fmt_chest_grant(r))
         elif r["type"] == "randomHeroCard":
             parts.append(fmt_random_card(r))
+        elif r["type"] == "feature":
+            parts.append(f"功能解锁·{r.get('featureId', '?')}")
+        elif r["type"] == "pickOne":
+            parts.append(f"三选一×{r.get('optionCount', 3)}")
     return " + ".join(parts) if parts else "—"
+
+
+def gen_arena_rewards_md(arena) -> str:
+    """竞技场奖励专表（与账号等级奖励分离）。"""
+    cap = arena["rules"].get("legendTrophySoftCap", "—")
+    lines = [
+        "# 竞技场奖励一览（`arena.json`）",
+        "",
+        "> **与账号等级奖励无关**：账号升级奖励见 [`PROGRESSION_TABLES.md` §五](PROGRESSION_TABLES.md#五账号等级-1100升级奖励)。",
+        "> 生成：`python3 scripts/gen-progression-config.py`",
+        "",
+        "竞技场共有 **两类一次性/里程碑奖励**：",
+        "",
+        "| 类型 | 字段 | 触发时机 |",
+        "|:---|:---|:---|",
+        "| **首次解锁** | `firstUnlockRewards` | 奖杯首次达到该场次 `unlockTrophy`，进入新竞技场时发放（仅一次） |",
+        "| **段位内里程碑** | `trophyMilestones` | 在该段位奖杯区间内累计达到指定 `trophy` 时领取（每节点一次） |",
+        "",
+        "另：**每场对战胜利**另有即时收益（奖杯/经验/金币/宝箱），见下表「对战收益」。",
+        "",
+        "---",
+        "",
+        "## 1. 场次解锁与对战收益",
+        "",
+        "| 场次 | 名称 | 解锁奖杯 | 下一场 | 胜杯 | 败扣 | 胜经验 | 败经验 | 胜金币 | 日上限 | 胜利掉落宝箱 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
+    ]
+    for a in arena["arenas"]:
+        br = a["battleReward"]
+        nxt = a["nextArenaTrophy"] if a["nextArenaTrophy"] else f"—（软上限{cap}）"
+        lines.append(
+            f"| {a['arenaId']} | {a['name']} | {a['unlockTrophy']} | {nxt} | "
+            f"+{br['trophyWin']} | -{br['trophyLoss']} | {br['expWin']} | {br['expLoss']} | "
+            f"{br['victoryGold']} | {br['dailyGoldCap']} | {br['chestDropId']} |"
+        )
+
+    lines += [
+        "",
+        "---",
+        "",
+        "## 2. 首次解锁奖励（进入新竞技场）",
+        "",
+        "奖杯达到该场次 `unlockTrophy` 时触发，**每个场次仅发放一次**。",
+        "",
+        "| 场次 | 名称 | 解锁奖杯 | 奖励 |",
+        "|:---:|:---:|:---:|:---|",
+    ]
+    for a in arena["arenas"]:
+        lines.append(
+            f"| {a['arenaId']} | {a['name']} | {a['unlockTrophy']} | "
+            f"{fmt_reward(a.get('firstUnlockRewards', []))} |"
+        )
+
+    lines += [
+        "",
+        "---",
+        "",
+        "## 3. 段位内奖杯里程碑（累计奖杯领奖）",
+        "",
+        "节点数 = **场次编号**（青铜 1 个、白银 2 个 … 传奇 10 个，共 **55** 个节点）。",
+        "奖杯在 `[unlockTrophy, nextArenaTrophy]` 内均匀分布；传奇段无下一场，使用软上限 **"
+        f"{cap}**。",
+        "每项奖励：**金币 + 钻石 + 宝箱**（宝箱品质与该场次对战掉落一致）。",
+        "",
+        "| 场次 | 名称 | 节点 | 累计奖杯 | 奖励 |",
+        "|:---:|:---:|:---:|:---:|:---|",
+    ]
+    for a in arena["arenas"]:
+        ms_list = a.get("trophyMilestones", [])
+        if not ms_list:
+            lines.append(f"| {a['arenaId']} | {a['name']} | — | — | — |")
+            continue
+        for idx, ms in enumerate(ms_list):
+            name_cell = a["name"] if idx == 0 else ""
+            lines.append(
+                f"| {a['arenaId'] if idx == 0 else ''} | {name_cell} | "
+                f"{idx + 1}/{len(ms_list)} | {ms['trophy']} | {fmt_reward(ms['rewards'])} |"
+            )
+    lines.append("")
+    return "\n".join(lines)
 
 
 def fmt_milestone_rewards(rewards: list) -> str:
@@ -354,15 +438,29 @@ def fmt_milestone_rewards(rewards: list) -> str:
 
 
 def gen_progression_tables_md(arena, chest, account, hero):
+    cap = arena["rules"].get("legendTrophySoftCap", "—")
     lines = [
         "# 《代号x》养成与竞技数值汇总表",
         "",
         "> 配表：`arena.json` · `accountLevel.json` · `chest.json` · `heroLevel.json`",
         "> 生成：`python3 scripts/gen-progression-config.py`",
         "",
+        "## 文档索引",
+        "",
+        "| 主题 | 说明 | 位置 |",
+        "|:---|:---|:---|",
+        "| **竞技场奖励** | 解锁奖励 + 段位内奖杯里程碑 + 对战收益 | **[`docs/ARENA_REWARDS.md`](ARENA_REWARDS.md)**（完整专表） |",
+        "| 宝箱产出 | 各品质宝箱内容 | 本文 §二 |",
+        "| 英雄升级 | 碎片与金币 | `heroLevel.json` |",
+        "| **账号等级奖励** | 升级经验与奇偶交替奖励（与竞技场无关） | 本文 §五 |",
+        "",
         "---",
         "",
-        "## 一、10 个竞技场",
+        "## 一、竞技场（摘要）",
+        "",
+        "完整竞技场解锁/里程碑/对战表见 **[`docs/ARENA_REWARDS.md`](ARENA_REWARDS.md)**。",
+        "",
+        "### 1.1 场次与对战收益",
         "",
         "| 场次 | 名称 | 解锁奖杯 | 下一场 | 胜杯 | 败扣 | 胜经验 | 败经验 | 胜金币 | 日上限 | 掉落宝箱 |",
         "|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|",
@@ -378,25 +476,36 @@ def gen_progression_tables_md(arena, chest, account, hero):
 
     lines += [
         "",
-        "### 段位内奖杯里程碑",
+        "### 1.2 首次解锁奖励（进入新竞技场，仅一次）",
         "",
-        "每个段位内奖励节点数 = **场次编号**（青铜 1 个、白银 2 个 … 传奇 10 个），",
-        "奖杯在 `[解锁, 下一段/软上限]` 区间内均匀分布；每项奖励含 **金币 + 钻石 + 宝箱**。",
+        "| 场次 | 名称 | 解锁奖杯 | 奖励 |",
+        "|:---:|:---:|:---:|:---|",
+    ]
+    for a in arena["arenas"]:
+        lines.append(
+            f"| {a['arenaId']} | {a['name']} | {a['unlockTrophy']} | "
+            f"{fmt_reward(a.get('firstUnlockRewards', []))} |"
+        )
+
+    lines += [
         "",
-        "| 场次 | 名称 | 节点数 | 奖杯 | 奖励 |",
+        "### 1.3 段位内奖杯里程碑（累计奖杯，金币+钻石+宝箱）",
+        "",
+        f"节点数 = 场次编号（共 55 个）；传奇软上限 **{cap}**。完整表见 [`ARENA_REWARDS.md`](ARENA_REWARDS.md) §3。",
+        "",
+        "| 场次 | 名称 | 节点 | 累计奖杯 | 奖励 |",
         "|:---:|:---:|:---:|:---:|:---|",
     ]
     for a in arena["arenas"]:
         ms_list = a.get("trophyMilestones", [])
         if not ms_list:
-            lines.append(f"| {a['arenaId']} | {a['name']} | 0 | — | — |")
+            lines.append(f"| {a['arenaId']} | {a['name']} | — | — | — |")
             continue
         for idx, ms in enumerate(ms_list):
             name_cell = a["name"] if idx == 0 else ""
-            count_cell = str(len(ms_list)) if idx == 0 else ""
             lines.append(
-                f"| {a['arenaId'] if idx == 0 else ''} | {name_cell} | {count_cell} | "
-                f"{ms['trophy']} | {fmt_milestone_rewards(ms['rewards'])} |"
+                f"| {a['arenaId'] if idx == 0 else ''} | {name_cell} | "
+                f"{idx + 1}/{len(ms_list)} | {ms['trophy']} | {fmt_reward(ms['rewards'])} |"
             )
 
     lines += [
@@ -434,9 +543,9 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "",
         "---",
         "",
-        "## 四、账号等级 1→100（交替奖励）",
+        "## 四、账号等级 1→100（升级奖励 · 与竞技场无关）",
         "",
-        "**规则：**",
+        "**规则（账号经验来自对战，奖励逻辑独立于竞技场奖杯）：**",
         "- **奇数级**：品质宝箱（共10/20张卡分3名英雄，见 chest.json）",
         "- **偶数级**：**随机1张卡**（低40%/中30%/高30%三档品质抽其一，优先未拥有）",
         "- 活动角色写入 `heroRewardPool.excludeHeroIds`，不参与随机",
@@ -481,3 +590,7 @@ if __name__ == "__main__":
     md_path = ROOT / "docs" / "PROGRESSION_TABLES.md"
     md_path.write_text(gen_progression_tables_md(arena, chest, account, hero) + "\n", encoding="utf-8")
     print(f"Wrote {md_path}")
+
+    arena_md_path = ROOT / "docs" / "ARENA_REWARDS.md"
+    arena_md_path.write_text(gen_arena_rewards_md(arena) + "\n", encoding="utf-8")
+    print(f"Wrote {arena_md_path}")
