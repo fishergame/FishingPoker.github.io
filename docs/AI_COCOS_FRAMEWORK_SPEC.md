@@ -270,26 +270,30 @@ interface CardAggregateData {
 
 ### 3.4 商店一级页 — ShopPage
 
-> 商店文档较简，以下结合战斗页货币表 + 商店 doc 整理。
+> 配表：`shop.json` v2.0.0 · 文档：`docs/SHOP_AND_ECONOMY.md` · 运行时：`shop-config.js`
 
-**3 个子模块（纵向 Scroll 或顶 Tab）**：
+**子模块（顶 Tab）**：
 
-| 模块 | 内容 |
-|------|------|
-| 特卖 | 月卡、神器包、角色包；商品卡片 + 特效 |
-| 基础 | 金币/木材/符文石/水晶/钻石 各档位；**每日优惠** |
-| 竞技场 | 按竞技场 1→N 排序；战旗/角色/金矿/金币礼包；解锁=达到该竞技场；买完或限时到期下架 |
+| 模块 | tabId | 内容 |
+|------|-------|------|
+| **礼包** | `giftPacks` | 四阵营卡牌礼包（人族/兽族/亡灵/机械）；广告转盘获取；**无月卡、无神器** |
+| **基础** | `basic` | 每日优惠、通用卡直购、砖头礼包 |
+| 竞技场 | `arena` | 一期不做 |
 
-**月卡（特卖）**：
-- 首次购买即时奖 + 每日领取
-- 特权：跳过广告（与宝箱/召唤联动，一期 mock）
-- 可续订，时间累加
+**礼包页（`giftPacks`）**：
+- 4 个礼包，角色池来自 `bond.json`，**互不重叠**
+- 每礼包每日 **4 次**购买；IAP 未接入时统一 **转盘 + 看广告**
+- 转盘四格各 25% 展示；当日保底：1 次免费、1 次看 1 广告、1 次看 2 广告、1 次看 3 广告
+- 领取后通用奖励页；按阵营刷新传奇预览与其他卡牌
+- 售罄置灰沉底；Toast「今日购买已达上限，请明日再来。」
 
 **购买流程（一期）**：
 ```
-点击购买 → ShopService.purchase(productId) → mock 成功 
-→ 货币/道具入账 → RewardFlow → 刷新 UI
+点击购买 → 转盘 → (免费领取 | 看广告×N) → ShopService.claimGiftPack(productId)
+→ RewardFlow → 刷新礼包展示 / 售罄态
 ```
+
+**广告未完成**：回到转盘页，保留指针档位与已看广告进度；主按钮「看广告」/「继续抽奖」+ 次按钮「放弃机会」。
 
 **货币不足**：`CurrencyLackPopup` → 跳转 ShopPage 并 `scrollToProduct(currencyType)`
 
@@ -497,7 +501,7 @@ rankTier.json      # 段位
 chest.json
 heroAccountLevel.json  # 1-100
 currency.json
-shopProducts.json  # 特卖+基础+竞技场商品
+shop.json           # 礼包(四阵营) + 基础区商品；见 docs/SHOP_AND_ECONOMY.md
 summonPool.json
 summonLevel.json
 emoji.json

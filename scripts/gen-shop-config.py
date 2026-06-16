@@ -15,6 +15,86 @@ DECK_SIZE = 8
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 
+FACTION_PACK_ORDER = ["human", "beast", "undead", "mechanical"]
+FACTION_PACK_PRODUCT_ID = {
+    "human": "hero_pack_human",
+    "beast": "hero_pack_beast",
+    "undead": "hero_pack_undead",
+    "mechanical": "hero_pack_mechanical",
+}
+
+# 与原 hero_pack_premium 一致的内容结构
+FACTION_PACK_CONTENTS = [
+    {
+        "type": "heroCard",
+        "quality": "legendary",
+        "count": 20,
+        "pool": "faction",
+        "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片",
+    },
+    {
+        "type": "heroCard",
+        "quality": "epic",
+        "count": 50,
+        "pool": "faction",
+        "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片",
+    },
+    {
+        "type": "heroCard",
+        "quality": "rare",
+        "count": 100,
+        "pool": "faction",
+        "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片",
+    },
+]
+
+WHEEL_SLOTS = [
+    {
+        "slotId": "free",
+        "label": "直接免费",
+        "displayWeight": 0.25,
+        "adsRequired": 0,
+        "tierKey": "free",
+    },
+    {
+        "slotId": "ad_1",
+        "label": "看1个广告",
+        "displayWeight": 0.25,
+        "adsRequired": 1,
+        "tierKey": "ad_1",
+    },
+    {
+        "slotId": "ad_2",
+        "label": "看2个广告",
+        "displayWeight": 0.25,
+        "adsRequired": 2,
+        "tierKey": "ad_2",
+    },
+    {
+        "slotId": "ad_3",
+        "label": "看3个广告",
+        "displayWeight": 0.25,
+        "adsRequired": 3,
+        "tierKey": "ad_3",
+    },
+]
+
+
+def load_bond_factions() -> dict[str, dict]:
+    bond = json.loads((ROOT / "bond.json").read_text(encoding="utf-8"))
+    out: dict[str, dict] = {}
+    for b in bond["bonds"]:
+        if b.get("type") != "faction":
+            continue
+        fid = b["faction"]
+        out[fid] = {
+            "bondId": b["bondId"],
+            "name": b["name"],
+            "faction": fid,
+            "heroIds": list(b["heroIds"]),
+        }
+    return out
+
 
 def price_gold(quality: str, count: int) -> int:
     return GOLD_PER[quality] * count
@@ -43,6 +123,125 @@ def card_purchase(
     return {
         "gold": price_gold(quality, count) if allow_gold else None,
         "diamond": price_diamond(quality, count) if allow_diamond else None,
+    }
+
+
+def faction_pack_products(factions: dict[str, dict]) -> list[dict]:
+    products = []
+    for idx, fid in enumerate(FACTION_PACK_ORDER):
+        meta = factions[fid]
+        products.append(
+            {
+                "productId": FACTION_PACK_PRODUCT_ID[fid],
+                "name": f"{meta['name']}礼包",
+                "faction": fid,
+                "factionLabel": meta["name"],
+                "bondId": meta["bondId"],
+                "heroPool": meta["heroIds"],
+                "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+                "sortWeight": 100 - idx,
+                "dailyPurchaseLimit": 4,
+                "purchaseModel": "ad_wheel",
+                "contents": [dict(c) for c in FACTION_PACK_CONTENTS],
+                "displayRefresh": {
+                    "onClaim": True,
+                    "legendaryPreview": True,
+                    "otherHeroPreview": True,
+                    "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示",
+                },
+                "soldOut": {
+                    "buttonLabel": "售罄",
+                    "dimmed": True,
+                    "sortToBottom": True,
+                    "toast": "今日购买已达上限，请明日再来。",
+                },
+            }
+        )
+    return products
+
+
+def gift_pack_zone(factions: dict[str, dict]) -> dict:
+    return {
+        "name": "礼包",
+        "tabId": "giftPacks",
+        "enabled": True,
+        "note": "仅卡牌礼包；暂不做月卡与神器；IAP 未接入时统一走看广告转盘",
+        "removedProducts": ["monthly_card", "artifact_pack_starter", "hero_pack_premium"],
+        "purchaseModel": "ad_wheel",
+        "dailyResetAt": "04:00",
+        "listSort": {
+            "availableFirst": True,
+            "soldOutBottom": True,
+            "soldOutDimmed": True,
+        },
+        "wheelSpin": {
+            "ui": {
+                "layout": "four_way",
+                "pointerStartsCenter": True,
+            },
+            "slots": WHEEL_SLOTS,
+            "spinDisplay": {
+                "equalWeightLabel": "四格各 25% 展示概率",
+                "note": "展示等概率；实际档位由当日 tierDeck 保底分配",
+            },
+            "dailyTierDeck": {
+                "description": "每日每礼包 4 次购买，预洗牌 4 档各 1 次",
+                "tierKeys": ["free", "ad_1", "ad_2", "ad_3"],
+                "guaranteedDistribution": {
+                    "free": 1,
+                    "ad_1": 1,
+                    "ad_2": 1,
+                    "ad_3": 1,
+                },
+                "shuffleOnDailyReset": True,
+                "drawFromRemainingOnly": True,
+            },
+            "adFlow": {
+                "completionNotGuaranteed": True,
+                "onIncompleteReturn": "wheel_page",
+                "preserveSpinResult": True,
+                "preserveAdsWatchedProgress": True,
+                "onAdLoadFail": {
+                    "stayOnWheel": True,
+                    "doNotConsumeTier": True,
+                    "doNotConsumePurchase": True,
+                },
+            },
+            "buttons": {
+                "purchase": "购买",
+                "watchAd": "看广告",
+                "continueSpin": "继续抽奖",
+                "forfeit": "放弃机会",
+                "claimFree": "领取",
+            },
+            "forfeit": {
+                "consumesPurchase": True,
+                "hintTemplate": "放弃后，本礼包只剩{remainingAfterForfeit}次购买机会",
+            },
+            "freeTier": {
+                "primaryButton": "claimFree",
+                "rewardFlow": "common_reward_page",
+            },
+            "adTier": {
+                "primaryButtonBeforePartial": "watchAd",
+                "primaryButtonAfterPartial": "continueSpin",
+                "secondaryButton": "forfeit",
+            },
+        },
+        "userStateSchema": {
+            "scope": "perUserPerPackPerDay",
+            "fields": {
+                "dateKey": "YYYY-MM-DD",
+                "purchasesRemaining": "0-4",
+                "tierDeck": "剩余未抽中的 tierKey 列表",
+                "currentSession": "null | { tierKey, spinSlotId, adsRequired, adsWatched }",
+                "soldOut": "purchasesRemaining === 0",
+                "displayLegendaryHeroId": "当前展示传奇",
+                "displayHeroIds": "其他预览卡",
+            },
+            "crossDayPolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新日重置",
+        },
+        "products": faction_pack_products(factions),
     }
 
 
@@ -75,10 +274,21 @@ def validate_shop(shop: dict) -> list[str]:
         r = s["reward"]
         check(s["slotId"], r["quality"], r["count"], s["purchase"], r)
 
+    # 四阵营礼包英雄池互不重叠
+    seen: set[str] = set()
+    for p in shop["zones"]["giftPacks"]["products"]:
+        pool = set(p["heroPool"])
+        overlap = seen & pool
+        if overlap:
+            errors.append(f"{p['productId']} heroPool overlaps: {sorted(overlap)}")
+        seen |= pool
+
     return errors
 
 
 def gen_shop() -> dict:
+    factions = load_bond_factions()
+
     daily_slots = [
         {
             "slotId": 1,
@@ -224,49 +434,22 @@ def gen_shop() -> dict:
     ]
 
     return {
-        "version": "1.2.0",
-        "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石/砖头)；价格由品质单价推导",
+        "version": "2.0.0",
+        "description": "商店 v2：礼包页(四阵营卡牌礼包·广告转盘) + 基础区(每日优惠/通用卡/钻石/砖头)",
+        "tabs": [
+            {"tabId": "giftPacks", "name": "礼包", "enabled": True},
+            {"tabId": "basic", "name": "基础", "enabled": True},
+            {"tabId": "arena", "name": "竞技场", "enabled": False, "note": "一期不做"},
+        ],
+        "iapPolicy": {
+            "directPurchaseEnabled": False,
+            "note": "IAP 未接入前，礼包统一走看广告转盘；广告完成不保证 100%",
+        },
         "zones": {
-            "character": {
-                "name": "角色区",
-                "products": [
-                    {
-                        "productId": "monthly_card",
-                        "name": "月卡",
-                        "priceCny": 30,
-                        "durationDays": 30,
-                        "firstBuyBonus": {"diamond": 300},
-                        "dailyClaim": {"diamond": 30},
-                        "privileges": ["skipAdForDailyRewards", "monthlyCardBadge"],
-                        "renewable": True,
-                        "note": "30天累计约1200钻+首购300",
-                    },
-                    {
-                        "productId": "artifact_pack_starter",
-                        "name": "神器礼包·启程",
-                        "priceCny": 30,
-                        "contents": [
-                            {"type": "artifactCard", "quality": "epic", "count": 1},
-                            {"type": "diamond", "amount": 200},
-                        ],
-                        "weeklyLimit": 1,
-                    },
-                    {
-                        "productId": "hero_pack_premium",
-                        "name": "角色礼包",
-                        "priceCny": 68,
-                        "contents": [
-                            {"type": "heroCard", "quality": "legendary", "count": 20},
-                            {"type": "heroCard", "quality": "epic", "count": 50},
-                            {"type": "heroCard", "quality": "rare", "count": 100},
-                        ],
-                        "weeklyLimit": 2,
-                        "note": "可指定目标英雄兑换",
-                    },
-                ],
-            },
+            "giftPacks": gift_pack_zone(factions),
             "basic": {
                 "name": "基础区",
+                "tabId": "basic",
                 "dailyDeals": {
                     "slotCount": 6,
                     "refresh": {
@@ -284,7 +467,11 @@ def gen_shop() -> dict:
                     "maxCardsPerQualityPerDay": 120,
                     "packs": universal_packs,
                 },
-                "diamondRecharge": diamond_tiers,
+                "diamondRecharge": {
+                    "enabled": False,
+                    "note": "IAP 未接入；钻石改由看广告等方式获取",
+                    "tiers": diamond_tiers,
+                },
                 "brickPacks": {
                     "currency": "brick",
                     "purchaseCurrency": "diamond",
@@ -305,7 +492,7 @@ def gen_shop() -> dict:
                 "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
                 "legendary5": "传奇×5 = 400×5 = 2000金 / 20×5 = 100钻",
             },
-            "note": "每日优惠可用金币或钻石；传奇轮换位默认仅钻石购买；通用卡仅人民币直购",
+            "note": "每日优惠可用金币或钻石；礼包区不走标价直购",
         },
     }
 
@@ -313,10 +500,12 @@ def gen_shop() -> dict:
 def estimate_economy(shop: dict) -> dict:
     battle_cards_day = 20 * 10
     battle_month = battle_cards_day * 30
-    ad_month_cards = (5 + 20 + 35 * 0.3) * 30  # 史诗广告+稀有+传奇轮换期望
+    ad_month_cards = (5 + 20 + 35 * 0.3) * 30
     small_rare_month = 30 * 30
-    pack = shop["zones"]["character"]["products"][2]["contents"]
-    pack_month = sum(c["count"] for c in pack) * 4
+    pack_contents = shop["zones"]["giftPacks"]["products"][0]["contents"]
+    cards_per_claim = sum(c["count"] for c in pack_contents)
+    # 4 阵营 × 4 次/日 × 170 张（理论满勤）
+    pack_month_max = cards_per_claim * 4 * 4 * 30
     deck_frag = FRAG_PER_HERO * DECK_SIZE
     all_heroes_frag = FRAG_PER_HERO * HERO_COUNT
 
@@ -328,11 +517,17 @@ def estimate_economy(shop: dict) -> dict:
             "allHeroesFrag": all_heroes_frag,
             "coreDeckFrag": deck_frag,
         },
+        "factionGiftPack": {
+            "packCount": len(shop["zones"]["giftPacks"]["products"]),
+            "dailyPurchasesPerPack": 4,
+            "cardsPerClaim": cards_per_claim,
+            "maxCardsPerDayAllPacks": cards_per_claim * 4 * 4,
+        },
         "monthlyCardsEstimate": {
             "f2p_battleOnly": battle_month,
             "ad_player": battle_month + ad_month_cards,
             "small_payer_18daily": battle_month + small_rare_month,
-            "mid_payer_packx4": battle_month + pack_month,
+            "gift_pack_max_grind": pack_month_max,
         },
         "gapAnalysis": {
             "monthsToCoreDeck8F2P": round(deck_frag / battle_month, 1),
@@ -352,59 +547,180 @@ def _fmt_price_row(quality: str, count: int, purchase: dict) -> str:
     return f"| {QUALITY_CN[quality]}×{count} | {unit_g} | {unit_d} | {g_s} | {d_s} |"
 
 
+def _contents_summary(contents: list[dict]) -> str:
+    parts = []
+    for c in contents:
+        if c["type"] == "heroCard":
+            parts.append(f"{QUALITY_CN[c['quality']]}{c['count']}张")
+        elif c["type"] == "diamond":
+            parts.append(f"钻石{c['amount']}")
+        else:
+            parts.append(str(c))
+    return " + ".join(parts)
+
+
 def gen_shop_md(shop: dict, economy: dict) -> str:
     ex = shop["pricingReference"]["examples"]
+    gp = shop["zones"]["giftPacks"]
+    wheel = gp["wheelSpin"]
+    efp = economy["factionGiftPack"]
+
     lines = [
         "# 商店配置与经济补足分析",
         "",
         "> 配表：`shop.json` v" + shop["version"] + " · 生成：`python3 scripts/gen-shop-config.py`",
+        "> 阵营英雄池来源：`bond.json`",
         "",
         "---",
         "",
-        "## 品质单价（全店唯一基准）",
+        "## 目录",
         "",
-        "| 品质 | 金币/张 | 钻石/张 |",
-        "|:---|:---:|:---:|",
+        "1. [商店页签](#一商店页签)",
+        "2. [礼包页 · 四阵营卡牌礼包](#二礼包页--四阵营卡牌礼包)",
+        "3. [转盘与广告交互流程](#三转盘与广告交互流程)",
+        "4. [每日档位保底分配](#四每日档位保底分配)",
+        "5. [用户状态字段](#五用户状态字段)",
+        "6. [基础区 · 每日优惠](#六基础区--每日优惠)",
+        "7. [基础区 · 通用卡/钻石/砖头](#七基础区--通用卡钻石砖头)",
+        "8. [品质单价基准](#八品质单价基准)",
+        "9. [经济补足粗算](#九经济补足粗算)",
+        "",
+        "---",
+        "",
+        "## 一、商店页签",
+        "",
+        "| tabId | 名称 | 状态 | 说明 |",
+        "|:---|:---|:---:|:---|",
     ]
-    for q in ("common", "rare", "epic", "legendary"):
-        lines.append(f"| {QUALITY_CN[q]} | {GOLD_PER[q]} | {DIAMOND_PER[q]} |")
+    for t in shop["tabs"]:
+        status = "✅" if t["enabled"] else "—"
+        note = t.get("note", "")
+        lines.append(f"| `{t['tabId']}` | {t['name']} | {status} | {note or '—'} |")
 
     lines += [
         "",
-        "**换算示例：**",
-        f"- {ex['epic5']}（每日优惠第6格）",
-        f"- {ex['legendary5']}（轮换池传奇×5）",
-        "",
-        "> ⚠️ **750 金 = 史诗×5，不是传奇×5。** 传奇×5 应为 **2000 金 / 100 钻**。",
+        f"> IAP 直购：**{'开启' if shop['iapPolicy']['directPurchaseEnabled'] else '关闭'}** — {shop['iapPolicy']['note']}",
         "",
         "---",
         "",
-        "## 一、角色区（直购）",
+        "## 二、礼包页 · 四阵营卡牌礼包",
         "",
-        "| 商品 | 价格 | 内容 | 限购 |",
-        "|:---|:---:|:---|:---|",
+        "**范围**：仅卡牌礼包；**不做**月卡、神器。",
+        "",
+        f"**限购**：每礼包每日 **{gp['products'][0]['dailyPurchaseLimit']}** 次；**{shop['iapPolicy']['note']}**",
+        "",
+        "**单次领取内容**（与原角色礼包一致，池限定为本阵营）：",
+        "",
+        "| 品质 | 数量 | 兑换规则 |",
+        "|:---|:---:|:---|",
     ]
-    for p in shop["zones"]["character"]["products"]:
-        if p["productId"] == "monthly_card":
-            content = f"首购{p['firstBuyBonus']['diamond']}钻 + 每日{p['dailyClaim']['diamond']}钻×30天"
-        elif "contents" in p:
-            parts = []
-            for c in p["contents"]:
-                if c["type"] == "diamond":
-                    parts.append(f"钻石{c['amount']}")
-                else:
-                    parts.append(f"{QUALITY_CN.get(c.get('quality',''), c.get('quality',''))}{c['count']}张")
-            content = " + ".join(parts)
-        else:
-            content = "—"
-        limit = p.get("weeklyLimit", p.get("durationDays", "—"))
-        lines.append(f"| {p['name']} | ¥{p['priceCny']} | {content} | {limit} |")
+    for c in gp["products"][0]["contents"]:
+        lines.append(f"| {QUALITY_CN[c['quality']]} | {c['count']} | {c['exchangeRule']} |")
+
+    lines += [
+        "",
+        "**四礼包角色池互不重叠**（来源 `bond.json`）：",
+        "",
+        "| 礼包 | productId | 阵营 | 池内英雄数 |",
+        "|:---|:---|:---|:---:|",
+    ]
+    for p in gp["products"]:
+        lines.append(
+            f"| {p['name']} | `{p['productId']}` | {p['factionLabel']} | {len(p['heroPool'])} |"
+        )
+
+    lines += [
+        "",
+        "**列表排序**：有剩余次数在上；售罄置灰沉底。",
+        "",
+        "**售罄**：按钮「售罄」；点击 Toast「" + gp["products"][0]["soldOut"]["toast"] + "」",
+        "",
+        "**领取后**：按本阵营刷新传奇预览 + 其他卡牌展示。",
+        "",
+        "---",
+        "",
+        "## 三、转盘与广告交互流程",
+        "",
+        "### 3.1 转盘四格（展示各 25%）",
+        "",
+        "| 格 | slotId | 文案 | 需广告数 |",
+        "|:---|:---|:---|:---:|",
+    ]
+    for s in wheel["slots"]:
+        lines.append(f"| — | `{s['slotId']}` | {s['label']} | {s['adsRequired']} |")
+
+    lines += [
+        "",
+        "### 3.2 主流程",
+        "",
+        "```",
+        "礼包列表 → 点击 [购买]",
+        "    → 转盘动画（四格各 25% 展示）",
+        "    → 停在某一档",
+        "",
+        "【直接免费】→ [领取] → 通用奖励页 → 扣 1 次 → 刷新阵营展示",
+        "",
+        "【看 N 个广告】",
+        "    → 主按钮 [看广告]  次按钮 [放弃机会]",
+        "    → 次按钮下：放弃后，本礼包只剩 M 次购买机会",
+        "    → 点 [看广告] → 播广告（可能未看完返回）",
+        "        → 未看完：回转盘页，指针不变，进度保留，仍 [看广告]/[放弃机会]",
+        "        → 看完 1 个且 N>1：[继续抽奖] + [放弃机会]",
+        "        → 看满 N 个：通用奖励页 → 扣 1 次 → 刷新阵营展示",
+        "    → 点 [放弃机会]：扣 1 次，不发奖",
+        "",
+        "四次用完 → 售罄置灰沉底",
+        "```",
+        "",
+        "### 3.3 按钮文案（配表）",
+        "",
+        "| 键 | 文案 |",
+        "|:---|:---|",
+    ]
+    for k, v in wheel["buttons"].items():
+        lines.append(f"| `{k}` | {v} |")
+
+    lines += [
+        "",
+        "### 3.4 异常",
+        "",
+        "- 广告加载失败：停留转盘，不扣次数、不消耗档位",
+        "- 跨日：进行中的 `currentSession` 作废，按新日重置",
+        "- 广告完成不保证 100%",
+        "",
+        "---",
+        "",
+        "## 四、每日档位保底分配",
+        "",
+        wheel["dailyTierDeck"]["description"],
+        "",
+        "| 档位 | 当日次数 |",
+        "|:---|:---:|",
+    ]
+    for tier, cnt in wheel["dailyTierDeck"]["guaranteedDistribution"].items():
+        label = next(s["label"] for s in wheel["slots"] if s["tierKey"] == tier)
+        lines.append(f"| {label} | {cnt} |")
+
+    lines += [
+        "",
+        "> 每次购买从**当日剩余档位池**抽取；4 次用完后恰好各档各 1 次。",
+        "",
+        "---",
+        "",
+        "## 五、用户状态字段",
+        "",
+        "| 字段 | 说明 |",
+        "|:---|:---|",
+    ]
+    for k, v in gp["userStateSchema"]["fields"].items():
+        lines.append(f"| `{k}` | {v} |")
+    lines.append(f"| 跨日 | {gp['userStateSchema']['crossDayPolicy']} |")
 
     lines += [
         "",
         "---",
         "",
-        "## 二、每日优惠（6格）",
+        "## 六、基础区 · 每日优惠",
         "",
         f"广告刷新 CD **{shop['zones']['basic']['dailyDeals']['refresh']['adCooldownHours']}小时**；手动刷新 **20钻**（日限6次）。",
         "",
@@ -441,52 +757,36 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
 
     lines += [
         "",
-        "### 全商品验算表",
-        "",
-        "| 商品 | 金/张 | 钻/张 | 总金币 | 总钻石 |",
-        "|:---|:---:|:---:|:---:|:---:|",
-    ]
-    for s in shop["zones"]["basic"]["dailyDeals"]["slots"]:
-        r = s["reward"]
-        if r.get("type") == "diamond":
-            continue
-        lines.append(_fmt_price_row(r["quality"], r["count"], s["purchase"]))
-    for s in shop["zones"]["basic"]["dailyDeals"]["rotationPool"]:
-        r = s["reward"]
-        lines.append(_fmt_price_row(r["quality"], r["count"], s["purchase"]))
-
-    lines += [
-        "",
         "---",
         "",
-        "## 三、通用卡直购（¥18/30张，每品质日限4次）",
+        "## 七、基础区 · 通用卡/钻石/砖头",
+        "",
+        "### 通用卡直购（¥18/30张，每品质日限4次）",
         "",
         "| SKU | 日满购 |",
-        "|:---|:---:|",
+        "|:---|:---:|:---:|",
     ]
     for p in shop["zones"]["basic"]["universalCardPacks"]["packs"]:
         lines.append(f"| {p['name']} | {p['count']*p['dailyLimit']}张 |")
 
+    dr = shop["zones"]["basic"]["diamondRecharge"]
     lines += [
         "",
-        "---",
+        f"### 钻石充值（{'已配置，IAP 关闭' if not dr['enabled'] else '开启'}）",
         "",
-        "## 四、钻石充值（6档）",
+        f"> {dr['note']}",
         "",
         "| 档位 | 价格 | 合计钻石 |",
-        "|:---:|:---:|:---:|",
+        "|:---:|:---:|:---:|:---:|",
     ]
-    for t in shop["zones"]["basic"]["diamondRecharge"]:
+    for t in dr["tiers"]:
         lines.append(f"| {t['tierId']} | ¥{t['priceCny']} | {t['diamond']+t['bonus']} |")
 
     lines += [
         "",
-        "---",
+        "### 砖头礼包（钻石 · 四档）",
         "",
-        "## 五、砖头礼包（钻石 · 四档）",
-        "",
-        "> 主城翻格升级消耗砖头；数值与 pacing 见 `docs/MAIN_CITY_PROGRESSION.md`",
-        "> **仅钻石购买**，量越大单价越低。",
+        "> 主城翻格升级消耗砖头；见 `docs/MAIN_CITY_PROGRESSION.md`",
         "",
         "| 商品 | 砖头 | 钻石 | 钻/砖 | 限购 |",
         "|:---|:---:|:---:|:---:|:---|",
@@ -498,20 +798,36 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         unit = round(dia / amt, 2)
         lines.append(f"| {p['name']} | {amt} | {dia} | {unit} | {lim} |")
 
-    e = economy
     lines += [
         "",
         "---",
         "",
-        "## 六、经济补足（30天粗算）",
+        "## 八、品质单价基准",
         "",
-        f"- 核心8卡满级需碎片：**{e['targets']['coreDeckFrag']:,}**",
+        "| 品质 | 金币/张 | 钻石/张 |",
+        "|:---|:---:|:---:|:---:|",
+    ]
+    for q in ("common", "rare", "epic", "legendary"):
+        lines.append(f"| {QUALITY_CN[q]} | {GOLD_PER[q]} | {DIAMOND_PER[q]} |")
+
+    lines += [
+        "",
+        f"- {ex['epic5']}（每日优惠第6格）",
+        f"- {ex['legendary5']}（轮换池传奇×5）",
+        "",
+        "---",
+        "",
+        "## 九、经济补足粗算",
+        "",
+        f"- 核心8卡满级需碎片：**{economy['targets']['coreDeckFrag']:,}**",
+        f"- 单礼包单次领取：**{efp['cardsPerClaim']}** 张（传20+史50+稀100）",
+        f"- 四礼包满勤日上限：**{efp['maxCardsPerDayAllPacks']}** 张",
         "",
         "| 玩家 | 月获卡(粗算) | 核心8卡满级 |",
-        "|:---|:---:|:---:|",
-        f"| F2P | ~{e['monthlyCardsEstimate']['f2p_battleOnly']:,} | ~{e['gapAnalysis']['monthsToCoreDeck8F2P']}月 |",
-        f"| 广告党 | ~{int(e['monthlyCardsEstimate']['ad_player']):,} | ~{e['gapAnalysis']['monthsToCoreDeck8Ad']}月 |",
-        f"| 小氪 | ~{e['monthlyCardsEstimate']['small_payer_18daily']:,} | ~{e['gapAnalysis']['monthsToCoreDeck8SmallPayer']}月 |",
+        "|:---|:---:|:---:|:---:|",
+        f"| F2P | ~{economy['monthlyCardsEstimate']['f2p_battleOnly']:,} | ~{economy['gapAnalysis']['monthsToCoreDeck8F2P']}月 |",
+        f"| 广告党 | ~{int(economy['monthlyCardsEstimate']['ad_player']):,} | ~{economy['gapAnalysis']['monthsToCoreDeck8Ad']}月 |",
+        f"| 礼包满勤(理论) | ~{economy['monthlyCardsEstimate']['gift_pack_max_grind']:,} | — |",
         "",
     ]
     return "\n".join(lines)

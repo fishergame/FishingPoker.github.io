@@ -1,73 +1,383 @@
 {
-  "version": "1.2.0",
-  "description": "商店：角色区(直购) + 基础区(每日优惠/通用卡/钻石/砖头)；价格由品质单价推导",
+  "version": "2.0.0",
+  "description": "商店 v2：礼包页(四阵营卡牌礼包·广告转盘) + 基础区(每日优惠/通用卡/钻石/砖头)",
+  "tabs": [
+    {
+      "tabId": "giftPacks",
+      "name": "礼包",
+      "enabled": true
+    },
+    {
+      "tabId": "basic",
+      "name": "基础",
+      "enabled": true
+    },
+    {
+      "tabId": "arena",
+      "name": "竞技场",
+      "enabled": false,
+      "note": "一期不做"
+    }
+  ],
+  "iapPolicy": {
+    "directPurchaseEnabled": false,
+    "note": "IAP 未接入前，礼包统一走看广告转盘；广告完成不保证 100%"
+  },
   "zones": {
-    "character": {
-      "name": "角色区",
+    "giftPacks": {
+      "name": "礼包",
+      "tabId": "giftPacks",
+      "enabled": true,
+      "note": "仅卡牌礼包；暂不做月卡与神器；IAP 未接入时统一走看广告转盘",
+      "removedProducts": [
+        "monthly_card",
+        "artifact_pack_starter",
+        "hero_pack_premium"
+      ],
+      "purchaseModel": "ad_wheel",
+      "dailyResetAt": "04:00",
+      "listSort": {
+        "availableFirst": true,
+        "soldOutBottom": true,
+        "soldOutDimmed": true
+      },
+      "wheelSpin": {
+        "ui": {
+          "layout": "four_way",
+          "pointerStartsCenter": true
+        },
+        "slots": [
+          {
+            "slotId": "free",
+            "label": "直接免费",
+            "displayWeight": 0.25,
+            "adsRequired": 0,
+            "tierKey": "free"
+          },
+          {
+            "slotId": "ad_1",
+            "label": "看1个广告",
+            "displayWeight": 0.25,
+            "adsRequired": 1,
+            "tierKey": "ad_1"
+          },
+          {
+            "slotId": "ad_2",
+            "label": "看2个广告",
+            "displayWeight": 0.25,
+            "adsRequired": 2,
+            "tierKey": "ad_2"
+          },
+          {
+            "slotId": "ad_3",
+            "label": "看3个广告",
+            "displayWeight": 0.25,
+            "adsRequired": 3,
+            "tierKey": "ad_3"
+          }
+        ],
+        "spinDisplay": {
+          "equalWeightLabel": "四格各 25% 展示概率",
+          "note": "展示等概率；实际档位由当日 tierDeck 保底分配"
+        },
+        "dailyTierDeck": {
+          "description": "每日每礼包 4 次购买，预洗牌 4 档各 1 次",
+          "tierKeys": [
+            "free",
+            "ad_1",
+            "ad_2",
+            "ad_3"
+          ],
+          "guaranteedDistribution": {
+            "free": 1,
+            "ad_1": 1,
+            "ad_2": 1,
+            "ad_3": 1
+          },
+          "shuffleOnDailyReset": true,
+          "drawFromRemainingOnly": true
+        },
+        "adFlow": {
+          "completionNotGuaranteed": true,
+          "onIncompleteReturn": "wheel_page",
+          "preserveSpinResult": true,
+          "preserveAdsWatchedProgress": true,
+          "onAdLoadFail": {
+            "stayOnWheel": true,
+            "doNotConsumeTier": true,
+            "doNotConsumePurchase": true
+          }
+        },
+        "buttons": {
+          "purchase": "购买",
+          "watchAd": "看广告",
+          "continueSpin": "继续抽奖",
+          "forfeit": "放弃机会",
+          "claimFree": "领取"
+        },
+        "forfeit": {
+          "consumesPurchase": true,
+          "hintTemplate": "放弃后，本礼包只剩{remainingAfterForfeit}次购买机会"
+        },
+        "freeTier": {
+          "primaryButton": "claimFree",
+          "rewardFlow": "common_reward_page"
+        },
+        "adTier": {
+          "primaryButtonBeforePartial": "watchAd",
+          "primaryButtonAfterPartial": "continueSpin",
+          "secondaryButton": "forfeit"
+        }
+      },
+      "userStateSchema": {
+        "scope": "perUserPerPackPerDay",
+        "fields": {
+          "dateKey": "YYYY-MM-DD",
+          "purchasesRemaining": "0-4",
+          "tierDeck": "剩余未抽中的 tierKey 列表",
+          "currentSession": "null | { tierKey, spinSlotId, adsRequired, adsWatched }",
+          "soldOut": "purchasesRemaining === 0",
+          "displayLegendaryHeroId": "当前展示传奇",
+          "displayHeroIds": "其他预览卡"
+        },
+        "crossDayPolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新日重置"
+      },
       "products": [
         {
-          "productId": "monthly_card",
-          "name": "月卡",
-          "priceCny": 30,
-          "durationDays": 30,
-          "firstBuyBonus": {
-            "diamond": 300
-          },
-          "dailyClaim": {
-            "diamond": 30
-          },
-          "privileges": [
-            "skipAdForDailyRewards",
-            "monthlyCardBadge"
+          "productId": "hero_pack_human",
+          "name": "人族礼包",
+          "faction": "human",
+          "factionLabel": "人族",
+          "bondId": "faction_human",
+          "heroPool": [
+            "archer",
+            "archmage",
+            "blacksmith",
+            "blademaster",
+            "bone_archer",
+            "druid",
+            "infantry",
+            "militia",
+            "royal_knight",
+            "shaman"
           ],
-          "renewable": true,
-          "note": "30天累计约1200钻+首购300"
-        },
-        {
-          "productId": "artifact_pack_starter",
-          "name": "神器礼包·启程",
-          "priceCny": 30,
-          "contents": [
-            {
-              "type": "artifactCard",
-              "quality": "epic",
-              "count": 1
-            },
-            {
-              "type": "diamond",
-              "amount": 200
-            }
-          ],
-          "weeklyLimit": 1
-        },
-        {
-          "productId": "hero_pack_premium",
-          "name": "角色礼包",
-          "priceCny": 68,
+          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "sortWeight": 100,
+          "dailyPurchaseLimit": 4,
+          "purchaseModel": "ad_wheel",
           "contents": [
             {
               "type": "heroCard",
               "quality": "legendary",
-              "count": 20
+              "count": 20,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
             },
             {
               "type": "heroCard",
               "quality": "epic",
-              "count": 50
+              "count": 50,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
             },
             {
               "type": "heroCard",
               "quality": "rare",
-              "count": 100
+              "count": 100,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
             }
           ],
-          "weeklyLimit": 2,
-          "note": "可指定目标英雄兑换"
+          "displayRefresh": {
+            "onClaim": true,
+            "legendaryPreview": true,
+            "otherHeroPreview": true,
+            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+          },
+          "soldOut": {
+            "buttonLabel": "售罄",
+            "dimmed": true,
+            "sortToBottom": true,
+            "toast": "今日购买已达上限，请明日再来。"
+          }
+        },
+        {
+          "productId": "hero_pack_beast",
+          "name": "兽族礼包",
+          "faction": "beast",
+          "factionLabel": "兽族",
+          "bondId": "faction_beast",
+          "heroPool": [
+            "bear_warrior",
+            "cavalry",
+            "dragon_knight",
+            "dread_knight",
+            "goblin",
+            "spear_orc",
+            "warlord",
+            "wolf_rider",
+            "wyrmling"
+          ],
+          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "sortWeight": 99,
+          "dailyPurchaseLimit": 4,
+          "purchaseModel": "ad_wheel",
+          "contents": [
+            {
+              "type": "heroCard",
+              "quality": "legendary",
+              "count": 20,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "epic",
+              "count": 50,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "rare",
+              "count": 100,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
+            }
+          ],
+          "displayRefresh": {
+            "onClaim": true,
+            "legendaryPreview": true,
+            "otherHeroPreview": true,
+            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+          },
+          "soldOut": {
+            "buttonLabel": "售罄",
+            "dimmed": true,
+            "sortToBottom": true,
+            "toast": "今日购买已达上限，请明日再来。"
+          }
+        },
+        {
+          "productId": "hero_pack_undead",
+          "name": "亡灵礼包",
+          "faction": "undead",
+          "factionLabel": "亡灵",
+          "bondId": "faction_undead",
+          "heroPool": [
+            "catapult",
+            "crusher",
+            "demon_lord",
+            "frost_dragon",
+            "lich_queen",
+            "necromancer",
+            "skeleton_giant",
+            "skeleton_knight",
+            "skeleton_warrior"
+          ],
+          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "sortWeight": 98,
+          "dailyPurchaseLimit": 4,
+          "purchaseModel": "ad_wheel",
+          "contents": [
+            {
+              "type": "heroCard",
+              "quality": "legendary",
+              "count": 20,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "epic",
+              "count": 50,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "rare",
+              "count": 100,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
+            }
+          ],
+          "displayRefresh": {
+            "onClaim": true,
+            "legendaryPreview": true,
+            "otherHeroPreview": true,
+            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+          },
+          "soldOut": {
+            "buttonLabel": "售罄",
+            "dimmed": true,
+            "sortToBottom": true,
+            "toast": "今日购买已达上限，请明日再来。"
+          }
+        },
+        {
+          "productId": "hero_pack_mechanical",
+          "name": "机械礼包",
+          "faction": "mechanical",
+          "factionLabel": "机械",
+          "bondId": "faction_mechanical",
+          "heroPool": [
+            "arrow_tower",
+            "ballista",
+            "catapult_tower",
+            "gargoyle",
+            "heavy_shield",
+            "helicopter",
+            "panda_monk",
+            "ranger",
+            "sky_dome",
+            "sniper"
+          ],
+          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "sortWeight": 97,
+          "dailyPurchaseLimit": 4,
+          "purchaseModel": "ad_wheel",
+          "contents": [
+            {
+              "type": "heroCard",
+              "quality": "legendary",
+              "count": 20,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "epic",
+              "count": 50,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
+            },
+            {
+              "type": "heroCard",
+              "quality": "rare",
+              "count": 100,
+              "pool": "faction",
+              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
+            }
+          ],
+          "displayRefresh": {
+            "onClaim": true,
+            "legendaryPreview": true,
+            "otherHeroPreview": true,
+            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+          },
+          "soldOut": {
+            "buttonLabel": "售罄",
+            "dimmed": true,
+            "sortToBottom": true,
+            "toast": "今日购买已达上限，请明日再来。"
+          }
         }
       ]
     },
     "basic": {
       "name": "基础区",
+      "tabId": "basic",
       "dailyDeals": {
         "slotCount": 6,
         "refresh": {
@@ -273,50 +583,54 @@
           }
         ]
       },
-      "diamondRecharge": [
-        {
-          "tierId": 1,
-          "priceCny": 6,
-          "diamond": 60,
-          "bonus": 0,
-          "label": "一小把"
-        },
-        {
-          "tierId": 2,
-          "priceCny": 12,
-          "diamond": 130,
-          "bonus": 10,
-          "label": "一袋"
-        },
-        {
-          "tierId": 3,
-          "priceCny": 30,
-          "diamond": 330,
-          "bonus": 30,
-          "label": "一箱"
-        },
-        {
-          "tierId": 4,
-          "priceCny": 68,
-          "diamond": 750,
-          "bonus": 90,
-          "label": "一大箱"
-        },
-        {
-          "tierId": 5,
-          "priceCny": 128,
-          "diamond": 1580,
-          "bonus": 220,
-          "label": "宝库"
-        },
-        {
-          "tierId": 6,
-          "priceCny": 328,
-          "diamond": 4280,
-          "bonus": 780,
-          "label": "巨藏"
-        }
-      ],
+      "diamondRecharge": {
+        "enabled": false,
+        "note": "IAP 未接入；钻石改由看广告等方式获取",
+        "tiers": [
+          {
+            "tierId": 1,
+            "priceCny": 6,
+            "diamond": 60,
+            "bonus": 0,
+            "label": "一小把"
+          },
+          {
+            "tierId": 2,
+            "priceCny": 12,
+            "diamond": 130,
+            "bonus": 10,
+            "label": "一袋"
+          },
+          {
+            "tierId": 3,
+            "priceCny": 30,
+            "diamond": 330,
+            "bonus": 30,
+            "label": "一箱"
+          },
+          {
+            "tierId": 4,
+            "priceCny": 68,
+            "diamond": 750,
+            "bonus": 90,
+            "label": "一大箱"
+          },
+          {
+            "tierId": 5,
+            "priceCny": 128,
+            "diamond": 1580,
+            "bonus": 220,
+            "label": "宝库"
+          },
+          {
+            "tierId": 6,
+            "priceCny": 328,
+            "diamond": 4280,
+            "bonus": 780,
+            "label": "巨藏"
+          }
+        ]
+      },
       "brickPacks": {
         "currency": "brick",
         "purchaseCurrency": "diamond",
@@ -404,6 +718,6 @@
       "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
       "legendary5": "传奇×5 = 400×5 = 2000金 / 20×5 = 100钻"
     },
-    "note": "每日优惠可用金币或钻石；传奇轮换位默认仅钻石购买；通用卡仅人民币直购"
+    "note": "每日优惠可用金币或钻石；礼包区不走标价直购"
   }
 }
