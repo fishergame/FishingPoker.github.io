@@ -8,7 +8,7 @@
 ## 零、开局赠送卡组
 
 > 单一数据源：`heroes-config.js → DEFAULT_DECK`（`getStarterGrantIds()`）
-> 新号赠送 **7** 张，卡组容量 **8** 槽，第 8 槽留空。
+> 新号赠送 **8** 张，卡组容量 **8** 槽。
 
 | # | id | 名称 | 品质 | 类型 | 阵营 |
 |:---:|:---|:---|:---:|:---|:---|
@@ -19,7 +19,7 @@
 | 5 | `bear_warrior` | 重锤卫士 | common | unit | — |
 | 6 | `skeleton_warrior` | 骷髅刀盾兵 | common | unit | — |
 | 7 | `gold_mine` | 采矿机 | common | resource | 无阵营 |
-| 8 | — | （空槽） | — | — | 待玩家装配 |
+| 8 | `heavy_shield` | 重型盾 | rare | building | — |
 
 阵营对照见 `bond.json`；`gold_mine` 不参与羁绊。
 
@@ -75,19 +75,18 @@
 
 ## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）
 
-**开局赠送**（7 张，`heroes-config.js → DEFAULT_DECK` 过滤空槽）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
-**第 8 槽**：空槽，待玩家自行装配（`DEFAULT_DECK[7] = null`）
-**L1 编队攻城 DPS**（7 张已装）：194.5
+**开局赠送**（8 张，`heroes-config.js → DEFAULT_DECK`）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine, heavy_shield`
+**L1 编队攻城 DPS**：208.8
 
 | 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |
 |:---:|:---:|:---:|:---:|
-| L1 | 1,500 | 194 | 7.7s |
-| L5 | 2,624 | 340 | 7.7s |
-| L10 | 5,277 | 684 | 7.7s |
-| L15 | 10,614 | 1376 | 7.7s |
-| L20 | 21,348 | 2768 | 7.7s |
-| L25 | 42,938 | 5568 | 7.7s |
-| L30 | 86,363 | 11198 | 7.7s |
+| L1 | 1,500 | 209 | 7.2s |
+| L5 | 2,624 | 365 | 7.2s |
+| L10 | 5,277 | 735 | 7.2s |
+| L15 | 10,614 | 1478 | 7.2s |
+| L20 | 21,348 | 2972 | 7.2s |
+| L25 | 42,938 | 5977 | 7.2s |
+| L30 | 86,363 | 12023 | 7.2s |
 
 ### 满配编队（8 张 L30 最高攻城 DPS）
 

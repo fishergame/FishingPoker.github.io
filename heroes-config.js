@@ -1,10 +1,10 @@
 /**
- * 英雄卡牌配置表（37 张）
+ * 英雄卡牌配置表（38 张）
  * 字段：id, name, avatar, quality, starter, level, power, buildingHp,
  *       attack, unitHp, attackSpeed, attackRange, income, type
  *
  * starter：是否为新号开局赠送（须与 DEFAULT_DECK 中非 null 项一一对应）
- * DEFAULT_DECK：默认编队槽位（长度 = DECK_SIZE）；null = 空槽待玩家装配
+ * DEFAULT_DECK：默认编队槽位（长度 = DECK_SIZE）
  *
  * attackSpeed：1 级攻速，上限 10（极快），随升级提升
  */
@@ -21,9 +21,8 @@ const HeroesConfig = {
   },
 
   /**
-   * 开局默认编队（8 槽）。
-   * 新号赠送 7 张（starter: true），第 8 槽留空引导玩家补齐卡组。
-   * 阵营：兽×2、人×2、亡灵×1、机械×1、采矿机（无阵营资源）×1
+   * 开局默认编队（8 槽，满编赠送）。
+   * 阵营：兽×2、人×2、机械×2、亡灵×1、采矿机（无阵营资源）×1
    */
   DEFAULT_DECK: [
     'dragon_knight',    // #1 传奇·兽族·近战输出
@@ -33,7 +32,7 @@ const HeroesConfig = {
     'bear_warrior',     // #5 普通·兽族·近战（可触发兽族 2 羁绊）
     'skeleton_warrior', // #6 普通·亡灵·近战
     'gold_mine',        // #7 普通·资源·局内产金（不参与阵营羁绊）
-    null,               // #8 空槽·待玩家自行装配
+    'heavy_shield',     // #8 稀有·机械·防御建筑（与高射塔触发机械 2 羁绊）
   ],
 
   HEROES: [
@@ -72,6 +71,7 @@ const HeroesConfig = {
     { id: 'archer', name: '见习女巫', avatar: '🏹', quality: 'rare', starter: true, level: 1, type: 'unit', power: 166, buildingHp: 260, attack: 33, unitHp: 110, attackSpeed: 1.0, attackRange: 5 }, // 开局#2
     { id: 'infantry', name: '重步兵', avatar: '⚔', quality: 'rare', starter: true, level: 1, type: 'unit', power: 256, buildingHp: 360, attack: 3, unitHp: 250, attackSpeed: 0.9, attackRange: 1 }, // 开局#3
     { id: 'arrow_tower', name: '高射塔', avatar: '🗼', quality: 'rare', starter: true, level: 1, type: 'building', power: 277, buildingHp: 380, attack: 80, unitHp: null, attackSpeed: 0.8, attackRange: null }, // 开局#4
+    { id: 'heavy_shield', name: '重型盾', avatar: '🛡️', quality: 'rare', starter: true, level: 1, type: 'building', power: 220, buildingHp: 420, attack: 45, unitHp: null, attackSpeed: 0.7, attackRange: null }, // 开局#8
 
     // ===== 普通 =====
     { id: 'bear_warrior', name: '重锤卫士', avatar: '🐻', quality: 'common', starter: true, level: 1, type: 'unit', power: 206, buildingHp: 260, attack: 53, unitHp: 210, attackSpeed: 1.0, attackRange: 1 }, // 开局#5
@@ -93,7 +93,7 @@ const HeroesConfig = {
     return map;
   },
 
-  /** 新号开局赠送的英雄 id 列表（7 张，不含空槽） */
+  /** 新号开局赠送的英雄 id 列表（8 张，满编） */
   getStarterGrantIds() {
     return this.DEFAULT_DECK.filter(Boolean);
   },

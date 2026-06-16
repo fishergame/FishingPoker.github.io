@@ -158,7 +158,7 @@ def gen_battle_balance(heroes: list[dict], default_deck: list[str]) -> dict:
         "defaultDeck": default_deck,
         "deckSize": 8,
         "starterGrantCount": len(default_deck),
-        "starterEmptySlots": 8 - len(default_deck),
+        "starterEmptySlots": max(0, 8 - len(default_deck)),
         "formulas": {
             "matchDurationSec": f"{MATCH_DURATION_BASE} + (arenaId-1)*{MATCH_DURATION_STEP}, max {MATCH_DURATION_MAX}",
             "mainCityHp": f"mainCity.json → round({MAIN_CITY_HP_L1} * 1.15^(mainCityLevel-1))",
@@ -189,13 +189,14 @@ def load_hero_factions() -> dict[str, str]:
     return out
 
 
-def gen_starter_deck_md(default_deck: list[str], heroes_map: dict, factions: dict[str, str]) -> list[str]:
+def gen_starter_deck_md(default_deck: list[str], heroes_map: dict, factions: dict[str, str], deck_size: int = 8) -> list[str]:
     """开局赠送卡组说明（从 heroes-config.js 同步）。"""
+    empty_slots = max(0, deck_size - len(default_deck))
     lines = [
         "## 零、开局赠送卡组",
         "",
         "> 单一数据源：`heroes-config.js → DEFAULT_DECK`（`getStarterGrantIds()`）",
-        f"> 新号赠送 **{len(default_deck)}** 张，卡组容量 **8** 槽，第 8 槽留空。",
+        f"> 新号赠送 **{len(default_deck)}** 张，卡组容量 **{deck_size}** 槽。",
         "",
         "| # | id | 名称 | 品质 | 类型 | 阵营 |",
         "|:---:|:---|:---|:---:|:---|:---|",
@@ -207,8 +208,10 @@ def gen_starter_deck_md(default_deck: list[str], heroes_map: dict, factions: dic
         lines.append(
             f"| {i} | `{hid}` | {h.get('name', '?')} | {q} | {h.get('type', '?')} | {faction} |"
         )
+    for j in range(empty_slots):
+        slot = len(default_deck) + j + 1
+        lines.append(f"| {slot} | — | （空槽） | — | — | 待玩家装配 |")
     lines += [
-        "| 8 | — | （空槽） | — | — | 待玩家装配 |",
         "",
         "阵营对照见 `bond.json`；`gold_mine` 不参与羁绊。",
         "",
@@ -231,7 +234,7 @@ def gen_markdown(data: dict, heroes_map: dict, factions: dict[str, str]) -> str:
         "---",
         "",
     ]
-    lines += gen_starter_deck_md(data["defaultDeck"], heroes_map, factions)
+    lines += gen_starter_deck_md(data["defaultDeck"], heroes_map, factions, data.get("deckSize", 8))
     lines += [
         "## 一、技能表在哪里？",
         "",
@@ -282,9 +285,8 @@ def gen_markdown(data: dict, heroes_map: dict, factions: dict[str, str]) -> str:
         "",
         "## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）",
         "",
-        f"**开局赠送**（7 张，`heroes-config.js → DEFAULT_DECK` 过滤空槽）：`{', '.join(data['defaultDeck'])}`",
-        f"**第 8 槽**：空槽，待玩家自行装配（`DEFAULT_DECK[7] = null`）",
-        f"**L1 编队攻城 DPS**（7 张已装）：{data['formulas']['defaultDeckL1CityDps']}",
+        f"**开局赠送**（{len(data['defaultDeck'])} 张，`heroes-config.js → DEFAULT_DECK`）：`{', '.join(data['defaultDeck'])}`",
+        f"**L1 编队攻城 DPS**：{data['formulas']['defaultDeckL1CityDps']}",
         "",
         "| 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |",
         "|:---:|:---:|:---:|:---:|",

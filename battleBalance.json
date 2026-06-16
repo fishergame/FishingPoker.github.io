@@ -10,18 +10,19 @@
     "arrow_tower",
     "bear_warrior",
     "skeleton_warrior",
-    "gold_mine"
+    "gold_mine",
+    "heavy_shield"
   ],
   "deckSize": 8,
-  "starterGrantCount": 7,
-  "starterEmptySlots": 1,
+  "starterGrantCount": 8,
+  "starterEmptySlots": 0,
   "formulas": {
     "matchDurationSec": "90 + (arenaId-1)*10, max 180",
     "mainCityHp": "mainCity.json → round(1500 * 1.15^(mainCityLevel-1))",
     "mainCityGoldPerSec": "mainCity.json → round(2 * 1.10^(mainCityLevel-1))",
     "unitCityDps": "attack * growth^(deckLevel-1) / (2.2/min(attackSpeed,10))",
     "siegeNote": "清场后全员集火主城；主城等级与卡组等级同档时理论拆城约 7.7s",
-    "defaultDeckL1CityDps": 194.5
+    "defaultDeckL1CityDps": 208.8
   },
   "skillQualityReference": [
     {
