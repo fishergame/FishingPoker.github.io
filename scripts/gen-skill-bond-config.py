@@ -707,29 +707,6 @@ FACTION_BOND_TIERS = {
     ],
 }
 
-CATEGORY_BOND_TIERS = {
-    "attack": [
-        {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
-        {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}]},
-        {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}]},
-    ],
-    "defense": [
-        {"count": 2, "effects": [{"type": "damageReductionPct", "value": 0.04}]},
-        {"count": 4, "effects": [{"type": "damageReductionPct", "value": 0.07}]},
-        {"count": 6, "effects": [{"type": "damageReductionPct", "value": 0.10}]},
-    ],
-    "supply": [
-        {"count": 2, "effects": [{"type": "healPct", "value": 0.10}]},
-        {"count": 4, "effects": [{"type": "healPct", "value": 0.15}]},
-        {"count": 6, "effects": [{"type": "healPct", "value": 0.20}]},
-    ],
-    "speed": [
-        {"count": 2, "effects": [{"type": "fireRatePct", "value": 0.08}]},
-        {"count": 4, "effects": [{"type": "fireRatePct", "value": 0.12}, {"type": "projectileSpeedPct", "value": 0.06}]},
-        {"count": 6, "effects": [{"type": "fireRatePct", "value": 0.16}]},
-    ],
-}
-
 
 def gen_bond(heroes: list[dict]) -> dict:
     factions = assign_faction(heroes)
@@ -748,29 +725,14 @@ def gen_bond(heroes: list[dict]) -> dict:
             "heroIds": faction_heroes[fid],
             "tiers": FACTION_BOND_TIERS[fid],
         })
-    for cat, label in CATEGORY_CN.items():
-        bonds.append({
-            "bondId": f"category_{cat}",
-            "type": "skillCategory",
-            "name": f"{label}型",
-            "category": cat,
-            "effectTheme": {
-                "attack": "攻击力",
-                "defense": "减伤防御",
-                "supply": "回血补给",
-                "speed": "攻速/弹速",
-            }[cat],
-            "tiers": CATEGORY_BOND_TIERS[cat],
-        })
     return {
-        "version": "3.0.0",
-        "description": "羁绊：人族/兽族/亡灵/机械 + 攻击/防御/补给/加速定位型",
+        "version": "3.1.0",
+        "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
         "rules": {
             "deckSize": 8,
             "excludeHeroIds": ["gold_mine"],
             "tierActivation": "atCount2And4And6",
             "maxActiveFactionBonds": 1,
-            "maxActiveCategoryBonds": 1,
             "factions": FACTION_CN,
             "factionCounter": {
                 "bonusPct": FACTION_COUNTER_BONUS,

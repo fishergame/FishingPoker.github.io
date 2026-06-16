@@ -191,11 +191,11 @@ attackInterval = 2.2 / fireRate
 
 ---
 
-## 八、羁绊系统
+## 八、羁绊系统（仅阵营）
 
-版本：bond.json v3.0.0
+版本：bond.json v3.1.0
 
-卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊** + **1 条定位羁绊**。
+卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊**。技能定位羁绊已取消。
 
 ### 8.1 种族阵营羁绊（人族 / 兽族 / 亡灵 / 机械）
 
@@ -238,15 +238,6 @@ attackInterval = 2.2 / fireRate
 | 2 | projectileSpeedPct +8% |
 | 4 | damageReductionPct +6%；projectileSpeedPct +4% |
 | 6 | damageReductionPct +10%；projectileSpeedPct +10% |
-
-### 8.2 技能定位羁绊（攻击 / 防御 / 补给 / 加速）
-
-| 定位 | 羁绊主题 | 2 张 | 4 张 | 6 张 |
-|:---|:---|:---|:---|:---|
-| **攻击型** | 攻击力 | atk5% | atk8% | atk12% |
-| **防御型** | 减伤防御 | damageReduction4% | damageReduction7% | damageReduction10% |
-| **补给型** | 回血补给 | heal10% | heal15% | heal20% |
-| **加速型** | 攻速/弹速 | fireRate8% | fireRate12%+projectileSpeed6% | fireRate16% |
 
 ---
 

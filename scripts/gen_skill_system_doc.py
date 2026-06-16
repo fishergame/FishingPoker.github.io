@@ -302,11 +302,11 @@ def gen_unified_skill_md(
         "",
         "---",
         "",
-        "## 八、羁绊系统",
+        "## 八、羁绊系统（仅阵营）",
         "",
         f"版本：bond.json v{bond['version']}",
         "",
-        "卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊** + **1 条定位羁绊**。",
+        "卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊**。技能定位羁绊已取消。",
         "",
         "### 8.1 种族阵营羁绊（人族 / 兽族 / 亡灵 / 机械）",
         "",
@@ -328,29 +328,16 @@ def gen_unified_skill_md(
         lines.append("| 数量 | 效果 |")
         lines.append("|:---:|:---|")
         for t in b["tiers"]:
-            eff = "；".join(f"{e['type']} +{int(e['value']*100)}%" if 'Pct' in e['type'] else f"{e['type']} {e['value']}" for e in t["effects"])
+            eff = "；".join(
+                f"{e['type']} +{int(e['value']*100)}%"
+                if "Pct" in e["type"]
+                else f"{e['type']} {e['value']}"
+                for e in t["effects"]
+            )
             lines.append(f"| {t['count']} | {eff} |")
         lines.append("")
 
     lines += [
-        "### 8.2 技能定位羁绊（攻击 / 防御 / 补给 / 加速）",
-        "",
-        "| 定位 | 羁绊主题 | 2 张 | 4 张 | 6 张 |",
-        "|:---|:---|:---|:---|:---|",
-    ]
-
-    for b in bond["bonds"]:
-        if b["type"] != "skillCategory":
-            continue
-        t2 = b["tiers"][0]["effects"]
-        t4 = b["tiers"][1]["effects"]
-        t6 = b["tiers"][2]["effects"]
-        fmt = lambda es: "+".join(f"{e['type'].replace('Pct','')}{int(e['value']*100)}%" for e in es)
-        theme = b.get("effectTheme", b["name"])
-        lines.append(f"| **{b['name']}** | {theme} | {fmt(t2)} | {fmt(t4)} | {fmt(t6)} |")
-
-    lines += [
-        "",
         "---",
         "",
         "## 九、英雄属性速查表",
@@ -446,7 +433,7 @@ def gen_unified_skill_md(
         "|:---|:---|",
         "| `skill.json` | 技能定义、弹道规则、`levelCurve` |",
         "| `heroBattle.json` | `combatStats`、技能槽映射 |",
-        "| `bond.json` | 阵营与定位羁绊 |",
+        "| `bond.json` | 种族阵营羁绊 |",
         "| `battle-skill-runtime.js` | `trajectoryDefense`、`primaryAttackTrajectory` |",
         "| `battle-rules.js` | 按 `attackTrajectory` 结算减伤 |",
         "| `skill-config.js` | 配表加载 |",
