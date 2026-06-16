@@ -1,6 +1,6 @@
 {
-  "version": "3.3.0",
-  "description": "技能 v3.3：普攻 + 定位特性（触发/持续）+ 品质特技",
+  "version": "3.4.0",
+  "description": "技能 v3.4：普通技能1/2 + 特技独立间隔/锁定/MISS飘字",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -8,6 +8,20 @@
     "speed": "加速"
   },
   "combatRules": {
+    "attackInterval": {
+      "normalSkill1": "跟随角色发射频率：间隔=2.2/fireRate（heroBattle.combatStats）",
+      "normalSkill2": "被动自动触发，见 activation.cooldownSec",
+      "specialActive": "主动特技使用技能独立间隔 activation.attackIntervalSec，不跟随普攻",
+      "specialPassive": "被动特技无需间隔（trigger=passive/onKill）"
+    },
+    "lockTarget": {
+      "lowestHpEnemyOnField": "锁定场上血量最低的敌方兵卡",
+      "lowestHpAllyOnField": "锁定场上血量最低的友军兵卡"
+    },
+    "blockFeedback": {
+      "text": "MISS",
+      "event": "blockSuccess"
+    },
     "trajectory": {
       "flat": "平直弹道（普通攻击、双联/连锁特技）",
       "arc": "高抛弹道（传奇攻击特技「高空重击」等）",
@@ -145,14 +159,14 @@
   "skillCount": 109,
   "skills": [
     {
-      "skillId": "skill_dragon_knight_basic_attack",
+      "skillId": "skill_dragon_knight_normal_1",
       "heroId": "dragon_knight",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "龙焰女王·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约88点）",
+      "name": "龙焰女王·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约88点）；攻击间隔跟随角色属性（L1约0.79秒/击，公式2.2/发射频率）",
       "visualDescription": "龙息火球，高抛弧线落点单格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -166,24 +180,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_dragon_knight_normal",
+      "skillId": "skill_dragon_knight_normal_2",
       "heroId": "dragon_knight",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "龙焰女王·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（88→97点）。",
+      "name": "龙焰女王·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（88→97点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -197,14 +212,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -217,7 +232,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙焰女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（88→136点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（88→136点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "龙息火球，高抛弧线落点单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -428,8 +443,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -441,14 +459,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_demon_lord_basic_attack",
+      "skillId": "skill_demon_lord_normal_1",
       "heroId": "demon_lord",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "永冬之王·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "name": "永冬之王·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）；攻击间隔跟随角色属性（L1约1.1秒/击，公式2.2/发射频率）",
       "visualDescription": "冰锥术，抛物线冻结打击；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -462,24 +480,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_demon_lord_normal",
+      "skillId": "skill_demon_lord_normal_2",
       "heroId": "demon_lord",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "永冬之王·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "name": "永冬之王·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -493,14 +512,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -513,7 +532,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "永冬之王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "冰锥术，抛物线冻结打击；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -724,8 +743,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -737,14 +759,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_archmage_basic_attack",
+      "skillId": "skill_archmage_normal_1",
       "heroId": "archmage",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "风暴女巫·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）",
+      "name": "风暴女巫·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）；攻击间隔跟随角色属性（L1约2.2秒/击，公式2.2/发射频率）",
       "visualDescription": "雷球高抛，落点范围电弧；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -758,24 +780,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_archmage_normal",
+      "skillId": "skill_archmage_normal_2",
       "heroId": "archmage",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "风暴女巫·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（100→110点）。",
+      "name": "风暴女巫·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（100→110点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -789,14 +812,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -809,7 +832,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "风暴女巫·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（100→155点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（100→155点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "雷球高抛，落点范围电弧；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1020,8 +1043,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -1033,14 +1059,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_ranger_basic_attack",
+      "skillId": "skill_ranger_normal_1",
       "heroId": "ranger",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "荆棘女王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）",
+      "name": "荆棘女王·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）；攻击间隔跟随角色属性（L1约0.85秒/击，公式2.2/发射频率）",
       "visualDescription": "荆棘箭，平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -1054,24 +1080,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_ranger_normal",
+      "skillId": "skill_ranger_normal_2",
       "heroId": "ranger",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "荆棘女王·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（50→55点）。",
+      "name": "荆棘女王·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（50→55点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -1085,14 +1112,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -1105,7 +1132,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "荆棘女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（50→77点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（50→77点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "荆棘箭，平直射击；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1316,8 +1343,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -1329,14 +1359,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_royal_knight_basic_attack",
+      "skillId": "skill_royal_knight_normal_1",
       "heroId": "royal_knight",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "圣盾领主·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
+      "name": "圣盾领主·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）；攻击间隔跟随角色属性（L1约1.22秒/击，公式2.2/发射频率）",
       "visualDescription": "圣盾光波，平直盾击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -1350,25 +1380,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_royal_knight_normal",
+      "skillId": "skill_royal_knight_normal_2",
       "heroId": "royal_knight",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "圣盾领主·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
-      "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "name": "圣盾领主·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -1384,17 +1415,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_royal_knight_legendary",
@@ -1404,8 +1439,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "圣盾领主·全局圣域",
-      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒触发1次；持续8秒。",
-      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒主动释放1次；技能独立间隔20秒（不跟随角色普攻间隔）；持续8秒。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "全场地坪升起光幕护罩，全局防护；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
       "unlockLevel": 20,
@@ -1607,24 +1642,30 @@
       "activation": {
         "trigger": "active",
         "cooldownSec": 20,
-        "durationSec": 8
+        "durationSec": 8,
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 20
       },
       "tags": [
         "legendary",
         "legendary",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_druid_basic_attack",
+      "skillId": "skill_druid_normal_1",
       "heroId": "druid",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "北境守护者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
+      "name": "北境守护者·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）；攻击间隔跟随角色属性（L1约1.47秒/击，公式2.2/发射频率）",
       "visualDescription": "自然花粉，平直治疗波；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -1638,24 +1679,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "supply",
         "unit"
       ]
     },
     {
-      "skillId": "skill_druid_normal",
+      "skillId": "skill_druid_normal_2",
       "heroId": "druid",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "北境守护者·应急包扎",
-      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复25%最大生命（例：HP700→约+175点）。",
+      "name": "北境守护者·普通技能2·应急包扎",
+      "description": "为自身恢复少量生命。被动自动触发。每10秒触发1次。目标：自身。恢复25%最大生命（例：HP700→约+175点）。",
       "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -1669,14 +1711,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 0,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "supply",
         "unit"
       ]
@@ -1689,7 +1731,7 @@
       "category": "supply",
       "categoryLabel": "补给",
       "name": "北境守护者·满血圣疗",
-      "description": "将场上血量最低的友军兵卡恢复至满血，并净化一次减益。【传奇】将场上血量最低的友军兵卡恢复至满血（例：HP700拉满），并净化减益。【触发】每18秒触发1次；目标：场上血量最低的友军兵卡。",
+      "description": "将场上血量最低的友军兵卡恢复至满血，并净化一次减益。【传奇】将场上血量最低的友军兵卡恢复至满血（例：HP700拉满），并净化减益。【触发】每18秒主动释放1次；技能独立间隔18秒（不跟随角色普攻间隔）；目标：场上血量最低的友军兵卡。",
       "visualDescription": "金色光柱从天而降，满血恢复",
       "projectileStyle": "flat",
       "attackMode": "heal",
@@ -1853,7 +1895,9 @@
       "activation": {
         "trigger": "active",
         "cooldownSec": 18,
-        "target": "lowestHpAllyOnField"
+        "target": "lowestHpAllyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 18
       },
       "tags": [
         "legendary",
@@ -1863,14 +1907,14 @@
       ]
     },
     {
-      "skillId": "skill_lich_queen_basic_attack",
+      "skillId": "skill_lich_queen_normal_1",
       "heroId": "lich_queen",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幽灵船长·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "name": "幽灵船长·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）；攻击间隔跟随角色属性（L1约1.57秒/击，公式2.2/发射频率）",
       "visualDescription": "幽魂炮，高抛灵魂弹；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -1884,24 +1928,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_lich_queen_normal",
+      "skillId": "skill_lich_queen_normal_2",
       "heroId": "lich_queen",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幽灵船长·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "name": "幽灵船长·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -1915,14 +1960,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -1934,23 +1979,20 @@
       "skillKind": "special",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幽灵船长·亡灵收割",
-      "description": "击杀敌方兵卡后，翻开相邻已阵亡格并召唤亡灵单位。【传奇】依托基础攻击（约70点/击）；击杀后复燃相邻阵亡格；目标≤25%生命时更易斩杀。【触发】每次普攻触发；目标：单格敌方兵卡。",
-      "visualDescription": "幽绿弧线落下，阵亡格复燃翻出亡灵牌",
+      "name": "幽灵船长·幽魂还魂",
+      "description": "复苏一张我方阵亡兵卡，恢复50%最大生命。【传奇】复苏1张我方阵亡兵卡，恢复50%最大生命。【触发】每20秒主动释放1次；技能独立间隔20秒（不跟随角色普攻间隔）；目标：我方阵亡兵卡。",
+      "visualDescription": "幽绿魂火飘向阵亡格，兵卡复燃",
       "projectileStyle": "arc",
-      "attackMode": "single_kill",
+      "attackMode": "revive",
       "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "reviveAdjacentDead",
-          "value": 1
-        },
-        {
-          "type": "executeThreshold",
-          "value": 0.25
+          "type": "reviveAllyDead",
+          "value": 1.0,
+          "reviveHpPct": 0.5
         }
       ],
       "levelCurve": [
@@ -1958,12 +2000,9 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "reviveAdjacentDead",
-              "value": 1
-            },
-            {
-              "type": "executeThreshold",
-              "value": 0.25
+              "type": "reviveAllyDead",
+              "value": 1.0,
+              "reviveHpPct": 0.5
             }
           ]
         },
@@ -1971,12 +2010,9 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "reviveAdjacentDead",
-              "value": 1
-            },
-            {
-              "type": "executeThreshold",
-              "value": 0.27
+              "type": "reviveAllyDead",
+              "value": 1.08,
+              "reviveHpPct": 0.5
             }
           ]
         },
@@ -1984,12 +2020,9 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "reviveAdjacentDead",
-              "value": 1
-            },
-            {
-              "type": "executeThreshold",
-              "value": 0.29
+              "type": "reviveAllyDead",
+              "value": 1.16,
+              "reviveHpPct": 0.5
             }
           ]
         },
@@ -1997,12 +2030,9 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "reviveAdjacentDead",
-              "value": 1
-            },
-            {
-              "type": "executeThreshold",
-              "value": 0.31
+              "type": "reviveAllyDead",
+              "value": 1.24,
+              "reviveHpPct": 0.5
             }
           ]
         },
@@ -2010,12 +2040,9 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "reviveAdjacentDead",
-              "value": 1
-            },
-            {
-              "type": "executeThreshold",
-              "value": 0.33
+              "type": "reviveAllyDead",
+              "value": 1.32,
+              "reviveHpPct": 0.5
             }
           ]
         }
@@ -2028,12 +2055,9 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "reviveAdjacentDead",
-                "value": 1
-              },
-              {
-                "type": "executeThreshold",
-                "value": 0.25
+                "type": "reviveAllyDead",
+                "value": 1,
+                "reviveHpPct": 0.5
               }
             ],
             "attackPerHit": 70,
@@ -2043,12 +2067,9 @@
             "skillLevel": 2,
             "effects": [
               {
-                "type": "reviveAdjacentDead",
-                "value": 1
-              },
-              {
-                "type": "executeThreshold",
-                "value": 0.25
+                "type": "reviveAllyDead",
+                "value": 1,
+                "reviveHpPct": 0.5
               }
             ],
             "attackPerHit": 70,
@@ -2058,12 +2079,9 @@
             "skillLevel": 3,
             "effects": [
               {
-                "type": "reviveAdjacentDead",
-                "value": 1
-              },
-              {
-                "type": "executeThreshold",
-                "value": 0.25
+                "type": "reviveAllyDead",
+                "value": 1,
+                "reviveHpPct": 0.5
               }
             ],
             "attackPerHit": 70,
@@ -2073,12 +2091,9 @@
             "skillLevel": 4,
             "effects": [
               {
-                "type": "reviveAdjacentDead",
-                "value": 1
-              },
-              {
-                "type": "executeThreshold",
-                "value": 0.25
+                "type": "reviveAllyDead",
+                "value": 1,
+                "reviveHpPct": 0.5
               }
             ],
             "attackPerHit": 70,
@@ -2088,12 +2103,9 @@
             "skillLevel": 5,
             "effects": [
               {
-                "type": "reviveAdjacentDead",
-                "value": 1
-              },
-              {
-                "type": "executeThreshold",
-                "value": 0.25
+                "type": "reviveAllyDead",
+                "value": 1,
+                "reviveHpPct": 0.5
               }
             ],
             "attackPerHit": 70,
@@ -2102,8 +2114,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 20,
+        "target": "allyDeadCard",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 20
       },
       "tags": [
         "legendary",
@@ -2113,14 +2128,14 @@
       ]
     },
     {
-      "skillId": "skill_blademaster_basic_attack",
+      "skillId": "skill_blademaster_normal_1",
       "heroId": "blademaster",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幻影刺客·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约150点）",
+      "name": "幻影刺客·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约150点）；攻击间隔跟随角色属性（L1约0.92秒/击，公式2.2/发射频率）",
       "visualDescription": "影刃直线突刺；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -2134,24 +2149,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_blademaster_normal",
+      "skillId": "skill_blademaster_normal_2",
       "heroId": "blademaster",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幻影刺客·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（150→165点）。",
+      "name": "幻影刺客·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（150→165点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -2165,14 +2181,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -2185,7 +2201,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幻影刺客·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（150→232点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（150→232点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "影刃直线突刺；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2396,8 +2412,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -2409,14 +2428,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_frost_dragon_basic_attack",
+      "skillId": "skill_frost_dragon_normal_1",
       "heroId": "frost_dragon",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "寒冰巨魔·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "name": "寒冰巨魔·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）；攻击间隔跟随角色属性（L1约1.83秒/击，公式2.2/发射频率）",
       "visualDescription": "巨锤冰陨，高空重砸；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -2430,24 +2449,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_frost_dragon_normal",
+      "skillId": "skill_frost_dragon_normal_2",
       "heroId": "frost_dragon",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "寒冰巨魔·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "name": "寒冰巨魔·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -2461,14 +2481,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -2481,7 +2501,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "寒冰巨魔·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "巨锤冰陨，高空重砸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2692,8 +2712,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -2705,14 +2728,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_crusher_basic_attack",
+      "skillId": "skill_crusher_normal_1",
       "heroId": "crusher",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "重装破城者·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）",
+      "name": "重装破城者·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）；攻击间隔跟随角色属性（L1约2.75秒/击，公式2.2/发射频率）",
       "visualDescription": "破城锤，高抛砸击单格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -2726,24 +2749,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_crusher_normal",
+      "skillId": "skill_crusher_normal_2",
       "heroId": "crusher",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "重装破城者·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（200→220点）。",
+      "name": "重装破城者·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（200→220点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -2757,14 +2781,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -2777,7 +2801,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "重装破城者·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（200→309点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（200→309点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "破城锤，高抛砸击单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2988,8 +3012,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -3001,14 +3028,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_helicopter_basic_attack",
+      "skillId": "skill_helicopter_normal_1",
       "heroId": "helicopter",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "机械飞鹰·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约110点）",
+      "name": "机械飞鹰·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约110点）；攻击间隔跟随角色属性（L1约1.38秒/击，公式2.2/发射频率）",
       "visualDescription": "机炮连射，平直子弹；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -3022,24 +3049,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_helicopter_normal",
+      "skillId": "skill_helicopter_normal_2",
       "heroId": "helicopter",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "机械飞鹰·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（110→121点）。",
+      "name": "机械飞鹰·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（110→121点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -3053,14 +3081,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -3073,7 +3101,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "机械飞鹰·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（110→170点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（110→170点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "机炮连射，平直子弹；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -3284,8 +3312,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -3297,14 +3328,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_dread_knight_basic_attack",
+      "skillId": "skill_dread_knight_normal_1",
       "heroId": "dread_knight",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "巨斧酋长·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约90点）",
+      "name": "巨斧酋长·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约90点）；攻击间隔跟随角色属性（L1约0.88秒/击，公式2.2/发射频率）",
       "visualDescription": "巨斧直线劈砍；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -3318,24 +3349,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_dread_knight_normal",
+      "skillId": "skill_dread_knight_normal_2",
       "heroId": "dread_knight",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "巨斧酋长·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（90→99点）。",
+      "name": "巨斧酋长·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（90→99点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -3349,14 +3381,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -3369,7 +3401,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "巨斧酋长·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（90→139点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "description": "发射高抛弹道重击，对单格造成巨额伤害并概率斩杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（90→139点）；目标生命≤30%时触发斩杀加成。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；目标：单格敌方兵卡。",
       "visualDescription": "巨斧直线劈砍；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -3580,8 +3612,11 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 10,
+        "attackIntervalSec": 10,
+        "target": "singleEnemy",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -3593,14 +3628,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_warlord_basic_attack",
+      "skillId": "skill_warlord_normal_1",
       "heroId": "warlord",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "双头奇美拉·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约120点）",
+      "name": "双头奇美拉·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约120点）；攻击间隔跟随角色属性（L1约1.69秒/击，公式2.2/发射频率）",
       "visualDescription": "双头咆哮盾墙，平直冲击波；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -3614,25 +3649,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_warlord_normal",
+      "skillId": "skill_warlord_normal_2",
       "heroId": "warlord",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "双头奇美拉·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
-      "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈",
+      "name": "双头奇美拉·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -3648,17 +3684,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_warlord_legendary",
@@ -3668,8 +3708,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "双头奇美拉·全局圣域",
-      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒触发1次；持续8秒。",
-      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒主动释放1次；技能独立间隔20秒（不跟随角色普攻间隔）；持续8秒。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "全场地坪升起光幕护罩，全局防护；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
       "unlockLevel": 20,
@@ -3871,24 +3911,30 @@
       "activation": {
         "trigger": "active",
         "cooldownSec": 20,
-        "durationSec": 8
+        "durationSec": 8,
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 20
       },
       "tags": [
         "legendary",
         "legendary",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_panda_monk_basic_attack",
+      "skillId": "skill_panda_monk_normal_1",
       "heroId": "panda_monk",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "爆破鬼才·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约160点）",
+      "name": "爆破鬼才·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约160点）；攻击间隔跟随角色属性（L1约1.57秒/击，公式2.2/发射频率）",
       "visualDescription": "炸药包高抛，落地爆炸；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -3902,24 +3948,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_panda_monk_normal",
+      "skillId": "skill_panda_monk_normal_2",
       "heroId": "panda_monk",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "爆破鬼才·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（160→176点）。",
+      "name": "爆破鬼才·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（160→176点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -3933,14 +3980,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -3952,23 +3999,27 @@
       "skillKind": "special",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "爆破鬼才·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（160→248点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
-      "visualDescription": "炸药包高抛，落地爆炸；**强抛物线**高空砸击，落地重击特效",
+      "name": "爆破鬼才·巨型炸弹",
+      "description": "投掷巨型炸弹，对周围4格敌方兵卡造成伤害，邻格溅射40%。【传奇】周围4格主伤害155%攻击力（约248点）；邻格溅射40%。【触发】每15秒主动释放1次；技能独立间隔15秒（不跟随角色普攻间隔）；目标：周围4格敌方兵卡。",
+      "visualDescription": "巨型炸药包高抛，落地环形爆炸",
       "projectileStyle": "arc",
-      "attackMode": "single_kill",
+      "attackMode": "area_bomb",
       "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
+          "type": "areaTiles",
+          "value": 4.0
+        },
+        {
           "type": "atkPct",
           "value": 0.547
         },
         {
-          "type": "executeThreshold",
-          "value": 0.3
+          "type": "splashPct",
+          "value": 0.4
         },
         {
           "type": "projectileArc",
@@ -3980,12 +4031,16 @@
           "skillLevel": 1,
           "effects": [
             {
+              "type": "areaTiles",
+              "value": 4.0
+            },
+            {
               "type": "atkPct",
               "value": 0.547
             },
             {
-              "type": "executeThreshold",
-              "value": 0.3
+              "type": "splashPct",
+              "value": 0.4
             },
             {
               "type": "projectileArc",
@@ -3997,12 +4052,16 @@
           "skillLevel": 2,
           "effects": [
             {
+              "type": "areaTiles",
+              "value": 4.32
+            },
+            {
               "type": "atkPct",
               "value": 0.591
             },
             {
-              "type": "executeThreshold",
-              "value": 0.324
+              "type": "splashPct",
+              "value": 0.432
             },
             {
               "type": "projectileArc",
@@ -4014,12 +4073,16 @@
           "skillLevel": 3,
           "effects": [
             {
+              "type": "areaTiles",
+              "value": 4.64
+            },
+            {
               "type": "atkPct",
               "value": 0.635
             },
             {
-              "type": "executeThreshold",
-              "value": 0.348
+              "type": "splashPct",
+              "value": 0.464
             },
             {
               "type": "projectileArc",
@@ -4031,12 +4094,16 @@
           "skillLevel": 4,
           "effects": [
             {
+              "type": "areaTiles",
+              "value": 4.96
+            },
+            {
               "type": "atkPct",
               "value": 0.678
             },
             {
-              "type": "executeThreshold",
-              "value": 0.372
+              "type": "splashPct",
+              "value": 0.496
             },
             {
               "type": "projectileArc",
@@ -4048,12 +4115,16 @@
           "skillLevel": 5,
           "effects": [
             {
+              "type": "areaTiles",
+              "value": 5.28
+            },
+            {
               "type": "atkPct",
               "value": 0.722
             },
             {
-              "type": "executeThreshold",
-              "value": 0.396
+              "type": "splashPct",
+              "value": 0.528
             },
             {
               "type": "projectileArc",
@@ -4070,12 +4141,16 @@
             "skillLevel": 1,
             "effects": [
               {
+                "type": "areaTiles",
+                "value": 4
+              },
+              {
                 "type": "atkPct",
                 "value": 0.547
               },
               {
-                "type": "executeThreshold",
-                "value": 0.3
+                "type": "splashPct",
+                "value": 0.4
               },
               {
                 "type": "projectileArc",
@@ -4083,18 +4158,22 @@
               }
             ],
             "attackPerHit": 248,
-            "splashDamage": 0
+            "splashDamage": 64
           },
           {
             "skillLevel": 2,
             "effects": [
               {
+                "type": "areaTiles",
+                "value": 4
+              },
+              {
                 "type": "atkPct",
                 "value": 0.591
               },
               {
-                "type": "executeThreshold",
-                "value": 0.3
+                "type": "splashPct",
+                "value": 0.432
               },
               {
                 "type": "projectileArc",
@@ -4102,18 +4181,22 @@
               }
             ],
             "attackPerHit": 255,
-            "splashDamage": 0
+            "splashDamage": 69
           },
           {
             "skillLevel": 3,
             "effects": [
               {
+                "type": "areaTiles",
+                "value": 4
+              },
+              {
                 "type": "atkPct",
                 "value": 0.635
               },
               {
-                "type": "executeThreshold",
-                "value": 0.3
+                "type": "splashPct",
+                "value": 0.464
               },
               {
                 "type": "projectileArc",
@@ -4121,18 +4204,22 @@
               }
             ],
             "attackPerHit": 262,
-            "splashDamage": 0
+            "splashDamage": 74
           },
           {
             "skillLevel": 4,
             "effects": [
               {
+                "type": "areaTiles",
+                "value": 4
+              },
+              {
                 "type": "atkPct",
                 "value": 0.678
               },
               {
-                "type": "executeThreshold",
-                "value": 0.3
+                "type": "splashPct",
+                "value": 0.496
               },
               {
                 "type": "projectileArc",
@@ -4140,18 +4227,22 @@
               }
             ],
             "attackPerHit": 268,
-            "splashDamage": 0
+            "splashDamage": 79
           },
           {
             "skillLevel": 5,
             "effects": [
               {
+                "type": "areaTiles",
+                "value": 4
+              },
+              {
                 "type": "atkPct",
                 "value": 0.722
               },
               {
-                "type": "executeThreshold",
-                "value": 0.3
+                "type": "splashPct",
+                "value": 0.528
               },
               {
                 "type": "projectileArc",
@@ -4159,13 +4250,16 @@
               }
             ],
             "attackPerHit": 276,
-            "splashDamage": 0
+            "splashDamage": 84
           }
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "singleEnemy"
+        "trigger": "active",
+        "cooldownSec": 15,
+        "attackIntervalSec": 15,
+        "target": "surrounding4",
+        "useHeroAttackSpeed": false
       },
       "tags": [
         "legendary",
@@ -4177,14 +4271,14 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_sky_dome_basic_attack",
+      "skillId": "skill_sky_dome_normal_1",
       "heroId": "sky_dome",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "天穹·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约65点）",
+      "name": "天穹·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约65点）；攻击间隔跟随角色属性（L1约3.67秒/击，公式2.2/发射频率）",
       "visualDescription": "穹顶光束，高抛能量弹；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -4198,25 +4292,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "legendary",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "building"
       ]
     },
     {
-      "skillId": "skill_sky_dome_normal",
+      "skillId": "skill_sky_dome_normal_2",
       "heroId": "sky_dome",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "天穹·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
-      "visualDescription": "穹顶光束，高抛能量弹；护体光效贴身，**平直**格挡反馈",
+      "name": "天穹·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "穹顶光束，高抛能量弹；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "arc",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -4232,17 +4327,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "legendary",
-        "trait",
+        "normal_skill_2",
         "defense",
         "building"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_sky_dome_legendary",
@@ -4252,8 +4351,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "天穹·天穹护盾",
-      "description": "周围4格常驻抵御平直攻击；每4秒开启天穹，5秒内抵御高空炮击。【传奇】周围4格抵御平直；激活天穹时5秒内抵御高抛炮击。【触发】每4秒触发1次；持续5秒；周围4格常驻抵御平直攻击；激活时抵御高空炮击。",
-      "visualDescription": "穹顶光幕展开，覆盖周围四格；激活时抵挡高抛炮击",
+      "description": "周围4格常驻抵御平直攻击；每10秒开启天穹，5秒内抵御高空炮击。【传奇】周围4格抵御平直；每10秒开启天穹，5秒内抵御高抛炮击。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；持续5秒；周围4格常驻抵御平直攻击；激活时抵御高空炮击。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "穹顶光幕展开，覆盖周围四格；激活时抵挡高抛炮击；抵挡成功 **MISS** 飘字",
       "projectileStyle": "arc",
       "attackMode": "area_defense",
       "unlockLevel": 20,
@@ -4271,7 +4370,7 @@
         {
           "type": "domeArcShield",
           "value": 4,
-          "cooldownSec": 4,
+          "cooldownSec": 10,
           "durationSec": 5,
           "blocksTrajectory": [
             "arc"
@@ -4292,7 +4391,7 @@
             {
               "type": "domeArcShield",
               "value": 4,
-              "cooldownSec": 4,
+              "cooldownSec": 10,
               "durationSec": 5,
               "blocksTrajectory": [
                 "arc"
@@ -4313,7 +4412,7 @@
             {
               "type": "domeArcShield",
               "value": 4,
-              "cooldownSec": 4,
+              "cooldownSec": 10,
               "durationSec": 5,
               "blocksTrajectory": [
                 "arc"
@@ -4334,7 +4433,7 @@
             {
               "type": "domeArcShield",
               "value": 4,
-              "cooldownSec": 4,
+              "cooldownSec": 10,
               "durationSec": 5,
               "blocksTrajectory": [
                 "arc"
@@ -4355,7 +4454,7 @@
             {
               "type": "domeArcShield",
               "value": 4,
-              "cooldownSec": 4,
+              "cooldownSec": 10,
               "durationSec": 5,
               "blocksTrajectory": [
                 "arc"
@@ -4376,7 +4475,7 @@
             {
               "type": "domeArcShield",
               "value": 4,
-              "cooldownSec": 4,
+              "cooldownSec": 10,
               "durationSec": 5,
               "blocksTrajectory": [
                 "arc"
@@ -4402,7 +4501,7 @@
               {
                 "type": "domeArcShield",
                 "value": 4,
-                "cooldownSec": 4,
+                "cooldownSec": 10,
                 "durationSec": 5,
                 "blocksTrajectory": [
                   "arc"
@@ -4423,7 +4522,7 @@
               {
                 "type": "domeArcShield",
                 "value": 4,
-                "cooldownSec": 4,
+                "cooldownSec": 10,
                 "durationSec": 5,
                 "blocksTrajectory": [
                   "arc"
@@ -4444,7 +4543,7 @@
               {
                 "type": "domeArcShield",
                 "value": 4,
-                "cooldownSec": 4,
+                "cooldownSec": 10,
                 "durationSec": 5,
                 "blocksTrajectory": [
                   "arc"
@@ -4465,7 +4564,7 @@
               {
                 "type": "domeArcShield",
                 "value": 4,
-                "cooldownSec": 4,
+                "cooldownSec": 10,
                 "durationSec": 5,
                 "blocksTrajectory": [
                   "arc"
@@ -4486,7 +4585,7 @@
               {
                 "type": "domeArcShield",
                 "value": 4,
-                "cooldownSec": 4,
+                "cooldownSec": 10,
                 "durationSec": 5,
                 "blocksTrajectory": [
                   "arc"
@@ -4498,7 +4597,7 @@
       },
       "activation": {
         "trigger": "active",
-        "cooldownSec": 4,
+        "cooldownSec": 10,
         "durationSec": 5,
         "scope": "adjacent4",
         "passiveBlocksTrajectory": [
@@ -4506,24 +4605,30 @@
         ],
         "activeBlocksTrajectory": [
           "arc"
-        ]
+        ],
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 10
       },
       "tags": [
         "legendary",
         "legendary",
         "defense",
         "building"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_shaman_basic_attack",
+      "skillId": "skill_shaman_normal_1",
       "heroId": "shaman",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "藤蔓萨满·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约58点）",
+      "name": "藤蔓萨满·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约58点）；攻击间隔跟随角色属性（L1约1.83秒/击，公式2.2/发射频率）",
       "visualDescription": "治疗花粉，平直飘向友军；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -4537,24 +4642,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "supply",
         "unit"
       ]
     },
     {
-      "skillId": "skill_shaman_normal",
+      "skillId": "skill_shaman_normal_2",
       "heroId": "shaman",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "藤蔓萨满·应急包扎",
-      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复22%最大生命（例：HP96→约+22点）。",
+      "name": "藤蔓萨满·普通技能2·应急包扎",
+      "description": "为自身恢复少量生命。被动自动触发。每10秒触发1次。目标：自身。恢复22%最大生命（例：HP96→约+22点）。",
       "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -4568,14 +4674,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 0,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "supply",
         "unit"
       ]
@@ -4588,7 +4694,7 @@
       "category": "supply",
       "categoryLabel": "补给",
       "name": "藤蔓萨满·群体复苏",
-      "description": "范围友军恢复50%生命。【史诗】范围友军恢复76%生命（例：HP96→约+73点）。【触发】每14秒触发1次；目标：范围内友军。",
+      "description": "范围友军恢复50%生命。【史诗】范围友军恢复76%生命（例：HP96→约+73点）。【触发】每14秒主动释放1次；技能独立间隔14秒（不跟随角色普攻间隔）；目标：范围内友军。",
       "visualDescription": "绿色光环扩散，范围内友军回血",
       "projectileStyle": "flat",
       "attackMode": "heal",
@@ -4709,7 +4815,9 @@
         "trigger": "active",
         "cooldownSec": 14,
         "durationSec": 0,
-        "target": "alliesInRange"
+        "target": "alliesInRange",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 14
       },
       "tags": [
         "epic",
@@ -4719,14 +4827,14 @@
       ]
     },
     {
-      "skillId": "skill_gargoyle_basic_attack",
+      "skillId": "skill_gargoyle_normal_1",
       "heroId": "gargoyle",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "鹰女·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
+      "name": "鹰女·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）；攻击间隔跟随角色属性（L1约1.47秒/击，公式2.2/发射频率）",
       "visualDescription": "石肤护壁，平直岩盾；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -4740,25 +4848,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_gargoyle_normal",
+      "skillId": "skill_gargoyle_normal_2",
       "heroId": "gargoyle",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "鹰女·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。",
-      "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈",
+      "name": "鹰女·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -4774,17 +4883,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_gargoyle_epic",
@@ -4794,8 +4907,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "鹰女·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒触发1次；持续6秒。",
-      "visualDescription": "弧形盾带展开，覆盖三格",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；持续6秒。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "弧形盾带展开，覆盖三格；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
       "unlockLevel": 10,
@@ -4997,24 +5110,30 @@
       "activation": {
         "trigger": "active",
         "cooldownSec": 12,
-        "durationSec": 6
+        "durationSec": 6,
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
         "epic",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_skeleton_giant_basic_attack",
+      "skillId": "skill_skeleton_giant_normal_1",
       "heroId": "skeleton_giant",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "巨石魔像·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
+      "name": "巨石魔像·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）；攻击间隔跟随角色属性（L1约3.67秒/击，公式2.2/发射频率）",
       "visualDescription": "巨石屏障，平直岩块；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -5028,25 +5147,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_skeleton_giant_normal",
+      "skillId": "skill_skeleton_giant_normal_2",
       "heroId": "skeleton_giant",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "巨石魔像·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。",
-      "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈",
+      "name": "巨石魔像·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -5062,17 +5182,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_skeleton_giant_epic",
@@ -5082,8 +5206,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "巨石魔像·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒触发1次；持续6秒。",
-      "visualDescription": "弧形盾带展开，覆盖三格",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；持续6秒。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "弧形盾带展开，覆盖三格；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
       "unlockLevel": 10,
@@ -5285,24 +5409,30 @@
       "activation": {
         "trigger": "active",
         "cooldownSec": 12,
-        "durationSec": 6
+        "durationSec": 6,
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
         "epic",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_sniper_basic_attack",
+      "skillId": "skill_sniper_normal_1",
       "heroId": "sniper",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "雇佣兵·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
+      "name": "雇佣兵·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）；攻击间隔跟随角色属性（L1约2.2秒/击，公式2.2/发射频率）",
       "visualDescription": "狙击弹，极快平直弹道；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -5316,24 +5446,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_sniper_normal",
+      "skillId": "skill_sniper_normal_2",
       "heroId": "sniper",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "雇佣兵·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（60→65点）。",
+      "name": "雇佣兵·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（60→65点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -5347,14 +5478,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -5367,7 +5498,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "雇佣兵·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（60→71点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "description": "锁定场上血量最低的敌方兵卡后连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（60→71点），锁定场上血量最低的敌方兵卡后连锁命中2格。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；锁定场上血量最低的敌方兵卡；目标：场上血量最低的敌方兵卡。",
       "visualDescription": "平直穿透，依次命中2格",
       "projectileStyle": "flat",
       "attackMode": "chain",
@@ -5534,8 +5665,12 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "chainedEnemies"
+        "trigger": "active",
+        "cooldownSec": 12,
+        "lockTarget": "lowestHpEnemyOnField",
+        "target": "lowestHpEnemyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -5545,14 +5680,14 @@
       ]
     },
     {
-      "skillId": "skill_catapult_tower_basic_attack",
+      "skillId": "skill_catapult_tower_normal_1",
       "heroId": "catapult_tower",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "炮楼·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）",
+      "name": "炮楼·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）；攻击间隔跟随角色属性（L1约3.14秒/击，公式2.2/发射频率）",
       "visualDescription": "石弹高抛，经典抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -5566,24 +5701,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "building"
       ]
     },
     {
-      "skillId": "skill_catapult_tower_normal",
+      "skillId": "skill_catapult_tower_normal_2",
       "heroId": "catapult_tower",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "炮楼·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（100→109点）。",
+      "name": "炮楼·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（100→109点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -5597,14 +5733,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "attack",
         "building"
       ]
@@ -5617,7 +5753,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "炮楼·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（100→118点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "description": "锁定场上血量最低的敌方兵卡后连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（100→118点），锁定场上血量最低的敌方兵卡后连锁命中2格。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；锁定场上血量最低的敌方兵卡；目标：场上血量最低的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -5784,8 +5920,12 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "chainedEnemies"
+        "trigger": "active",
+        "cooldownSec": 12,
+        "lockTarget": "lowestHpEnemyOnField",
+        "target": "lowestHpEnemyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -5795,14 +5935,14 @@
       ]
     },
     {
-      "skillId": "skill_catapult_basic_attack",
+      "skillId": "skill_catapult_normal_1",
       "heroId": "catapult",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "自爆蜘蛛·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）",
+      "name": "自爆蜘蛛·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）；攻击间隔跟随角色属性（L1约4.4秒/击，公式2.2/发射频率）",
       "visualDescription": "自爆蜘蛛高抛投掷；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -5816,24 +5956,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_catapult_normal",
+      "skillId": "skill_catapult_normal_2",
       "heroId": "catapult",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "自爆蜘蛛·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（200→218点）。",
+      "name": "自爆蜘蛛·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（200→218点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -5847,14 +5988,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -5867,7 +6008,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "自爆蜘蛛·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（200→236点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "description": "锁定场上血量最低的敌方兵卡后连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（200→236点），锁定场上血量最低的敌方兵卡后连锁命中2格。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；锁定场上血量最低的敌方兵卡；目标：场上血量最低的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -6034,8 +6175,12 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "chainedEnemies"
+        "trigger": "active",
+        "cooldownSec": 12,
+        "lockTarget": "lowestHpEnemyOnField",
+        "target": "lowestHpEnemyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -6045,14 +6190,14 @@
       ]
     },
     {
-      "skillId": "skill_cavalry_basic_attack",
+      "skillId": "skill_cavalry_normal_1",
       "heroId": "cavalry",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "龙骑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）",
+      "name": "龙骑士·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）；攻击间隔跟随角色属性（L1约1.16秒/击，公式2.2/发射频率）",
       "visualDescription": "骑枪冲锋，平直突刺；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -6066,24 +6211,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_cavalry_normal",
+      "skillId": "skill_cavalry_normal_2",
       "heroId": "cavalry",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "龙骑士·迅捷装填",
-      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+9%（间隔1.16s→约1.06s）。",
+      "name": "龙骑士·普通技能2·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。被动自动触发。每10秒触发1次。持续5秒。目标：自身。发射频率+9%（间隔1.16s→约1.06s）。",
       "visualDescription": "骑枪冲锋，平直突刺；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -6097,14 +6243,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "speed",
         "unit"
       ]
@@ -6117,7 +6263,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "龙骑士·弹速增压",
-      "description": "提升弹道飞行速度，并小幅提升攻速。【史诗】弹道速度+30%、发射频率+15%（间隔1.16s→约1.01s）。【触发】每12秒触发1次；持续6秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
+      "description": "提升弹道飞行速度，并小幅提升攻速。【史诗】弹道速度+30%、发射频率+15%（间隔1.16s→约1.01s）。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；持续6秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
       "visualDescription": "弹道拖尾加速，平直/高抛均更快到达",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -6277,7 +6423,9 @@
         "trigger": "active",
         "cooldownSec": 12,
         "durationSec": 6,
-        "target": "self"
+        "target": "self",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -6287,14 +6435,14 @@
       ]
     },
     {
-      "skillId": "skill_wyrmling_basic_attack",
+      "skillId": "skill_wyrmling_normal_1",
       "heroId": "wyrmling",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "火龙·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约68点）",
+      "name": "火龙·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约68点）；攻击间隔跟随角色属性（L1约1.22秒/击，公式2.2/发射频率）",
       "visualDescription": "幼龙火球，小抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -6308,24 +6456,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_wyrmling_normal",
+      "skillId": "skill_wyrmling_normal_2",
       "heroId": "wyrmling",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "火龙·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（68→74点）。",
+      "name": "火龙·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（68→74点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -6339,14 +6488,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -6359,7 +6508,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火龙·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（68→80点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "description": "锁定场上血量最低的敌方兵卡后连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（68→80点），锁定场上血量最低的敌方兵卡后连锁命中2格。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；锁定场上血量最低的敌方兵卡；目标：场上血量最低的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -6526,8 +6675,12 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "chainedEnemies"
+        "trigger": "active",
+        "cooldownSec": 12,
+        "lockTarget": "lowestHpEnemyOnField",
+        "target": "lowestHpEnemyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -6537,14 +6690,14 @@
       ]
     },
     {
-      "skillId": "skill_ballista_basic_attack",
+      "skillId": "skill_ballista_normal_1",
       "heroId": "ballista",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "弩车·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约90点）",
+      "name": "弩车·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约90点）；攻击间隔跟随角色属性（L1约4.4秒/击，公式2.2/发射频率）",
       "visualDescription": "弩炮重矢，高抛穿透；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -6558,24 +6711,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "epic",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_ballista_normal",
+      "skillId": "skill_ballista_normal_2",
       "heroId": "ballista",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "弩车·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（90→98点）。",
+      "name": "弩车·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（90→98点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -6589,14 +6743,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "epic",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -6609,7 +6763,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "弩车·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（90→106点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "description": "锁定场上血量最低的敌方兵卡后连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（90→106点），锁定场上血量最低的敌方兵卡后连锁命中2格。【触发】每12秒主动释放1次；技能独立间隔12秒（不跟随角色普攻间隔）；锁定场上血量最低的敌方兵卡；目标：场上血量最低的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -6776,8 +6930,12 @@
         ]
       },
       "activation": {
-        "trigger": "onBasicAttack",
-        "target": "chainedEnemies"
+        "trigger": "active",
+        "cooldownSec": 12,
+        "lockTarget": "lowestHpEnemyOnField",
+        "target": "lowestHpEnemyOnField",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 12
       },
       "tags": [
         "epic",
@@ -6787,14 +6945,14 @@
       ]
     },
     {
-      "skillId": "skill_necromancer_basic_attack",
+      "skillId": "skill_necromancer_normal_1",
       "heroId": "necromancer",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "骷髅魔导师·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约30点）",
+      "name": "骷髅魔导师·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约30点）；攻击间隔跟随角色属性（L1约2.0秒/击，公式2.2/发射频率）",
       "visualDescription": "亡灵弹，弧线触发复活格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -6808,24 +6966,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_necromancer_normal",
+      "skillId": "skill_necromancer_normal_2",
       "heroId": "necromancer",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "骷髅魔导师·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
+      "name": "骷髅魔导师·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -6839,14 +6998,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -6859,7 +7018,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "骷髅魔导师·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】随角色普攻发射；攻击间隔跟随角色属性（L1约2.0秒/击）；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "亡灵弹，弧线触发复活格；主目标+邻格溅射，高抛双道",
       "projectileStyle": "arc",
       "attackMode": "multi",
@@ -7027,7 +7186,8 @@
       },
       "activation": {
         "trigger": "onBasicAttack",
-        "target": "primaryAndAdjacentEnemy"
+        "target": "primaryAndAdjacentEnemy",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
@@ -7037,14 +7197,14 @@
       ]
     },
     {
-      "skillId": "skill_spear_orc_basic_attack",
+      "skillId": "skill_spear_orc_normal_1",
       "heroId": "spear_orc",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "鱼叉捕猎者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）",
+      "name": "鱼叉捕猎者·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）；攻击间隔跟随角色属性（L1约1.83秒/击，公式2.2/发射频率）",
       "visualDescription": "鱼叉直线投掷；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -7058,24 +7218,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_spear_orc_normal",
+      "skillId": "skill_spear_orc_normal_2",
       "heroId": "spear_orc",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "鱼叉捕猎者·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
+      "name": "鱼叉捕猎者·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -7089,14 +7250,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -7109,7 +7270,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "鱼叉捕猎者·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】随角色普攻发射；攻击间隔跟随角色属性（L1约1.83秒/击）；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "鱼叉直线投掷；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
@@ -7277,7 +7438,8 @@
       },
       "activation": {
         "trigger": "onBasicAttack",
-        "target": "primaryAndAdjacentEnemy"
+        "target": "primaryAndAdjacentEnemy",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
@@ -7287,14 +7449,14 @@
       ]
     },
     {
-      "skillId": "skill_wolf_rider_basic_attack",
+      "skillId": "skill_wolf_rider_normal_1",
       "heroId": "wolf_rider",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "利爪猎犬·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约40点）",
+      "name": "利爪猎犬·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约40点）；攻击间隔跟随角色属性（L1约1.16秒/击，公式2.2/发射频率）",
       "visualDescription": "利爪直线扑击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -7308,24 +7470,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_wolf_rider_normal",
+      "skillId": "skill_wolf_rider_normal_2",
       "heroId": "wolf_rider",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "利爪猎犬·迅捷装填",
-      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.16s→约1.07s）。",
+      "name": "利爪猎犬·普通技能2·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。被动自动触发。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.16s→约1.07s）。",
       "visualDescription": "利爪直线扑击；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -7339,14 +7502,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "speed",
         "unit"
       ]
@@ -7359,7 +7522,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "利爪猎犬·速射补给",
-      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.16s→约1.01s）。【触发】每10秒触发1次；持续5秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
+      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.16s→约1.01s）。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；持续5秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
       "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -7475,7 +7638,9 @@
         "trigger": "active",
         "cooldownSec": 10,
         "durationSec": 5,
-        "target": "self"
+        "target": "self",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 10
       },
       "tags": [
         "rare",
@@ -7485,14 +7650,14 @@
       ]
     },
     {
-      "skillId": "skill_skeleton_knight_basic_attack",
+      "skillId": "skill_skeleton_knight_normal_1",
       "heroId": "skeleton_knight",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "蝙蝠突袭者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约38点）",
+      "name": "蝙蝠突袭者·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约38点）；攻击间隔跟随角色属性（L1约1.57秒/击，公式2.2/发射频率）",
       "visualDescription": "骨刃直线斩；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -7506,24 +7671,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_skeleton_knight_normal",
+      "skillId": "skill_skeleton_knight_normal_2",
       "heroId": "skeleton_knight",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "蝙蝠突袭者·迅捷装填",
-      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.57s→约1.45s）。",
+      "name": "蝙蝠突袭者·普通技能2·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。被动自动触发。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.57s→约1.45s）。",
       "visualDescription": "骨刃直线斩；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -7537,14 +7703,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "speed",
         "unit"
       ]
@@ -7557,7 +7723,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "蝙蝠突袭者·速射补给",
-      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.57s→约1.37s）。【触发】每10秒触发1次；持续5秒；目标：自身；攻击间隔缩短15%（1.57s→约1.37s）。",
+      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.57s→约1.37s）。【触发】每10秒主动释放1次；技能独立间隔10秒（不跟随角色普攻间隔）；持续5秒；目标：自身；攻击间隔缩短15%（1.57s→约1.37s）。",
       "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -7673,7 +7839,9 @@
         "trigger": "active",
         "cooldownSec": 10,
         "durationSec": 5,
-        "target": "self"
+        "target": "self",
+        "useHeroAttackSpeed": false,
+        "attackIntervalSec": 10
       },
       "tags": [
         "rare",
@@ -7683,14 +7851,14 @@
       ]
     },
     {
-      "skillId": "skill_archer_basic_attack",
+      "skillId": "skill_archer_normal_1",
       "heroId": "archer",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "见习女巫·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约33点）",
+      "name": "见习女巫·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约33点）；攻击间隔跟随角色属性（L1约2.2秒/击，公式2.2/发射频率）",
       "visualDescription": "魔法箭平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -7704,24 +7872,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_archer_normal",
+      "skillId": "skill_archer_normal_2",
       "heroId": "archer",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "见习女巫·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（33→36点）。",
+      "name": "见习女巫·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（33→36点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -7735,14 +7904,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
@@ -7755,7 +7924,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "见习女巫·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约33点）；邻格溅射15%攻击力（约5点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约33点）；邻格溅射15%攻击力（约5点）。【触发】随角色普攻发射；攻击间隔跟随角色属性（L1约2.2秒/击）；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "魔法箭平直射击；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
@@ -7923,7 +8092,8 @@
       },
       "activation": {
         "trigger": "onBasicAttack",
-        "target": "primaryAndAdjacentEnemy"
+        "target": "primaryAndAdjacentEnemy",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
@@ -7933,14 +8103,14 @@
       ]
     },
     {
-      "skillId": "skill_infantry_basic_attack",
+      "skillId": "skill_infantry_normal_1",
       "heroId": "infantry",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重步兵·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约3点）",
+      "name": "重步兵·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约3点）；攻击间隔跟随角色属性（L1约2.44秒/击，公式2.2/发射频率）",
       "visualDescription": "塔盾格挡，平直盾击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -7954,25 +8124,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_infantry_normal",
+      "skillId": "skill_infantry_normal_2",
       "heroId": "infantry",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重步兵·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。",
-      "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "name": "重步兵·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -7988,17 +8159,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_infantry_rare",
@@ -8008,8 +8183,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重步兵·单格护墙",
-      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤。【稀有】附加减伤10%（例：受击100点→实际约90点）。【触发】常驻被动。",
-      "visualDescription": "石墙从地面平直升起，挡单格",
+      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤。【稀有】附加减伤10%（例：受击100点→实际约90点）。【触发】常驻被动。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "石墙从地面平直升起，挡单格；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
       "unlockLevel": 5,
@@ -8205,17 +8380,21 @@
         "rare",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_arrow_tower_basic_attack",
+      "skillId": "skill_arrow_tower_normal_1",
       "heroId": "arrow_tower",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "高射塔·高抛点射",
-      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约80点）",
+      "name": "高射塔·普通技能1·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约80点）；攻击间隔跟随角色属性（L1约2.75秒/击，公式2.2/发射频率）",
       "visualDescription": "高射炮弹，高空抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
@@ -8229,24 +8408,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "building"
       ]
     },
     {
-      "skillId": "skill_arrow_tower_normal",
+      "skillId": "skill_arrow_tower_normal_2",
       "heroId": "arrow_tower",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "高射塔·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（80→86点）。",
+      "name": "高射塔·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（80→86点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "arc",
       "attackMode": "self_buff",
@@ -8260,14 +8440,14 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "attack",
         "building"
       ]
@@ -8280,7 +8460,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "高射塔·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约80点）；邻格溅射15%攻击力（约12点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约80点）；邻格溅射15%攻击力（约12点）。【触发】随角色普攻发射；攻击间隔跟随角色属性（L1约2.75秒/击）；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "高射炮弹，高空抛物线；主目标+邻格溅射，高抛双道",
       "projectileStyle": "arc",
       "attackMode": "multi",
@@ -8448,7 +8628,8 @@
       },
       "activation": {
         "trigger": "onBasicAttack",
-        "target": "primaryAndAdjacentEnemy"
+        "target": "primaryAndAdjacentEnemy",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
@@ -8458,14 +8639,14 @@
       ]
     },
     {
-      "skillId": "skill_heavy_shield_basic_attack",
+      "skillId": "skill_heavy_shield_normal_1",
       "heroId": "heavy_shield",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重型盾·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约45点）",
+      "name": "重型盾·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约45点）；攻击间隔跟随角色属性（L1约3.14秒/击，公式2.2/发射频率）",
       "visualDescription": "盾面光刃，平直盾击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -8479,25 +8660,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "rare",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "building"
       ]
     },
     {
-      "skillId": "skill_heavy_shield_normal",
+      "skillId": "skill_heavy_shield_normal_2",
       "heroId": "heavy_shield",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重型盾·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。",
-      "visualDescription": "盾面光刃，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "name": "重型盾·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "盾面光刃，平直盾击；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -8513,17 +8695,21 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "rare",
-        "trait",
+        "normal_skill_2",
         "defense",
         "building"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
       "skillId": "skill_heavy_shield_rare",
@@ -8533,8 +8719,8 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重型盾·重盾护壁",
-      "description": "抵御自身1格平直攻击；后方建筑获得减伤。【稀有】自身1格完全抵御平直攻击；后方建筑免伤。【触发】常驻被动；自身1格抵御平直攻击；后方建筑免伤。",
-      "visualDescription": "巨型盾面升起，挡平直弹道；后方建筑笼罩护盾",
+      "description": "抵御自身1格平直攻击；后方建筑免伤。【稀有】自身1格完全抵御平直攻击；后方建筑免伤。【触发】常驻被动；自身1格抵御平直攻击；后方建筑免伤。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "巨型盾面升起，挡平直弹道；后方建筑笼罩护盾；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "passive_defense",
       "unlockLevel": 5,
@@ -8735,17 +8921,21 @@
         "rare",
         "defense",
         "building"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_bear_warrior_basic_attack",
+      "skillId": "skill_bear_warrior_normal_1",
       "heroId": "bear_warrior",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重锤卫士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约53点）",
+      "name": "重锤卫士·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约53点）；攻击间隔跟随角色属性（L1约2.2秒/击，公式2.2/发射频率）",
       "visualDescription": "重锤平直挥击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -8759,25 +8949,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_bear_warrior_normal",
+      "skillId": "skill_bear_warrior_normal_2",
       "heroId": "bear_warrior",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重锤卫士·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。",
-      "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈",
+      "name": "重锤卫士·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -8793,27 +8984,31 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_skeleton_warrior_basic_attack",
+      "skillId": "skill_skeleton_warrior_normal_1",
       "heroId": "skeleton_warrior",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "骷髅刀盾兵·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约24点）",
+      "name": "骷髅刀盾兵·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约24点）；攻击间隔跟随角色属性（L1约1.83秒/击，公式2.2/发射频率）",
       "visualDescription": "刀盾平直格挡；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -8827,25 +9022,26 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_skeleton_warrior_normal",
+      "skillId": "skill_skeleton_warrior_normal_2",
       "heroId": "skeleton_warrior",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "骷髅刀盾兵·铁壁",
-      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。",
-      "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈",
+      "name": "骷髅刀盾兵·普通技能2·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。被动自动触发。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。抵挡成功时显示 MISS 飘字。",
+      "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈；抵挡成功 **MISS** 飘字",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -8861,27 +9057,31 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "defense",
         "unit"
-      ]
+      ],
+      "blockFeedback": {
+        "text": "MISS",
+        "event": "blockSuccess"
+      }
     },
     {
-      "skillId": "skill_goblin_basic_attack",
+      "skillId": "skill_goblin_normal_1",
       "heroId": "goblin",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "小野猪人·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）",
+      "name": "小野猪人·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）；攻击间隔跟随角色属性（L1约1.69秒/击，公式2.2/发射频率）",
       "visualDescription": "短矛轻快直线戳刺；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -8895,24 +9095,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_goblin_normal",
+      "skillId": "skill_goblin_normal_2",
       "heroId": "goblin",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "小野猪人·迅捷装填",
-      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+7%（间隔1.69s→约1.58s）。",
+      "name": "小野猪人·普通技能2·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。被动自动触发。每10秒触发1次。持续5秒。目标：自身。发射频率+7%（间隔1.69s→约1.58s）。",
       "visualDescription": "短矛轻快直线戳刺；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -8926,27 +9127,27 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 5,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_blacksmith_basic_attack",
+      "skillId": "skill_blacksmith_normal_1",
       "heroId": "blacksmith",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "长枪教头·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约25点）",
+      "name": "长枪教头·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约25点）；攻击间隔跟随角色属性（L1约2.44秒/击，公式2.2/发射频率）",
       "visualDescription": "锻造火花，平直补给友军；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -8960,24 +9161,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "supply",
         "unit"
       ]
     },
     {
-      "skillId": "skill_blacksmith_normal",
+      "skillId": "skill_blacksmith_normal_2",
       "heroId": "blacksmith",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "长枪教头·应急包扎",
-      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复17%最大生命（例：HP200→约+34点）。",
+      "name": "长枪教头·普通技能2·应急包扎",
+      "description": "为自身恢复少量生命。被动自动触发。每10秒触发1次。目标：自身。恢复17%最大生命（例：HP200→约+34点）。",
       "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -8991,27 +9193,27 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 10,
         "durationSec": 0,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "supply",
         "unit"
       ]
     },
     {
-      "skillId": "skill_militia_basic_attack",
+      "skillId": "skill_militia_normal_1",
       "heroId": "militia",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "短剑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）",
+      "name": "短剑士·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）；攻击间隔跟随角色属性（L1约2.0秒/击，公式2.2/发射频率）",
       "visualDescription": "短剑平直快攻；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -9025,24 +9227,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_militia_normal",
+      "skillId": "skill_militia_normal_2",
       "heroId": "militia",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "短剑士·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（30→32点）。",
+      "name": "短剑士·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（30→32点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -9056,27 +9259,27 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_bone_archer_basic_attack",
+      "skillId": "skill_bone_archer_normal_1",
       "heroId": "bone_archer",
-      "slot": "basic_attack",
-      "skillKind": "basic_attack",
+      "slot": "normal_1",
+      "skillKind": "normal_skill_1",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "火枪手·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）",
+      "name": "火枪手·普通技能1·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）；攻击间隔跟随角色属性（L1约2.2秒/击，公式2.2/发射频率）",
       "visualDescription": "火枪弹，平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
@@ -9090,24 +9293,25 @@
         }
       ],
       "activation": {
-        "trigger": "onBasicAttack"
+        "trigger": "autoAttack",
+        "useHeroAttackSpeed": true
       },
       "tags": [
         "common",
-        "basic_attack",
+        "normal_skill_1",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_bone_archer_normal",
+      "skillId": "skill_bone_archer_normal_2",
       "heroId": "bone_archer",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "火枪手·战意凝集",
-      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（20→21点）。",
+      "name": "火枪手·普通技能2·战意凝集",
+      "description": "短时提升自身攻击力。被动自动触发。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（20→21点）。",
       "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
       "projectileStyle": "flat",
       "attackMode": "self_buff",
@@ -9121,26 +9325,26 @@
         }
       ],
       "activation": {
-        "trigger": "active",
+        "trigger": "passive",
         "cooldownSec": 12,
         "durationSec": 4,
         "target": "self"
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_gold_mine_normal",
+      "skillId": "skill_gold_mine_normal_2",
       "heroId": "gold_mine",
-      "slot": "normal",
-      "skillKind": "trait",
+      "slot": "normal_2",
+      "skillKind": "normal_skill_2",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "采矿机·矿脉",
+      "name": "采矿机·普通技能2·矿脉",
       "description": "翻开获得额外金币，无战斗攻击",
       "visualDescription": "金币从矿口平直弹出",
       "projectileStyle": "flat",
@@ -9159,7 +9363,7 @@
       },
       "tags": [
         "common",
-        "trait",
+        "normal_skill_2",
         "supply",
         "resource"
       ]

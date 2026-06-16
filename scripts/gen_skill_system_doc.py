@@ -9,7 +9,15 @@ SIM_APPENDIX_PATH = ROOT / "docs" / "_SKILL_SIM_APPENDIX.md"
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
-SLOT_CN = {"basic_attack": "普攻", "normal": "定位特性", "rare": "稀有特技", "epic": "史诗特技", "legendary": "传奇特技"}
+SLOT_CN = {
+    "normal_1": "普通技能1",
+    "normal_2": "普通技能2",
+    "basic_attack": "普通技能1",
+    "normal": "普通技能2",
+    "rare": "稀有特技",
+    "epic": "史诗特技",
+    "legendary": "传奇特技",
+}
 CATEGORY_CN = {
     "attack": "攻击",
     "defense": "防御",
@@ -47,17 +55,32 @@ def skill_block(sk: dict | None) -> str:
     ]
     if sk.get("attackTrajectory"):
         lines.append(f"- 攻击弹道：**{sk['attackTrajectory']}**（穿透普通铁壁）")
+    if sk.get("blockFeedback"):
+        bf = sk["blockFeedback"]
+        lines.append(f"- 抵挡反馈：成功时飘字 **{bf.get('text', 'MISS')}**")
     if sk.get("activation"):
         act = sk["activation"]
         act_parts = []
-        if act.get("trigger") == "onBasicAttack":
-            act_parts.append("每次普攻触发")
+        if act.get("trigger") == "autoAttack" or act.get("trigger") == "onBasicAttack":
+            act_parts.append("随角色普攻自动发射")
+            if act.get("useHeroAttackSpeed"):
+                act_parts.append("攻击间隔=角色属性（2.2/发射频率）")
+        elif act.get("trigger") == "onKill":
+            act_parts.append("击杀敌方兵卡时触发")
         elif act.get("trigger") == "passive":
             act_parts.append("常驻被动")
+            if act.get("cooldownSec"):
+                act_parts.append(f"每{act['cooldownSec']}秒自动触发")
         elif act.get("trigger") == "active" and act.get("cooldownSec"):
-            act_parts.append(f"每{act['cooldownSec']}秒触发1次")
+            act_parts.append(f"每{act['cooldownSec']}秒主动释放1次")
+        if act.get("useHeroAttackSpeed") is False:
+            iv = act.get("attackIntervalSec") or act.get("cooldownSec")
+            if iv:
+                act_parts.append(f"技能独立间隔{iv}秒（不跟随普攻）")
         if act.get("durationSec"):
             act_parts.append(f"持续{act['durationSec']}秒")
+        if act.get("lockTarget"):
+            act_parts.append(f"锁定={act['lockTarget']}")
         if act.get("target"):
             act_parts.append(f"目标={act['target']}")
         if act_parts:
@@ -136,7 +159,7 @@ def gen_unified_skill_md(
         "# 技能体系 v3 · 完整文档",
         "",
         "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录",
-        "> 配表：`skill.json` v3.3.0 · `heroBattle.json` v3.3.0 · `bond.json` v3.3.0",
+        "> 配表：`skill.json` v3.4.0 · `heroBattle.json` v3.4.0 · `bond.json` v3.4.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
@@ -161,11 +184,11 @@ def gen_unified_skill_md(
         "",
         "## 一、设计总览",
         "",
-        "技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普攻 + 定位特性** 两个普通层技能，外加 **0~1 个品质特技**：",
+        "技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普通技能1 + 普通技能2**，外加 **0~1 个品质特技**：",
         "",
-        "- **普攻**（`basic_attack`）：开局即拥有，按弹道发射基础攻击，不可升级",
-        "- **定位特性**（`normal`）：按攻击/防御/补给/加速设定效果，含触发间隔与持续时间，不可升级",
-        "- **特技**：按品质解锁（稀有/史诗/传奇），可升至 5 级",
+        "- **普通技能1**（`normal_1`）：主动攻击，**攻击间隔跟随角色属性**（公式 `2.2/发射频率`），不可升级",
+        "- **普通技能2**（`normal_2`）：被动/自动效果，按定位每 N 秒触发，不可升级",
+        "- **特技**：主动技能使用**技能独立间隔**（不跟随普攻）；被动特技无需间隔定义",
         "- **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率",
         "",
         f"当前共 **{skill_count}** 个技能，覆盖 **{len(heroes)}** 位英雄。",
@@ -178,32 +201,49 @@ def gen_unified_skill_md(
         "",
         "## 二、品质与技能槽",
         "",
-        "| 卡牌品质 | 技能组成 | 普攻 | 定位特性 | 特技 |",
+        "| 卡牌品质 | 技能组成 | 普通技能1 | 普通技能2 | 特技 |",
         "|:---|:---|:---:|:---:|:---:|",
-        "| **普通** | 普攻 + 定位特性 | ✅ | ✅ | — |",
-        "| **稀有** | 普攻 + 定位特性 + 稀有特技 | ✅ | ✅ | 稀有特技 ×1 |",
-        "| **史诗** | 普攻 + 定位特性 + 史诗特技 | ✅ | ✅ | 史诗特技 ×1 |",
-        "| **传奇** | 普攻 + 定位特性 + 传奇特技 | ✅ | ✅ | 传奇特技 ×1 |",
+        "| **普通** | 技能1 + 技能2 | ✅ | ✅ | — |",
+        "| **稀有** | 技能1 + 技能2 + 稀有特技 | ✅ | ✅ | 稀有特技 ×1 |",
+        "| **史诗** | 技能1 + 技能2 + 史诗特技 | ✅ | ✅ | 史诗特技 ×1 |",
+        "| **传奇** | 技能1 + 技能2 + 传奇特技 | ✅ | ✅ | 传奇特技 ×1 |",
         "",
         "---",
         "",
         "## 三、四类技能与特技递进",
         "",
-        "| 类型 | 战术目标 | 普攻 | 定位特性（触发/持续） | 稀有特技 | 史诗特技 | 传奇特技 |",
+        "| 类型 | 战术目标 | 普通技能1 | 普通技能2（被动） | 稀有特技 | 史诗特技 | 传奇特技 |",
         "|:---|:---|:---|:---|:---|:---|:---|",
-        "| **攻击** | 输出/击杀 | 平直/高抛点射 | 战意凝集（12s/4s） | 双联点射 | 连锁穿透 | 高空重击 / 亡灵收割 |",
-        "| **防御** | 护墙/减伤 | 平直/高抛点射 | 铁壁（10s/5s，挡平直） | 单格护墙 / 重盾护壁 | 三格盾带 | 全局圣域 / 天穹护盾 |",
-        "| **补给** | 回血 | 平直/高抛点射 | 应急包扎（10s，20%自疗） | 战地包扎 | 群体复苏 | 满血圣疗 |",
-        "| **加速** | 攻速/弹速 | 平直/高抛点射 | 迅捷装填（10s/5s） | 速射补给 | 弹速增压 | 狂热号令 |",
+        "| **攻击** | 输出/击杀 | 平直/高抛点射 | 战意凝集（12s/4s） | 双联点射（随普攻） | 连锁穿透（锁定最低血敌） | 高空重击（10s独立间隔） |",
+        "| **防御** | 护墙/减伤 | 平直/高抛点射 | 铁壁（10s/5s，MISS飘字） | 单格护墙 / 重盾护壁 | 三格盾带 | 全局圣域 / 天穹护盾（10s） |",
+        "| **补给** | 回血 | 平直/高抛点射 | 应急包扎（10s，20%自疗） | 战地包扎 | 群体复苏 | 满血圣疗 / 幽魂还魂（20s） |",
+        "| **加速** | 攻速/弹速 | 平直/高抛点射 | 迅捷装填（10s/5s） | 速射补给 | 弹速增压 | 狂热号令 / 巨型炸弹（15s） |",
         "",
-        "### 3.1 定位特性触发节奏（L1）",
+        "### 3.1 普通技能2 被动触发（L1）",
         "",
-        "| 定位 | 特性名 | 触发间隔 | 持续时间 | 效果概要 |",
+        "| 定位 | 技能名 | 触发间隔 | 持续时间 | 效果概要 |",
         "|:---|:---|:---:|:---:|:---|",
         "| 攻击 | 战意凝集 | 12秒 | 4秒 | 自身攻击力 +8%（品质缩放） |",
-        "| 防御 | 铁壁 | 10秒 | 5秒 | 抵挡平直弹道，减伤约6% |",
+        "| 防御 | 铁壁 | 10秒 | 5秒 | 抵挡平直弹道；成功显示 **MISS** 飘字 |",
         "| 补给 | 应急包扎 | 10秒 | 即时 | 自身恢复20%最大生命 |",
         "| 加速 | 迅捷装填 | 10秒 | 5秒 | 发射频率 +8% |",
+        "",
+        "### 3.2 传奇主动特技间隔（独立于普攻）",
+        "",
+        "| 技能 | 代表英雄 | 间隔 | 说明 |",
+        "|:---|:---|:---:|:---|",
+        "| 高空重击 | 龙焰女王、永冬之王、幻影刺客等 | **10秒** | 高抛重击，不跟随角色普攻间隔 |",
+        "| 幽魂还魂 | 幽灵船长 | **20秒** | 复苏1张我方阵亡兵卡，50%血量 |",
+        "| 巨型炸弹 | 爆破鬼才 | **15秒** | 周围4格伤害，邻格溅射40% |",
+        "| 天穹护盾 | 天穹 | **10秒** | 激活5秒，抵御高抛炮击 |",
+        "",
+        "### 3.3 锁定目标定义",
+        "",
+        "| 锁定键 | 含义 | 适用示例 |",
+        "|:---|:---|:---|",
+        "| `lowestHpEnemyOnField` | 锁定场上血量最低的敌方兵卡 | 史诗「连锁穿透」 |",
+        "| `lowestHpAllyOnField` | 锁定场上血量最低的友军兵卡 | 传奇「满血圣疗」 |",
+        "| `allyDeadCard` | 我方阵亡兵卡 | 传奇「幽魂还魂」 |",
         "",
         "---",
         "",
@@ -223,8 +263,8 @@ def gen_unified_skill_md(
         "| **普通铁壁** | 仅 `flat` | 无法抵挡特技高抛 |",
         "| **稀有单格护墙**附加减伤 | 仅 `flat` | 护墙 + 平直减伤 |",
         "| **史诗三格盾带** | `flat` + `arc` | 范围内友军可挡高抛 |",
-        "| **重型盾·重盾护壁** | 仅 `flat` | 自身1格挡平直；后方建筑免伤 |",
-        "| **天穹·天穹护盾** | `flat`（被动）+ `arc`（激活） | 周围4格挡平直；每4秒激活5秒挡高抛 |",
+        "| **重型盾·重盾护壁** | 仅 `flat` | 自身1格挡平直；后方建筑免伤；**MISS** 飘字 |",
+        "| **天穹·天穹护盾** | `flat`（被动）+ `arc`（激活） | 周围4格挡平直；每**10秒**激活5秒挡高抛；**MISS** 飘字 |",
         "",
         "### 4.3 对抗示例",
         "",
@@ -377,7 +417,7 @@ def gen_unified_skill_md(
         "",
         "## 九、英雄属性速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普攻 ID | 定位特性 ID | 特技 ID |",
+        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 技能1 ID | 技能2 ID | 特技 ID |",
         "|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|:---|",
     ]
 
@@ -391,7 +431,7 @@ def gen_unified_skill_md(
             f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
             f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
             f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
-            f"| {sk.get('basic_attack', '—')} | {sk.get('normal', '—')} | {sp} |"
+            f"| {sk.get('normal_1', '—')} | {sk.get('normal_2', '—')} | {sp} |"
         )
 
     lines += [
@@ -400,15 +440,15 @@ def gen_unified_skill_md(
         "",
         "## 十、技能一览速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普攻 | 定位特性 | 特技 | 解锁等级 | 高抛穿透 |",
+        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能1 | 普通技能2 | 特技 | 解锁等级 | 高抛穿透 |",
         "|:---|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|",
     ]
 
     for hid in sorted(heroes.keys()):
         h = heroes[hid]
         sk = h["skills"]
-        normal = skill_by_id.get(sk.get("normal"), {})
-        basic = skill_by_id.get(sk.get("basic_attack"), {})
+        normal2 = skill_by_id.get(sk.get("normal_2"), {})
+        basic = skill_by_id.get(sk.get("normal_1"), {})
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         special = skill_by_id.get(special_id, {}) if special_id else {}
         arc = "✅" if special.get("attackTrajectory") == "arc" else "—"
@@ -417,7 +457,7 @@ def gen_unified_skill_md(
             f"| {h['name']} | {QUALITY_CN[h['quality']]} | {h.get('factionLabel', '—')} | {h['categoryLabel']} "
             f"| {h['combatStats'].get('projectileStyle', '—')} "
             f"| {(basic.get('name') or '—').split('·')[-1] if basic else '—'} "
-            f"| {(normal.get('name') or '—').split('·')[-1]} "
+            f"| {(normal2.get('name') or '—').split('·')[-1]} "
             f"| {(special.get('name') or '—').split('·')[-1] if special else '—'} | L{unlock_lv} | {arc} |"
         )
 
@@ -445,13 +485,13 @@ def gen_unified_skill_md(
             f"{cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} | {h.get('factionLabel', h.get('faction', '—'))} |"
         )
         lines.append("")
-        lines.append("#### 普攻")
+        lines.append("#### 普通技能1（主动攻击）")
         lines.append("")
-        lines.append(skill_block(skill_by_id.get(sk.get("basic_attack"))))
+        lines.append(skill_block(skill_by_id.get(sk.get("normal_1"))))
         lines.append("")
-        lines.append("#### 定位特性")
+        lines.append("#### 普通技能2（被动）")
         lines.append("")
-        lines.append(skill_block(skill_by_id.get(sk.get("normal"))))
+        lines.append(skill_block(skill_by_id.get(sk.get("normal_2"))))
         lines.append("")
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         if special_id:

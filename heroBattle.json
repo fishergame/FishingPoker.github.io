@@ -1,6 +1,6 @@
 {
-  "version": "3.3.0",
-  "description": "英雄战斗元数据 v3.3：普攻 + 定位特性双普通技 + 特技",
+  "version": "3.4.0",
+  "description": "英雄战斗元数据 v3.4：普通技能1/2 + 特技独立间隔/锁定",
   "rules": {
     "noMeleeRangedLogic": true,
     "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -64,38 +64,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_dragon_knight_basic_attack",
-        "normal": "skill_dragon_knight_normal",
+        "normal_1": "skill_dragon_knight_normal_1",
+        "normal_2": "skill_dragon_knight_normal_2",
         "legendary": "skill_dragon_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "demon_lord": {
@@ -148,38 +148,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_demon_lord_basic_attack",
-        "normal": "skill_demon_lord_normal",
+        "normal_1": "skill_demon_lord_normal_1",
+        "normal_2": "skill_demon_lord_normal_2",
         "legendary": "skill_demon_lord_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archmage": {
@@ -232,38 +232,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_archmage_basic_attack",
-        "normal": "skill_archmage_normal",
+        "normal_1": "skill_archmage_normal_1",
+        "normal_2": "skill_archmage_normal_2",
         "legendary": "skill_archmage_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ranger": {
@@ -316,38 +316,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_ranger_basic_attack",
-        "normal": "skill_ranger_normal",
+        "normal_1": "skill_ranger_normal_1",
+        "normal_2": "skill_ranger_normal_2",
         "legendary": "skill_ranger_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "royal_knight": {
@@ -400,38 +400,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_royal_knight_basic_attack",
-        "normal": "skill_royal_knight_normal",
+        "normal_1": "skill_royal_knight_normal_1",
+        "normal_2": "skill_royal_knight_normal_2",
         "legendary": "skill_royal_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "druid": {
@@ -484,38 +484,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_druid_basic_attack",
-        "normal": "skill_druid_normal",
+        "normal_1": "skill_druid_normal_1",
+        "normal_2": "skill_druid_normal_2",
         "legendary": "skill_druid_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "lich_queen": {
@@ -568,38 +568,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_lich_queen_basic_attack",
-        "normal": "skill_lich_queen_normal",
+        "normal_1": "skill_lich_queen_normal_1",
+        "normal_2": "skill_lich_queen_normal_2",
         "legendary": "skill_lich_queen_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blademaster": {
@@ -652,38 +652,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_blademaster_basic_attack",
-        "normal": "skill_blademaster_normal",
+        "normal_1": "skill_blademaster_normal_1",
+        "normal_2": "skill_blademaster_normal_2",
         "legendary": "skill_blademaster_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "frost_dragon": {
@@ -736,38 +736,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_frost_dragon_basic_attack",
-        "normal": "skill_frost_dragon_normal",
+        "normal_1": "skill_frost_dragon_normal_1",
+        "normal_2": "skill_frost_dragon_normal_2",
         "legendary": "skill_frost_dragon_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "crusher": {
@@ -820,38 +820,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_crusher_basic_attack",
-        "normal": "skill_crusher_normal",
+        "normal_1": "skill_crusher_normal_1",
+        "normal_2": "skill_crusher_normal_2",
         "legendary": "skill_crusher_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "helicopter": {
@@ -904,38 +904,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_helicopter_basic_attack",
-        "normal": "skill_helicopter_normal",
+        "normal_1": "skill_helicopter_normal_1",
+        "normal_2": "skill_helicopter_normal_2",
         "legendary": "skill_helicopter_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "dread_knight": {
@@ -988,38 +988,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_dread_knight_basic_attack",
-        "normal": "skill_dread_knight_normal",
+        "normal_1": "skill_dread_knight_normal_1",
+        "normal_2": "skill_dread_knight_normal_2",
         "legendary": "skill_dread_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "warlord": {
@@ -1072,38 +1072,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_warlord_basic_attack",
-        "normal": "skill_warlord_normal",
+        "normal_1": "skill_warlord_normal_1",
+        "normal_2": "skill_warlord_normal_2",
         "legendary": "skill_warlord_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "panda_monk": {
@@ -1156,38 +1156,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_panda_monk_basic_attack",
-        "normal": "skill_panda_monk_normal",
+        "normal_1": "skill_panda_monk_normal_1",
+        "normal_2": "skill_panda_monk_normal_2",
         "legendary": "skill_panda_monk_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "sky_dome": {
@@ -1240,38 +1240,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_sky_dome_basic_attack",
-        "normal": "skill_sky_dome_normal",
+        "normal_1": "skill_sky_dome_normal_1",
+        "normal_2": "skill_sky_dome_normal_2",
         "legendary": "skill_sky_dome_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "shaman": {
@@ -1324,38 +1324,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_shaman_basic_attack",
-        "normal": "skill_shaman_normal",
+        "normal_1": "skill_shaman_normal_1",
+        "normal_2": "skill_shaman_normal_2",
         "epic": "skill_shaman_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gargoyle": {
@@ -1408,38 +1408,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_gargoyle_basic_attack",
-        "normal": "skill_gargoyle_normal",
+        "normal_1": "skill_gargoyle_normal_1",
+        "normal_2": "skill_gargoyle_normal_2",
         "epic": "skill_gargoyle_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_giant": {
@@ -1492,38 +1492,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_skeleton_giant_basic_attack",
-        "normal": "skill_skeleton_giant_normal",
+        "normal_1": "skill_skeleton_giant_normal_1",
+        "normal_2": "skill_skeleton_giant_normal_2",
         "epic": "skill_skeleton_giant_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "sniper": {
@@ -1576,38 +1576,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_sniper_basic_attack",
-        "normal": "skill_sniper_normal",
+        "normal_1": "skill_sniper_normal_1",
+        "normal_2": "skill_sniper_normal_2",
         "epic": "skill_sniper_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult_tower": {
@@ -1660,38 +1660,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_catapult_tower_basic_attack",
-        "normal": "skill_catapult_tower_normal",
+        "normal_1": "skill_catapult_tower_normal_1",
+        "normal_2": "skill_catapult_tower_normal_2",
         "epic": "skill_catapult_tower_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult": {
@@ -1744,38 +1744,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_catapult_basic_attack",
-        "normal": "skill_catapult_normal",
+        "normal_1": "skill_catapult_normal_1",
+        "normal_2": "skill_catapult_normal_2",
         "epic": "skill_catapult_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "cavalry": {
@@ -1828,38 +1828,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_cavalry_basic_attack",
-        "normal": "skill_cavalry_normal",
+        "normal_1": "skill_cavalry_normal_1",
+        "normal_2": "skill_cavalry_normal_2",
         "epic": "skill_cavalry_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wyrmling": {
@@ -1912,38 +1912,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_wyrmling_basic_attack",
-        "normal": "skill_wyrmling_normal",
+        "normal_1": "skill_wyrmling_normal_1",
+        "normal_2": "skill_wyrmling_normal_2",
         "epic": "skill_wyrmling_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ballista": {
@@ -1996,38 +1996,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_ballista_basic_attack",
-        "normal": "skill_ballista_normal",
+        "normal_1": "skill_ballista_normal_1",
+        "normal_2": "skill_ballista_normal_2",
         "epic": "skill_ballista_epic"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "necromancer": {
@@ -2080,38 +2080,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_necromancer_basic_attack",
-        "normal": "skill_necromancer_normal",
+        "normal_1": "skill_necromancer_normal_1",
+        "normal_2": "skill_necromancer_normal_2",
         "rare": "skill_necromancer_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "spear_orc": {
@@ -2164,38 +2164,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_spear_orc_basic_attack",
-        "normal": "skill_spear_orc_normal",
+        "normal_1": "skill_spear_orc_normal_1",
+        "normal_2": "skill_spear_orc_normal_2",
         "rare": "skill_spear_orc_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wolf_rider": {
@@ -2248,38 +2248,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_wolf_rider_basic_attack",
-        "normal": "skill_wolf_rider_normal",
+        "normal_1": "skill_wolf_rider_normal_1",
+        "normal_2": "skill_wolf_rider_normal_2",
         "rare": "skill_wolf_rider_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_knight": {
@@ -2332,38 +2332,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_skeleton_knight_basic_attack",
-        "normal": "skill_skeleton_knight_normal",
+        "normal_1": "skill_skeleton_knight_normal_1",
+        "normal_2": "skill_skeleton_knight_normal_2",
         "rare": "skill_skeleton_knight_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archer": {
@@ -2416,38 +2416,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_archer_basic_attack",
-        "normal": "skill_archer_normal",
+        "normal_1": "skill_archer_normal_1",
+        "normal_2": "skill_archer_normal_2",
         "rare": "skill_archer_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "infantry": {
@@ -2500,38 +2500,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_infantry_basic_attack",
-        "normal": "skill_infantry_normal",
+        "normal_1": "skill_infantry_normal_1",
+        "normal_2": "skill_infantry_normal_2",
         "rare": "skill_infantry_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "arrow_tower": {
@@ -2584,38 +2584,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_arrow_tower_basic_attack",
-        "normal": "skill_arrow_tower_normal",
+        "normal_1": "skill_arrow_tower_normal_1",
+        "normal_2": "skill_arrow_tower_normal_2",
         "rare": "skill_arrow_tower_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "heavy_shield": {
@@ -2668,38 +2668,38 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_heavy_shield_basic_attack",
-        "normal": "skill_heavy_shield_normal",
+        "normal_1": "skill_heavy_shield_normal_1",
+        "normal_2": "skill_heavy_shield_normal_2",
         "rare": "skill_heavy_shield_rare"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bear_warrior": {
@@ -2752,37 +2752,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_bear_warrior_basic_attack",
-        "normal": "skill_bear_warrior_normal"
+        "normal_1": "skill_bear_warrior_normal_1",
+        "normal_2": "skill_bear_warrior_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_warrior": {
@@ -2835,37 +2835,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_skeleton_warrior_basic_attack",
-        "normal": "skill_skeleton_warrior_normal"
+        "normal_1": "skill_skeleton_warrior_normal_1",
+        "normal_2": "skill_skeleton_warrior_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "goblin": {
@@ -2918,37 +2918,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_goblin_basic_attack",
-        "normal": "skill_goblin_normal"
+        "normal_1": "skill_goblin_normal_1",
+        "normal_2": "skill_goblin_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blacksmith": {
@@ -3001,37 +3001,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_blacksmith_basic_attack",
-        "normal": "skill_blacksmith_normal"
+        "normal_1": "skill_blacksmith_normal_1",
+        "normal_2": "skill_blacksmith_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "militia": {
@@ -3084,37 +3084,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_militia_basic_attack",
-        "normal": "skill_militia_normal"
+        "normal_1": "skill_militia_normal_1",
+        "normal_2": "skill_militia_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bone_archer": {
@@ -3167,37 +3167,37 @@
         }
       },
       "skills": {
-        "basic_attack": "skill_bone_archer_basic_attack",
-        "normal": "skill_bone_archer_normal"
+        "normal_1": "skill_bone_archer_normal_1",
+        "normal_2": "skill_bone_archer_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "basic_attack",
-          "normal"
+          "normal_1",
+          "normal_2"
         ],
         "rare": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "basic_attack",
-          "normal",
+          "normal_1",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gold_mine": {
@@ -3248,32 +3248,32 @@
         }
       },
       "skills": {
-        "normal": "skill_gold_mine_normal"
+        "normal_2": "skill_gold_mine_normal_2"
       },
       "skillSlotsByQuality": {
         "common": [
-          "normal"
+          "normal_2"
         ],
         "rare": [
-          "normal",
+          "normal_2",
           "rare"
         ],
         "epic": [
-          "normal",
+          "normal_2",
           "epic"
         ],
         "legendary": [
-          "normal",
+          "normal_2",
           "legendary"
         ]
       },
       "skillUnlock": {
-        "basic_attack": 1,
-        "normal": 1,
+        "normal_1": 1,
+        "normal_2": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技"
+        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
       }
     }
   }
