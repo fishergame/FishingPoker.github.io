@@ -26,7 +26,7 @@ const BattleSkillRuntime = (() => {
     const { skills } = meta;
     const ids = [];
     if (skills.normal_1) ids.push(skills.normal_1);
-    if (skills.normal_2) ids.push(skills.normal_2);
+    if (skills.normal_3) ids.push(skills.normal_3);
     // v3.3 兼容
     if (skills.basic_attack) ids.push(skills.basic_attack);
     if (skills.normal) ids.push(skills.normal);

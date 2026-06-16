@@ -1,6 +1,6 @@
 {
-  "version": "3.4.0",
-  "description": "技能 v3.4：普通技能1/2 + 特技独立间隔/锁定/MISS飘字",
+  "version": "3.5.0",
+  "description": "技能 v3.5：普通技能3种族克制被动 + 1/2/特技",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -156,7 +156,7 @@
       }
     ]
   },
-  "skillCount": 109,
+  "skillCount": 147,
   "skills": [
     {
       "skillId": "skill_dragon_knight_normal_1",
@@ -220,6 +220,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_dragon_knight_normal_3",
+      "heroId": "dragon_knight",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "龙焰女王·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "beast",
         "attack",
         "unit"
       ]
@@ -525,6 +563,44 @@
       ]
     },
     {
+      "skillId": "skill_demon_lord_normal_3",
+      "heroId": "demon_lord",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "永冬之王·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "undead",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_demon_lord_legendary",
       "heroId": "demon_lord",
       "slot": "legendary",
@@ -825,6 +901,44 @@
       ]
     },
     {
+      "skillId": "skill_archmage_normal_3",
+      "heroId": "archmage",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "风暴女巫·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "human",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_archmage_legendary",
       "heroId": "archmage",
       "slot": "legendary",
@@ -1120,6 +1234,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_ranger_normal_3",
+      "heroId": "ranger",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "荆棘女王·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "mechanical",
         "attack",
         "unit"
       ]
@@ -1432,6 +1584,44 @@
       }
     },
     {
+      "skillId": "skill_royal_knight_normal_3",
+      "heroId": "royal_knight",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "圣盾领主·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "human",
+        "defense",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_royal_knight_legendary",
       "heroId": "royal_knight",
       "slot": "legendary",
@@ -1724,6 +1914,44 @@
       ]
     },
     {
+      "skillId": "skill_druid_normal_3",
+      "heroId": "druid",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "北境守护者·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "human",
+        "supply",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_druid_legendary",
       "heroId": "druid",
       "slot": "legendary",
@@ -1973,6 +2201,44 @@
       ]
     },
     {
+      "skillId": "skill_lich_queen_normal_3",
+      "heroId": "lich_queen",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "幽灵船长·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "undead",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_lich_queen_legendary",
       "heroId": "lich_queen",
       "slot": "legendary",
@@ -2189,6 +2455,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_blademaster_normal_3",
+      "heroId": "blademaster",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "幻影刺客·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "human",
         "attack",
         "unit"
       ]
@@ -2494,6 +2798,44 @@
       ]
     },
     {
+      "skillId": "skill_frost_dragon_normal_3",
+      "heroId": "frost_dragon",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "寒冰巨魔·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "undead",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_frost_dragon_legendary",
       "heroId": "frost_dragon",
       "slot": "legendary",
@@ -2789,6 +3131,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_crusher_normal_3",
+      "heroId": "crusher",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "重装破城者·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "undead",
         "attack",
         "unit"
       ]
@@ -3094,6 +3474,44 @@
       ]
     },
     {
+      "skillId": "skill_helicopter_normal_3",
+      "heroId": "helicopter",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "机械飞鹰·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "mechanical",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_helicopter_legendary",
       "heroId": "helicopter",
       "slot": "legendary",
@@ -3389,6 +3807,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_dread_knight_normal_3",
+      "heroId": "dread_knight",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "巨斧酋长·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "beast",
         "attack",
         "unit"
       ]
@@ -3701,6 +4157,44 @@
       }
     },
     {
+      "skillId": "skill_warlord_normal_3",
+      "heroId": "warlord",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "双头奇美拉·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "beast",
+        "defense",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_warlord_legendary",
       "heroId": "warlord",
       "slot": "legendary",
@@ -3988,6 +4482,44 @@
       "tags": [
         "legendary",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_panda_monk_normal_3",
+      "heroId": "panda_monk",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "爆破鬼才·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "mechanical",
         "attack",
         "unit"
       ]
@@ -4344,6 +4876,44 @@
       }
     },
     {
+      "skillId": "skill_sky_dome_normal_3",
+      "heroId": "sky_dome",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "天穹·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "legendary",
+        "normal_skill_3",
+        "mechanical",
+        "defense",
+        "building"
+      ]
+    },
+    {
       "skillId": "skill_sky_dome_legendary",
       "heroId": "sky_dome",
       "slot": "legendary",
@@ -4687,6 +5257,44 @@
       ]
     },
     {
+      "skillId": "skill_shaman_normal_3",
+      "heroId": "shaman",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "藤蔓萨满·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "human",
+        "supply",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_shaman_epic",
       "heroId": "shaman",
       "slot": "epic",
@@ -4898,6 +5506,44 @@
         "text": "MISS",
         "event": "blockSuccess"
       }
+    },
+    {
+      "skillId": "skill_gargoyle_normal_3",
+      "heroId": "gargoyle",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "鹰女·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "mechanical",
+        "defense",
+        "unit"
+      ]
     },
     {
       "skillId": "skill_gargoyle_epic",
@@ -5199,6 +5845,44 @@
       }
     },
     {
+      "skillId": "skill_skeleton_giant_normal_3",
+      "heroId": "skeleton_giant",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "巨石魔像·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "undead",
+        "defense",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_skeleton_giant_epic",
       "heroId": "skeleton_giant",
       "slot": "epic",
@@ -5491,6 +6175,44 @@
       ]
     },
     {
+      "skillId": "skill_sniper_normal_3",
+      "heroId": "sniper",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "雇佣兵·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "mechanical",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_sniper_epic",
       "heroId": "sniper",
       "slot": "epic",
@@ -5741,6 +6463,44 @@
       "tags": [
         "epic",
         "normal_skill_2",
+        "attack",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_catapult_tower_normal_3",
+      "heroId": "catapult_tower",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "炮楼·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "mechanical",
         "attack",
         "building"
       ]
@@ -6001,6 +6761,44 @@
       ]
     },
     {
+      "skillId": "skill_catapult_normal_3",
+      "heroId": "catapult",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "自爆蜘蛛·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "undead",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_catapult_epic",
       "heroId": "catapult",
       "slot": "epic",
@@ -6256,6 +7054,44 @@
       ]
     },
     {
+      "skillId": "skill_cavalry_normal_3",
+      "heroId": "cavalry",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "龙骑士·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "beast",
+        "speed",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_cavalry_epic",
       "heroId": "cavalry",
       "slot": "epic",
@@ -6496,6 +7332,44 @@
       "tags": [
         "epic",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_wyrmling_normal_3",
+      "heroId": "wyrmling",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "火龙·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "beast",
         "attack",
         "unit"
       ]
@@ -6756,6 +7630,44 @@
       ]
     },
     {
+      "skillId": "skill_ballista_normal_3",
+      "heroId": "ballista",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "弩车·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "epic",
+        "normal_skill_3",
+        "mechanical",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_ballista_epic",
       "heroId": "ballista",
       "slot": "epic",
@@ -7006,6 +7918,44 @@
       "tags": [
         "rare",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_necromancer_normal_3",
+      "heroId": "necromancer",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "骷髅魔导师·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "undead",
         "attack",
         "unit"
       ]
@@ -7263,6 +8213,44 @@
       ]
     },
     {
+      "skillId": "skill_spear_orc_normal_3",
+      "heroId": "spear_orc",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "鱼叉捕猎者·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "beast",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_spear_orc_rare",
       "heroId": "spear_orc",
       "slot": "rare",
@@ -7515,6 +8503,44 @@
       ]
     },
     {
+      "skillId": "skill_wolf_rider_normal_3",
+      "heroId": "wolf_rider",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "利爪猎犬·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "beast",
+        "speed",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_wolf_rider_rare",
       "heroId": "wolf_rider",
       "slot": "rare",
@@ -7716,6 +8742,44 @@
       ]
     },
     {
+      "skillId": "skill_skeleton_knight_normal_3",
+      "heroId": "skeleton_knight",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "蝙蝠突袭者·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "undead",
+        "speed",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_skeleton_knight_rare",
       "heroId": "skeleton_knight",
       "slot": "rare",
@@ -7912,6 +8976,44 @@
       "tags": [
         "rare",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_archer_normal_3",
+      "heroId": "archer",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "见习女巫·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "human",
         "attack",
         "unit"
       ]
@@ -8174,6 +9276,44 @@
         "text": "MISS",
         "event": "blockSuccess"
       }
+    },
+    {
+      "skillId": "skill_infantry_normal_3",
+      "heroId": "infantry",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "重步兵·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "human",
+        "defense",
+        "unit"
+      ]
     },
     {
       "skillId": "skill_infantry_rare",
@@ -8453,6 +9593,44 @@
       ]
     },
     {
+      "skillId": "skill_arrow_tower_normal_3",
+      "heroId": "arrow_tower",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "高射塔·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "arc",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "mechanical",
+        "attack",
+        "building"
+      ]
+    },
+    {
       "skillId": "skill_arrow_tower_rare",
       "heroId": "arrow_tower",
       "slot": "rare",
@@ -8710,6 +9888,44 @@
         "text": "MISS",
         "event": "blockSuccess"
       }
+    },
+    {
+      "skillId": "skill_heavy_shield_normal_3",
+      "heroId": "heavy_shield",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "name": "重型盾·普通技能3·种族克制",
+      "description": "种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "机械徽记常亮；命中兽族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "mechanical",
+          "strongVsFaction": "beast"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "机械 → 兽族"
+      },
+      "tags": [
+        "rare",
+        "normal_skill_3",
+        "mechanical",
+        "defense",
+        "building"
+      ]
     },
     {
       "skillId": "skill_heavy_shield_rare",
@@ -9001,6 +10217,44 @@
       }
     },
     {
+      "skillId": "skill_bear_warrior_normal_3",
+      "heroId": "bear_warrior",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "重锤卫士·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "beast",
+        "defense",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_skeleton_warrior_normal_1",
       "heroId": "skeleton_warrior",
       "slot": "normal_1",
@@ -9074,6 +10328,44 @@
       }
     },
     {
+      "skillId": "skill_skeleton_warrior_normal_3",
+      "heroId": "skeleton_warrior",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "name": "骷髅刀盾兵·普通技能3·种族克制",
+      "description": "种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "亡灵徽记常亮；命中人族时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "undead",
+          "strongVsFaction": "human"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "亡灵 → 人族"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "undead",
+        "defense",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_goblin_normal_1",
       "heroId": "goblin",
       "slot": "normal_1",
@@ -9135,6 +10427,44 @@
       "tags": [
         "common",
         "normal_skill_2",
+        "speed",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_goblin_normal_3",
+      "heroId": "goblin",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "name": "小野猪人·普通技能3·种族克制",
+      "description": "种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "兽族徽记常亮；命中亡灵时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "beast",
+          "strongVsFaction": "undead"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "兽族 → 亡灵"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "beast",
         "speed",
         "unit"
       ]
@@ -9206,6 +10536,44 @@
       ]
     },
     {
+      "skillId": "skill_blacksmith_normal_3",
+      "heroId": "blacksmith",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "长枪教头·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "human",
+        "supply",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_militia_normal_1",
       "heroId": "militia",
       "slot": "normal_1",
@@ -9272,6 +10640,44 @@
       ]
     },
     {
+      "skillId": "skill_militia_normal_3",
+      "heroId": "militia",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "短剑士·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "human",
+        "attack",
+        "unit"
+      ]
+    },
+    {
       "skillId": "skill_bone_archer_normal_1",
       "heroId": "bone_archer",
       "slot": "normal_1",
@@ -9333,6 +10739,44 @@
       "tags": [
         "common",
         "normal_skill_2",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_bone_archer_normal_3",
+      "heroId": "bone_archer",
+      "slot": "normal_3",
+      "skillKind": "normal_skill_3",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "name": "火枪手·普通技能3·种族克制",
+      "description": "种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）",
+      "visualDescription": "人族徽记常亮；命中机械时伤害泛光",
+      "projectileStyle": "flat",
+      "attackMode": "passive",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "factionCounterDamagePct",
+          "value": 0.1,
+          "attackerFaction": "human",
+          "strongVsFaction": "mechanical"
+        }
+      ],
+      "activation": {
+        "trigger": "passive",
+        "scope": "factionCounter",
+        "cycle": "人族 → 机械（含建筑）"
+      },
+      "tags": [
+        "common",
+        "normal_skill_3",
+        "human",
         "attack",
         "unit"
       ]

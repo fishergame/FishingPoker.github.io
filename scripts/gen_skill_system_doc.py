@@ -12,6 +12,7 @@ FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechani
 SLOT_CN = {
     "normal_1": "普通技能1",
     "normal_2": "普通技能2",
+    "normal_3": "普通技能3",
     "basic_attack": "普通技能1",
     "normal": "普通技能2",
     "rare": "稀有特技",
@@ -159,7 +160,7 @@ def gen_unified_skill_md(
         "# 技能体系 v3 · 完整文档",
         "",
         "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录",
-        "> 配表：`skill.json` v3.4.0 · `heroBattle.json` v3.4.0 · `bond.json` v3.4.0",
+        "> 配表：`skill.json` v3.5.0 · `heroBattle.json` v3.5.0 · `bond.json` v3.5.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
@@ -184,10 +185,11 @@ def gen_unified_skill_md(
         "",
         "## 一、设计总览",
         "",
-        "技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普通技能1 + 普通技能2**，外加 **0~1 个品质特技**：",
+        "技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普通技能1 + 普通技能2 + 普通技能3**，外加 **0~1 个品质特技**：",
         "",
         "- **普通技能1**（`normal_1`）：主动攻击，**攻击间隔跟随角色属性**（公式 `2.2/发射频率`），不可升级",
         "- **普通技能2**（`normal_2`）：被动/自动效果，按定位每 N 秒触发，不可升级",
+        "- **普通技能3**（`normal_3`）：**种族克制被动**，对克制阵营伤害 +10%，不可升级",
         "- **特技**：主动技能使用**技能独立间隔**（不跟随普攻）；被动特技无需间隔定义",
         "- **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率",
         "",
@@ -201,12 +203,12 @@ def gen_unified_skill_md(
         "",
         "## 二、品质与技能槽",
         "",
-        "| 卡牌品质 | 技能组成 | 普通技能1 | 普通技能2 | 特技 |",
-        "|:---|:---|:---:|:---:|:---:|",
-        "| **普通** | 技能1 + 技能2 | ✅ | ✅ | — |",
-        "| **稀有** | 技能1 + 技能2 + 稀有特技 | ✅ | ✅ | 稀有特技 ×1 |",
-        "| **史诗** | 技能1 + 技能2 + 史诗特技 | ✅ | ✅ | 史诗特技 ×1 |",
-        "| **传奇** | 技能1 + 技能2 + 传奇特技 | ✅ | ✅ | 传奇特技 ×1 |",
+        "| 卡牌品质 | 技能组成 | 普通技能1 | 普通技能2 | 普通技能3 | 特技 |",
+        "|:---|:---|:---:|:---:|:---:|:---:|",
+        "| **普通** | 技能1 + 技能2 + 技能3 | ✅ | ✅ | ✅ | — |",
+        "| **稀有** | 技能1~3 + 稀有特技 | ✅ | ✅ | ✅ | 稀有特技 ×1 |",
+        "| **史诗** | 技能1~3 + 史诗特技 | ✅ | ✅ | ✅ | 史诗特技 ×1 |",
+        "| **传奇** | 技能1~3 + 传奇特技 | ✅ | ✅ | ✅ | 传奇特技 ×1 |",
         "",
         "---",
         "",
@@ -244,6 +246,19 @@ def gen_unified_skill_md(
         "| `lowestHpEnemyOnField` | 锁定场上血量最低的敌方兵卡 | 史诗「连锁穿透」 |",
         "| `lowestHpAllyOnField` | 锁定场上血量最低的友军兵卡 | 传奇「满血圣疗」 |",
         "| `allyDeadCard` | 我方阵亡兵卡 | 传奇「幽魂还魂」 |",
+        "",
+        "### 3.4 普通技能3 · 种族克制（被动）",
+        "",
+        "每位战斗英雄 L1 拥有 **普通技能3·种族克制**，按自身种族对克制目标 **+10% 伤害**（与 `bond.json` / `battle-rules.js` 一致）：",
+        "",
+        "| 自身种族 | 克制目标 | 技能描述 |",
+        "|:---|:---|:---|",
+        "| **人族** | 机械（含建筑） | 对机械单位伤害 +10% |",
+        "| **机械** | 兽族 | 对兽族单位伤害 +10% |",
+        "| **兽族** | 亡灵 | 对亡灵单位伤害 +10% |",
+        "| **亡灵** | 人族 | 对人族单位伤害 +10% |",
+        "",
+        "> 采矿机等资源卡无普通技能1/3，仅有矿脉（普通技能2）。",
         "",
         "---",
         "",
@@ -374,6 +389,7 @@ def gen_unified_skill_md(
         "| `revealAdjacent` | 加速 | 翻开相邻格 |",
         "| `reviveChancePct` | 亡灵羁绊 | 复活/复燃概率加成 |",
         "| `deployGold` | 补给 | 翻开获得金币（采矿机） |",
+        "| `factionCounterDamagePct` | 克制 | 对克制种族伤害 +10%（普通技能3） |",
         "",
         "---",
         "",
@@ -417,7 +433,7 @@ def gen_unified_skill_md(
         "",
         "## 九、英雄属性速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 技能1 ID | 技能2 ID | 特技 ID |",
+        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 技能1 | 技能2 | 技能3 | 特技 |",
         "|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|:---|",
     ]
 
@@ -431,7 +447,7 @@ def gen_unified_skill_md(
             f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
             f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
             f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
-            f"| {sk.get('normal_1', '—')} | {sk.get('normal_2', '—')} | {sp} |"
+            f"| {sk.get('normal_1', '—')} | {sk.get('normal_2', '—')} | {sk.get('normal_3', '—')} | {sp} |"
         )
 
     lines += [
@@ -440,7 +456,7 @@ def gen_unified_skill_md(
         "",
         "## 十、技能一览速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能1 | 普通技能2 | 特技 | 解锁等级 | 高抛穿透 |",
+        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能1 | 普通技能2 | 普通技能3 | 特技 | 解锁 | 高抛 |",
         "|:---|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|",
     ]
 
@@ -448,6 +464,7 @@ def gen_unified_skill_md(
         h = heroes[hid]
         sk = h["skills"]
         normal2 = skill_by_id.get(sk.get("normal_2"), {})
+        normal3 = skill_by_id.get(sk.get("normal_3"), {})
         basic = skill_by_id.get(sk.get("normal_1"), {})
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         special = skill_by_id.get(special_id, {}) if special_id else {}
@@ -458,6 +475,7 @@ def gen_unified_skill_md(
             f"| {h['combatStats'].get('projectileStyle', '—')} "
             f"| {(basic.get('name') or '—').split('·')[-1] if basic else '—'} "
             f"| {(normal2.get('name') or '—').split('·')[-1]} "
+            f"| {(normal3.get('name') or '—').split('·')[-1] if normal3 else '—'} "
             f"| {(special.get('name') or '—').split('·')[-1] if special else '—'} | L{unlock_lv} | {arc} |"
         )
 
@@ -492,6 +510,10 @@ def gen_unified_skill_md(
         lines.append("#### 普通技能2（被动）")
         lines.append("")
         lines.append(skill_block(skill_by_id.get(sk.get("normal_2"))))
+        lines.append("")
+        lines.append("#### 普通技能3（种族克制）")
+        lines.append("")
+        lines.append(skill_block(skill_by_id.get(sk.get("normal_3"))))
         lines.append("")
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         if special_id:

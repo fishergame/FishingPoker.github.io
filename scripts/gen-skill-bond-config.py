@@ -689,6 +689,59 @@ def build_trait_skill(hero: dict, prof: dict) -> dict:
     return skill
 
 
+def build_faction_counter_skill(hero: dict, prof: dict, faction: str | None) -> dict | None:
+    """普通技能3：种族克制被动（对克制阵营伤害+10%）。"""
+    if hero["type"] == "resource" or not faction or faction not in FACTION_COUNTER_CYCLE:
+        return None
+    hid = hero["id"]
+    cat = prof["category"]
+    q = hero["quality"]
+    strong_vs = FACTION_COUNTER_CYCLE[faction]
+    bonus = FACTION_COUNTER_BONUS
+    target_label = FACTION_CN[strong_vs]
+    if strong_vs == "mechanical":
+        target_label += "单位（含建筑）"
+    else:
+        target_label += "单位"
+    desc = (
+        f"种族克制被动：{FACTION_CN[faction]}对{target_label}造成伤害{pct_label(bonus)}"
+        f"（例：基础100点→约{round(100 * (1 + bonus))}点）"
+    )
+    vfx = f"{FACTION_CN[faction]}徽记常亮；命中{FACTION_CN[strong_vs]}时伤害泛光"
+    return {
+        "skillId": f"skill_{hid}_normal_3",
+        "heroId": hid,
+        "slot": "normal_3",
+        "skillKind": "normal_skill_3",
+        "category": cat,
+        "categoryLabel": CATEGORY_CN[cat],
+        "faction": faction,
+        "factionLabel": FACTION_CN[faction],
+        "name": f"{hero['name']}·普通技能3·种族克制",
+        "description": desc,
+        "visualDescription": vfx,
+        "projectileStyle": prof["projectile"],
+        "attackMode": "passive",
+        "unlockLevel": 1,
+        "upgradeable": False,
+        "maxLevel": 1,
+        "effects": [
+            {
+                "type": "factionCounterDamagePct",
+                "value": bonus,
+                "attackerFaction": faction,
+                "strongVsFaction": strong_vs,
+            }
+        ],
+        "activation": {
+            "trigger": "passive",
+            "scope": "factionCounter",
+            "cycle": FACTION_COUNTER_LABEL[faction],
+        },
+        "tags": [q, "normal_skill_3", faction, cat, hero["type"]],
+    }
+
+
 def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
     q = hero["quality"]
     cat = prof["category"]
@@ -914,6 +967,7 @@ def stat_at_level(l1: float, level: int, growth: float = STAT_GROWTH) -> int:
 
 
 def gen_skills(heroes: list[dict]) -> list[dict]:
+    factions = assign_faction(heroes)
     skills = []
     for h in heroes:
         prof = profile_for(h)
@@ -921,6 +975,9 @@ def gen_skills(heroes: list[dict]) -> list[dict]:
         if basic:
             skills.append(basic)
         skills.append(build_trait_skill(h, prof))
+        counter = build_faction_counter_skill(h, prof, factions.get(h["id"]))
+        if counter:
+            skills.append(counter)
         slot = QUALITY_SPECIAL_SLOT.get(h["quality"])
         if slot:
             skills.append(build_special_skill(h, prof, slot))
@@ -994,11 +1051,17 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
         if by_slot.get("normal_1"):
             skill_map["normal_1"] = by_slot["normal_1"]
         skill_map["normal_2"] = by_slot.get("normal_2")
+        if by_slot.get("normal_3"):
+            skill_map["normal_3"] = by_slot["normal_3"]
         special = QUALITY_SPECIAL_SLOT.get(q)
         if special:
             skill_map[special] = by_slot.get(special)
 
-        base_slots = (["normal_1", "normal_2"] if by_slot.get("normal_1") else ["normal_2"])
+        base_slots = ["normal_1", "normal_2"]
+        if by_slot.get("normal_3"):
+            base_slots.append("normal_3")
+        if not by_slot.get("normal_1"):
+            base_slots = [s for s in base_slots if s != "normal_1"]
 
         entries[hid] = {
             "heroId": hid,
@@ -1055,15 +1118,16 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             "skillUnlock": {
                 "normal_1": 1,
                 "normal_2": 1,
+                "normal_3": 1,
                 "rare": SPECIAL_UNLOCK_HERO_LEVEL["rare"],
                 "epic": SPECIAL_UNLOCK_HERO_LEVEL["epic"],
                 "legendary": SPECIAL_UNLOCK_HERO_LEVEL["legendary"],
-                "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁",
+                "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁",
             },
         }
     return {
-        "version": "3.4.0",
-        "description": "英雄战斗元数据 v3.4：普通技能1/2 + 特技独立间隔/锁定",
+        "version": "3.5.0",
+        "description": "英雄战斗元数据 v3.5：普通技能1/2/3 + 种族克制被动",
         "rules": {
             "noMeleeRangedLogic": True,
             "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -1118,7 +1182,7 @@ def gen_bond(heroes: list[dict]) -> dict:
             "tiers": FACTION_BOND_TIERS[fid],
         })
     return {
-        "version": "3.4.0",
+        "version": "3.5.0",
         "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
         "rules": {
             "deckSize": 8,
@@ -1150,8 +1214,8 @@ if __name__ == "__main__":
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "3.4.0",
-                "description": "技能 v3.4：普通技能1/2 + 特技独立间隔/锁定/MISS飘字",
+                "version": "3.5.0",
+                "description": "技能 v3.5：普通技能3种族克制被动 + 1/2/特技",
                 "categories": CATEGORY_CN,
                 "combatRules": {
                     "attackInterval": {

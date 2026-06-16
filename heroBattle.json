@@ -1,6 +1,6 @@
 {
-  "version": "3.4.0",
-  "description": "英雄战斗元数据 v3.4：普通技能1/2 + 特技独立间隔/锁定",
+  "version": "3.5.0",
+  "description": "英雄战斗元数据 v3.5：普通技能1/2/3 + 种族克制被动",
   "rules": {
     "noMeleeRangedLogic": true,
     "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -66,36 +66,42 @@
       "skills": {
         "normal_1": "skill_dragon_knight_normal_1",
         "normal_2": "skill_dragon_knight_normal_2",
+        "normal_3": "skill_dragon_knight_normal_3",
         "legendary": "skill_dragon_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "demon_lord": {
@@ -150,36 +156,42 @@
       "skills": {
         "normal_1": "skill_demon_lord_normal_1",
         "normal_2": "skill_demon_lord_normal_2",
+        "normal_3": "skill_demon_lord_normal_3",
         "legendary": "skill_demon_lord_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archmage": {
@@ -234,36 +246,42 @@
       "skills": {
         "normal_1": "skill_archmage_normal_1",
         "normal_2": "skill_archmage_normal_2",
+        "normal_3": "skill_archmage_normal_3",
         "legendary": "skill_archmage_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ranger": {
@@ -318,36 +336,42 @@
       "skills": {
         "normal_1": "skill_ranger_normal_1",
         "normal_2": "skill_ranger_normal_2",
+        "normal_3": "skill_ranger_normal_3",
         "legendary": "skill_ranger_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "royal_knight": {
@@ -402,36 +426,42 @@
       "skills": {
         "normal_1": "skill_royal_knight_normal_1",
         "normal_2": "skill_royal_knight_normal_2",
+        "normal_3": "skill_royal_knight_normal_3",
         "legendary": "skill_royal_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "druid": {
@@ -486,36 +516,42 @@
       "skills": {
         "normal_1": "skill_druid_normal_1",
         "normal_2": "skill_druid_normal_2",
+        "normal_3": "skill_druid_normal_3",
         "legendary": "skill_druid_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "lich_queen": {
@@ -570,36 +606,42 @@
       "skills": {
         "normal_1": "skill_lich_queen_normal_1",
         "normal_2": "skill_lich_queen_normal_2",
+        "normal_3": "skill_lich_queen_normal_3",
         "legendary": "skill_lich_queen_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blademaster": {
@@ -654,36 +696,42 @@
       "skills": {
         "normal_1": "skill_blademaster_normal_1",
         "normal_2": "skill_blademaster_normal_2",
+        "normal_3": "skill_blademaster_normal_3",
         "legendary": "skill_blademaster_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "frost_dragon": {
@@ -738,36 +786,42 @@
       "skills": {
         "normal_1": "skill_frost_dragon_normal_1",
         "normal_2": "skill_frost_dragon_normal_2",
+        "normal_3": "skill_frost_dragon_normal_3",
         "legendary": "skill_frost_dragon_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "crusher": {
@@ -822,36 +876,42 @@
       "skills": {
         "normal_1": "skill_crusher_normal_1",
         "normal_2": "skill_crusher_normal_2",
+        "normal_3": "skill_crusher_normal_3",
         "legendary": "skill_crusher_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "helicopter": {
@@ -906,36 +966,42 @@
       "skills": {
         "normal_1": "skill_helicopter_normal_1",
         "normal_2": "skill_helicopter_normal_2",
+        "normal_3": "skill_helicopter_normal_3",
         "legendary": "skill_helicopter_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "dread_knight": {
@@ -990,36 +1056,42 @@
       "skills": {
         "normal_1": "skill_dread_knight_normal_1",
         "normal_2": "skill_dread_knight_normal_2",
+        "normal_3": "skill_dread_knight_normal_3",
         "legendary": "skill_dread_knight_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "warlord": {
@@ -1074,36 +1146,42 @@
       "skills": {
         "normal_1": "skill_warlord_normal_1",
         "normal_2": "skill_warlord_normal_2",
+        "normal_3": "skill_warlord_normal_3",
         "legendary": "skill_warlord_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "panda_monk": {
@@ -1158,36 +1236,42 @@
       "skills": {
         "normal_1": "skill_panda_monk_normal_1",
         "normal_2": "skill_panda_monk_normal_2",
+        "normal_3": "skill_panda_monk_normal_3",
         "legendary": "skill_panda_monk_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "sky_dome": {
@@ -1242,36 +1326,42 @@
       "skills": {
         "normal_1": "skill_sky_dome_normal_1",
         "normal_2": "skill_sky_dome_normal_2",
+        "normal_3": "skill_sky_dome_normal_3",
         "legendary": "skill_sky_dome_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "shaman": {
@@ -1326,36 +1416,42 @@
       "skills": {
         "normal_1": "skill_shaman_normal_1",
         "normal_2": "skill_shaman_normal_2",
+        "normal_3": "skill_shaman_normal_3",
         "epic": "skill_shaman_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gargoyle": {
@@ -1410,36 +1506,42 @@
       "skills": {
         "normal_1": "skill_gargoyle_normal_1",
         "normal_2": "skill_gargoyle_normal_2",
+        "normal_3": "skill_gargoyle_normal_3",
         "epic": "skill_gargoyle_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_giant": {
@@ -1494,36 +1596,42 @@
       "skills": {
         "normal_1": "skill_skeleton_giant_normal_1",
         "normal_2": "skill_skeleton_giant_normal_2",
+        "normal_3": "skill_skeleton_giant_normal_3",
         "epic": "skill_skeleton_giant_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "sniper": {
@@ -1578,36 +1686,42 @@
       "skills": {
         "normal_1": "skill_sniper_normal_1",
         "normal_2": "skill_sniper_normal_2",
+        "normal_3": "skill_sniper_normal_3",
         "epic": "skill_sniper_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult_tower": {
@@ -1662,36 +1776,42 @@
       "skills": {
         "normal_1": "skill_catapult_tower_normal_1",
         "normal_2": "skill_catapult_tower_normal_2",
+        "normal_3": "skill_catapult_tower_normal_3",
         "epic": "skill_catapult_tower_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult": {
@@ -1746,36 +1866,42 @@
       "skills": {
         "normal_1": "skill_catapult_normal_1",
         "normal_2": "skill_catapult_normal_2",
+        "normal_3": "skill_catapult_normal_3",
         "epic": "skill_catapult_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "cavalry": {
@@ -1830,36 +1956,42 @@
       "skills": {
         "normal_1": "skill_cavalry_normal_1",
         "normal_2": "skill_cavalry_normal_2",
+        "normal_3": "skill_cavalry_normal_3",
         "epic": "skill_cavalry_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wyrmling": {
@@ -1914,36 +2046,42 @@
       "skills": {
         "normal_1": "skill_wyrmling_normal_1",
         "normal_2": "skill_wyrmling_normal_2",
+        "normal_3": "skill_wyrmling_normal_3",
         "epic": "skill_wyrmling_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ballista": {
@@ -1998,36 +2136,42 @@
       "skills": {
         "normal_1": "skill_ballista_normal_1",
         "normal_2": "skill_ballista_normal_2",
+        "normal_3": "skill_ballista_normal_3",
         "epic": "skill_ballista_epic"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "necromancer": {
@@ -2082,36 +2226,42 @@
       "skills": {
         "normal_1": "skill_necromancer_normal_1",
         "normal_2": "skill_necromancer_normal_2",
+        "normal_3": "skill_necromancer_normal_3",
         "rare": "skill_necromancer_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "spear_orc": {
@@ -2166,36 +2316,42 @@
       "skills": {
         "normal_1": "skill_spear_orc_normal_1",
         "normal_2": "skill_spear_orc_normal_2",
+        "normal_3": "skill_spear_orc_normal_3",
         "rare": "skill_spear_orc_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wolf_rider": {
@@ -2250,36 +2406,42 @@
       "skills": {
         "normal_1": "skill_wolf_rider_normal_1",
         "normal_2": "skill_wolf_rider_normal_2",
+        "normal_3": "skill_wolf_rider_normal_3",
         "rare": "skill_wolf_rider_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_knight": {
@@ -2334,36 +2496,42 @@
       "skills": {
         "normal_1": "skill_skeleton_knight_normal_1",
         "normal_2": "skill_skeleton_knight_normal_2",
+        "normal_3": "skill_skeleton_knight_normal_3",
         "rare": "skill_skeleton_knight_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archer": {
@@ -2418,36 +2586,42 @@
       "skills": {
         "normal_1": "skill_archer_normal_1",
         "normal_2": "skill_archer_normal_2",
+        "normal_3": "skill_archer_normal_3",
         "rare": "skill_archer_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "infantry": {
@@ -2502,36 +2676,42 @@
       "skills": {
         "normal_1": "skill_infantry_normal_1",
         "normal_2": "skill_infantry_normal_2",
+        "normal_3": "skill_infantry_normal_3",
         "rare": "skill_infantry_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "arrow_tower": {
@@ -2586,36 +2766,42 @@
       "skills": {
         "normal_1": "skill_arrow_tower_normal_1",
         "normal_2": "skill_arrow_tower_normal_2",
+        "normal_3": "skill_arrow_tower_normal_3",
         "rare": "skill_arrow_tower_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "heavy_shield": {
@@ -2670,36 +2856,42 @@
       "skills": {
         "normal_1": "skill_heavy_shield_normal_1",
         "normal_2": "skill_heavy_shield_normal_2",
+        "normal_3": "skill_heavy_shield_normal_3",
         "rare": "skill_heavy_shield_rare"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bear_warrior": {
@@ -2753,36 +2945,42 @@
       },
       "skills": {
         "normal_1": "skill_bear_warrior_normal_1",
-        "normal_2": "skill_bear_warrior_normal_2"
+        "normal_2": "skill_bear_warrior_normal_2",
+        "normal_3": "skill_bear_warrior_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_warrior": {
@@ -2836,36 +3034,42 @@
       },
       "skills": {
         "normal_1": "skill_skeleton_warrior_normal_1",
-        "normal_2": "skill_skeleton_warrior_normal_2"
+        "normal_2": "skill_skeleton_warrior_normal_2",
+        "normal_3": "skill_skeleton_warrior_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "goblin": {
@@ -2919,36 +3123,42 @@
       },
       "skills": {
         "normal_1": "skill_goblin_normal_1",
-        "normal_2": "skill_goblin_normal_2"
+        "normal_2": "skill_goblin_normal_2",
+        "normal_3": "skill_goblin_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blacksmith": {
@@ -3002,36 +3212,42 @@
       },
       "skills": {
         "normal_1": "skill_blacksmith_normal_1",
-        "normal_2": "skill_blacksmith_normal_2"
+        "normal_2": "skill_blacksmith_normal_2",
+        "normal_3": "skill_blacksmith_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "militia": {
@@ -3085,36 +3301,42 @@
       },
       "skills": {
         "normal_1": "skill_militia_normal_1",
-        "normal_2": "skill_militia_normal_2"
+        "normal_2": "skill_militia_normal_2",
+        "normal_3": "skill_militia_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bone_archer": {
@@ -3168,36 +3390,42 @@
       },
       "skills": {
         "normal_1": "skill_bone_archer_normal_1",
-        "normal_2": "skill_bone_archer_normal_2"
+        "normal_2": "skill_bone_archer_normal_2",
+        "normal_3": "skill_bone_archer_normal_3"
       },
       "skillSlotsByQuality": {
         "common": [
           "normal_1",
-          "normal_2"
+          "normal_2",
+          "normal_3"
         ],
         "rare": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "rare"
         ],
         "epic": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "epic"
         ],
         "legendary": [
           "normal_1",
           "normal_2",
+          "normal_3",
           "legendary"
         ]
       },
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gold_mine": {
@@ -3270,10 +3498,11 @@
       "skillUnlock": {
         "normal_1": 1,
         "normal_2": 1,
+        "normal_3": 1,
         "rare": 5,
         "epic": 10,
         "legendary": 20,
-        "description": "普通技能1/2 L1 即拥有；品质特技按英雄等级解锁"
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     }
   }

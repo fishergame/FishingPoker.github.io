@@ -1,7 +1,7 @@
 # 技能体系 v3 · 完整文档
 
 > **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录
-> 配表：`skill.json` v3.4.0 · `heroBattle.json` v3.4.0 · `bond.json` v3.4.0
+> 配表：`skill.json` v3.5.0 · `heroBattle.json` v3.5.0 · `bond.json` v3.5.0
 > 生成：`python3 scripts/gen-skill-bond-config.py`
 
 ---
@@ -26,14 +26,15 @@
 
 ## 一、设计总览
 
-技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普通技能1 + 普通技能2**，外加 **0~1 个品质特技**：
+技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普通技能1 + 普通技能2 + 普通技能3**，外加 **0~1 个品质特技**：
 
 - **普通技能1**（`normal_1`）：主动攻击，**攻击间隔跟随角色属性**（公式 `2.2/发射频率`），不可升级
 - **普通技能2**（`normal_2`）：被动/自动效果，按定位每 N 秒触发，不可升级
+- **普通技能3**（`normal_3`）：**种族克制被动**，对克制阵营伤害 +10%，不可升级
 - **特技**：主动技能使用**技能独立间隔**（不跟随普攻）；被动特技无需间隔定义
 - **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率
 
-当前共 **109** 个技能，覆盖 **39** 位英雄。
+当前共 **147** 个技能，覆盖 **39** 位英雄。
 **定位分布（战斗英雄 38）**：攻击 22 · 防御 9 · 补给 4 · 加速 4
 **种族分布**：人族 10 · 兽族 9 · 亡灵 9 · 机械 10
 
@@ -41,12 +42,12 @@
 
 ## 二、品质与技能槽
 
-| 卡牌品质 | 技能组成 | 普通技能1 | 普通技能2 | 特技 |
-|:---|:---|:---:|:---:|:---:|
-| **普通** | 技能1 + 技能2 | ✅ | ✅ | — |
-| **稀有** | 技能1 + 技能2 + 稀有特技 | ✅ | ✅ | 稀有特技 ×1 |
-| **史诗** | 技能1 + 技能2 + 史诗特技 | ✅ | ✅ | 史诗特技 ×1 |
-| **传奇** | 技能1 + 技能2 + 传奇特技 | ✅ | ✅ | 传奇特技 ×1 |
+| 卡牌品质 | 技能组成 | 普通技能1 | 普通技能2 | 普通技能3 | 特技 |
+|:---|:---|:---:|:---:|:---:|:---:|
+| **普通** | 技能1 + 技能2 + 技能3 | ✅ | ✅ | ✅ | — |
+| **稀有** | 技能1~3 + 稀有特技 | ✅ | ✅ | ✅ | 稀有特技 ×1 |
+| **史诗** | 技能1~3 + 史诗特技 | ✅ | ✅ | ✅ | 史诗特技 ×1 |
+| **传奇** | 技能1~3 + 传奇特技 | ✅ | ✅ | ✅ | 传奇特技 ×1 |
 
 ---
 
@@ -84,6 +85,19 @@
 | `lowestHpEnemyOnField` | 锁定场上血量最低的敌方兵卡 | 史诗「连锁穿透」 |
 | `lowestHpAllyOnField` | 锁定场上血量最低的友军兵卡 | 传奇「满血圣疗」 |
 | `allyDeadCard` | 我方阵亡兵卡 | 传奇「幽魂还魂」 |
+
+### 3.4 普通技能3 · 种族克制（被动）
+
+每位战斗英雄 L1 拥有 **普通技能3·种族克制**，按自身种族对克制目标 **+10% 伤害**（与 `bond.json` / `battle-rules.js` 一致）：
+
+| 自身种族 | 克制目标 | 技能描述 |
+|:---|:---|:---|
+| **人族** | 机械（含建筑） | 对机械单位伤害 +10% |
+| **机械** | 兽族 | 对兽族单位伤害 +10% |
+| **兽族** | 亡灵 | 对亡灵单位伤害 +10% |
+| **亡灵** | 人族 | 对人族单位伤害 +10% |
+
+> 采矿机等资源卡无普通技能1/3，仅有矿脉（普通技能2）。
 
 ---
 
@@ -216,12 +230,13 @@ attackInterval = 2.2 / fireRate
 | `revealAdjacent` | 加速 | 翻开相邻格 |
 | `reviveChancePct` | 亡灵羁绊 | 复活/复燃概率加成 |
 | `deployGold` | 补给 | 翻开获得金币（采矿机） |
+| `factionCounterDamagePct` | 克制 | 对克制种族伤害 +10%（普通技能3） |
 
 ---
 
 ## 八、羁绊系统（仅阵营）
 
-版本：bond.json v3.4.0
+版本：bond.json v3.5.0
 
 卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊**。技能定位羁绊已取消。
 
@@ -271,93 +286,93 @@ attackInterval = 2.2 / fireRate
 
 ## 九、英雄属性速查表
 
-| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 技能1 ID | 技能2 ID | 特技 ID |
+| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 技能1 | 技能2 | 技能3 | 特技 |
 |:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|:---|
-| 见习女巫 | 稀有 | 人族 | 攻击 | 33 | 110 | 1 | 5.0 | 2.2 | flat | skill_archer_normal_1 | skill_archer_normal_2 | skill_archer_rare |
-| 风暴女巫 | 传奇 | 人族 | 攻击 | 100 | 800 | 1 | 4.0 | 2.2 | arc | skill_archmage_normal_1 | skill_archmage_normal_2 | skill_archmage_legendary |
-| 高射塔 | 稀有 | 机械 | 攻击 | 80 | None | 0.8 | 4.0 | 2.75 | arc | skill_arrow_tower_normal_1 | skill_arrow_tower_normal_2 | skill_arrow_tower_rare |
-| 弩车 | 史诗 | 机械 | 攻击 | 90 | 200 | 0.5 | 4.0 | 4.4 | arc | skill_ballista_normal_1 | skill_ballista_normal_2 | skill_ballista_epic |
-| 重锤卫士 | 普通 | 兽族 | 防御 | 53 | 210 | 1 | 5.0 | 2.2 | flat | skill_bear_warrior_normal_1 | skill_bear_warrior_normal_2 | — |
-| 长枪教头 | 普通 | 人族 | 补给 | 25 | 200 | 0.9 | 5.0 | 2.44 | flat | skill_blacksmith_normal_1 | skill_blacksmith_normal_2 | — |
-| 幻影刺客 | 传奇 | 人族 | 攻击 | 150 | 960 | 2.4 | 5.4 | 0.92 | flat | skill_blademaster_normal_1 | skill_blademaster_normal_2 | skill_blademaster_legendary |
-| 火枪手 | 普通 | 人族 | 攻击 | 20 | 80 | 1 | 5.0 | 2.2 | flat | skill_bone_archer_normal_1 | skill_bone_archer_normal_2 | — |
-| 自爆蜘蛛 | 史诗 | 亡灵 | 攻击 | 200 | 480 | 0.5 | 4.0 | 4.4 | arc | skill_catapult_normal_1 | skill_catapult_normal_2 | skill_catapult_epic |
-| 炮楼 | 史诗 | 机械 | 攻击 | 100 | None | 0.7 | 4.0 | 3.14 | arc | skill_catapult_tower_normal_1 | skill_catapult_tower_normal_2 | skill_catapult_tower_epic |
-| 龙骑士 | 史诗 | 兽族 | 加速 | 50 | 300 | 1.9 | 5.0 | 1.16 | flat | skill_cavalry_normal_1 | skill_cavalry_normal_2 | skill_cavalry_epic |
-| 重装破城者 | 传奇 | 亡灵 | 攻击 | 200 | 1500 | 0.8 | 4.0 | 2.75 | arc | skill_crusher_normal_1 | skill_crusher_normal_2 | skill_crusher_legendary |
-| 永冬之王 | 传奇 | 亡灵 | 攻击 | 70 | 700 | 2 | 4.5 | 1.1 | arc | skill_demon_lord_normal_1 | skill_demon_lord_normal_2 | skill_demon_lord_legendary |
-| 龙焰女王 | 传奇 | 兽族 | 攻击 | 88 | 950 | 2.8 | 5.3 | 0.79 | arc | skill_dragon_knight_normal_1 | skill_dragon_knight_normal_2 | skill_dragon_knight_legendary |
-| 巨斧酋长 | 传奇 | 兽族 | 攻击 | 90 | 900 | 2.5 | 5.5 | 0.88 | flat | skill_dread_knight_normal_1 | skill_dread_knight_normal_2 | skill_dread_knight_legendary |
-| 北境守护者 | 传奇 | 人族 | 补给 | 70 | 700 | 1.5 | 5.0 | 1.47 | flat | skill_druid_normal_1 | skill_druid_normal_2 | skill_druid_legendary |
-| 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | 70 | 1040 | 1.2 | 4.0 | 1.83 | arc | skill_frost_dragon_normal_1 | skill_frost_dragon_normal_2 | skill_frost_dragon_legendary |
-| 鹰女 | 史诗 | 机械 | 防御 | 60 | 300 | 1.5 | 5.0 | 1.47 | flat | skill_gargoyle_normal_1 | skill_gargoyle_normal_2 | skill_gargoyle_epic |
-| 小野猪人 | 普通 | 兽族 | 加速 | 20 | 80 | 1.3 | 5.0 | 1.69 | flat | skill_goblin_normal_1 | skill_goblin_normal_2 | — |
-| 采矿机 | 普通 | 机械 | 补给 | None | None | None | None | None | — | — | skill_gold_mine_normal_2 | — |
-| 重型盾 | 稀有 | 机械 | 防御 | 45 | None | 0.7 | 5.0 | 3.14 | flat | skill_heavy_shield_normal_1 | skill_heavy_shield_normal_2 | skill_heavy_shield_rare |
-| 机械飞鹰 | 传奇 | 机械 | 攻击 | 110 | 700 | 1.6 | 5.0 | 1.38 | flat | skill_helicopter_normal_1 | skill_helicopter_normal_2 | skill_helicopter_legendary |
-| 重步兵 | 稀有 | 人族 | 防御 | 3 | 250 | 0.9 | 5.0 | 2.44 | flat | skill_infantry_normal_1 | skill_infantry_normal_2 | skill_infantry_rare |
-| 幽灵船长 | 传奇 | 亡灵 | 攻击 | 70 | 860 | 1.4 | 4.0 | 1.57 | arc | skill_lich_queen_normal_1 | skill_lich_queen_normal_2 | skill_lich_queen_legendary |
-| 短剑士 | 普通 | 人族 | 攻击 | 30 | 100 | 1.1 | 5.0 | 2.0 | flat | skill_militia_normal_1 | skill_militia_normal_2 | — |
-| 骷髅魔导师 | 稀有 | 亡灵 | 攻击 | 30 | 80 | 1.1 | 4.0 | 2.0 | arc | skill_necromancer_normal_1 | skill_necromancer_normal_2 | skill_necromancer_rare |
-| 爆破鬼才 | 传奇 | 机械 | 攻击 | 160 | 960 | 1.4 | 4.0 | 1.57 | arc | skill_panda_monk_normal_1 | skill_panda_monk_normal_2 | skill_panda_monk_legendary |
-| 荆棘女王 | 传奇 | 机械 | 攻击 | 50 | 160 | 2.6 | 5.6 | 0.85 | flat | skill_ranger_normal_1 | skill_ranger_normal_2 | skill_ranger_legendary |
-| 圣盾领主 | 传奇 | 人族 | 防御 | 70 | 800 | 1.8 | 5.0 | 1.22 | flat | skill_royal_knight_normal_1 | skill_royal_knight_normal_2 | skill_royal_knight_legendary |
-| 藤蔓萨满 | 史诗 | 人族 | 补给 | 58 | 96 | 1.2 | 5.0 | 1.83 | flat | skill_shaman_normal_1 | skill_shaman_normal_2 | skill_shaman_epic |
-| 巨石魔像 | 史诗 | 亡灵 | 防御 | 60 | 400 | 0.6 | 5.0 | 3.67 | flat | skill_skeleton_giant_normal_1 | skill_skeleton_giant_normal_2 | skill_skeleton_giant_epic |
-| 蝙蝠突袭者 | 稀有 | 亡灵 | 加速 | 38 | 130 | 1.4 | 5.0 | 1.57 | flat | skill_skeleton_knight_normal_1 | skill_skeleton_knight_normal_2 | skill_skeleton_knight_rare |
-| 骷髅刀盾兵 | 普通 | 亡灵 | 防御 | 24 | 92 | 1.2 | 5.0 | 1.83 | flat | skill_skeleton_warrior_normal_1 | skill_skeleton_warrior_normal_2 | — |
-| 天穹 | 传奇 | 机械 | 防御 | 65 | None | 0.6 | 4.0 | 3.67 | arc | skill_sky_dome_normal_1 | skill_sky_dome_normal_2 | skill_sky_dome_legendary |
-| 雇佣兵 | 史诗 | 机械 | 攻击 | 60 | 120 | 1 | 5.0 | 2.2 | flat | skill_sniper_normal_1 | skill_sniper_normal_2 | skill_sniper_epic |
-| 鱼叉捕猎者 | 稀有 | 兽族 | 攻击 | 30 | 120 | 1.2 | 5.0 | 1.83 | flat | skill_spear_orc_normal_1 | skill_spear_orc_normal_2 | skill_spear_orc_rare |
-| 双头奇美拉 | 传奇 | 兽族 | 防御 | 120 | 1040 | 1.3 | 5.0 | 1.69 | flat | skill_warlord_normal_1 | skill_warlord_normal_2 | skill_warlord_legendary |
-| 利爪猎犬 | 稀有 | 兽族 | 加速 | 40 | 240 | 1.9 | 5.0 | 1.16 | flat | skill_wolf_rider_normal_1 | skill_wolf_rider_normal_2 | skill_wolf_rider_rare |
-| 火龙 | 史诗 | 兽族 | 攻击 | 68 | 430 | 1.8 | 4.3 | 1.22 | arc | skill_wyrmling_normal_1 | skill_wyrmling_normal_2 | skill_wyrmling_epic |
+| 见习女巫 | 稀有 | 人族 | 攻击 | 33 | 110 | 1 | 5.0 | 2.2 | flat | skill_archer_normal_1 | skill_archer_normal_2 | skill_archer_normal_3 | skill_archer_rare |
+| 风暴女巫 | 传奇 | 人族 | 攻击 | 100 | 800 | 1 | 4.0 | 2.2 | arc | skill_archmage_normal_1 | skill_archmage_normal_2 | skill_archmage_normal_3 | skill_archmage_legendary |
+| 高射塔 | 稀有 | 机械 | 攻击 | 80 | None | 0.8 | 4.0 | 2.75 | arc | skill_arrow_tower_normal_1 | skill_arrow_tower_normal_2 | skill_arrow_tower_normal_3 | skill_arrow_tower_rare |
+| 弩车 | 史诗 | 机械 | 攻击 | 90 | 200 | 0.5 | 4.0 | 4.4 | arc | skill_ballista_normal_1 | skill_ballista_normal_2 | skill_ballista_normal_3 | skill_ballista_epic |
+| 重锤卫士 | 普通 | 兽族 | 防御 | 53 | 210 | 1 | 5.0 | 2.2 | flat | skill_bear_warrior_normal_1 | skill_bear_warrior_normal_2 | skill_bear_warrior_normal_3 | — |
+| 长枪教头 | 普通 | 人族 | 补给 | 25 | 200 | 0.9 | 5.0 | 2.44 | flat | skill_blacksmith_normal_1 | skill_blacksmith_normal_2 | skill_blacksmith_normal_3 | — |
+| 幻影刺客 | 传奇 | 人族 | 攻击 | 150 | 960 | 2.4 | 5.4 | 0.92 | flat | skill_blademaster_normal_1 | skill_blademaster_normal_2 | skill_blademaster_normal_3 | skill_blademaster_legendary |
+| 火枪手 | 普通 | 人族 | 攻击 | 20 | 80 | 1 | 5.0 | 2.2 | flat | skill_bone_archer_normal_1 | skill_bone_archer_normal_2 | skill_bone_archer_normal_3 | — |
+| 自爆蜘蛛 | 史诗 | 亡灵 | 攻击 | 200 | 480 | 0.5 | 4.0 | 4.4 | arc | skill_catapult_normal_1 | skill_catapult_normal_2 | skill_catapult_normal_3 | skill_catapult_epic |
+| 炮楼 | 史诗 | 机械 | 攻击 | 100 | None | 0.7 | 4.0 | 3.14 | arc | skill_catapult_tower_normal_1 | skill_catapult_tower_normal_2 | skill_catapult_tower_normal_3 | skill_catapult_tower_epic |
+| 龙骑士 | 史诗 | 兽族 | 加速 | 50 | 300 | 1.9 | 5.0 | 1.16 | flat | skill_cavalry_normal_1 | skill_cavalry_normal_2 | skill_cavalry_normal_3 | skill_cavalry_epic |
+| 重装破城者 | 传奇 | 亡灵 | 攻击 | 200 | 1500 | 0.8 | 4.0 | 2.75 | arc | skill_crusher_normal_1 | skill_crusher_normal_2 | skill_crusher_normal_3 | skill_crusher_legendary |
+| 永冬之王 | 传奇 | 亡灵 | 攻击 | 70 | 700 | 2 | 4.5 | 1.1 | arc | skill_demon_lord_normal_1 | skill_demon_lord_normal_2 | skill_demon_lord_normal_3 | skill_demon_lord_legendary |
+| 龙焰女王 | 传奇 | 兽族 | 攻击 | 88 | 950 | 2.8 | 5.3 | 0.79 | arc | skill_dragon_knight_normal_1 | skill_dragon_knight_normal_2 | skill_dragon_knight_normal_3 | skill_dragon_knight_legendary |
+| 巨斧酋长 | 传奇 | 兽族 | 攻击 | 90 | 900 | 2.5 | 5.5 | 0.88 | flat | skill_dread_knight_normal_1 | skill_dread_knight_normal_2 | skill_dread_knight_normal_3 | skill_dread_knight_legendary |
+| 北境守护者 | 传奇 | 人族 | 补给 | 70 | 700 | 1.5 | 5.0 | 1.47 | flat | skill_druid_normal_1 | skill_druid_normal_2 | skill_druid_normal_3 | skill_druid_legendary |
+| 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | 70 | 1040 | 1.2 | 4.0 | 1.83 | arc | skill_frost_dragon_normal_1 | skill_frost_dragon_normal_2 | skill_frost_dragon_normal_3 | skill_frost_dragon_legendary |
+| 鹰女 | 史诗 | 机械 | 防御 | 60 | 300 | 1.5 | 5.0 | 1.47 | flat | skill_gargoyle_normal_1 | skill_gargoyle_normal_2 | skill_gargoyle_normal_3 | skill_gargoyle_epic |
+| 小野猪人 | 普通 | 兽族 | 加速 | 20 | 80 | 1.3 | 5.0 | 1.69 | flat | skill_goblin_normal_1 | skill_goblin_normal_2 | skill_goblin_normal_3 | — |
+| 采矿机 | 普通 | 机械 | 补给 | None | None | None | None | None | — | — | skill_gold_mine_normal_2 | — | — |
+| 重型盾 | 稀有 | 机械 | 防御 | 45 | None | 0.7 | 5.0 | 3.14 | flat | skill_heavy_shield_normal_1 | skill_heavy_shield_normal_2 | skill_heavy_shield_normal_3 | skill_heavy_shield_rare |
+| 机械飞鹰 | 传奇 | 机械 | 攻击 | 110 | 700 | 1.6 | 5.0 | 1.38 | flat | skill_helicopter_normal_1 | skill_helicopter_normal_2 | skill_helicopter_normal_3 | skill_helicopter_legendary |
+| 重步兵 | 稀有 | 人族 | 防御 | 3 | 250 | 0.9 | 5.0 | 2.44 | flat | skill_infantry_normal_1 | skill_infantry_normal_2 | skill_infantry_normal_3 | skill_infantry_rare |
+| 幽灵船长 | 传奇 | 亡灵 | 攻击 | 70 | 860 | 1.4 | 4.0 | 1.57 | arc | skill_lich_queen_normal_1 | skill_lich_queen_normal_2 | skill_lich_queen_normal_3 | skill_lich_queen_legendary |
+| 短剑士 | 普通 | 人族 | 攻击 | 30 | 100 | 1.1 | 5.0 | 2.0 | flat | skill_militia_normal_1 | skill_militia_normal_2 | skill_militia_normal_3 | — |
+| 骷髅魔导师 | 稀有 | 亡灵 | 攻击 | 30 | 80 | 1.1 | 4.0 | 2.0 | arc | skill_necromancer_normal_1 | skill_necromancer_normal_2 | skill_necromancer_normal_3 | skill_necromancer_rare |
+| 爆破鬼才 | 传奇 | 机械 | 攻击 | 160 | 960 | 1.4 | 4.0 | 1.57 | arc | skill_panda_monk_normal_1 | skill_panda_monk_normal_2 | skill_panda_monk_normal_3 | skill_panda_monk_legendary |
+| 荆棘女王 | 传奇 | 机械 | 攻击 | 50 | 160 | 2.6 | 5.6 | 0.85 | flat | skill_ranger_normal_1 | skill_ranger_normal_2 | skill_ranger_normal_3 | skill_ranger_legendary |
+| 圣盾领主 | 传奇 | 人族 | 防御 | 70 | 800 | 1.8 | 5.0 | 1.22 | flat | skill_royal_knight_normal_1 | skill_royal_knight_normal_2 | skill_royal_knight_normal_3 | skill_royal_knight_legendary |
+| 藤蔓萨满 | 史诗 | 人族 | 补给 | 58 | 96 | 1.2 | 5.0 | 1.83 | flat | skill_shaman_normal_1 | skill_shaman_normal_2 | skill_shaman_normal_3 | skill_shaman_epic |
+| 巨石魔像 | 史诗 | 亡灵 | 防御 | 60 | 400 | 0.6 | 5.0 | 3.67 | flat | skill_skeleton_giant_normal_1 | skill_skeleton_giant_normal_2 | skill_skeleton_giant_normal_3 | skill_skeleton_giant_epic |
+| 蝙蝠突袭者 | 稀有 | 亡灵 | 加速 | 38 | 130 | 1.4 | 5.0 | 1.57 | flat | skill_skeleton_knight_normal_1 | skill_skeleton_knight_normal_2 | skill_skeleton_knight_normal_3 | skill_skeleton_knight_rare |
+| 骷髅刀盾兵 | 普通 | 亡灵 | 防御 | 24 | 92 | 1.2 | 5.0 | 1.83 | flat | skill_skeleton_warrior_normal_1 | skill_skeleton_warrior_normal_2 | skill_skeleton_warrior_normal_3 | — |
+| 天穹 | 传奇 | 机械 | 防御 | 65 | None | 0.6 | 4.0 | 3.67 | arc | skill_sky_dome_normal_1 | skill_sky_dome_normal_2 | skill_sky_dome_normal_3 | skill_sky_dome_legendary |
+| 雇佣兵 | 史诗 | 机械 | 攻击 | 60 | 120 | 1 | 5.0 | 2.2 | flat | skill_sniper_normal_1 | skill_sniper_normal_2 | skill_sniper_normal_3 | skill_sniper_epic |
+| 鱼叉捕猎者 | 稀有 | 兽族 | 攻击 | 30 | 120 | 1.2 | 5.0 | 1.83 | flat | skill_spear_orc_normal_1 | skill_spear_orc_normal_2 | skill_spear_orc_normal_3 | skill_spear_orc_rare |
+| 双头奇美拉 | 传奇 | 兽族 | 防御 | 120 | 1040 | 1.3 | 5.0 | 1.69 | flat | skill_warlord_normal_1 | skill_warlord_normal_2 | skill_warlord_normal_3 | skill_warlord_legendary |
+| 利爪猎犬 | 稀有 | 兽族 | 加速 | 40 | 240 | 1.9 | 5.0 | 1.16 | flat | skill_wolf_rider_normal_1 | skill_wolf_rider_normal_2 | skill_wolf_rider_normal_3 | skill_wolf_rider_rare |
+| 火龙 | 史诗 | 兽族 | 攻击 | 68 | 430 | 1.8 | 4.3 | 1.22 | arc | skill_wyrmling_normal_1 | skill_wyrmling_normal_2 | skill_wyrmling_normal_3 | skill_wyrmling_epic |
 
 ---
 
 ## 十、技能一览速查表
 
-| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能1 | 普通技能2 | 特技 | 解锁等级 | 高抛穿透 |
+| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能1 | 普通技能2 | 普通技能3 | 特技 | 解锁 | 高抛 |
 |:---|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|
-| 见习女巫 | 稀有 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 双联点射 | L5 | — |
-| 风暴女巫 | 传奇 | 人族 | 攻击 | arc | 高抛点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 高射塔 | 稀有 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 双联点射 | L5 | — |
-| 弩车 | 史诗 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 连锁穿透 | L10 | — |
-| 重锤卫士 | 普通 | 兽族 | 防御 | flat | 平直点射 | 铁壁 | — | L— | — |
-| 长枪教头 | 普通 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | — | L— | — |
-| 幻影刺客 | 传奇 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 火枪手 | 普通 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | — | L— | — |
-| 自爆蜘蛛 | 史诗 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 连锁穿透 | L10 | — |
-| 炮楼 | 史诗 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 连锁穿透 | L10 | — |
-| 龙骑士 | 史诗 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 弹速增压 | L10 | — |
-| 重装破城者 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 永冬之王 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 龙焰女王 | 传奇 | 兽族 | 攻击 | arc | 高抛点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 巨斧酋长 | 传奇 | 兽族 | 攻击 | flat | 平直点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 北境守护者 | 传奇 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | 满血圣疗 | L20 | — |
-| 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 鹰女 | 史诗 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 三格盾带 | L10 | — |
-| 小野猪人 | 普通 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | — | L— | — |
-| 采矿机 | 普通 | 机械 | 补给 | — | — | 矿脉 | — | L— | — |
-| 重型盾 | 稀有 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 重盾护壁 | L5 | — |
-| 机械飞鹰 | 传奇 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 重步兵 | 稀有 | 人族 | 防御 | flat | 平直点射 | 铁壁 | 单格护墙 | L5 | — |
-| 幽灵船长 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 幽魂还魂 | L20 | — |
-| 短剑士 | 普通 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | — | L— | — |
-| 骷髅魔导师 | 稀有 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 双联点射 | L5 | — |
-| 爆破鬼才 | 传奇 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 巨型炸弹 | L20 | ✅ |
-| 荆棘女王 | 传奇 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 高空重击 | L20 | ✅ |
-| 圣盾领主 | 传奇 | 人族 | 防御 | flat | 平直点射 | 铁壁 | 全局圣域 | L20 | — |
-| 藤蔓萨满 | 史诗 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | 群体复苏 | L10 | — |
-| 巨石魔像 | 史诗 | 亡灵 | 防御 | flat | 平直点射 | 铁壁 | 三格盾带 | L10 | — |
-| 蝙蝠突袭者 | 稀有 | 亡灵 | 加速 | flat | 平直点射 | 迅捷装填 | 速射补给 | L5 | — |
-| 骷髅刀盾兵 | 普通 | 亡灵 | 防御 | flat | 平直点射 | 铁壁 | — | L— | — |
-| 天穹 | 传奇 | 机械 | 防御 | arc | 高抛点射 | 铁壁 | 天穹护盾 | L20 | — |
-| 雇佣兵 | 史诗 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 连锁穿透 | L10 | — |
-| 鱼叉捕猎者 | 稀有 | 兽族 | 攻击 | flat | 平直点射 | 战意凝集 | 双联点射 | L5 | — |
-| 双头奇美拉 | 传奇 | 兽族 | 防御 | flat | 平直点射 | 铁壁 | 全局圣域 | L20 | — |
-| 利爪猎犬 | 稀有 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 速射补给 | L5 | — |
-| 火龙 | 史诗 | 兽族 | 攻击 | arc | 高抛点射 | 战意凝集 | 连锁穿透 | L10 | — |
+| 见习女巫 | 稀有 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 双联点射 | L5 | — |
+| 风暴女巫 | 传奇 | 人族 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 高射塔 | 稀有 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 双联点射 | L5 | — |
+| 弩车 | 史诗 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 连锁穿透 | L10 | — |
+| 重锤卫士 | 普通 | 兽族 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | — | L— | — |
+| 长枪教头 | 普通 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | 种族克制 | — | L— | — |
+| 幻影刺客 | 传奇 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 火枪手 | 普通 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | — | L— | — |
+| 自爆蜘蛛 | 史诗 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 连锁穿透 | L10 | — |
+| 炮楼 | 史诗 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 连锁穿透 | L10 | — |
+| 龙骑士 | 史诗 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 种族克制 | 弹速增压 | L10 | — |
+| 重装破城者 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 永冬之王 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 龙焰女王 | 传奇 | 兽族 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 巨斧酋长 | 传奇 | 兽族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 北境守护者 | 传奇 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | 种族克制 | 满血圣疗 | L20 | — |
+| 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 鹰女 | 史诗 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 三格盾带 | L10 | — |
+| 小野猪人 | 普通 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 种族克制 | — | L— | — |
+| 采矿机 | 普通 | 机械 | 补给 | — | — | 矿脉 | — | — | L— | — |
+| 重型盾 | 稀有 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 重盾护壁 | L5 | — |
+| 机械飞鹰 | 传奇 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 重步兵 | 稀有 | 人族 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 单格护墙 | L5 | — |
+| 幽灵船长 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 幽魂还魂 | L20 | — |
+| 短剑士 | 普通 | 人族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | — | L— | — |
+| 骷髅魔导师 | 稀有 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 双联点射 | L5 | — |
+| 爆破鬼才 | 传奇 | 机械 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 巨型炸弹 | L20 | ✅ |
+| 荆棘女王 | 传奇 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
+| 圣盾领主 | 传奇 | 人族 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 全局圣域 | L20 | — |
+| 藤蔓萨满 | 史诗 | 人族 | 补给 | flat | 平直点射 | 应急包扎 | 种族克制 | 群体复苏 | L10 | — |
+| 巨石魔像 | 史诗 | 亡灵 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 三格盾带 | L10 | — |
+| 蝙蝠突袭者 | 稀有 | 亡灵 | 加速 | flat | 平直点射 | 迅捷装填 | 种族克制 | 速射补给 | L5 | — |
+| 骷髅刀盾兵 | 普通 | 亡灵 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | — | L— | — |
+| 天穹 | 传奇 | 机械 | 防御 | arc | 高抛点射 | 铁壁 | 种族克制 | 天穹护盾 | L20 | — |
+| 雇佣兵 | 史诗 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 连锁穿透 | L10 | — |
+| 鱼叉捕猎者 | 稀有 | 兽族 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 双联点射 | L5 | — |
+| 双头奇美拉 | 传奇 | 兽族 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 全局圣域 | L20 | — |
+| 利爪猎犬 | 稀有 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 种族克制 | 速射补给 | L5 | — |
+| 火龙 | 史诗 | 兽族 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 连锁穿透 | L10 | — |
 
 ---
 
@@ -384,6 +399,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.08
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**见习女巫·普通技能3·种族克制** (`skill_archer_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -420,6 +443,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**风暴女巫·普通技能3·种族克制** (`skill_archmage_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **风暴女巫·高空重击** (`skill_archmage_legendary`)
@@ -454,6 +485,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.08
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**高射塔·普通技能3·种族克制** (`skill_arrow_tower_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -490,6 +529,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.09
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**弩车·普通技能3·种族克制** (`skill_ballista_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **弩车·连锁穿透** (`skill_ballista_epic`)
@@ -525,6 +572,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**重锤卫士·普通技能3·种族克制** (`skill_bear_warrior_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -553,6 +608,14 @@ attackInterval = 2.2 / fireRate
 - 效果：healPct=0.17
 - 触发：常驻被动；每10秒自动触发；目标=self
 
+#### 普通技能3（种族克制）
+
+**长枪教头·普通技能3·种族克制** (`skill_blacksmith_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -580,6 +643,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**幻影刺客·普通技能3·种族克制** (`skill_blademaster_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -616,6 +687,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.068
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**火枪手·普通技能3·种族克制** (`skill_bone_archer_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -643,6 +722,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.09
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**自爆蜘蛛·普通技能3·种族克制** (`skill_catapult_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 史诗特技
 
@@ -678,6 +765,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.09
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**炮楼·普通技能3·种族克制** (`skill_catapult_tower_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **炮楼·连锁穿透** (`skill_catapult_tower_epic`)
@@ -712,6 +807,14 @@ attackInterval = 2.2 / fireRate
 - 效果：fireRatePct=0.09
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**龙骑士·普通技能3·种族克制** (`skill_cavalry_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **龙骑士·弹速增压** (`skill_cavalry_epic`)
@@ -744,6 +847,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**重装破城者·普通技能3·种族克制** (`skill_crusher_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -780,6 +891,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**永冬之王·普通技能3·种族克制** (`skill_demon_lord_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **永冬之王·高空重击** (`skill_demon_lord_legendary`)
@@ -814,6 +933,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**龙焰女王·普通技能3·种族克制** (`skill_dragon_knight_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -850,6 +977,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**巨斧酋长·普通技能3·种族克制** (`skill_dread_knight_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **巨斧酋长·高空重击** (`skill_dread_knight_legendary`)
@@ -885,6 +1020,14 @@ attackInterval = 2.2 / fireRate
 - 效果：healPct=0.25
 - 触发：常驻被动；每10秒自动触发；目标=self
 
+#### 普通技能3（种族克制）
+
+**北境守护者·普通技能3·种族克制** (`skill_druid_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **北境守护者·满血圣疗** (`skill_druid_legendary`)
@@ -917,6 +1060,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**寒冰巨魔·普通技能3·种族克制** (`skill_frost_dragon_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -954,6 +1105,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**鹰女·普通技能3·种族克制** (`skill_gargoyle_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **鹰女·三格盾带** (`skill_gargoyle_epic`)
@@ -988,6 +1147,14 @@ attackInterval = 2.2 / fireRate
 - 效果：fireRatePct=0.068
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**小野猪人·普通技能3·种族克制** (`skill_goblin_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -1010,6 +1177,10 @@ attackInterval = 2.2 / fireRate
 - 描述：翻开获得额外金币，无战斗攻击
 - 表现：金币从矿口平直弹出
 - 效果：deployGold=8
+
+#### 普通技能3（种族克制）
+
+—
 
 #### 特技
 
@@ -1039,6 +1210,14 @@ attackInterval = 2.2 / fireRate
 - 效果：damageReductionPct=0.06 [挡flat]
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**重型盾·普通技能3·种族克制** (`skill_heavy_shield_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -1073,6 +1252,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**机械飞鹰·普通技能3·种族克制** (`skill_helicopter_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -1110,6 +1297,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**重步兵·普通技能3·种族克制** (`skill_infantry_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 稀有特技
 
 **重步兵·单格护墙** (`skill_infantry_rare`)
@@ -1143,6 +1338,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**幽灵船长·普通技能3·种族克制** (`skill_lich_queen_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -1178,6 +1381,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.068
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**短剑士·普通技能3·种族克制** (`skill_militia_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -1205,6 +1416,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.08
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**骷髅魔导师·普通技能3·种族克制** (`skill_necromancer_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -1240,6 +1459,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**爆破鬼才·普通技能3·种族克制** (`skill_panda_monk_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -1277,6 +1504,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.1
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**荆棘女王·普通技能3·种族克制** (`skill_ranger_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **荆棘女王·高空重击** (`skill_ranger_legendary`)
@@ -1313,6 +1548,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**圣盾领主·普通技能3·种族克制** (`skill_royal_knight_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **圣盾领主·全局圣域** (`skill_royal_knight_legendary`)
@@ -1346,6 +1589,14 @@ attackInterval = 2.2 / fireRate
 - 表现：绿色光粒平直飞向自身；**补给粒子**
 - 效果：healPct=0.224
 - 触发：常驻被动；每10秒自动触发；目标=self
+
+#### 普通技能3（种族克制）
+
+**藤蔓萨满·普通技能3·种族克制** (`skill_shaman_normal_3`)
+- 描述：种族克制被动：人族对机械单位（含建筑）造成伤害10%（例：基础100点→约110点）
+- 表现：人族徽记常亮；命中机械时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 史诗特技
 
@@ -1382,6 +1633,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**巨石魔像·普通技能3·种族克制** (`skill_skeleton_giant_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **巨石魔像·三格盾带** (`skill_skeleton_giant_epic`)
@@ -1415,6 +1674,14 @@ attackInterval = 2.2 / fireRate
 - 表现：骨刃直线斩；出手前摇缩短，弹道仍**平直**
 - 效果：fireRatePct=0.08
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**蝙蝠突袭者·普通技能3·种族克制** (`skill_skeleton_knight_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -1450,6 +1717,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**骷髅刀盾兵·普通技能3·种族克制** (`skill_skeleton_warrior_normal_3`)
+- 描述：种族克制被动：亡灵对人族单位造成伤害10%（例：基础100点→约110点）
+- 表现：亡灵徽记常亮；命中人族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 特技
 
 —（普通品质，无特技槽）
@@ -1478,6 +1753,14 @@ attackInterval = 2.2 / fireRate
 - 效果：damageReductionPct=0.075 [挡flat]
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**天穹·普通技能3·种族克制** (`skill_sky_dome_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 传奇特技
 
@@ -1513,6 +1796,14 @@ attackInterval = 2.2 / fireRate
 - 效果：atkPct=0.09
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**雇佣兵·普通技能3·种族克制** (`skill_sniper_normal_3`)
+- 描述：种族克制被动：机械对兽族单位造成伤害10%（例：基础100点→约110点）
+- 表现：机械徽记常亮；命中兽族时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 史诗特技
 
 **雇佣兵·连锁穿透** (`skill_sniper_epic`)
@@ -1546,6 +1837,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.08
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**鱼叉捕猎者·普通技能3·种族克制** (`skill_spear_orc_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 稀有特技
 
@@ -1583,6 +1882,14 @@ attackInterval = 2.2 / fireRate
 - 抵挡反馈：成功时飘字 **MISS**
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**双头奇美拉·普通技能3·种族克制** (`skill_warlord_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 传奇特技
 
 **双头奇美拉·全局圣域** (`skill_warlord_legendary`)
@@ -1617,6 +1924,14 @@ attackInterval = 2.2 / fireRate
 - 效果：fireRatePct=0.08
 - 触发：常驻被动；每10秒自动触发；持续5秒；目标=self
 
+#### 普通技能3（种族克制）
+
+**利爪猎犬·普通技能3·种族克制** (`skill_wolf_rider_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
+
 #### 稀有特技
 
 **利爪猎犬·速射补给** (`skill_wolf_rider_rare`)
@@ -1649,6 +1964,14 @@ attackInterval = 2.2 / fireRate
 - 表现：战意光晕贴身，刀刃/弹道泛光
 - 效果：atkPct=0.09
 - 触发：常驻被动；每12秒自动触发；持续4秒；目标=self
+
+#### 普通技能3（种族克制）
+
+**火龙·普通技能3·种族克制** (`skill_wyrmling_normal_3`)
+- 描述：种族克制被动：兽族对亡灵单位造成伤害10%（例：基础100点→约110点）
+- 表现：兽族徽记常亮；命中亡灵时伤害泛光
+- 效果：factionCounterDamagePct=0.1
+- 触发：常驻被动
 
 #### 史诗特技
 
