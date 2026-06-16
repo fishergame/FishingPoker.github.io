@@ -161,7 +161,7 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
         "heroSkillNote": HERO_SKILL_NOTE,
         "combatCaps": {
             "recommendedCityDpsMultiplierMax": 1.45,
-            "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_BOND_REVIEW.md",
+            "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_SYSTEM.md",
         },
         "arenas": arenas,
     }

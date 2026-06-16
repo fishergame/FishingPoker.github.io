@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Generate skill.json, bond.json, heroBattle.json, docs/SKILL_BOND_REVIEW.md (v3)"""
+"""Generate skill.json, bond.json, heroBattle.json, docs/SKILL_SYSTEM.md (v3 unified)"""
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from gen_skill_system_doc import gen_unified_skill_md  # noqa: E402
 
 STAT_GROWTH = 1.15
 FIRE_RATE_GROWTH = 1.02
@@ -492,163 +495,6 @@ def gen_bond() -> dict:
     }
 
 
-def gen_review_md(skills: list[dict], hero_battle: dict, upgrade: dict) -> str:
-    heroes = hero_battle["heroes"]
-    cat_count: dict[str, int] = {}
-    for h in heroes.values():
-        c = h.get("category")
-        if c:
-            cat_count[c] = cat_count.get(c, 0) + 1
-
-    lines = [
-        "# 技能体系 v3 · 品质分槽 · 四类技能",
-        "",
-        "> 配表：`skill.json` · `heroBattle.json` · `bond.json`",
-        "> 生成：`python3 scripts/gen-skill-bond-config.py`",
-        "",
-        "---",
-        "",
-        "## 一、品质与技能槽",
-        "",
-        "| 卡牌品质 | 技能组成 | 可升级 |",
-        "|:---|:---|:---|",
-        "| **普通** | 仅 **普通技能** | 普通技不可升级 |",
-        "| **稀有** | 普通 + **稀有特技** | 特技 1→5 级 |",
-        "| **史诗** | 普通 + **史诗特技** | 特技 1→5 级 |",
-        "| **传奇** | 普通 + **传奇特技** | 特技 1→5 级 |",
-        "",
-        "**取消远近战战斗逻辑**；`attackRange` 仅影响表现距离。",
-        "**attackSpeed** = 弹道飞行速度；**fireRate** = 发射频率（间隔 `2.2/fireRate` 秒）。",
-        "",
-        "---",
-        "",
-        "## 二、四类技能定位",
-        "",
-        "| 类型 | 战术目标 | 普通技（示例） | 特技递进（稀有→史诗→传奇） |",
-        "|:---|:---|:---|:---|",
-        "| **攻击** | 单点/多点/击杀/亡灵复活 | 平直点射 | 双联→连锁→高空重击/亡灵收割 |",
-        "| **防御** | 护墙/减伤/全局保护 | 铁壁减伤（仅挡平直） | 单格墙→三格带（挡弧）→全局圣域（挡弧） |",
-        "| **补给** | 回血 20%/50%/满血 | 应急包扎20% | 30%单友→50%范围→满血圣疗 |",
-        "| **加速** | 攻速/弹速/铺场 | 迅捷装填 | 速射→弹速增压→狂热号令 |",
-        "",
-        f"**英雄定位分布：** " + " · ".join(f"{CATEGORY_CN[k]} {v}" for k, v in sorted(cat_count.items())),
-        "",
-        "---",
-        "",
-        "## 三、英雄属性公式（30 级）",
-        "",
-        "```",
-        f"attack(L)      = round(attackL1 * {STAT_GROWTH}^(L-1))",
-        f"unitHp(L)      = round(unitHpL1 * {STAT_GROWTH}^(L-1))",
-        f"buildingHp(L)  = round(buildingHpL1 * {STAT_GROWTH}^(L-1))",
-        f"fireRate(L)    = round(fireRateL1 * {FIRE_RATE_GROWTH}^(L-1), 2)   // 发射频率",
-        f"attackSpeed(L) = round(attackSpeedL1 * {PROJECTILE_SPEED_GROWTH}^(L-1), 2)  // 弹道速度",
-        "attackInterval = 2.2 / fireRate",
-        "```",
-        "",
-        "---",
-        "",
-        "## 四、特技升级消耗（5 级）",
-        "",
-        f"效果曲线：`effect(L) = base × (1 + {SPECIAL_SCALING_PER_LEVEL}×(L-1))`",
-        "",
-        "| 升级 | 基础碎片 | 普通 | 稀有 | 史诗 | 传奇 |",
-        "|:---:|:---:|:---:|:---:|:---:|:---:|",
-    ]
-    for row in upgrade["fragmentCost"]:
-        bq = row["byQuality"]
-        lines.append(
-            f"| L{row['fromLevel']}→L{row['toLevel']} | {row['baseFragments']} "
-            f"| {bq['common']} | {bq['rare']} | {bq['epic']} | {bq['legendary']} |"
-        )
-    lines += [
-        "",
-        "金币消耗 ≈ 同级英雄升级金币 × **15%**（见 `heroLevel.json`）。",
-        "",
-        "---",
-        "",
-        "## 五、全英雄技能表",
-        "",
-        "| 英雄 | 品质 | 定位 | 弹道 | 普通技能 | 表现 | 特技 | 特技表现 |",
-        "|:---|:---|:---|:---|:---|:---|:---|:---|",
-    ]
-    skill_by_id = {s["skillId"]: s for s in skills}
-    for hid in sorted(heroes.keys()):
-        h = heroes[hid]
-        q = QUALITY_CN[h["quality"]]
-        sk = h["skills"]
-        normal = skill_by_id.get(sk.get("normal"), {})
-        special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
-        special = skill_by_id.get(special_id, {}) if special_id else {}
-        lines.append(
-            f"| {h['name']} | {q} | {h['categoryLabel']} | {h['combatStats'].get('projectileStyle', '—')} "
-            f"| {normal.get('name', '—').split('·')[-1] if normal else '—'} | {normal.get('visualDescription', '—')[:28]}… "
-            f"| {special.get('name', '—').split('·')[-1] if special else '—'} | {(special.get('visualDescription') or '—')[:28]}… |"
-        )
-
-    lines += [
-        "",
-        "---",
-        "",
-        "## 六、特技等级曲线示例（攻击 · 传奇 · 高空重击 atkPct）",
-        "",
-        "以 base=0.25 为例：",
-        "",
-        "| 特技等级 | 效果系数 |",
-        "|:---:|:---:|",
-    ]
-    for lv in range(1, 6):
-        lines.append(f"| L{lv} | {skill_value_at_level(0.25, lv)} |")
-
-    lines += [
-        "",
-        "---",
-        "",
-        "## 七、弹道与防御",
-        "",
-        "| 弹道 | 来源 | 普通铁壁 | 史诗+特技防御 |",
-        "|:---|:---|:---:|:---:|",
-        "| **flat** 平直 | 普通攻击技、双联/连锁特技 | ✅ 减伤 | ✅ 减伤 |",
-        "| **arc** 高抛 | 传奇攻击特技「高空重击」等 | ❌ 穿透 | ✅ 减伤 |",
-        "",
-        "配表字段：`effects[].blocksTrajectory`（防御）、`attackTrajectory` + `bypassesNormalDefense`（高抛攻击）。",
-        "",
-        "---",
-        "",
-        "## 八、战斗接入",
-        "",
-        "1. `heroBattle.json` → `combatStats` 读属性；`skills` 按品质取槽位",
-        "2. `skill.json` → 普通技 `upgradeable:false`；特技读 `levelCurve`",
-        "3. `battle-skill-runtime.js` 需适配 v3 effect 类型（healPct / fireRatePct 等）",
-        "",
-    ]
-    return "\n".join(lines)
-
-
-def gen_hero_table_md(hero_battle: dict) -> str:
-    lines = [
-        "# 全英雄属性与技能 v3",
-        "",
-        "> 生成：`python3 scripts/gen-skill-bond-config.py`",
-        "",
-        "| 英雄 | 品质 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普通技 | 特技 |",
-        "|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|",
-    ]
-    for hid in sorted(hero_battle["heroes"].keys()):
-        h = hero_battle["heroes"][hid]
-        cs = h["combatStats"]
-        sk = h["skills"]
-        sp = sk.get("rare") or sk.get("epic") or sk.get("legendary") or "—"
-        lines.append(
-            f"| {h['name']} | {h['qualityLabel']} | {h['categoryLabel']} "
-            f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
-            f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
-            f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
-            f"| {sk.get('normal', '—')} | {sp} |"
-        )
-    return "\n".join(lines)
-
-
 if __name__ == "__main__":
     heroes = load_heroes()
     skills = gen_skills(heroes)
@@ -683,7 +529,9 @@ if __name__ == "__main__":
         json.dumps(hero_battle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (ROOT / "bond.json").write_text(json.dumps(bond, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (ROOT / "docs" / "SKILL_BOND_REVIEW.md").write_text(gen_review_md(skills, hero_battle, upgrade) + "\n", encoding="utf-8")
-    (ROOT / "docs" / "SKILL_HERO_TABLE_V3.md").write_text(gen_hero_table_md(hero_battle) + "\n", encoding="utf-8")
+    (ROOT / "docs" / "SKILL_SYSTEM.md").write_text(
+        gen_unified_skill_md(skills, hero_battle, upgrade, bond, len(skills)) + "\n",
+        encoding="utf-8",
+    )
 
-    print(f"Wrote {len(skills)} skills, {len(hero_battle['heroes'])} heroes (v3)")
+    print(f"Wrote {len(skills)} skills, {len(hero_battle['heroes'])} heroes, docs/SKILL_SYSTEM.md (v3)")

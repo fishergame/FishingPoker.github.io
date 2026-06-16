@@ -71,7 +71,7 @@ function parseArgs() {
     seed: 42,
     real: false,
     multi: false,
-    out: 'docs/SKILL_BATTLE_SIM_REPORT.md',
+    out: 'docs/_SKILL_SIM_APPENDIX.md',
   };
   for (const a of process.argv.slice(2)) {
     if (a === '--real') args.real = true;
@@ -83,11 +83,11 @@ function parseArgs() {
     if (a.startsWith('--out=')) args.out = a.split('=')[1];
   }
   if (args.real && !args.multi) {
-    args.out = 'docs/SKILL_BATTLE_SIM_REPORT_REAL_HP.md';
+    args.out = 'docs/_SKILL_SIM_APPENDIX.md';
   }
   if (args.multi) {
     args.real = true;
-    args.out = 'docs/SKILL_BATTLE_SIM_REPORT_REAL_HP.md';
+    args.out = 'docs/_SKILL_SIM_APPENDIX.md';
   }
   return args;
 }
@@ -336,7 +336,7 @@ function main() {
 
   if (args.real || args.multi) {
     lines.push('# 翻卡对战模拟（真实主城 HP）\n');
-    lines.push('> 数据源：`battleBalance.json` · 技能：`skill.json` v2 · 全 36 战斗英雄卡组\n');
+    lines.push('> 合入 `docs/SKILL_SYSTEM.md` 附录 · 技能 v3 · 运行后请执行 `python3 scripts/gen-skill-bond-config.py`\n');
     lines.push(printMainCityHpTables());
     lines.push('\n---\n');
     lines.push(`## 多阶段对战模拟（每场景 ${args.battles} 场）\n`);
@@ -358,8 +358,8 @@ function main() {
     lines.push('- 青铜场次时限仅 90s，高等级时易出现「时间耗尽前差一丝拆城」；传奇场次 180s 拆城率更高。');
     lines.push('- 技能 `cityDamagePct` 与羁绊加成会进一步提高拆城比例；建议对城 DPS cap 1.45×。');
   } else {
-    lines.push('# 全英雄技能 + 模拟对战报告（演示 HP=200）\n');
-    lines.push(`> 英雄 L${args.level} · ${args.battles} 场 · 使用 \`--real --multi\` 切换真实主城 HP\n`);
+    lines.push('# 对战模拟附录\n');
+    lines.push('> 合入 `docs/SKILL_SYSTEM.md` · 演示 HP=200 · 运行后请执行 `python3 scripts/gen-skill-bond-config.py`\n');
     const results = [];
     for (let i = 0; i < args.battles; i++) {
       results.push(runFullBattle(args.level, makeRng(args.seed + i * 9973), deck));
