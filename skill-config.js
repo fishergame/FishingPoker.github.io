@@ -12,6 +12,7 @@ const SkillConfig = {
     this.VERSION = skillData.version;
     this.EFFECT_BOUNDS = skillData.effectBounds || {};
     this.ARCHETYPES = skillData.archetypes || {};
+    this.SKILL_UPGRADE = skillData.skillUpgrade || {};
     this.SKILLS = Object.fromEntries(skillData.skills.map((s) => [s.skillId, s]));
     this.HERO_BATTLE = heroBattleData.heroes;
   },

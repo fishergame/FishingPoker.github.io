@@ -18,6 +18,8 @@ const BattleSkillRuntime = (() => {
     return effect.value + (skillLevel - 1) * (scaling || 0);
   }
 
+  const SPECIAL_UNLOCK_LEVEL = { rare: 5, epic: 10, legendary: 20 };
+
   function getUnlockedSkillIds(heroId, heroLevel = 1) {
     const meta = SkillConfig.HERO_BATTLE?.[heroId];
     if (!meta?.skills) return [];
@@ -26,9 +28,15 @@ const BattleSkillRuntime = (() => {
     if (skills.normal) ids.push(skills.normal);
     const cfg = typeof HeroesConfig !== 'undefined' ? HeroesConfig.getById(heroId) : null;
     const q = cfg?.quality;
+    const unlockRules = meta.skillUnlock || SkillConfig.SKILL_UPGRADE?.unlockByHeroLevel || SPECIAL_UNLOCK_LEVEL;
     const specialSlot = { rare: 'rare', epic: 'epic', legendary: 'legendary' }[q];
-    if (specialSlot && skills[specialSlot]) ids.push(skills[specialSlot]);
-    // v2 兼容：按等级解锁 epic/legend
+    if (specialSlot && skills[specialSlot]) {
+      const need = unlockRules[specialSlot] ?? SPECIAL_UNLOCK_LEVEL[specialSlot] ?? 1;
+      const sk = SkillConfig.SKILLS[skills[specialSlot]];
+      const unlockLv = sk?.unlockLevel ?? need;
+      if (heroLevel >= unlockLv) ids.push(skills[specialSlot]);
+    }
+    // v2 兼容
     if (!specialSlot) {
       if (heroLevel >= (skills.epicUnlockLevel || 8) && skills.epic) ids.push(skills.epic);
       if (heroLevel >= (skills.legendUnlockLevel || 20) && skills.legend) ids.push(skills.legend);

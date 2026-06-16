@@ -1,11 +1,17 @@
 {
-  "version": "3.0.0",
-  "description": "英雄战斗元数据 v3：品质决定特技槽；普通技不可升级，特技5级",
+  "version": "3.1.0",
+  "description": "英雄战斗元数据 v3.1：种族阵营 + 等级解锁特技 + 钻石升级",
   "rules": {
     "noMeleeRangedLogic": true,
     "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
     "fireRateMeans": "发射频率（攻击间隔=2.2/fireRate）",
-    "projectileStyle": "flat=平直射击 arc=高抛重击"
+    "projectileStyle": "flat=平直射击 arc=高抛重击",
+    "skillUnlockByHeroLevel": {
+      "rare": 5,
+      "epic": 10,
+      "legendary": 20
+    },
+    "specialSkillUpgradeCurrency": "diamond"
   },
   "heroes": {
     "dragon_knight": {
@@ -13,7 +19,8 @@
       "name": "龙焰女王",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "shu",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -75,6 +82,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "demon_lord": {
@@ -82,7 +95,8 @@
       "name": "永冬之王",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wei",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -144,6 +158,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "archmage": {
@@ -151,7 +171,8 @@
       "name": "风暴女巫",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "shu",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -213,6 +234,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "ranger": {
@@ -220,16 +247,17 @@
       "name": "荆棘女王",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "shu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 2.6,
-        "attackSpeedL1": 5.1,
+        "attackSpeedL1": 5.6,
         "attackIntervalL1": 0.85,
-        "projectileStyle": "arc",
-        "weaponVfx": "荆棘箭雨，弧线覆盖单格",
+        "projectileStyle": "flat",
+        "weaponVfx": "荆棘花粉，平直洒向友军",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -246,19 +274,19 @@
             "attack": 50,
             "unitHp": 160,
             "fireRate": 2.6,
-            "attackSpeed": 5.1
+            "attackSpeed": 5.6
           },
           "L15": {
             "attack": 354,
             "unitHp": 1132,
             "fireRate": 3.43,
-            "attackSpeed": 7.71
+            "attackSpeed": 8.47
           },
           "L30": {
             "attack": 2879,
             "unitHp": 9212,
             "fireRate": 4.62,
-            "attackSpeed": 12.02
+            "attackSpeed": 13.2
           }
         }
       },
@@ -282,6 +310,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "royal_knight": {
@@ -289,7 +323,8 @@
       "name": "圣盾领主",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wu",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -351,6 +386,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "druid": {
@@ -358,16 +399,17 @@
       "name": "北境守护者",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "qun",
-      "category": "defense",
-      "categoryLabel": "防御",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.5,
         "attackSpeedL1": 5.0,
         "attackIntervalL1": 1.47,
         "projectileStyle": "flat",
-        "weaponVfx": "自然屏障，平直藤蔓盾",
+        "weaponVfx": "自然花粉，平直治疗波",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -420,6 +462,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "lich_queen": {
@@ -427,7 +475,8 @@
       "name": "幽灵船长",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "shu",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -489,6 +538,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "blademaster": {
@@ -496,7 +551,8 @@
       "name": "幻影刺客",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wu",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -558,6 +614,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "frost_dragon": {
@@ -565,7 +627,8 @@
       "name": "寒冰巨魔",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wei",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -627,6 +690,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "crusher": {
@@ -634,7 +703,8 @@
       "name": "重装破城者",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "qun",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -696,6 +766,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "helicopter": {
@@ -703,9 +779,10 @@
       "name": "机械飞鹰",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "qun",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.6,
@@ -765,6 +842,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "dread_knight": {
@@ -772,7 +855,8 @@
       "name": "巨斧酋长",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wu",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -834,6 +918,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "warlord": {
@@ -841,7 +931,8 @@
       "name": "双头奇美拉",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "shu",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -903,6 +994,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "panda_monk": {
@@ -910,7 +1007,8 @@
       "name": "爆破鬼才",
       "quality": "legendary",
       "qualityLabel": "传奇",
-      "faction": "wei",
+      "faction": "mechanical",
+      "factionLabel": "机械",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -972,6 +1070,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "shaman": {
@@ -979,7 +1083,8 @@
       "name": "藤蔓萨满",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "qun",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "supply",
       "categoryLabel": "补给",
       "bondEligible": true,
@@ -1041,6 +1146,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "gargoyle": {
@@ -1048,7 +1159,8 @@
       "name": "鹰女",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "shu",
+      "faction": "mechanical",
+      "factionLabel": "机械",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -1110,6 +1222,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "skeleton_giant": {
@@ -1117,7 +1235,8 @@
       "name": "巨石魔像",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "wei",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -1179,6 +1298,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "sniper": {
@@ -1186,7 +1311,8 @@
       "name": "雇佣兵",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "qun",
+      "faction": "mechanical",
+      "factionLabel": "机械",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -1248,6 +1374,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "catapult_tower": {
@@ -1255,9 +1387,10 @@
       "name": "炮楼",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "shu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 0.7,
@@ -1317,6 +1450,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "catapult": {
@@ -1324,7 +1463,8 @@
       "name": "自爆蜘蛛",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "wei",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -1386,6 +1526,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "cavalry": {
@@ -1393,9 +1539,10 @@
       "name": "龙骑士",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "wu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.9,
@@ -1455,6 +1602,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "wyrmling": {
@@ -1462,7 +1615,8 @@
       "name": "火龙",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "qun",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -1524,6 +1678,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "ballista": {
@@ -1531,16 +1691,17 @@
       "name": "弩车",
       "quality": "epic",
       "qualityLabel": "史诗",
-      "faction": "qun",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 0.5,
         "attackSpeedL1": 4.0,
         "attackIntervalL1": 4.4,
         "projectileStyle": "arc",
-        "weaponVfx": "弩炮重矢，高抛穿透",
+        "weaponVfx": "弩炮护墙，高抛拦截弹道",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -1593,6 +1754,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "necromancer": {
@@ -1600,9 +1767,10 @@
       "name": "骷髅魔导师",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "qun",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.1,
@@ -1662,6 +1830,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "spear_orc": {
@@ -1669,7 +1843,8 @@
       "name": "鱼叉捕猎者",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "wei",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -1731,6 +1906,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "wolf_rider": {
@@ -1738,9 +1919,10 @@
       "name": "利爪猎犬",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "wu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.9,
@@ -1800,6 +1982,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "skeleton_knight": {
@@ -1807,9 +1995,10 @@
       "name": "蝙蝠突袭者",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "shu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.4,
@@ -1869,6 +2058,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "archer": {
@@ -1876,7 +2071,8 @@
       "name": "见习女巫",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "wei",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "attack",
       "categoryLabel": "攻击",
       "bondEligible": true,
@@ -1938,6 +2134,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "infantry": {
@@ -1945,7 +2147,8 @@
       "name": "重步兵",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "wei",
+      "faction": "human",
+      "factionLabel": "人族",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -2007,6 +2210,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "arrow_tower": {
@@ -2014,9 +2223,10 @@
       "name": "高射塔",
       "quality": "rare",
       "qualityLabel": "稀有",
-      "faction": "wu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 0.8,
@@ -2076,6 +2286,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "bear_warrior": {
@@ -2083,7 +2299,8 @@
       "name": "重锤卫士",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "wei",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -2144,6 +2361,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "skeleton_warrior": {
@@ -2151,7 +2374,8 @@
       "name": "骷髅刀盾兵",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "wu",
+      "faction": "undead",
+      "factionLabel": "亡灵",
       "category": "defense",
       "categoryLabel": "防御",
       "bondEligible": true,
@@ -2212,6 +2436,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "goblin": {
@@ -2219,7 +2449,8 @@
       "name": "小野猪人",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "wu",
+      "faction": "beast",
+      "factionLabel": "兽族",
       "category": "speed",
       "categoryLabel": "加速",
       "bondEligible": true,
@@ -2280,6 +2511,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "blacksmith": {
@@ -2287,16 +2524,17 @@
       "name": "长枪教头",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "shu",
-      "category": "defense",
-      "categoryLabel": "防御",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 0.9,
         "attackSpeedL1": 5.0,
         "attackIntervalL1": 2.44,
         "projectileStyle": "flat",
-        "weaponVfx": "长枪平直突刺",
+        "weaponVfx": "锻造火花，平直补给友军",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -2348,6 +2586,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "militia": {
@@ -2355,9 +2599,10 @@
       "name": "短剑士",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "wu",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1.1,
@@ -2416,6 +2661,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "bone_archer": {
@@ -2423,16 +2674,17 @@
       "name": "火枪手",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "qun",
-      "category": "attack",
-      "categoryLabel": "攻击",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
       "combatStats": {
         "fireRateL1": 1,
         "attackSpeedL1": 5.0,
         "attackIntervalL1": 2.2,
         "projectileStyle": "flat",
-        "weaponVfx": "火枪铅弹平直射击",
+        "weaponVfx": "急救包，平直飞向受伤友军",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -2484,6 +2736,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     },
     "gold_mine": {
@@ -2491,7 +2749,8 @@
       "name": "采矿机",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": null,
+      "faction": "mechanical",
+      "factionLabel": "机械",
       "category": "supply",
       "categoryLabel": "补给",
       "bondEligible": false,
@@ -2550,6 +2809,12 @@
           "normal",
           "legendary"
         ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
       }
     }
   }

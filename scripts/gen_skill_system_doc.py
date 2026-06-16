@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SIM_APPENDIX_PATH = ROOT / "docs" / "_SKILL_SIM_APPENDIX.md"
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
+FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
 SLOT_CN = {"normal": "普通技", "rare": "稀有特技", "epic": "史诗特技", "legendary": "传奇特技"}
 CATEGORY_CN = {
     "attack": "攻击",
@@ -136,7 +137,8 @@ def gen_unified_skill_md(
         "- **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率",
         "",
         f"当前共 **{skill_count}** 个技能，覆盖 **{len(heroes)}** 位英雄。",
-        f"定位分布：" + " · ".join(f"{CATEGORY_CN[k]} {v}" for k, v in sorted(cat_count.items())),
+        f"**定位分布（战斗英雄 36）**：攻击 14 · 防御 10 · 补给 6 · 加速 6",
+        f"**种族分布**：人族 10 · 兽族 9 · 亡灵 9 · 机械 9",
         "",
         "---",
         "",
@@ -210,26 +212,39 @@ def gen_unified_skill_md(
         "",
         "---",
         "",
-        "## 六、特技升级消耗",
+        "## 六、特技解锁与升级",
+        "",
+        "### 6.1 解锁条件（英雄等级）",
+        "",
+        "| 特技品质 | 解锁英雄等级 | 说明 |",
+        "|:---|:---:|:---|",
+        "| **稀有特技** | **L5** | 稀有品质卡牌 |",
+        "| **史诗特技** | **L10** | 史诗品质卡牌 |",
+        "| **传奇特技** | **L20** | 传奇品质卡牌 |",
+        "| **普通技能** | L1 | 始终拥有，不可升级 |",
+        "",
+        "### 6.2 升级消耗（仅钻石）",
+        "",
+        "特技升级**不使用碎片**，仅消耗**钻石**；同档参考英雄升级金币折算后 × 溢价系数（稀有×2.0 / 史诗×2.5 / 传奇×3.0），高于普通英雄升级。",
         "",
         f"效果曲线：`effect(L) = base × (1 + {SPECIAL_SCALING_PER_LEVEL} × (L-1))`",
         "",
-        "| 升级 | 基础碎片 | 普通 | 稀有 | 史诗 | 传奇 |",
-        "|:---:|:---:|:---:|:---:|:---:|:---:|",
+        "| 特技档 | 升级 | 钻石消耗 | 参考英雄金币 |",
+        "|:---|:---:|:---:|:---:|",
     ]
 
-    for row in upgrade["fragmentCost"]:
-        bq = row["byQuality"]
+    unlock = upgrade.get("unlockByHeroLevel", {"rare": 5, "epic": 10, "legendary": 20})
+    for row in upgrade.get("diamondCost", []):
+        slot_cn = {"rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(row["slot"], row["slot"])
         lines.append(
-            f"| L{row['fromLevel']}→L{row['toLevel']} | {row['baseFragments']} "
-            f"| {bq['common']} | {bq['rare']} | {bq['epic']} | {bq['legendary']} |"
+            f"| {slot_cn} | L{row['fromLevel']}→L{row['toLevel']} | **{row['diamondCost']}** | {row.get('heroGoldReference', '—')} |"
         )
 
     lines += [
         "",
-        "金币消耗 ≈ 同级英雄升级金币 × **15%**（见 `heroLevel.json`）。",
+        f"公式：`{upgrade.get('diamondCostFormula', '')}`",
         "",
-        "### 特技等级曲线示例（传奇高空重击 atkPct，base=0.25）",
+        "### 6.3 特技等级曲线示例（传奇高空重击 atkPct，base=0.25）",
         "",
         "| 特技等级 | 效果系数 |",
         "|:---:|:---:|",
@@ -260,6 +275,7 @@ def gen_unified_skill_md(
         "| `fireRatePct` / `projectileSpeedPct` | 加速 | 攻速/弹速提升 |",
         "| `teamFireRatePct` | 加速 | 全队攻速 |",
         "| `revealAdjacent` | 加速 | 翻开相邻格 |",
+        "| `reviveChancePct` | 亡灵羁绊 | 复活/复燃概率加成 |",
         "| `deployGold` | 补给 | 翻开获得金币（采矿机） |",
         "",
         "---",
@@ -268,30 +284,57 @@ def gen_unified_skill_md(
         "",
         f"版本：bond.json v{bond['version']}",
         "",
-        "### 8.1 阵营羁绊（魏/蜀/吴/群雄）",
+        "卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊** + **1 条定位羁绊**。",
         "",
-        "| 同阵营数量 | 效果 |",
-        "|:---:|:---|",
-        "| 2 | 攻击 +5% |",
-        "| 4 | 攻击 +8%，生命 +5% |",
-        "| 6 | 攻击 +12%，生命 +8% |",
+        "### 8.1 种族阵营羁绊（人族 / 兽族 / 亡灵 / 机械）",
         "",
-        "### 8.2 技能定位羁绊（攻击/防御/补给/加速）",
+    ]
+
+    for b in bond["bonds"]:
+        if b["type"] != "faction":
+            continue
+        fname = b["name"]
+        lines.append(f"#### {fname}")
+        lines.append("")
+        hero_names = []
+        for hid in b.get("heroIds", []):
+            h = heroes.get(hid)
+            if h:
+                hero_names.append(h["name"])
+        lines.append(f"**成员（{len(hero_names)}）**：{' · '.join(hero_names)}")
+        lines.append("")
+        lines.append("| 数量 | 效果 |")
+        lines.append("|:---:|:---|")
+        for t in b["tiers"]:
+            eff = "；".join(f"{e['type']} +{int(e['value']*100)}%" if 'Pct' in e['type'] else f"{e['type']} {e['value']}" for e in t["effects"])
+            lines.append(f"| {t['count']} | {eff} |")
+        lines.append("")
+
+    lines += [
+        "### 8.2 技能定位羁绊（攻击 / 防御 / 补给 / 加速）",
         "",
-        "| 同定位数量 | 效果 |",
-        "|:---:|:---|",
-        "| 2 | 攻击 +5% |",
-        "| 4 | 攻击 +8%，发射频率 +5% |",
-        "| 6 | 攻击 +12%，应急回血 +5% |",
-        "",
-        "卡组 8 张，不含采矿机；最多各激活 1 条阵营羁绊 + 1 条定位羁绊。",
+        "| 定位 | 羁绊主题 | 2 张 | 4 张 | 6 张 |",
+        "|:---|:---|:---|:---|:---|",
+    ]
+
+    for b in bond["bonds"]:
+        if b["type"] != "skillCategory":
+            continue
+        t2 = b["tiers"][0]["effects"]
+        t4 = b["tiers"][1]["effects"]
+        t6 = b["tiers"][2]["effects"]
+        fmt = lambda es: "+".join(f"{e['type'].replace('Pct','')}{int(e['value']*100)}%" for e in es)
+        theme = b.get("effectTheme", b["name"])
+        lines.append(f"| **{b['name']}** | {theme} | {fmt(t2)} | {fmt(t4)} | {fmt(t6)} |")
+
+    lines += [
         "",
         "---",
         "",
         "## 九、英雄属性速查表",
         "",
-        "| 英雄 | 品质 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普通技 ID | 特技 ID |",
-        "|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|",
+        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普通技 ID | 特技 ID |",
+        "|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|",
     ]
 
     for hid in sorted(heroes.keys()):
@@ -300,7 +343,7 @@ def gen_unified_skill_md(
         sk = h["skills"]
         sp = sk.get("rare") or sk.get("epic") or sk.get("legendary") or "—"
         lines.append(
-            f"| {h['name']} | {h['qualityLabel']} | {h['categoryLabel']} "
+            f"| {h['name']} | {h['qualityLabel']} | {h.get('factionLabel', '—')} | {h['categoryLabel']} "
             f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
             f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
             f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
@@ -313,8 +356,8 @@ def gen_unified_skill_md(
         "",
         "## 十、技能一览速查表",
         "",
-        "| 英雄 | 品质 | 定位 | 弹道 | 普通技能 | 特技 | 高抛穿透铁壁 |",
-        "|:---|:---|:---|:---|:---|:---|:---:|",
+        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能 | 特技 | 解锁等级 | 高抛穿透 |",
+        "|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|",
     ]
 
     for hid in sorted(heroes.keys()):
@@ -324,11 +367,12 @@ def gen_unified_skill_md(
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         special = skill_by_id.get(special_id, {}) if special_id else {}
         arc = "✅" if special.get("attackTrajectory") == "arc" else "—"
+        unlock_lv = special.get("unlockLevel", "—") if special else "—"
         lines.append(
-            f"| {h['name']} | {QUALITY_CN[h['quality']]} | {h['categoryLabel']} "
+            f"| {h['name']} | {QUALITY_CN[h['quality']]} | {h.get('factionLabel', '—')} | {h['categoryLabel']} "
             f"| {h['combatStats'].get('projectileStyle', '—')} "
             f"| {(normal.get('name') or '—').split('·')[-1]} "
-            f"| {(special.get('name') or '—').split('·')[-1] if special else '—'} | {arc} |"
+            f"| {(special.get('name') or '—').split('·')[-1] if special else '—'} | L{unlock_lv} | {arc} |"
         )
 
     lines += [
@@ -343,7 +387,7 @@ def gen_unified_skill_md(
         h = heroes[hid]
         cs = h["combatStats"]
         sk = h["skills"]
-        lines.append(f"### {h['name']}（{QUALITY_CN[h['quality']]} · {h['categoryLabel']}）")
+        lines.append(f"### {h['name']}（{QUALITY_CN[h['quality']]} · {h.get('factionLabel', '—')} · {h['categoryLabel']}）")
         lines.append("")
         lines.append(
             "| 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 阵营 |"
@@ -352,7 +396,7 @@ def gen_unified_skill_md(
         lines.append(
             f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} | "
             f"{cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} | "
-            f"{cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} | {h.get('faction', '—')} |"
+            f"{cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} | {h.get('factionLabel', h.get('faction', '—'))} |"
         )
         lines.append("")
         lines.append("#### 普通技能")

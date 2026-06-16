@@ -1,28 +1,46 @@
 {
-  "version": "2.0.0",
-  "description": "羁绊：4阵营 + 4技能定位型；近战/远程羁绊已移除",
+  "version": "3.0.0",
+  "description": "羁绊：人族/兽族/亡灵/机械 + 攻击/防御/补给/加速定位型",
   "rules": {
     "deckSize": 8,
     "excludeHeroIds": [
       "gold_mine"
     ],
-    "tierActivation": "atCount4ActivateTier2And4",
+    "tierActivation": "atCount2And4And6",
     "maxActiveFactionBonds": 1,
-    "maxActiveCategoryBonds": 1
+    "maxActiveCategoryBonds": 1,
+    "factions": {
+      "human": "人族",
+      "beast": "兽族",
+      "undead": "亡灵",
+      "mechanical": "机械"
+    }
   },
   "bonds": [
     {
-      "bondId": "faction_wei",
+      "bondId": "faction_human",
       "type": "faction",
-      "name": "魏",
-      "faction": "wei",
+      "name": "人族",
+      "faction": "human",
+      "heroIds": [
+        "archer",
+        "archmage",
+        "blacksmith",
+        "blademaster",
+        "bone_archer",
+        "druid",
+        "infantry",
+        "militia",
+        "royal_knight",
+        "shaman"
+      ],
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
               "type": "atkPct",
-              "value": 0.05
+              "value": 0.06
             }
           ]
         },
@@ -31,11 +49,11 @@
           "effects": [
             {
               "type": "atkPct",
-              "value": 0.08
+              "value": 0.1
             },
             {
               "type": "unitHpPct",
-              "value": 0.05
+              "value": 0.04
             }
           ]
         },
@@ -44,10 +62,110 @@
           "effects": [
             {
               "type": "atkPct",
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_beast",
+      "type": "faction",
+      "name": "兽族",
+      "faction": "beast",
+      "heroIds": [
+        "bear_warrior",
+        "cavalry",
+        "dragon_knight",
+        "dread_knight",
+        "goblin",
+        "spear_orc",
+        "warlord",
+        "wolf_rider",
+        "wyrmling"
+      ],
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.06
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.1
+            },
+            {
+              "type": "atkPct",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_undead",
+      "type": "faction",
+      "name": "亡灵",
+      "faction": "undead",
+      "heroIds": [
+        "catapult",
+        "crusher",
+        "demon_lord",
+        "frost_dragon",
+        "lich_queen",
+        "necromancer",
+        "skeleton_giant",
+        "skeleton_knight",
+        "skeleton_warrior"
+      ],
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "healPct",
+              "value": 0.08
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "healPct",
               "value": 0.12
             },
             {
-              "type": "unitHpPct",
+              "type": "damageReductionPct",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "reviveChancePct",
+              "value": 0.05
+            },
+            {
+              "type": "healPct",
               "value": 0.08
             }
           ]
@@ -55,17 +173,28 @@
       ]
     },
     {
-      "bondId": "faction_shu",
+      "bondId": "faction_mechanical",
       "type": "faction",
-      "name": "蜀",
-      "faction": "shu",
+      "name": "机械",
+      "faction": "mechanical",
+      "heroIds": [
+        "arrow_tower",
+        "ballista",
+        "catapult_tower",
+        "gargoyle",
+        "gold_mine",
+        "helicopter",
+        "panda_monk",
+        "ranger",
+        "sniper"
+      ],
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.05
+              "type": "projectileSpeedPct",
+              "value": 0.08
             }
           ]
         },
@@ -73,12 +202,12 @@
           "count": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.08
+              "type": "damageReductionPct",
+              "value": 0.06
             },
             {
-              "type": "unitHpPct",
-              "value": 0.05
+              "type": "projectileSpeedPct",
+              "value": 0.04
             }
           ]
         },
@@ -86,98 +215,12 @@
           "count": 6,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.12
+              "type": "damageReductionPct",
+              "value": 0.1
             },
             {
-              "type": "unitHpPct",
-              "value": 0.08
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "faction_wu",
-      "type": "faction",
-      "name": "吴",
-      "faction": "wu",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "faction_qun",
-      "type": "faction",
-      "name": "群雄",
-      "faction": "qun",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
+              "type": "projectileSpeedPct",
+              "value": 0.1
             }
           ]
         }
@@ -188,6 +231,7 @@
       "type": "skillCategory",
       "name": "攻击型",
       "category": "attack",
+      "effectTheme": "攻击力",
       "tiers": [
         {
           "count": 2,
@@ -204,10 +248,6 @@
             {
               "type": "atkPct",
               "value": 0.08
-            },
-            {
-              "type": "fireRatePct",
-              "value": 0.05
             }
           ]
         },
@@ -217,10 +257,6 @@
             {
               "type": "atkPct",
               "value": 0.12
-            },
-            {
-              "type": "healPct",
-              "value": 0.05
             }
           ]
         }
@@ -231,13 +267,14 @@
       "type": "skillCategory",
       "name": "防御型",
       "category": "defense",
+      "effectTheme": "减伤防御",
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.05
+              "type": "damageReductionPct",
+              "value": 0.04
             }
           ]
         },
@@ -245,12 +282,8 @@
           "count": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "fireRatePct",
-              "value": 0.05
+              "type": "damageReductionPct",
+              "value": 0.07
             }
           ]
         },
@@ -258,12 +291,8 @@
           "count": 6,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "healPct",
-              "value": 0.05
+              "type": "damageReductionPct",
+              "value": 0.1
             }
           ]
         }
@@ -274,13 +303,14 @@
       "type": "skillCategory",
       "name": "补给型",
       "category": "supply",
+      "effectTheme": "回血补给",
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.05
+              "type": "healPct",
+              "value": 0.1
             }
           ]
         },
@@ -288,12 +318,8 @@
           "count": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "fireRatePct",
-              "value": 0.05
+              "type": "healPct",
+              "value": 0.15
             }
           ]
         },
@@ -301,12 +327,8 @@
           "count": 6,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
               "type": "healPct",
-              "value": 0.05
+              "value": 0.2
             }
           ]
         }
@@ -317,13 +339,14 @@
       "type": "skillCategory",
       "name": "加速型",
       "category": "speed",
+      "effectTheme": "攻速/弹速",
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.05
+              "type": "fireRatePct",
+              "value": 0.08
             }
           ]
         },
@@ -331,12 +354,12 @@
           "count": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.08
+              "type": "fireRatePct",
+              "value": 0.12
             },
             {
-              "type": "fireRatePct",
-              "value": 0.05
+              "type": "projectileSpeedPct",
+              "value": 0.06
             }
           ]
         },
@@ -344,12 +367,8 @@
           "count": 6,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "healPct",
-              "value": 0.05
+              "type": "fireRatePct",
+              "value": 0.16
             }
           ]
         }

@@ -1,6 +1,6 @@
 {
-  "version": "3.0.0",
-  "description": "技能 v3：普通技+品质特技；攻击/防御/补给/加速",
+  "version": "3.1.0",
+  "description": "技能 v3.1：种族阵营羁绊 + 等级解锁特技 + 钻石升级",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -19,53 +19,112 @@
     "normalSkillUpgradeable": false,
     "scalingPerLevel": 0.08,
     "formula": "effect(L) = base * (1 + 0.08*(L-1))",
-    "fragmentCost": [
+    "currency": "diamond",
+    "fragmentCost": null,
+    "unlockByHeroLevel": {
+      "rare": 5,
+      "epic": 10,
+      "legendary": 20
+    },
+    "diamondCostFormula": "diamond = round(heroGoldNeed[unlockBase + skillLv - 2] × 0.045 × premium)；premium: rare×2.0 epic×2.5 legendary×3.0；仅钻石，无碎片",
+    "diamondCost": [
       {
+        "slot": "rare",
         "fromLevel": 1,
         "toLevel": 2,
-        "baseFragments": 5,
-        "byQuality": {
-          "common": 5,
-          "rare": 8,
-          "epic": 12,
-          "legendary": 20
-        }
+        "diamondCost": 108,
+        "heroGoldReference": 1200,
+        "heroLevelContext": 5
       },
       {
+        "slot": "rare",
         "fromLevel": 2,
         "toLevel": 3,
-        "baseFragments": 8,
-        "byQuality": {
-          "common": 8,
-          "rare": 12,
-          "epic": 20,
-          "legendary": 32
-        }
+        "diamondCost": 162,
+        "heroGoldReference": 1800,
+        "heroLevelContext": 6
       },
       {
+        "slot": "rare",
         "fromLevel": 3,
         "toLevel": 4,
-        "baseFragments": 12,
-        "byQuality": {
-          "common": 12,
-          "rare": 18,
-          "epic": 30,
-          "legendary": 48
-        }
+        "diamondCost": 234,
+        "heroGoldReference": 2600,
+        "heroLevelContext": 7
       },
       {
+        "slot": "rare",
         "fromLevel": 4,
         "toLevel": 5,
-        "baseFragments": 18,
-        "byQuality": {
-          "common": 18,
-          "rare": 27,
-          "epic": 45,
-          "legendary": 72
-        }
+        "diamondCost": 315,
+        "heroGoldReference": 3500,
+        "heroLevelContext": 8
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "diamondCost": 1552,
+        "heroGoldReference": 13800,
+        "heroLevelContext": 10
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "diamondCost": 1912,
+        "heroGoldReference": 17000,
+        "heroLevelContext": 11
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "diamondCost": 2306,
+        "heroGoldReference": 20500,
+        "heroLevelContext": 12
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "diamondCost": 2734,
+        "heroGoldReference": 24300,
+        "heroLevelContext": 13
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "diamondCost": 20385,
+        "heroGoldReference": 151000,
+        "heroLevelContext": 20
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "diamondCost": 22612,
+        "heroGoldReference": 167500,
+        "heroLevelContext": 21
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "diamondCost": 24908,
+        "heroGoldReference": 184500,
+        "heroLevelContext": 22
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "diamondCost": 27270,
+        "heroGoldReference": 202000,
+        "heroLevelContext": 23
       }
-    ],
-    "goldCostFormula": "round(heroGoldNeed[level-1] * 0.15)  // 特技升级金币≈同级英雄升级的15%"
+    ]
   },
   "skillCount": 67,
   "skills": [
@@ -108,7 +167,7 @@
       "visualDescription": "龙息火球，高抛弧线落点单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -261,7 +320,7 @@
       "visualDescription": "冰锥术，抛物线冻结打击；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -414,7 +473,7 @@
       "visualDescription": "雷球高抛，落点范围电弧；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -533,25 +592,25 @@
       "heroId": "ranger",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "荆棘女王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
-      "projectileStyle": "arc",
-      "attackMode": "single",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "荆棘女王·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.062
+          "type": "healPct",
+          "value": 0.25
         }
       ],
       "tags": [
         "legendary",
-        "attack",
+        "supply",
         "unit"
       ]
     },
@@ -560,28 +619,24 @@
       "heroId": "ranger",
       "slot": "legendary",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "荆棘女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
-      "visualDescription": "荆棘箭雨，弧线覆盖单格；**强抛物线**高空砸击，落地重击特效",
-      "projectileStyle": "arc",
-      "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "荆棘女王·满血圣疗",
+      "description": "将目标友军恢复至满血，并净化一次减益",
+      "visualDescription": "金色光柱从天而降，满血恢复",
+      "projectileStyle": "flat",
+      "attackMode": "heal",
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.547
+          "type": "healFull",
+          "value": 1
         },
         {
-          "type": "executeThreshold",
-          "value": 0.3
-        },
-        {
-          "type": "projectileArc",
+          "type": "cleanse",
           "value": 1
         }
       ],
@@ -590,15 +645,11 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.547
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "executeThreshold",
-              "value": 0.3
-            },
-            {
-              "type": "projectileArc",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -607,15 +658,11 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.591
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "executeThreshold",
-              "value": 0.324
-            },
-            {
-              "type": "projectileArc",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -624,15 +671,11 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.635
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "executeThreshold",
-              "value": 0.348
-            },
-            {
-              "type": "projectileArc",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -641,15 +684,11 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.678
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "executeThreshold",
-              "value": 0.372
-            },
-            {
-              "type": "projectileArc",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -658,15 +697,11 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.722
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "executeThreshold",
-              "value": 0.396
-            },
-            {
-              "type": "projectileArc",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -675,11 +710,9 @@
       "tags": [
         "legendary",
         "legendary",
-        "attack",
+        "supply",
         "unit"
-      ],
-      "attackTrajectory": "arc",
-      "bypassesNormalDefense": true
+      ]
     },
     {
       "skillId": "skill_royal_knight_normal",
@@ -723,7 +756,7 @@
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -840,11 +873,11 @@
       "heroId": "druid",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "北境守护者·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "自然屏障，平直藤蔓盾；护体光效贴身，**平直**格挡反馈",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "北境守护者·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -852,16 +885,13 @@
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.075,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "healPct",
+          "value": 0.25
         }
       ],
       "tags": [
         "legendary",
-        "defense",
+        "supply",
         "unit"
       ]
     },
@@ -870,28 +900,24 @@
       "heroId": "druid",
       "slot": "legendary",
       "skillKind": "special",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "北境守护者·全局圣域",
-      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次",
-      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "北境守护者·满血圣疗",
+      "description": "将目标友军恢复至满血，并净化一次减益",
+      "visualDescription": "金色光柱从天而降，满血恢复",
       "projectileStyle": "flat",
-      "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "attackMode": "heal",
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "globalDamageReductionPct",
-          "value": 0.328,
-          "blocksTrajectory": [
-            "flat",
-            "arc"
-          ]
+          "type": "healFull",
+          "value": 1
         },
         {
-          "type": "blockRush",
+          "type": "cleanse",
           "value": 1
         }
       ],
@@ -900,15 +926,11 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "globalDamageReductionPct",
-              "value": 0.328,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "blockRush",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -917,15 +939,11 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "globalDamageReductionPct",
-              "value": 0.354,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "blockRush",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -934,15 +952,11 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "globalDamageReductionPct",
-              "value": 0.38,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "blockRush",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -951,15 +965,11 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "globalDamageReductionPct",
-              "value": 0.407,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "blockRush",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -968,15 +978,11 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "globalDamageReductionPct",
-              "value": 0.433,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "healFull",
+              "value": 1
             },
             {
-              "type": "blockRush",
+              "type": "cleanse",
               "value": 1
             }
           ]
@@ -985,7 +991,7 @@
       "tags": [
         "legendary",
         "legendary",
-        "defense",
+        "supply",
         "unit"
       ]
     },
@@ -1028,7 +1034,7 @@
       "visualDescription": "幽绿弧线落下，阵亡格复燃翻出亡灵牌",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -1155,7 +1161,7 @@
       "visualDescription": "影刃直线突刺；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -1308,7 +1314,7 @@
       "visualDescription": "巨锤冰陨，高空重砸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -1461,7 +1467,7 @@
       "visualDescription": "破城锤，高抛砸击单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -1580,25 +1586,25 @@
       "heroId": "helicopter",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "机械飞鹰·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "机械飞鹰·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "机炮连射，平直子弹；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.062
+          "type": "fireRatePct",
+          "value": 0.1
         }
       ],
       "tags": [
         "legendary",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -1607,28 +1613,24 @@
       "heroId": "helicopter",
       "slot": "legendary",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "机械飞鹰·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
-      "visualDescription": "机炮连射，平直子弹；**强抛物线**高空砸击，落地重击特效",
-      "projectileStyle": "arc",
-      "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "机械飞鹰·狂热号令",
+      "description": "全队攻速提升，并翻开相邻1格",
+      "visualDescription": "战鼓音波扩散，相邻格翻开预览",
+      "projectileStyle": "flat",
+      "attackMode": "buff",
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.547
+          "type": "teamFireRatePct",
+          "value": 0.394
         },
         {
-          "type": "executeThreshold",
-          "value": 0.3
-        },
-        {
-          "type": "projectileArc",
+          "type": "revealAdjacent",
           "value": 1
         }
       ],
@@ -1637,15 +1639,11 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.547
+              "type": "teamFireRatePct",
+              "value": 0.394
             },
             {
-              "type": "executeThreshold",
-              "value": 0.3
-            },
-            {
-              "type": "projectileArc",
+              "type": "revealAdjacent",
               "value": 1
             }
           ]
@@ -1654,15 +1652,11 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.591
+              "type": "teamFireRatePct",
+              "value": 0.426
             },
             {
-              "type": "executeThreshold",
-              "value": 0.324
-            },
-            {
-              "type": "projectileArc",
+              "type": "revealAdjacent",
               "value": 1
             }
           ]
@@ -1671,15 +1665,11 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.635
+              "type": "teamFireRatePct",
+              "value": 0.457
             },
             {
-              "type": "executeThreshold",
-              "value": 0.348
-            },
-            {
-              "type": "projectileArc",
+              "type": "revealAdjacent",
               "value": 1
             }
           ]
@@ -1688,15 +1678,11 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.678
+              "type": "teamFireRatePct",
+              "value": 0.489
             },
             {
-              "type": "executeThreshold",
-              "value": 0.372
-            },
-            {
-              "type": "projectileArc",
+              "type": "revealAdjacent",
               "value": 1
             }
           ]
@@ -1705,15 +1691,11 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "atkPct",
-              "value": 0.722
+              "type": "teamFireRatePct",
+              "value": 0.52
             },
             {
-              "type": "executeThreshold",
-              "value": 0.396
-            },
-            {
-              "type": "projectileArc",
+              "type": "revealAdjacent",
               "value": 1
             }
           ]
@@ -1722,11 +1704,9 @@
       "tags": [
         "legendary",
         "legendary",
-        "attack",
+        "speed",
         "unit"
-      ],
-      "attackTrajectory": "arc",
-      "bypassesNormalDefense": true
+      ]
     },
     {
       "skillId": "skill_dread_knight_normal",
@@ -1767,7 +1747,7 @@
       "visualDescription": "巨斧直线劈砍；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -1923,7 +1903,7 @@
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2074,7 +2054,7 @@
       "visualDescription": "炸药包高抛，落地爆炸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
-      "unlockLevel": 1,
+      "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2227,7 +2207,7 @@
       "visualDescription": "绿色光环扩散，范围内友军回血",
       "projectileStyle": "flat",
       "attackMode": "heal",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2333,7 +2313,7 @@
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2487,7 +2467,7 @@
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2638,7 +2618,7 @@
       "visualDescription": "平直穿透，依次命中2格",
       "projectileStyle": "flat",
       "attackMode": "chain",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2731,25 +2711,28 @@
       "heroId": "catapult_tower",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "炮楼·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "炮楼·铁壁",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
+      "visualDescription": "石弹高抛，经典抛物线；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "arc",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.056
+          "type": "damageReductionPct",
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
         "epic",
-        "attack",
+        "defense",
         "building"
       ]
     },
@@ -2758,25 +2741,29 @@
       "heroId": "catapult_tower",
       "slot": "epic",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "炮楼·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
-      "visualDescription": "高抛爆炸链，依次命中2格",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "炮楼·三格盾带",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）",
+      "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "arc",
-      "attackMode": "chain",
-      "unlockLevel": 1,
+      "attackMode": "area_defense",
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "chainTargets",
-          "value": 2
+          "type": "wallTiles",
+          "value": 3
         },
         {
-          "type": "atkPct",
-          "value": 0.181
+          "type": "allyDamageReductionPct",
+          "value": 0.181,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         }
       ],
       "levelCurve": [
@@ -2784,12 +2771,16 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.181
+              "type": "allyDamageReductionPct",
+              "value": 0.181,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2797,12 +2788,16 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.195
+              "type": "allyDamageReductionPct",
+              "value": 0.195,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2810,12 +2805,16 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.21
+              "type": "allyDamageReductionPct",
+              "value": 0.21,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2823,12 +2822,16 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.224
+              "type": "allyDamageReductionPct",
+              "value": 0.224,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2836,12 +2839,16 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.239
+              "type": "allyDamageReductionPct",
+              "value": 0.239,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         }
@@ -2849,7 +2856,7 @@
       "tags": [
         "epic",
         "epic",
-        "attack",
+        "defense",
         "building"
       ]
     },
@@ -2892,7 +2899,7 @@
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -2985,25 +2992,25 @@
       "heroId": "cavalry",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "龙骑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "龙骑士·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "骑枪冲锋，平直突刺；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.056
+          "type": "fireRatePct",
+          "value": 0.09
         }
       ],
       "tags": [
         "epic",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3012,25 +3019,25 @@
       "heroId": "cavalry",
       "slot": "epic",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "龙骑士·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
-      "visualDescription": "平直穿透，依次命中2格",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "龙骑士·弹速增压",
+      "description": "提升弹道飞行速度，并小幅提升攻速",
+      "visualDescription": "弹道拖尾加速，平直/高抛均更快到达",
       "projectileStyle": "flat",
-      "attackMode": "chain",
-      "unlockLevel": 1,
+      "attackMode": "buff",
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "chainTargets",
-          "value": 2
+          "type": "projectileSpeedPct",
+          "value": 0.302
         },
         {
-          "type": "atkPct",
-          "value": 0.181
+          "type": "fireRatePct",
+          "value": 0.151
         }
       ],
       "levelCurve": [
@@ -3038,12 +3045,12 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "projectileSpeedPct",
+              "value": 0.302
             },
             {
-              "type": "atkPct",
-              "value": 0.181
+              "type": "fireRatePct",
+              "value": 0.151
             }
           ]
         },
@@ -3051,12 +3058,12 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "projectileSpeedPct",
+              "value": 0.326
             },
             {
-              "type": "atkPct",
-              "value": 0.195
+              "type": "fireRatePct",
+              "value": 0.163
             }
           ]
         },
@@ -3064,12 +3071,12 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "projectileSpeedPct",
+              "value": 0.35
             },
             {
-              "type": "atkPct",
-              "value": 0.21
+              "type": "fireRatePct",
+              "value": 0.175
             }
           ]
         },
@@ -3077,12 +3084,12 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "projectileSpeedPct",
+              "value": 0.374
             },
             {
-              "type": "atkPct",
-              "value": 0.224
+              "type": "fireRatePct",
+              "value": 0.187
             }
           ]
         },
@@ -3090,12 +3097,12 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "projectileSpeedPct",
+              "value": 0.399
             },
             {
-              "type": "atkPct",
-              "value": 0.239
+              "type": "fireRatePct",
+              "value": 0.199
             }
           ]
         }
@@ -3103,7 +3110,7 @@
       "tags": [
         "epic",
         "epic",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3146,7 +3153,7 @@
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
-      "unlockLevel": 1,
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -3239,25 +3246,28 @@
       "heroId": "ballista",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "弩车·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "弩车·铁壁",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
+      "visualDescription": "弩炮护墙，高抛拦截弹道；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "arc",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.056
+          "type": "damageReductionPct",
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
         "epic",
-        "attack",
+        "defense",
         "unit"
       ]
     },
@@ -3266,25 +3276,29 @@
       "heroId": "ballista",
       "slot": "epic",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "弩车·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
-      "visualDescription": "高抛爆炸链，依次命中2格",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "弩车·三格盾带",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）",
+      "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "arc",
-      "attackMode": "chain",
-      "unlockLevel": 1,
+      "attackMode": "area_defense",
+      "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "chainTargets",
-          "value": 2
+          "type": "wallTiles",
+          "value": 3
         },
         {
-          "type": "atkPct",
-          "value": 0.181
+          "type": "allyDamageReductionPct",
+          "value": 0.181,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         }
       ],
       "levelCurve": [
@@ -3292,12 +3306,16 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.181
+              "type": "allyDamageReductionPct",
+              "value": 0.181,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -3305,12 +3323,16 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.195
+              "type": "allyDamageReductionPct",
+              "value": 0.195,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -3318,12 +3340,16 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.21
+              "type": "allyDamageReductionPct",
+              "value": 0.21,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -3331,12 +3357,16 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.224
+              "type": "allyDamageReductionPct",
+              "value": 0.224,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -3344,12 +3374,16 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "chainTargets",
-              "value": 2
+              "type": "wallTiles",
+              "value": 3
             },
             {
-              "type": "atkPct",
-              "value": 0.239
+              "type": "allyDamageReductionPct",
+              "value": 0.239,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         }
@@ -3357,7 +3391,7 @@
       "tags": [
         "epic",
         "epic",
-        "attack",
+        "defense",
         "unit"
       ]
     },
@@ -3366,25 +3400,25 @@
       "heroId": "necromancer",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "骷髅魔导师·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "骷髅魔导师·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "arc",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.05
+          "type": "healPct",
+          "value": 0.2
         }
       ],
       "tags": [
         "rare",
-        "attack",
+        "supply",
         "unit"
       ]
     },
@@ -3393,25 +3427,21 @@
       "heroId": "necromancer",
       "slot": "rare",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "骷髅魔导师·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
-      "visualDescription": "亡灵弹，弧线触发复活格；主目标+邻格溅射，高抛双道",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "骷髅魔导师·战地包扎",
+      "description": "为血量最低友军恢复30%生命",
+      "visualDescription": "治疗光带平直飞向友军",
       "projectileStyle": "arc",
-      "attackMode": "multi",
-      "unlockLevel": 1,
+      "attackMode": "heal",
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "extraTargets",
-          "value": 1
-        },
-        {
-          "type": "splashPct",
-          "value": 0.15
+          "type": "healAllyPct",
+          "value": 0.3
         }
       ],
       "levelCurve": [
@@ -3419,12 +3449,8 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
-              "value": 0.15
+              "type": "healAllyPct",
+              "value": 0.3
             }
           ]
         },
@@ -3432,12 +3458,8 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
-              "value": 0.162
+              "type": "healAllyPct",
+              "value": 0.324
             }
           ]
         },
@@ -3445,12 +3467,8 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
-              "value": 0.174
+              "type": "healAllyPct",
+              "value": 0.348
             }
           ]
         },
@@ -3458,12 +3476,8 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
-              "value": 0.186
+              "type": "healAllyPct",
+              "value": 0.372
             }
           ]
         },
@@ -3471,12 +3485,8 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
-              "value": 0.198
+              "type": "healAllyPct",
+              "value": 0.396
             }
           ]
         }
@@ -3484,7 +3494,7 @@
       "tags": [
         "rare",
         "rare",
-        "attack",
+        "supply",
         "unit"
       ]
     },
@@ -3527,7 +3537,7 @@
       "visualDescription": "鱼叉直线投掷；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
-      "unlockLevel": 1,
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -3620,25 +3630,25 @@
       "heroId": "wolf_rider",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "利爪猎犬·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "利爪猎犬·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "利爪直线扑击；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.05
+          "type": "fireRatePct",
+          "value": 0.08
         }
       ],
       "tags": [
         "rare",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3647,24 +3657,20 @@
       "heroId": "wolf_rider",
       "slot": "rare",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "利爪猎犬·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
-      "visualDescription": "利爪直线扑击；主目标+邻格溅射，平直双道",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "利爪猎犬·速射补给",
+      "description": "提升自身发射速度（缩短攻击间隔）15%",
+      "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
-      "attackMode": "multi",
-      "unlockLevel": 1,
+      "attackMode": "buff",
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "extraTargets",
-          "value": 1
-        },
-        {
-          "type": "splashPct",
+          "type": "fireRatePct",
           "value": 0.15
         }
       ],
@@ -3673,11 +3679,7 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.15
             }
           ]
@@ -3686,11 +3688,7 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.162
             }
           ]
@@ -3699,11 +3697,7 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.174
             }
           ]
@@ -3712,11 +3706,7 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.186
             }
           ]
@@ -3725,11 +3715,7 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.198
             }
           ]
@@ -3738,7 +3724,7 @@
       "tags": [
         "rare",
         "rare",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3747,25 +3733,25 @@
       "heroId": "skeleton_knight",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "蝙蝠突袭者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "蝙蝠突袭者·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "骨刃直线斩；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.05
+          "type": "fireRatePct",
+          "value": 0.08
         }
       ],
       "tags": [
         "rare",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3774,24 +3760,20 @@
       "heroId": "skeleton_knight",
       "slot": "rare",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "蝙蝠突袭者·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
-      "visualDescription": "骨刃直线斩；主目标+邻格溅射，平直双道",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "蝙蝠突袭者·速射补给",
+      "description": "提升自身发射速度（缩短攻击间隔）15%",
+      "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
-      "attackMode": "multi",
-      "unlockLevel": 1,
+      "attackMode": "buff",
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "extraTargets",
-          "value": 1
-        },
-        {
-          "type": "splashPct",
+          "type": "fireRatePct",
           "value": 0.15
         }
       ],
@@ -3800,11 +3782,7 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.15
             }
           ]
@@ -3813,11 +3791,7 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.162
             }
           ]
@@ -3826,11 +3800,7 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.174
             }
           ]
@@ -3839,11 +3809,7 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.186
             }
           ]
@@ -3852,11 +3818,7 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "extraTargets",
-              "value": 1
-            },
-            {
-              "type": "splashPct",
+              "type": "fireRatePct",
               "value": 0.198
             }
           ]
@@ -3865,7 +3827,7 @@
       "tags": [
         "rare",
         "rare",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -3908,7 +3870,7 @@
       "visualDescription": "魔法箭平直射击；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
-      "unlockLevel": 1,
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -4038,7 +4000,7 @@
       "visualDescription": "石墙从地面平直升起，挡单格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
-      "unlockLevel": 1,
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
@@ -4149,25 +4111,28 @@
       "heroId": "arrow_tower",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "高射塔·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "高射塔·铁壁",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
+      "visualDescription": "高射炮弹，高空抛物线；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "arc",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.05
+          "type": "damageReductionPct",
+          "value": 0.06,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
         "rare",
-        "attack",
+        "defense",
         "building"
       ]
     },
@@ -4176,25 +4141,28 @@
       "heroId": "arrow_tower",
       "slot": "rare",
       "skillKind": "special",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "高射塔·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
-      "visualDescription": "高射炮弹，高空抛物线；主目标+邻格溅射，高抛双道",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "高射塔·单格护墙",
+      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤",
+      "visualDescription": "石墙从地面平直升起，挡单格",
       "projectileStyle": "arc",
-      "attackMode": "multi",
-      "unlockLevel": 1,
+      "attackMode": "area_defense",
+      "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "extraTargets",
+          "type": "wallTiles",
           "value": 1
         },
         {
-          "type": "splashPct",
-          "value": 0.15
+          "type": "damageReductionPct",
+          "value": 0.1,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "levelCurve": [
@@ -4202,12 +4170,15 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "extraTargets",
+              "type": "wallTiles",
               "value": 1
             },
             {
-              "type": "splashPct",
-              "value": 0.15
+              "type": "damageReductionPct",
+              "value": 0.1,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -4215,12 +4186,15 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "extraTargets",
+              "type": "wallTiles",
               "value": 1
             },
             {
-              "type": "splashPct",
-              "value": 0.162
+              "type": "damageReductionPct",
+              "value": 0.108,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -4228,12 +4202,15 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "extraTargets",
+              "type": "wallTiles",
               "value": 1
             },
             {
-              "type": "splashPct",
-              "value": 0.174
+              "type": "damageReductionPct",
+              "value": 0.116,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -4241,12 +4218,15 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "extraTargets",
+              "type": "wallTiles",
               "value": 1
             },
             {
-              "type": "splashPct",
-              "value": 0.186
+              "type": "damageReductionPct",
+              "value": 0.124,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -4254,12 +4234,15 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "extraTargets",
+              "type": "wallTiles",
               "value": 1
             },
             {
-              "type": "splashPct",
-              "value": 0.198
+              "type": "damageReductionPct",
+              "value": 0.132,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         }
@@ -4267,7 +4250,7 @@
       "tags": [
         "rare",
         "rare",
-        "attack",
+        "defense",
         "building"
       ]
     },
@@ -4363,11 +4346,11 @@
       "heroId": "blacksmith",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "长枪教头·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "长枪平直突刺；护体光效贴身，**平直**格挡反馈",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "长枪教头·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
       "attackMode": "self",
       "unlockLevel": 1,
@@ -4375,16 +4358,13 @@
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.051,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "healPct",
+          "value": 0.17
         }
       ],
       "tags": [
         "common",
-        "defense",
+        "supply",
         "unit"
       ]
     },
@@ -4393,25 +4373,25 @@
       "heroId": "militia",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "短剑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "短剑士·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "短剑平直快攻；出手前摇缩短，弹道仍**平直**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.043
+          "type": "fireRatePct",
+          "value": 0.068
         }
       ],
       "tags": [
         "common",
-        "attack",
+        "speed",
         "unit"
       ]
     },
@@ -4420,25 +4400,25 @@
       "heroId": "bone_archer",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "attack",
-      "categoryLabel": "攻击",
-      "name": "火枪手·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "火枪手·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
       "projectileStyle": "flat",
-      "attackMode": "single",
+      "attackMode": "self",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.043
+          "type": "healPct",
+          "value": 0.17
         }
       ],
       "tags": [
         "common",
-        "attack",
+        "supply",
         "unit"
       ]
     },

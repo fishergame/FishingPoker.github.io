@@ -16,8 +16,12 @@ SPECIAL_SKILL_MAX = 5
 SPECIAL_SCALING_PER_LEVEL = 0.08
 SKILL_UPGRADE_FRAGMENTS = [5, 8, 12, 18]  # 特技 L1→2 … L4→5
 
-FACTIONS = ["wei", "shu", "wu", "qun"]
-FACTION_CN = {"wei": "魏", "shu": "蜀", "wu": "吴", "qun": "群雄"}
+SPECIAL_UNLOCK_HERO_LEVEL = {"rare": 5, "epic": 10, "legendary": 20}
+SKILL_DIAMOND_PREMIUM = {"rare": 2.0, "epic": 2.5, "legendary": 3.0}
+GOLD_TO_DIAMOND_RATE = 0.045
+
+FACTIONS = ["human", "beast", "undead", "mechanical"]
+FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
 
 CATEGORY_CN = {
     "attack": "攻击",
@@ -36,19 +40,40 @@ QUALITY_SPECIAL_SLOT = {
 QUALITY_POWER = {"common": 0.85, "rare": 1.0, "epic": 1.12, "legendary": 1.25}
 SKILL_FRAG_Q_MULT = {"common": 1.0, "rare": 1.5, "epic": 2.5, "legendary": 4.0}
 
-# 英雄 → 技能倾向、弹道表现（取消远近战战斗逻辑，仅表现）
+# 英雄 → 种族、技能定位、弹道表现
+HERO_FACTION: dict[str, str] = {
+    # 人族
+    "royal_knight": "human", "druid": "human", "infantry": "human", "blacksmith": "human",
+    "militia": "human", "bone_archer": "human", "archer": "human", "archmage": "human",
+    "blademaster": "human",
+    # 兽族
+    "warlord": "beast", "dread_knight": "beast", "wolf_rider": "beast", "spear_orc": "beast",
+    "goblin": "beast", "wyrmling": "beast", "dragon_knight": "beast", "bear_warrior": "beast",
+    "cavalry": "beast",
+    # 亡灵
+    "lich_queen": "undead", "necromancer": "undead", "skeleton_giant": "undead",
+    "skeleton_warrior": "undead", "skeleton_knight": "undead", "frost_dragon": "undead",
+    "crusher": "undead", "catapult": "undead", "demon_lord": "undead",
+    # 机械
+    "helicopter": "mechanical", "catapult_tower": "mechanical", "arrow_tower": "mechanical",
+    "ballista": "mechanical", "gold_mine": "mechanical", "panda_monk": "mechanical",
+    "sniper": "mechanical", "gargoyle": "mechanical", "ranger": "mechanical",
+    "shaman": "human",
+}
+
+# 英雄 → 技能倾向、弹道表现（定位：攻击15 / 防御9 / 补给6 / 加速6）
 HERO_PROFILE: dict[str, dict] = {
     "dragon_knight": {"category": "attack", "projectile": "arc", "weapon": "龙息火球，高抛弧线落点单格"},
     "demon_lord": {"category": "attack", "projectile": "arc", "weapon": "冰锥术，抛物线冻结打击"},
     "archmage": {"category": "attack", "projectile": "arc", "weapon": "雷球高抛，落点范围电弧"},
-    "ranger": {"category": "attack", "projectile": "arc", "weapon": "荆棘箭雨，弧线覆盖单格"},
+    "ranger": {"category": "supply", "projectile": "flat", "weapon": "荆棘花粉，平直洒向友军"},
     "royal_knight": {"category": "defense", "projectile": "flat", "weapon": "圣盾光波，平直盾击"},
-    "druid": {"category": "defense", "projectile": "flat", "weapon": "自然屏障，平直藤蔓盾"},
+    "druid": {"category": "supply", "projectile": "flat", "weapon": "自然花粉，平直治疗波"},
     "lich_queen": {"category": "attack", "projectile": "arc", "weapon": "幽魂炮，高抛灵魂弹"},
     "blademaster": {"category": "attack", "projectile": "flat", "weapon": "影刃直线突刺"},
     "frost_dragon": {"category": "attack", "projectile": "arc", "weapon": "巨锤冰陨，高空重砸"},
     "crusher": {"category": "attack", "projectile": "arc", "weapon": "破城锤，高抛砸击单格"},
-    "helicopter": {"category": "attack", "projectile": "flat", "weapon": "机炮连射，平直子弹"},
+    "helicopter": {"category": "speed", "projectile": "flat", "weapon": "机炮连射，平直子弹"},
     "dread_knight": {"category": "attack", "projectile": "flat", "weapon": "巨斧直线劈砍"},
     "warlord": {"category": "defense", "projectile": "flat", "weapon": "双头咆哮盾墙，平直冲击波"},
     "panda_monk": {"category": "attack", "projectile": "arc", "weapon": "炸药包高抛，落地爆炸"},
@@ -56,24 +81,24 @@ HERO_PROFILE: dict[str, dict] = {
     "gargoyle": {"category": "defense", "projectile": "flat", "weapon": "石肤护壁，平直岩盾"},
     "skeleton_giant": {"category": "defense", "projectile": "flat", "weapon": "巨石屏障，平直岩块"},
     "sniper": {"category": "attack", "projectile": "flat", "weapon": "狙击弹，极快平直弹道"},
-    "catapult_tower": {"category": "attack", "projectile": "arc", "weapon": "石弹高抛，经典抛物线"},
+    "catapult_tower": {"category": "defense", "projectile": "arc", "weapon": "石弹高抛，经典抛物线"},
     "catapult": {"category": "attack", "projectile": "arc", "weapon": "自爆蜘蛛高抛投掷"},
-    "cavalry": {"category": "attack", "projectile": "flat", "weapon": "骑枪冲锋，平直突刺"},
+    "cavalry": {"category": "speed", "projectile": "flat", "weapon": "骑枪冲锋，平直突刺"},
     "wyrmling": {"category": "attack", "projectile": "arc", "weapon": "幼龙火球，小抛物线"},
-    "ballista": {"category": "attack", "projectile": "arc", "weapon": "弩炮重矢，高抛穿透"},
-    "necromancer": {"category": "attack", "projectile": "arc", "weapon": "亡灵弹，弧线触发复活格"},
+    "ballista": {"category": "defense", "projectile": "arc", "weapon": "弩炮护墙，高抛拦截弹道"},
+    "necromancer": {"category": "supply", "projectile": "arc", "weapon": "亡灵弹，弧线触发复活格"},
     "spear_orc": {"category": "attack", "projectile": "flat", "weapon": "鱼叉直线投掷"},
-    "wolf_rider": {"category": "attack", "projectile": "flat", "weapon": "利爪直线扑击"},
-    "skeleton_knight": {"category": "attack", "projectile": "flat", "weapon": "骨刃直线斩"},
+    "wolf_rider": {"category": "speed", "projectile": "flat", "weapon": "利爪直线扑击"},
+    "skeleton_knight": {"category": "speed", "projectile": "flat", "weapon": "骨刃直线斩"},
     "archer": {"category": "attack", "projectile": "flat", "weapon": "魔法箭平直射击"},
     "infantry": {"category": "defense", "projectile": "flat", "weapon": "塔盾格挡，平直盾击"},
-    "arrow_tower": {"category": "attack", "projectile": "arc", "weapon": "高射炮弹，高空抛物线"},
+    "arrow_tower": {"category": "defense", "projectile": "arc", "weapon": "高射炮弹，高空抛物线"},
     "bear_warrior": {"category": "defense", "projectile": "flat", "weapon": "重锤平直挥击"},
     "skeleton_warrior": {"category": "defense", "projectile": "flat", "weapon": "刀盾平直格挡"},
     "goblin": {"category": "speed", "projectile": "flat", "weapon": "短矛轻快直线戳刺"},
-    "blacksmith": {"category": "defense", "projectile": "flat", "weapon": "长枪平直突刺"},
-    "militia": {"category": "attack", "projectile": "flat", "weapon": "短剑平直快攻"},
-    "bone_archer": {"category": "attack", "projectile": "flat", "weapon": "火枪铅弹平直射击"},
+    "blacksmith": {"category": "supply", "projectile": "flat", "weapon": "锻造火花，平直补给友军"},
+    "militia": {"category": "speed", "projectile": "flat", "weapon": "短剑平直快攻"},
+    "bone_archer": {"category": "supply", "projectile": "flat", "weapon": "急救包，平直飞向受伤友军"},
     "gold_mine": {"category": "supply", "projectile": "flat", "weapon": "矿车补给，无攻击弹道"},
 }
 
@@ -288,7 +313,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
         "visualDescription": vfx,
         "projectileStyle": "arc" if slot == "legendary" and cat == "attack" else prof["projectile"],
         "attackMode": attack_mode,
-        "unlockLevel": 1,
+        "unlockLevel": SPECIAL_UNLOCK_HERO_LEVEL[slot],
         "upgradeable": True,
         "maxLevel": SPECIAL_SKILL_MAX,
         "scalingPerSkillLevel": SPECIAL_SCALING_PER_LEVEL,
@@ -340,32 +365,52 @@ def gen_skills(heroes: list[dict]) -> list[dict]:
     return skills
 
 
-def skill_upgrade_table() -> dict:
-    rows = []
-    for from_lv, frag in enumerate(SKILL_UPGRADE_FRAGMENTS, start=1):
-        row = {"fromLevel": from_lv, "toLevel": from_lv + 1, "baseFragments": frag, "byQuality": {}}
-        for q, mult in SKILL_FRAG_Q_MULT.items():
-            row["byQuality"][q] = max(1, round(frag * mult))
-        rows.append(row)
+def load_hero_level() -> dict:
+    return json.loads((ROOT / "heroLevel.json").read_text(encoding="utf-8"))
+
+
+def skill_upgrade_table(hero_level: dict) -> dict:
+    gold_by_q = hero_level["goldNeedByQuality"]
+    diamond_rows = []
+    for slot, unlock in SPECIAL_UNLOCK_HERO_LEVEL.items():
+        q = slot
+        for from_lv in range(1, SPECIAL_SKILL_MAX):
+            gold_idx = min(max(0, unlock + from_lv - 2), 29)
+            gold_ref = gold_by_q[q][gold_idx]
+            premium = SKILL_DIAMOND_PREMIUM[q]
+            diamond = max(30, round(gold_ref * GOLD_TO_DIAMOND_RATE * premium))
+            diamond_rows.append({
+                "slot": slot,
+                "fromLevel": from_lv,
+                "toLevel": from_lv + 1,
+                "diamondCost": diamond,
+                "heroGoldReference": gold_ref,
+                "heroLevelContext": unlock + from_lv - 1,
+            })
     return {
         "specialSkillMaxLevel": SPECIAL_SKILL_MAX,
         "normalSkillUpgradeable": False,
         "scalingPerLevel": SPECIAL_SCALING_PER_LEVEL,
         "formula": "effect(L) = base * (1 + 0.08*(L-1))",
-        "fragmentCost": rows,
-        "goldCostFormula": "round(heroGoldNeed[level-1] * 0.15)  // 特技升级金币≈同级英雄升级的15%",
+        "currency": "diamond",
+        "fragmentCost": None,
+        "unlockByHeroLevel": SPECIAL_UNLOCK_HERO_LEVEL,
+        "diamondCostFormula": (
+            "diamond = round(heroGoldNeed[unlockBase + skillLv - 2] × 0.045 × premium)；"
+            "premium: rare×2.0 epic×2.5 legendary×3.0；仅钻石，无碎片"
+        ),
+        "diamondCost": diamond_rows,
     }
 
 
 def assign_faction(heroes: list[dict]) -> dict[str, str]:
     mapping = {}
-    factions_cycle = FACTIONS * 20
-    idx = 0
-    for h in sorted(heroes, key=lambda x: x["id"]):
-        if h["id"] == "gold_mine":
-            continue
-        mapping[h["id"]] = factions_cycle[idx % len(FACTIONS)]
-        idx += 1
+    for h in heroes:
+        hid = h["id"]
+        if hid in HERO_FACTION:
+            mapping[hid] = HERO_FACTION[hid]
+        elif h["type"] == "resource":
+            mapping[hid] = "mechanical"
     return mapping
 
 
@@ -394,6 +439,7 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             "quality": q,
             "qualityLabel": QUALITY_CN[q],
             "faction": factions.get(hid),
+            "factionLabel": FACTION_CN.get(factions.get(hid), "—"),
             "category": prof["category"],
             "categoryLabel": CATEGORY_CN[prof["category"]],
             "bondEligible": hid != "gold_mine",
@@ -438,28 +484,82 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
                 "epic": ["normal", "epic"],
                 "legendary": ["normal", "legendary"],
             },
+            "skillUnlock": {
+                "rare": SPECIAL_UNLOCK_HERO_LEVEL["rare"],
+                "epic": SPECIAL_UNLOCK_HERO_LEVEL["epic"],
+                "legendary": SPECIAL_UNLOCK_HERO_LEVEL["legendary"],
+                "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有",
+            },
         }
     return {
-        "version": "3.0.0",
-        "description": "英雄战斗元数据 v3：品质决定特技槽；普通技不可升级，特技5级",
+        "version": "3.1.0",
+        "description": "英雄战斗元数据 v3.1：种族阵营 + 等级解锁特技 + 钻石升级",
         "rules": {
             "noMeleeRangedLogic": True,
             "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
             "fireRateMeans": "发射频率（攻击间隔=2.2/fireRate）",
             "projectileStyle": "flat=平直射击 arc=高抛重击",
+            "skillUnlockByHeroLevel": SPECIAL_UNLOCK_HERO_LEVEL,
+            "specialSkillUpgradeCurrency": "diamond",
         },
         "heroes": entries,
     }
 
 
-BOND_CATEGORY = [
-    {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
-    {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}, {"type": "fireRatePct", "value": 0.05}]},
-    {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}, {"type": "healPct", "value": 0.05}]},
-]
+FACTION_BOND_TIERS = {
+    "human": [
+        {"count": 2, "effects": [{"type": "atkPct", "value": 0.06}]},
+        {"count": 4, "effects": [{"type": "atkPct", "value": 0.10}, {"type": "unitHpPct", "value": 0.04}]},
+        {"count": 6, "effects": [{"type": "atkPct", "value": 0.14}]},
+    ],
+    "beast": [
+        {"count": 2, "effects": [{"type": "fireRatePct", "value": 0.06}]},
+        {"count": 4, "effects": [{"type": "fireRatePct", "value": 0.10}, {"type": "atkPct", "value": 0.04}]},
+        {"count": 6, "effects": [{"type": "fireRatePct", "value": 0.14}]},
+    ],
+    "undead": [
+        {"count": 2, "effects": [{"type": "healPct", "value": 0.08}]},
+        {"count": 4, "effects": [{"type": "healPct", "value": 0.12}, {"type": "damageReductionPct", "value": 0.04}]},
+        {"count": 6, "effects": [{"type": "reviveChancePct", "value": 0.05}, {"type": "healPct", "value": 0.08}]},
+    ],
+    "mechanical": [
+        {"count": 2, "effects": [{"type": "projectileSpeedPct", "value": 0.08}]},
+        {"count": 4, "effects": [{"type": "damageReductionPct", "value": 0.06}, {"type": "projectileSpeedPct", "value": 0.04}]},
+        {"count": 6, "effects": [{"type": "damageReductionPct", "value": 0.10}, {"type": "projectileSpeedPct", "value": 0.10}]},
+    ],
+}
+
+CATEGORY_BOND_TIERS = {
+    "attack": [
+        {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
+        {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}]},
+        {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}]},
+    ],
+    "defense": [
+        {"count": 2, "effects": [{"type": "damageReductionPct", "value": 0.04}]},
+        {"count": 4, "effects": [{"type": "damageReductionPct", "value": 0.07}]},
+        {"count": 6, "effects": [{"type": "damageReductionPct", "value": 0.10}]},
+    ],
+    "supply": [
+        {"count": 2, "effects": [{"type": "healPct", "value": 0.10}]},
+        {"count": 4, "effects": [{"type": "healPct", "value": 0.15}]},
+        {"count": 6, "effects": [{"type": "healPct", "value": 0.20}]},
+    ],
+    "speed": [
+        {"count": 2, "effects": [{"type": "fireRatePct", "value": 0.08}]},
+        {"count": 4, "effects": [{"type": "fireRatePct", "value": 0.12}, {"type": "projectileSpeedPct", "value": 0.06}]},
+        {"count": 6, "effects": [{"type": "fireRatePct", "value": 0.16}]},
+    ],
+}
 
 
-def gen_bond() -> dict:
+def gen_bond(heroes: list[dict]) -> dict:
+    factions = assign_faction(heroes)
+    faction_heroes: dict[str, list[str]] = {f: [] for f in FACTIONS}
+    for hid, fid in sorted(factions.items()):
+        if fid in faction_heroes:
+            faction_heroes[fid].append(hid)
+
     bonds = []
     for fid in FACTIONS:
         bonds.append({
@@ -467,11 +567,8 @@ def gen_bond() -> dict:
             "type": "faction",
             "name": FACTION_CN[fid],
             "faction": fid,
-            "tiers": [
-                {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
-                {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}, {"type": "unitHpPct", "value": 0.05}]},
-                {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}, {"type": "unitHpPct", "value": 0.08}]},
-            ],
+            "heroIds": faction_heroes[fid],
+            "tiers": FACTION_BOND_TIERS[fid],
         })
     for cat, label in CATEGORY_CN.items():
         bonds.append({
@@ -479,17 +576,24 @@ def gen_bond() -> dict:
             "type": "skillCategory",
             "name": f"{label}型",
             "category": cat,
-            "tiers": BOND_CATEGORY,
+            "effectTheme": {
+                "attack": "攻击力",
+                "defense": "减伤防御",
+                "supply": "回血补给",
+                "speed": "攻速/弹速",
+            }[cat],
+            "tiers": CATEGORY_BOND_TIERS[cat],
         })
     return {
-        "version": "2.0.0",
-        "description": "羁绊：4阵营 + 4技能定位型；近战/远程羁绊已移除",
+        "version": "3.0.0",
+        "description": "羁绊：人族/兽族/亡灵/机械 + 攻击/防御/补给/加速定位型",
         "rules": {
             "deckSize": 8,
             "excludeHeroIds": ["gold_mine"],
-            "tierActivation": "atCount4ActivateTier2And4",
+            "tierActivation": "atCount2And4And6",
             "maxActiveFactionBonds": 1,
             "maxActiveCategoryBonds": 1,
+            "factions": FACTION_CN,
         },
         "bonds": bonds,
     }
@@ -497,16 +601,17 @@ def gen_bond() -> dict:
 
 if __name__ == "__main__":
     heroes = load_heroes()
+    hero_level = load_hero_level()
     skills = gen_skills(heroes)
-    upgrade = skill_upgrade_table()
+    upgrade = skill_upgrade_table(hero_level)
     hero_battle = gen_hero_battle(heroes, skills)
-    bond = gen_bond()
+    bond = gen_bond(heroes)
 
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "3.0.0",
-                "description": "技能 v3：普通技+品质特技；攻击/防御/补给/加速",
+                "version": "3.1.0",
+                "description": "技能 v3.1：种族阵营羁绊 + 等级解锁特技 + 钻石升级",
                 "categories": CATEGORY_CN,
                 "combatRules": {
                     "trajectory": {
