@@ -72,22 +72,23 @@ HERO_FACTION: dict[str, str] = {
     "helicopter": "mechanical", "catapult_tower": "mechanical", "arrow_tower": "mechanical",
     "ballista": "mechanical", "gold_mine": "mechanical", "panda_monk": "mechanical",
     "sniper": "mechanical", "gargoyle": "mechanical", "ranger": "mechanical",
+    "heavy_shield": "mechanical", "sky_dome": "mechanical",
     "shaman": "human",
 }
 
-# 英雄 → 技能倾向、弹道表现（定位：攻击15 / 防御9 / 补给6 / 加速6）
+# 英雄 → 技能倾向、弹道表现（定位：攻击为主；机械建筑除重盾/天穹外均为攻击）
 HERO_PROFILE: dict[str, dict] = {
     "dragon_knight": {"category": "attack", "projectile": "arc", "weapon": "龙息火球，高抛弧线落点单格"},
     "demon_lord": {"category": "attack", "projectile": "arc", "weapon": "冰锥术，抛物线冻结打击"},
     "archmage": {"category": "attack", "projectile": "arc", "weapon": "雷球高抛，落点范围电弧"},
-    "ranger": {"category": "supply", "projectile": "flat", "weapon": "荆棘花粉，平直洒向友军"},
+    "ranger": {"category": "attack", "projectile": "flat", "weapon": "荆棘箭，平直射击"},
     "royal_knight": {"category": "defense", "projectile": "flat", "weapon": "圣盾光波，平直盾击"},
     "druid": {"category": "supply", "projectile": "flat", "weapon": "自然花粉，平直治疗波"},
     "lich_queen": {"category": "attack", "projectile": "arc", "weapon": "幽魂炮，高抛灵魂弹"},
     "blademaster": {"category": "attack", "projectile": "flat", "weapon": "影刃直线突刺"},
     "frost_dragon": {"category": "attack", "projectile": "arc", "weapon": "巨锤冰陨，高空重砸"},
     "crusher": {"category": "attack", "projectile": "arc", "weapon": "破城锤，高抛砸击单格"},
-    "helicopter": {"category": "speed", "projectile": "flat", "weapon": "机炮连射，平直子弹"},
+    "helicopter": {"category": "attack", "projectile": "flat", "weapon": "机炮连射，平直子弹"},
     "dread_knight": {"category": "attack", "projectile": "flat", "weapon": "巨斧直线劈砍"},
     "warlord": {"category": "defense", "projectile": "flat", "weapon": "双头咆哮盾墙，平直冲击波"},
     "panda_monk": {"category": "attack", "projectile": "arc", "weapon": "炸药包高抛，落地爆炸"},
@@ -95,25 +96,70 @@ HERO_PROFILE: dict[str, dict] = {
     "gargoyle": {"category": "defense", "projectile": "flat", "weapon": "石肤护壁，平直岩盾"},
     "skeleton_giant": {"category": "defense", "projectile": "flat", "weapon": "巨石屏障，平直岩块"},
     "sniper": {"category": "attack", "projectile": "flat", "weapon": "狙击弹，极快平直弹道"},
-    "catapult_tower": {"category": "defense", "projectile": "arc", "weapon": "石弹高抛，经典抛物线"},
+    "catapult_tower": {"category": "attack", "projectile": "arc", "weapon": "石弹高抛，经典抛物线"},
     "catapult": {"category": "attack", "projectile": "arc", "weapon": "自爆蜘蛛高抛投掷"},
     "cavalry": {"category": "speed", "projectile": "flat", "weapon": "骑枪冲锋，平直突刺"},
     "wyrmling": {"category": "attack", "projectile": "arc", "weapon": "幼龙火球，小抛物线"},
-    "ballista": {"category": "defense", "projectile": "arc", "weapon": "弩炮护墙，高抛拦截弹道"},
-    "necromancer": {"category": "supply", "projectile": "arc", "weapon": "亡灵弹，弧线触发复活格"},
+    "ballista": {"category": "attack", "projectile": "arc", "weapon": "弩炮重矢，高抛穿透"},
+    "necromancer": {"category": "attack", "projectile": "arc", "weapon": "亡灵弹，弧线触发复活格"},
     "spear_orc": {"category": "attack", "projectile": "flat", "weapon": "鱼叉直线投掷"},
     "wolf_rider": {"category": "speed", "projectile": "flat", "weapon": "利爪直线扑击"},
     "skeleton_knight": {"category": "speed", "projectile": "flat", "weapon": "骨刃直线斩"},
     "archer": {"category": "attack", "projectile": "flat", "weapon": "魔法箭平直射击"},
     "infantry": {"category": "defense", "projectile": "flat", "weapon": "塔盾格挡，平直盾击"},
-    "arrow_tower": {"category": "defense", "projectile": "arc", "weapon": "高射炮弹，高空抛物线"},
+    "arrow_tower": {"category": "attack", "projectile": "arc", "weapon": "高射炮弹，高空抛物线"},
     "bear_warrior": {"category": "defense", "projectile": "flat", "weapon": "重锤平直挥击"},
     "skeleton_warrior": {"category": "defense", "projectile": "flat", "weapon": "刀盾平直格挡"},
     "goblin": {"category": "speed", "projectile": "flat", "weapon": "短矛轻快直线戳刺"},
     "blacksmith": {"category": "supply", "projectile": "flat", "weapon": "锻造火花，平直补给友军"},
-    "militia": {"category": "speed", "projectile": "flat", "weapon": "短剑平直快攻"},
-    "bone_archer": {"category": "supply", "projectile": "flat", "weapon": "急救包，平直飞向受伤友军"},
+    "militia": {"category": "attack", "projectile": "flat", "weapon": "短剑平直快攻"},
+    "bone_archer": {"category": "attack", "projectile": "flat", "weapon": "火枪弹，平直射击"},
     "gold_mine": {"category": "supply", "projectile": "flat", "weapon": "矿车补给，无攻击弹道"},
+    "heavy_shield": {"category": "defense", "projectile": "flat", "weapon": "盾面光刃，平直盾击"},
+    "sky_dome": {"category": "defense", "projectile": "arc", "weapon": "穹顶光束，高抛能量弹"},
+}
+
+# 特技触发：间隔(cooldownSec)、持续(durationSec)、目标(target)
+SPECIAL_ACTIVATION: dict[tuple[str, str], dict] = {
+    ("attack", "rare"): {"trigger": "onBasicAttack", "target": "primaryAndAdjacentEnemy"},
+    ("attack", "epic"): {"trigger": "onBasicAttack", "target": "chainedEnemies"},
+    ("attack", "legendary"): {"trigger": "onBasicAttack", "target": "singleEnemy"},
+    ("defense", "rare"): {"trigger": "passive"},
+    ("defense", "epic"): {"trigger": "active", "cooldownSec": 12, "durationSec": 6},
+    ("defense", "legendary"): {"trigger": "active", "cooldownSec": 20, "durationSec": 8},
+    ("supply", "rare"): {"trigger": "active", "cooldownSec": 10, "target": "lowestHpAllyOnField"},
+    ("supply", "epic"): {"trigger": "active", "cooldownSec": 14, "durationSec": 0, "target": "alliesInRange"},
+    ("supply", "legendary"): {"trigger": "active", "cooldownSec": 18, "target": "lowestHpAllyOnField"},
+    ("speed", "rare"): {"trigger": "active", "cooldownSec": 10, "durationSec": 5, "target": "self"},
+    ("speed", "epic"): {"trigger": "active", "cooldownSec": 12, "durationSec": 6, "target": "self"},
+    ("speed", "legendary"): {"trigger": "active", "cooldownSec": 15, "durationSec": 8, "target": "team"},
+}
+
+HERO_ACTIVATION_OVERRIDE: dict[str, dict] = {
+    "heavy_shield": {
+        "trigger": "passive",
+        "scope": "selfTile",
+        "rearBuildingDr": True,
+        "blocksTrajectory": ["flat"],
+    },
+    "sky_dome": {
+        "trigger": "active",
+        "cooldownSec": 4,
+        "durationSec": 5,
+        "scope": "adjacent4",
+        "passiveBlocksTrajectory": ["flat"],
+        "activeBlocksTrajectory": ["arc"],
+    },
+}
+
+TARGET_CN = {
+    "self": "自身",
+    "team": "全队友军",
+    "lowestHpAllyOnField": "场上血量最低的友军兵卡",
+    "alliesInRange": "范围内友军",
+    "primaryAndAdjacentEnemy": "主目标及相邻敌方兵卡",
+    "chainedEnemies": "连锁命中的敌方兵卡",
+    "singleEnemy": "单格敌方兵卡",
 }
 
 
@@ -165,6 +211,46 @@ def effect_val(effects: list[dict], etype: str, default=0.0) -> float:
     return default
 
 
+def activation_for(hero: dict, cat: str, slot: str) -> dict:
+    hid = hero["id"]
+    if hid in HERO_ACTIVATION_OVERRIDE:
+        return {**SPECIAL_ACTIVATION.get((cat, slot), {}), **HERO_ACTIVATION_OVERRIDE[hid]}
+    return dict(SPECIAL_ACTIVATION.get((cat, slot), {}))
+
+
+def format_activation_suffix(hero: dict, cat: str, slot: str, effects: list[dict]) -> str:
+    act = activation_for(hero, cat, slot)
+    parts = []
+    trigger = act.get("trigger")
+    if trigger == "onBasicAttack":
+        parts.append("每次普攻触发")
+    elif trigger == "passive":
+        parts.append("常驻被动")
+    elif trigger == "active":
+        cd = act.get("cooldownSec")
+        if cd:
+            parts.append(f"每{cd}秒触发1次")
+    dur = act.get("durationSec")
+    if dur and dur > 0:
+        parts.append(f"持续{dur}秒")
+    target = act.get("target")
+    if target and target in TARGET_CN:
+        parts.append(f"目标：{TARGET_CN[target]}")
+    if cat == "speed":
+        fr = effect_val(effects, "fireRatePct") or effect_val(effects, "teamFireRatePct")
+        if fr:
+            fire_rate = float(hero.get("attackSpeed") or 1.0)
+            interval = round(2.2 / fire_rate, 2) if fire_rate else None
+            new_iv = round(interval / (1 + fr), 2) if interval else None
+            if interval and new_iv:
+                parts.append(f"攻击间隔缩短{pct_label(fr)}（{interval}s→约{new_iv}s）")
+    if hero["id"] == "heavy_shield":
+        parts.append("自身1格抵御平直攻击；后方建筑免伤")
+    if hero["id"] == "sky_dome":
+        parts.append("周围4格常驻抵御平直攻击；激活时抵御高空炮击")
+    return "；".join(parts)
+
+
 def enrich_special_description(
     hero: dict,
     cat: str,
@@ -176,6 +262,7 @@ def enrich_special_description(
 ) -> str:
     """为稀有/史诗/传奇特技补充基于 L1 属性的具体数值说明。"""
     slot_cn = {"rare": "稀有", "epic": "史诗", "legendary": "传奇"}[slot]
+    hid = hero["id"]
     atk = hero_atk_l1(hero)
     hp = hero_hp_l1(hero)
     parts = [base_desc.rstrip("。")]
@@ -215,7 +302,11 @@ def enrich_special_description(
                     f"目标生命≤{pct_label(exec_t)}时触发斩杀加成"
                 )
     elif cat == "defense":
-        if slot == "rare":
+        if hid == "heavy_shield":
+            parts.append(f"【{slot_cn}】自身1格完全抵御平直攻击；后方建筑免伤")
+        elif hid == "sky_dome":
+            parts.append(f"【{slot_cn}】周围4格抵御平直；激活天穹时5秒内抵御高抛炮击")
+        elif slot == "rare":
             dr = effect_val(effects, "damageReductionPct")
             parts.append(
                 f"【{slot_cn}】附加减伤{pct_label(dr)}"
@@ -250,7 +341,7 @@ def enrich_special_description(
             )
         else:
             parts.append(
-                f"【{slot_cn}】将目标恢复至满血"
+                f"【{slot_cn}】将{TARGET_CN['lowestHpAllyOnField']}恢复至满血"
                 f"{'（例：HP' + str(hp) + '拉满）' if hp else ''}，并净化减益"
             )
     else:  # speed
@@ -275,6 +366,10 @@ def enrich_special_description(
             fr = effect_val(effects, "teamFireRatePct")
             parts.append(f"【{slot_cn}】全队发射频率+{pct_label(fr)}")
 
+    act_suffix = format_activation_suffix(hero, cat, slot, effects)
+    if act_suffix:
+        parts.append(f"【触发】{act_suffix}")
+
     return "。".join(parts) + "。"
 
 
@@ -288,7 +383,7 @@ def build_damage_examples(hero: dict, cat: str, slot: str, base_effects: list[di
             if e["type"] in (
                 "extraTargets", "chainTargets", "wallTiles", "reviveAdjacentDead",
                 "revealAdjacent", "healFull", "cleanse", "blockRush", "projectileArc",
-                "executeThreshold",
+                "executeThreshold", "blockFlatTile", "protectAdjacentFlat", "domeArcShield",
             ):
                 scaled.append({**e})
             else:
@@ -310,41 +405,24 @@ def build_normal_skill(hero: dict, prof: dict) -> dict:
     hid = hero["id"]
     p = QUALITY_POWER[q]
 
-    if cat == "attack":
-        name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
-        if hero_atk_l1(hero):
-            desc += f"（100%攻击力，L1约{hero_atk_l1(hero)}点）"
-        vfx = "基础弹药**平直**射向单格目标；无高抛"
-        effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
-        attack_mode = "single"
-    elif cat == "defense":
-        name = "铁壁"
-        desc = "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击"
-        vfx = f"{prof['weapon']}；护体光效贴身，**平直**格挡反馈"
-        effects = [
-            {
-                "type": "damageReductionPct",
-                "value": qscale(q, 0.06),
-                "blocksTrajectory": ["flat"],
-            }
-        ]
-        attack_mode = "self"
-    elif cat == "supply":
-        name, desc = "应急包扎", "主动为自身恢复少量生命（约20%最大生命）"
-        vfx = "绿色光粒平直飞向自身；**补给粒子**"
-        effects = [{"type": "healPct", "value": qscale(q, 0.20)}]
-        attack_mode = "self"
-    else:
-        name, desc = "迅捷装填", "提升发射间隔效率（攻速补给），弹道更快出手"
-        vfx = f"{prof['weapon']}；出手前摇缩短，弹道仍**平直**"
-        effects = [{"type": "fireRatePct", "value": qscale(q, 0.08)}]
-        attack_mode = "self"
-
     if hero["type"] == "resource":
         name, desc = "矿脉", "翻开获得额外金币，无战斗攻击"
         vfx = "金币从矿口平直弹出"
         effects = [{"type": "deployGold", "value": int(10 * p)}]
         attack_mode = "none"
+        projectile = prof["projectile"]
+    else:
+        projectile = prof["projectile"]
+        if projectile == "arc":
+            name, desc = "高抛点射", "单点高抛弹道，对目标造成基础攻击伤害"
+            vfx = f"{prof['weapon']}；**高抛**弹道落点单格"
+        else:
+            name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
+            vfx = f"{prof['weapon']}；**平直**射向单格目标"
+        if hero_atk_l1(hero):
+            desc += f"（100%攻击力，L1约{hero_atk_l1(hero)}点）"
+        effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
+        attack_mode = "single"
 
     return {
         "skillId": f"skill_{hid}_normal",
@@ -356,7 +434,7 @@ def build_normal_skill(hero: dict, prof: dict) -> dict:
         "name": f"{hero['name']}·{name}",
         "description": desc,
         "visualDescription": vfx,
-        "projectileStyle": prof["projectile"],
+        "projectileStyle": projectile,
         "attackMode": attack_mode,
         "unlockLevel": 1,
         "upgradeable": False,
@@ -372,7 +450,42 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
     hid = hero["id"]
     tier_power = {"rare": 1.0, "epic": 1.35, "legendary": 1.75}[slot]
 
-    if cat == "attack":
+    if hid == "heavy_shield" and slot == "rare":
+        name = "重盾护壁"
+        desc = "抵御自身1格平直攻击；后方建筑获得减伤"
+        vfx = "巨型盾面升起，挡平直弹道；后方建筑笼罩护盾"
+        effects = [
+            {
+                "type": "blockFlatTile",
+                "value": 1,
+                "blocksTrajectory": ["flat"],
+            },
+            {
+                "type": "rearBuildingDrPct",
+                "value": 1.0,
+            },
+        ]
+        attack_mode = "passive_defense"
+    elif hid == "sky_dome" and slot == "legendary":
+        name = "天穹护盾"
+        desc = "周围4格常驻抵御平直攻击；每4秒开启天穹，5秒内抵御高空炮击"
+        vfx = "穹顶光幕展开，覆盖周围四格；激活时抵挡高抛炮击"
+        effects = [
+            {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": ["flat"],
+            },
+            {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": ["arc"],
+            },
+        ]
+        attack_mode = "area_defense"
+    elif cat == "attack":
         if slot == "rare":
             name, desc = "双联点射", "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）"
             vfx = f"{prof['weapon']}；主目标+邻格溅射，{'高抛' if prof['projectile']=='arc' else '平直'}双道"
@@ -444,7 +557,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
             vfx = "绿色光环扩散，范围内友军回血"
             effects = [{"type": "healAreaPct", "value": qscale(q, 0.50 * tier_power)}]
         else:
-            name, desc = "满血圣疗", "将目标友军恢复至满血，并净化一次减益"
+            name, desc = "满血圣疗", "将场上血量最低的友军兵卡恢复至满血，并净化一次减益"
             vfx = "金色光柱从天而降，满血恢复"
             effects = [{"type": "healFull", "value": 1}, {"type": "cleanse", "value": 1}]
         attack_mode = "heal"
@@ -469,13 +582,14 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
     for lv in range(1, SPECIAL_SKILL_MAX + 1):
         scaled = []
         for e in base_effects:
-            if e["type"] in ("extraTargets", "chainTargets", "wallTiles", "reviveAdjacentDead", "revealAdjacent", "healFull", "cleanse", "blockRush", "projectileArc"):
+            if e["type"] in ("extraTargets", "chainTargets", "wallTiles", "reviveAdjacentDead", "revealAdjacent", "healFull", "cleanse", "blockRush", "projectileArc", "blockFlatTile", "protectAdjacentFlat", "domeArcShield"):
                 scaled.append({**e})
             else:
                 scaled.append({**e, "value": skill_value_at_level(e["value"], lv)})
         level_curve.append({"skillLevel": lv, "effects": scaled})
 
     desc = enrich_special_description(hero, cat, slot, desc, base_effects, prof, name)
+    activation = activation_for(hero, cat, slot)
 
     skill = {
         "skillId": f"skill_{hid}_{slot}",
@@ -496,6 +610,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
         "effects": level_curve[0]["effects"],
         "levelCurve": level_curve,
         "damageExamples": build_damage_examples(hero, cat, slot, base_effects),
+        "activation": activation,
         "tags": [q, slot, cat, hero["type"]],
     }
     if cat == "attack" and any(e.get("type") == "projectileArc" for e in base_effects):
@@ -670,8 +785,8 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             },
         }
     return {
-        "version": "3.1.0",
-        "description": "英雄战斗元数据 v3.1：种族阵营 + 等级解锁特技 + 钻石升级",
+        "version": "3.2.0",
+        "description": "英雄战斗元数据 v3.2：全员普攻 + 重盾/天穹 + 特技 activation",
         "rules": {
             "noMeleeRangedLogic": True,
             "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -726,7 +841,7 @@ def gen_bond(heroes: list[dict]) -> dict:
             "tiers": FACTION_BOND_TIERS[fid],
         })
     return {
-        "version": "3.1.0",
+        "version": "3.2.0",
         "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
         "rules": {
             "deckSize": 8,
@@ -758,8 +873,8 @@ if __name__ == "__main__":
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "3.1.0",
-                "description": "技能 v3.1：种族阵营羁绊 + 等级解锁特技 + 钻石升级",
+                "version": "3.2.0",
+                "description": "技能 v3.2：全员普攻 + 重盾/天穹防御建筑 + 特技触发间隔",
                 "categories": CATEGORY_CN,
                 "combatRules": {
                     "trajectory": {

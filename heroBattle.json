@@ -1,6 +1,6 @@
 {
-  "version": "3.1.0",
-  "description": "英雄战斗元数据 v3.1：种族阵营 + 等级解锁特技 + 钻石升级",
+  "version": "3.2.0",
+  "description": "英雄战斗元数据 v3.2：全员普攻 + 重盾/天穹 + 特技 activation",
   "rules": {
     "noMeleeRangedLogic": true,
     "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -252,8 +252,8 @@
       "qualityLabel": "传奇",
       "faction": "mechanical",
       "factionLabel": "机械",
-      "category": "supply",
-      "categoryLabel": "补给",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -261,7 +261,7 @@
         "attackSpeedL1": 5.6,
         "attackIntervalL1": 0.85,
         "projectileStyle": "flat",
-        "weaponVfx": "荆棘花粉，平直洒向友军",
+        "weaponVfx": "荆棘箭，平直射击",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -791,8 +791,8 @@
       "qualityLabel": "传奇",
       "faction": "mechanical",
       "factionLabel": "机械",
-      "category": "speed",
-      "categoryLabel": "加速",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -1067,6 +1067,83 @@
       "skills": {
         "normal": "skill_panda_monk_normal",
         "legendary": "skill_panda_monk_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal"
+        ],
+        "rare": [
+          "normal",
+          "rare"
+        ],
+        "epic": [
+          "normal",
+          "epic"
+        ],
+        "legendary": [
+          "normal",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
+      }
+    },
+    "sky_dome": {
+      "heroId": "sky_dome",
+      "name": "天穹",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.6,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 3.67,
+        "projectileStyle": "arc",
+        "weaponVfx": "穹顶光束，高抛能量弹",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 65,
+        "unitHpL1": null,
+        "buildingHpL1": 480,
+        "samples": {
+          "L1": {
+            "attack": 65,
+            "unitHp": null,
+            "fireRate": 0.6,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 460,
+            "unitHp": null,
+            "fireRate": 0.79,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 3742,
+            "unitHp": null,
+            "fireRate": 1.07,
+            "attackSpeed": 9.43
+          }
+        }
+      },
+      "skills": {
+        "normal": "skill_sky_dome_normal",
+        "legendary": "skill_sky_dome_legendary"
       },
       "skillSlotsByQuality": {
         "common": [
@@ -1407,8 +1484,8 @@
       "qualityLabel": "史诗",
       "faction": "mechanical",
       "factionLabel": "机械",
-      "category": "defense",
-      "categoryLabel": "防御",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "building",
       "combatStats": {
@@ -1715,8 +1792,8 @@
       "qualityLabel": "史诗",
       "faction": "mechanical",
       "factionLabel": "机械",
-      "category": "defense",
-      "categoryLabel": "防御",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -1724,7 +1801,7 @@
         "attackSpeedL1": 4.0,
         "attackIntervalL1": 4.4,
         "projectileStyle": "arc",
-        "weaponVfx": "弩炮护墙，高抛拦截弹道",
+        "weaponVfx": "弩炮重矢，高抛穿透",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
@@ -1792,8 +1869,8 @@
       "qualityLabel": "稀有",
       "faction": "undead",
       "factionLabel": "亡灵",
-      "category": "supply",
-      "categoryLabel": "补给",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -2254,8 +2331,8 @@
       "qualityLabel": "稀有",
       "faction": "mechanical",
       "factionLabel": "机械",
-      "category": "defense",
-      "categoryLabel": "防御",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "building",
       "combatStats": {
@@ -2299,6 +2376,83 @@
       "skills": {
         "normal": "skill_arrow_tower_normal",
         "rare": "skill_arrow_tower_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal"
+        ],
+        "rare": [
+          "normal",
+          "rare"
+        ],
+        "epic": [
+          "normal",
+          "epic"
+        ],
+        "legendary": [
+          "normal",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有"
+      }
+    },
+    "heavy_shield": {
+      "heroId": "heavy_shield",
+      "name": "重型盾",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.7,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 3.14,
+        "projectileStyle": "flat",
+        "weaponVfx": "盾面光刃，平直盾击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 45,
+        "unitHpL1": null,
+        "buildingHpL1": 420,
+        "samples": {
+          "L1": {
+            "attack": 45,
+            "unitHp": null,
+            "fireRate": 0.7,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 318,
+            "unitHp": null,
+            "fireRate": 0.92,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 2591,
+            "unitHp": null,
+            "fireRate": 1.24,
+            "attackSpeed": 11.78
+          }
+        }
+      },
+      "skills": {
+        "normal": "skill_heavy_shield_normal",
+        "rare": "skill_heavy_shield_rare"
       },
       "skillSlotsByQuality": {
         "common": [
@@ -2635,8 +2789,8 @@
       "qualityLabel": "普通",
       "faction": "human",
       "factionLabel": "人族",
-      "category": "speed",
-      "categoryLabel": "加速",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -2711,8 +2865,8 @@
       "qualityLabel": "普通",
       "faction": "human",
       "factionLabel": "人族",
-      "category": "supply",
-      "categoryLabel": "补给",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
       "unitType": "unit",
       "combatStats": {
@@ -2720,7 +2874,7 @@
         "attackSpeedL1": 5.0,
         "attackIntervalL1": 2.2,
         "projectileStyle": "flat",
-        "weaponVfx": "急救包，平直飞向受伤友军",
+        "weaponVfx": "火枪弹，平直射击",
         "formulas": {
           "attack": "round(attackL1 * 1.15^(heroLevel-1))",
           "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",

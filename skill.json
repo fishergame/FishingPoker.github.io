@@ -1,6 +1,6 @@
 {
-  "version": "3.1.0",
-  "description": "技能 v3.1：种族阵营羁绊 + 等级解锁特技 + 钻石升级",
+  "version": "3.2.0",
+  "description": "技能 v3.2：全员普攻 + 重盾/天穹防御建筑 + 特技触发间隔",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -142,7 +142,7 @@
       }
     ]
   },
-  "skillCount": 67,
+  "skillCount": 71,
   "skills": [
     {
       "skillId": "skill_dragon_knight_normal",
@@ -151,9 +151,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "龙焰女王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约88点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "龙焰女王·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约88点）",
+      "visualDescription": "龙息火球，高抛弧线落点单格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -179,7 +179,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙焰女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（88→136点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（88→136点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "龙息火球，高抛弧线落点单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -389,6 +389,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -405,9 +409,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "永冬之王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "永冬之王·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "visualDescription": "冰锥术，抛物线冻结打击；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -433,7 +437,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "永冬之王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "冰锥术，抛物线冻结打击；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -643,6 +647,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -659,9 +667,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "风暴女巫·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约100点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "风暴女巫·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）",
+      "visualDescription": "雷球高抛，落点范围电弧；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -687,7 +695,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "风暴女巫·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（100→155点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（100→155点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "雷球高抛，落点范围电弧；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -897,6 +905,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -911,25 +923,25 @@
       "heroId": "ranger",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "荆棘女王·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "荆棘女王·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）",
+      "visualDescription": "荆棘箭，平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.25
+          "type": "atkPct",
+          "value": 0.062
         }
       ],
       "tags": [
         "legendary",
-        "supply",
+        "attack",
         "unit"
       ]
     },
@@ -938,24 +950,28 @@
       "heroId": "ranger",
       "slot": "legendary",
       "skillKind": "special",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "荆棘女王·满血圣疗",
-      "description": "将目标友军恢复至满血，并净化一次减益。【传奇】将目标恢复至满血（例：HP160拉满），并净化减益。",
-      "visualDescription": "金色光柱从天而降，满血恢复",
-      "projectileStyle": "flat",
-      "attackMode": "heal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "荆棘女王·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（50→77点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "visualDescription": "荆棘箭，平直射击；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
       "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "healFull",
-          "value": 1
+          "type": "atkPct",
+          "value": 0.547
         },
         {
-          "type": "cleanse",
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
           "value": 1
         }
       ],
@@ -964,11 +980,15 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "healFull",
-              "value": 1
+              "type": "atkPct",
+              "value": 0.547
             },
             {
-              "type": "cleanse",
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -977,11 +997,15 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "healFull",
-              "value": 1
+              "type": "atkPct",
+              "value": 0.591
             },
             {
-              "type": "cleanse",
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -990,11 +1014,15 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "healFull",
-              "value": 1
+              "type": "atkPct",
+              "value": 0.635
             },
             {
-              "type": "cleanse",
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -1003,11 +1031,15 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "healFull",
-              "value": 1
+              "type": "atkPct",
+              "value": 0.678
             },
             {
-              "type": "cleanse",
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -1016,11 +1048,15 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "healFull",
-              "value": 1
+              "type": "atkPct",
+              "value": 0.722
             },
             {
-              "type": "cleanse",
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -1034,80 +1070,111 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "healFull",
-                "value": 1
+                "type": "atkPct",
+                "value": 0.547
               },
               {
-                "type": "cleanse",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
             ],
-            "healAmount": 0
+            "attackPerHit": 77,
+            "splashDamage": 0
           },
           {
             "skillLevel": 2,
             "effects": [
               {
-                "type": "healFull",
-                "value": 1
+                "type": "atkPct",
+                "value": 0.591
               },
               {
-                "type": "cleanse",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
             ],
-            "healAmount": 0
+            "attackPerHit": 80,
+            "splashDamage": 0
           },
           {
             "skillLevel": 3,
             "effects": [
               {
-                "type": "healFull",
-                "value": 1
+                "type": "atkPct",
+                "value": 0.635
               },
               {
-                "type": "cleanse",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
             ],
-            "healAmount": 0
+            "attackPerHit": 82,
+            "splashDamage": 0
           },
           {
             "skillLevel": 4,
             "effects": [
               {
-                "type": "healFull",
-                "value": 1
+                "type": "atkPct",
+                "value": 0.678
               },
               {
-                "type": "cleanse",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
             ],
-            "healAmount": 0
+            "attackPerHit": 84,
+            "splashDamage": 0
           },
           {
             "skillLevel": 5,
             "effects": [
               {
-                "type": "healFull",
-                "value": 1
+                "type": "atkPct",
+                "value": 0.722
               },
               {
-                "type": "cleanse",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
             ],
-            "healAmount": 0
+            "attackPerHit": 86,
+            "splashDamage": 0
           }
         ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
       },
       "tags": [
         "legendary",
         "legendary",
-        "supply",
+        "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_royal_knight_normal",
@@ -1116,21 +1183,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "圣盾领主·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "name": "圣盾领主·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
+      "visualDescription": "圣盾光波，平直盾击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.075,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.062
         }
       ],
       "tags": [
@@ -1147,7 +1211,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "圣盾领主·全局圣域",
-      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒触发1次；持续8秒。",
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -1347,6 +1411,11 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 20,
+        "durationSec": 8
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -1361,18 +1430,18 @@
       "skillKind": "normal",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "北境守护者·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "name": "北境守护者·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
+      "visualDescription": "自然花粉，平直治疗波；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.25
+          "type": "atkPct",
+          "value": 0.062
         }
       ],
       "tags": [
@@ -1389,7 +1458,7 @@
       "category": "supply",
       "categoryLabel": "补给",
       "name": "北境守护者·满血圣疗",
-      "description": "将目标友军恢复至满血，并净化一次减益。【传奇】将目标恢复至满血（例：HP700拉满），并净化减益。",
+      "description": "将场上血量最低的友军兵卡恢复至满血，并净化一次减益。【传奇】将场上血量最低的友军兵卡恢复至满血（例：HP700拉满），并净化减益。【触发】每18秒触发1次；目标：场上血量最低的友军兵卡。",
       "visualDescription": "金色光柱从天而降，满血恢复",
       "projectileStyle": "flat",
       "attackMode": "heal",
@@ -1550,6 +1619,11 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 18,
+        "target": "lowestHpAllyOnField"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -1564,9 +1638,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "幽灵船长·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "幽灵船长·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "visualDescription": "幽魂炮，高抛灵魂弹；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1592,7 +1666,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幽灵船长·亡灵收割",
-      "description": "击杀敌方兵卡后，翻开相邻已阵亡格并召唤亡灵单位。【传奇】依托基础攻击（约70点/击）；击杀后复燃相邻阵亡格；目标≤25%生命时更易斩杀。",
+      "description": "击杀敌方兵卡后，翻开相邻已阵亡格并召唤亡灵单位。【传奇】依托基础攻击（约70点/击）；击杀后复燃相邻阵亡格；目标≤25%生命时更易斩杀。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "幽绿弧线落下，阵亡格复燃翻出亡灵牌",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1758,6 +1832,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -1774,7 +1852,7 @@
       "categoryLabel": "攻击",
       "name": "幻影刺客·平直点射",
       "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约150点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "visualDescription": "影刃直线突刺；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1800,7 +1878,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幻影刺客·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（150→232点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（150→232点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "影刃直线突刺；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2010,6 +2088,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -2026,9 +2108,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "寒冰巨魔·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约70点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "寒冰巨魔·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约70点）",
+      "visualDescription": "巨锤冰陨，高空重砸；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2054,7 +2136,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "寒冰巨魔·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（70→108点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "巨锤冰陨，高空重砸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2264,6 +2346,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -2280,9 +2366,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "重装破城者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约200点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "重装破城者·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）",
+      "visualDescription": "破城锤，高抛砸击单格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2308,7 +2394,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "重装破城者·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（200→309点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（200→309点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "破城锤，高抛砸击单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2518,6 +2604,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -2532,25 +2622,25 @@
       "heroId": "helicopter",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "speed",
-      "categoryLabel": "加速",
-      "name": "机械飞鹰·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "机炮连射，平直子弹；出手前摇缩短，弹道仍**平直**",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "机械飞鹰·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约110点）",
+      "visualDescription": "机炮连射，平直子弹；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.1
+          "type": "atkPct",
+          "value": 0.062
         }
       ],
       "tags": [
         "legendary",
-        "speed",
+        "attack",
         "unit"
       ]
     },
@@ -2559,24 +2649,28 @@
       "heroId": "helicopter",
       "slot": "legendary",
       "skillKind": "special",
-      "category": "speed",
-      "categoryLabel": "加速",
-      "name": "机械飞鹰·狂热号令",
-      "description": "全队攻速提升，并翻开相邻1格。【传奇】全队发射频率+39%。",
-      "visualDescription": "战鼓音波扩散，相邻格翻开预览",
-      "projectileStyle": "flat",
-      "attackMode": "buff",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "机械飞鹰·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（110→170点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
+      "visualDescription": "机炮连射，平直子弹；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
       "unlockLevel": 20,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "teamFireRatePct",
-          "value": 0.394
+          "type": "atkPct",
+          "value": 0.547
         },
         {
-          "type": "revealAdjacent",
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
           "value": 1
         }
       ],
@@ -2585,11 +2679,15 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "teamFireRatePct",
-              "value": 0.394
+              "type": "atkPct",
+              "value": 0.547
             },
             {
-              "type": "revealAdjacent",
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -2598,11 +2696,15 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "teamFireRatePct",
-              "value": 0.426
+              "type": "atkPct",
+              "value": 0.591
             },
             {
-              "type": "revealAdjacent",
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -2611,11 +2713,15 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "teamFireRatePct",
-              "value": 0.457
+              "type": "atkPct",
+              "value": 0.635
             },
             {
-              "type": "revealAdjacent",
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -2624,11 +2730,15 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "teamFireRatePct",
-              "value": 0.489
+              "type": "atkPct",
+              "value": 0.678
             },
             {
-              "type": "revealAdjacent",
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -2637,11 +2747,15 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "teamFireRatePct",
-              "value": 0.52
+              "type": "atkPct",
+              "value": 0.722
             },
             {
-              "type": "revealAdjacent",
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
               "value": 1
             }
           ]
@@ -2655,75 +2769,111 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "teamFireRatePct",
-                "value": 0.394
+                "type": "atkPct",
+                "value": 0.547
               },
               {
-                "type": "revealAdjacent",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
-            ]
+            ],
+            "attackPerHit": 170,
+            "splashDamage": 0
           },
           {
             "skillLevel": 2,
             "effects": [
               {
-                "type": "teamFireRatePct",
-                "value": 0.426
+                "type": "atkPct",
+                "value": 0.591
               },
               {
-                "type": "revealAdjacent",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
-            ]
+            ],
+            "attackPerHit": 175,
+            "splashDamage": 0
           },
           {
             "skillLevel": 3,
             "effects": [
               {
-                "type": "teamFireRatePct",
-                "value": 0.457
+                "type": "atkPct",
+                "value": 0.635
               },
               {
-                "type": "revealAdjacent",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
-            ]
+            ],
+            "attackPerHit": 180,
+            "splashDamage": 0
           },
           {
             "skillLevel": 4,
             "effects": [
               {
-                "type": "teamFireRatePct",
-                "value": 0.489
+                "type": "atkPct",
+                "value": 0.678
               },
               {
-                "type": "revealAdjacent",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
-            ]
+            ],
+            "attackPerHit": 185,
+            "splashDamage": 0
           },
           {
             "skillLevel": 5,
             "effects": [
               {
-                "type": "teamFireRatePct",
-                "value": 0.52
+                "type": "atkPct",
+                "value": 0.722
               },
               {
-                "type": "revealAdjacent",
+                "type": "executeThreshold",
+                "value": 0.3
+              },
+              {
+                "type": "projectileArc",
                 "value": 1
               }
-            ]
+            ],
+            "attackPerHit": 189,
+            "splashDamage": 0
           }
         ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
       },
       "tags": [
         "legendary",
         "legendary",
-        "speed",
+        "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_dread_knight_normal",
@@ -2734,7 +2884,7 @@
       "categoryLabel": "攻击",
       "name": "巨斧酋长·平直点射",
       "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约90点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "visualDescription": "巨斧直线劈砍；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2760,7 +2910,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "巨斧酋长·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（90→139点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（90→139点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "巨斧直线劈砍；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2970,6 +3120,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -2986,21 +3140,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "双头奇美拉·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈",
+      "name": "双头奇美拉·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约120点）",
+      "visualDescription": "双头咆哮盾墙，平直冲击波；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.075,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.062
         }
       ],
       "tags": [
@@ -3017,7 +3168,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "双头奇美拉·全局圣域",
-      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次。【传奇】全队减伤33%（例：受击100点→约67点）。【触发】每20秒触发1次；持续8秒。",
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -3217,6 +3368,11 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 20,
+        "durationSec": 8
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -3231,9 +3387,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "爆破鬼才·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约160点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "爆破鬼才·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约160点）",
+      "visualDescription": "炸药包高抛，落地爆炸；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3259,7 +3415,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "爆破鬼才·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（160→248点）；目标生命≤30%时触发斩杀加成。",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁。【传奇】造成155%攻击力伤害（160→248点）；目标生命≤30%时触发斩杀加成。【触发】每次普攻触发；目标：单格敌方兵卡。",
       "visualDescription": "炸药包高抛，落地爆炸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -3469,6 +3625,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "singleEnemy"
+      },
       "tags": [
         "legendary",
         "legendary",
@@ -3479,24 +3639,322 @@
       "bypassesNormalDefense": true
     },
     {
+      "skillId": "skill_sky_dome_normal",
+      "heroId": "sky_dome",
+      "slot": "normal",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "天穹·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约65点）",
+      "visualDescription": "穹顶光束，高抛能量弹；**高抛**弹道落点单格",
+      "projectileStyle": "arc",
+      "attackMode": "single",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.062
+        }
+      ],
+      "tags": [
+        "legendary",
+        "defense",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_sky_dome_legendary",
+      "heroId": "sky_dome",
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "天穹·天穹护盾",
+      "description": "周围4格常驻抵御平直攻击；每4秒开启天穹，5秒内抵御高空炮击。【传奇】周围4格抵御平直；激活天穹时5秒内抵御高抛炮击。【触发】每4秒触发1次；持续5秒；周围4格常驻抵御平直攻击；激活时抵御高空炮击。",
+      "visualDescription": "穹顶光幕展开，覆盖周围四格；激活时抵挡高抛炮击",
+      "projectileStyle": "arc",
+      "attackMode": "area_defense",
+      "unlockLevel": 20,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
+      "effects": [
+        {
+          "type": "protectAdjacentFlat",
+          "value": 4,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        },
+        {
+          "type": "domeArcShield",
+          "value": 4,
+          "cooldownSec": 4,
+          "durationSec": 5,
+          "blocksTrajectory": [
+            "arc"
+          ]
+        }
+      ],
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "protectAdjacentFlat",
+              "value": 4,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "domeArcShield",
+              "value": 4,
+              "cooldownSec": 4,
+              "durationSec": 5,
+              "blocksTrajectory": [
+                "arc"
+              ]
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "protectAdjacentFlat",
+              "value": 4,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "domeArcShield",
+              "value": 4,
+              "cooldownSec": 4,
+              "durationSec": 5,
+              "blocksTrajectory": [
+                "arc"
+              ]
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "protectAdjacentFlat",
+              "value": 4,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "domeArcShield",
+              "value": 4,
+              "cooldownSec": 4,
+              "durationSec": 5,
+              "blocksTrajectory": [
+                "arc"
+              ]
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "protectAdjacentFlat",
+              "value": 4,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "domeArcShield",
+              "value": 4,
+              "cooldownSec": 4,
+              "durationSec": 5,
+              "blocksTrajectory": [
+                "arc"
+              ]
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "protectAdjacentFlat",
+              "value": 4,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "domeArcShield",
+              "value": 4,
+              "cooldownSec": 4,
+              "durationSec": 5,
+              "blocksTrajectory": [
+                "arc"
+              ]
+            }
+          ]
+        }
+      ],
+      "damageExamples": {
+        "heroAttackL1": 65,
+        "heroHpL1": 480,
+        "levels": [
+          {
+            "skillLevel": 1,
+            "effects": [
+              {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": [
+                  "flat"
+                ]
+              },
+              {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": [
+                  "arc"
+                ]
+              }
+            ]
+          },
+          {
+            "skillLevel": 2,
+            "effects": [
+              {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": [
+                  "flat"
+                ]
+              },
+              {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": [
+                  "arc"
+                ]
+              }
+            ]
+          },
+          {
+            "skillLevel": 3,
+            "effects": [
+              {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": [
+                  "flat"
+                ]
+              },
+              {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": [
+                  "arc"
+                ]
+              }
+            ]
+          },
+          {
+            "skillLevel": 4,
+            "effects": [
+              {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": [
+                  "flat"
+                ]
+              },
+              {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": [
+                  "arc"
+                ]
+              }
+            ]
+          },
+          {
+            "skillLevel": 5,
+            "effects": [
+              {
+                "type": "protectAdjacentFlat",
+                "value": 4,
+                "blocksTrajectory": [
+                  "flat"
+                ]
+              },
+              {
+                "type": "domeArcShield",
+                "value": 4,
+                "cooldownSec": 4,
+                "durationSec": 5,
+                "blocksTrajectory": [
+                  "arc"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 4,
+        "durationSec": 5,
+        "scope": "adjacent4",
+        "passiveBlocksTrajectory": [
+          "flat"
+        ],
+        "activeBlocksTrajectory": [
+          "arc"
+        ]
+      },
+      "tags": [
+        "legendary",
+        "legendary",
+        "defense",
+        "building"
+      ]
+    },
+    {
       "skillId": "skill_shaman_normal",
       "heroId": "shaman",
       "slot": "normal",
       "skillKind": "normal",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "藤蔓萨满·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "name": "藤蔓萨满·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约58点）",
+      "visualDescription": "治疗花粉，平直飘向友军；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.224
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
@@ -3513,7 +3971,7 @@
       "category": "supply",
       "categoryLabel": "补给",
       "name": "藤蔓萨满·群体复苏",
-      "description": "范围友军恢复50%生命。【史诗】范围友军恢复76%生命（例：HP96→约+73点）。",
+      "description": "范围友军恢复50%生命。【史诗】范围友军恢复76%生命（例：HP96→约+73点）。【触发】每14秒触发1次；目标：范围内友军。",
       "visualDescription": "绿色光环扩散，范围内友军回血",
       "projectileStyle": "flat",
       "attackMode": "heal",
@@ -3630,6 +4088,12 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 14,
+        "durationSec": 0,
+        "target": "alliesInRange"
+      },
       "tags": [
         "epic",
         "epic",
@@ -3644,21 +4108,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "鹰女·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈",
+      "name": "鹰女·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
+      "visualDescription": "石肤护壁，平直岩盾；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.067,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
@@ -3675,7 +4136,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "鹰女·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒触发1次；持续6秒。",
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -3875,6 +4336,11 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 6
+      },
       "tags": [
         "epic",
         "epic",
@@ -3889,21 +4355,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "巨石魔像·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈",
+      "name": "巨石魔像·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
+      "visualDescription": "巨石屏障，平直岩块；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.067,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
@@ -3920,7 +4383,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "巨石魔像·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。【触发】每12秒触发1次；持续6秒。",
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -4120,6 +4583,11 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 6
+      },
       "tags": [
         "epic",
         "epic",
@@ -4136,7 +4604,7 @@
       "categoryLabel": "攻击",
       "name": "雇佣兵·平直点射",
       "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约60点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "visualDescription": "狙击弹，极快平直弹道；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -4162,7 +4630,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "雇佣兵·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（60→71点），连锁命中2格。",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（60→71点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
       "visualDescription": "平直穿透，依次命中2格",
       "projectileStyle": "flat",
       "attackMode": "chain",
@@ -4328,6 +4796,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "chainedEnemies"
+      },
       "tags": [
         "epic",
         "epic",
@@ -4340,28 +4812,25 @@
       "heroId": "catapult_tower",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "炮楼·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "石弹高抛，经典抛物线；护体光效贴身，**平直**格挡反馈",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "炮楼·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约100点）",
+      "visualDescription": "石弹高抛，经典抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.067,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
         "epic",
-        "defense",
+        "attack",
         "building"
       ]
     },
@@ -4370,29 +4839,25 @@
       "heroId": "catapult_tower",
       "slot": "epic",
       "skillKind": "special",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "炮楼·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。",
-      "visualDescription": "弧形盾带展开，覆盖三格",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "炮楼·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（100→118点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
-      "attackMode": "area_defense",
+      "attackMode": "chain",
       "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "wallTiles",
-          "value": 3
+          "type": "chainTargets",
+          "value": 2
         },
         {
-          "type": "allyDamageReductionPct",
-          "value": 0.181,
-          "blocksTrajectory": [
-            "flat",
-            "arc"
-          ]
+          "type": "atkPct",
+          "value": 0.181
         }
       ],
       "levelCurve": [
@@ -4400,16 +4865,12 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.181,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.181
             }
           ]
         },
@@ -4417,16 +4878,12 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.195,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.195
             }
           ]
         },
@@ -4434,16 +4891,12 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.21,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.21
             }
           ]
         },
@@ -4451,16 +4904,12 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.224,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.224
             }
           ]
         },
@@ -4468,16 +4917,12 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.239,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.239
             }
           ]
         }
@@ -4490,93 +4935,87 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.181,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.181
               }
-            ]
+            ],
+            "attackPerHit": 118,
+            "splashDamage": 0
           },
           {
             "skillLevel": 2,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.195,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.195
               }
-            ]
+            ],
+            "attackPerHit": 120,
+            "splashDamage": 0
           },
           {
             "skillLevel": 3,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.21,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.21
               }
-            ]
+            ],
+            "attackPerHit": 121,
+            "splashDamage": 0
           },
           {
             "skillLevel": 4,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.224,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.224
               }
-            ]
+            ],
+            "attackPerHit": 122,
+            "splashDamage": 0
           },
           {
             "skillLevel": 5,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.239,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.239
               }
-            ]
+            ],
+            "attackPerHit": 124,
+            "splashDamage": 0
           }
         ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "chainedEnemies"
       },
       "tags": [
         "epic",
         "epic",
-        "defense",
+        "attack",
         "building"
       ]
     },
@@ -4587,9 +5026,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "自爆蜘蛛·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约200点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "自爆蜘蛛·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约200点）",
+      "visualDescription": "自爆蜘蛛高抛投掷；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -4615,7 +5054,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "自爆蜘蛛·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（200→236点），连锁命中2格。",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（200→236点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -4781,6 +5220,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "chainedEnemies"
+      },
       "tags": [
         "epic",
         "epic",
@@ -4795,18 +5238,18 @@
       "skillKind": "normal",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "龙骑士·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "骑枪冲锋，平直突刺；出手前摇缩短，弹道仍**平直**",
+      "name": "龙骑士·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约50点）",
+      "visualDescription": "骑枪冲锋，平直突刺；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.09
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
@@ -4823,7 +5266,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "龙骑士·弹速增压",
-      "description": "提升弹道飞行速度，并小幅提升攻速。【史诗】弹道速度+30%、发射频率+15%（间隔1.16s→约1.01s）。",
+      "description": "提升弹道飞行速度，并小幅提升攻速。【史诗】弹道速度+30%、发射频率+15%（间隔1.16s→约1.01s）。【触发】每12秒触发1次；持续6秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
       "visualDescription": "弹道拖尾加速，平直/高抛均更快到达",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -4979,6 +5422,12 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 6,
+        "target": "self"
+      },
       "tags": [
         "epic",
         "epic",
@@ -4993,9 +5442,9 @@
       "skillKind": "normal",
       "category": "attack",
       "categoryLabel": "攻击",
-      "name": "火龙·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约68点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "name": "火龙·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约68点）",
+      "visualDescription": "幼龙火球，小抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -5021,7 +5470,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火龙·连锁穿透",
-      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（68→80点），连锁命中2格。",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（68→80点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
       "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
       "attackMode": "chain",
@@ -5187,6 +5636,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "chainedEnemies"
+      },
       "tags": [
         "epic",
         "epic",
@@ -5199,28 +5652,25 @@
       "heroId": "ballista",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "弩车·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "弩炮护墙，高抛拦截弹道；护体光效贴身，**平直**格挡反馈",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "弩车·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约90点）",
+      "visualDescription": "弩炮重矢，高抛穿透；**高抛**弹道落点单格",
       "projectileStyle": "arc",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.067,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
       "tags": [
         "epic",
-        "defense",
+        "attack",
         "unit"
       ]
     },
@@ -5229,29 +5679,25 @@
       "heroId": "ballista",
       "slot": "epic",
       "skillKind": "special",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "弩车·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）。【史诗】范围友军减伤18%（例：受击100点→约82点）。",
-      "visualDescription": "弧形盾带展开，覆盖三格",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "弩车·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害。【史诗】单次伤害提升至118%攻击力（90→106点），连锁命中2格。【触发】每次普攻触发；目标：连锁命中的敌方兵卡。",
+      "visualDescription": "高抛爆炸链，依次命中2格",
       "projectileStyle": "arc",
-      "attackMode": "area_defense",
+      "attackMode": "chain",
       "unlockLevel": 10,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "wallTiles",
-          "value": 3
+          "type": "chainTargets",
+          "value": 2
         },
         {
-          "type": "allyDamageReductionPct",
-          "value": 0.181,
-          "blocksTrajectory": [
-            "flat",
-            "arc"
-          ]
+          "type": "atkPct",
+          "value": 0.181
         }
       ],
       "levelCurve": [
@@ -5259,16 +5705,12 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.181,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.181
             }
           ]
         },
@@ -5276,16 +5718,12 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.195,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.195
             }
           ]
         },
@@ -5293,16 +5731,12 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.21,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.21
             }
           ]
         },
@@ -5310,16 +5744,12 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.224,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.224
             }
           ]
         },
@@ -5327,16 +5757,12 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "wallTiles",
-              "value": 3
+              "type": "chainTargets",
+              "value": 2
             },
             {
-              "type": "allyDamageReductionPct",
-              "value": 0.239,
-              "blocksTrajectory": [
-                "flat",
-                "arc"
-              ]
+              "type": "atkPct",
+              "value": 0.239
             }
           ]
         }
@@ -5349,93 +5775,87 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.181,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.181
               }
-            ]
+            ],
+            "attackPerHit": 106,
+            "splashDamage": 0
           },
           {
             "skillLevel": 2,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.195,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.195
               }
-            ]
+            ],
+            "attackPerHit": 108,
+            "splashDamage": 0
           },
           {
             "skillLevel": 3,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.21,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.21
               }
-            ]
+            ],
+            "attackPerHit": 109,
+            "splashDamage": 0
           },
           {
             "skillLevel": 4,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.224,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.224
               }
-            ]
+            ],
+            "attackPerHit": 110,
+            "splashDamage": 0
           },
           {
             "skillLevel": 5,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 3
+                "type": "chainTargets",
+                "value": 2
               },
               {
-                "type": "allyDamageReductionPct",
-                "value": 0.239,
-                "blocksTrajectory": [
-                  "flat",
-                  "arc"
-                ]
+                "type": "atkPct",
+                "value": 0.239
               }
-            ]
+            ],
+            "attackPerHit": 112,
+            "splashDamage": 0
           }
         ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "chainedEnemies"
       },
       "tags": [
         "epic",
         "epic",
-        "defense",
+        "attack",
         "unit"
       ]
     },
@@ -5444,25 +5864,25 @@
       "heroId": "necromancer",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "骷髅魔导师·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "骷髅魔导师·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约30点）",
+      "visualDescription": "亡灵弹，弧线触发复活格；**高抛**弹道落点单格",
       "projectileStyle": "arc",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.2
+          "type": "atkPct",
+          "value": 0.05
         }
       ],
       "tags": [
         "rare",
-        "supply",
+        "attack",
         "unit"
       ]
     },
@@ -5471,21 +5891,25 @@
       "heroId": "necromancer",
       "slot": "rare",
       "skillKind": "special",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "骷髅魔导师·战地包扎",
-      "description": "为血量最低友军恢复30%生命。【稀有】为友军恢复30%最大生命（例：HP80→约+24点）。",
-      "visualDescription": "治疗光带平直飞向友军",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "骷髅魔导师·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "visualDescription": "亡灵弹，弧线触发复活格；主目标+邻格溅射，高抛双道",
       "projectileStyle": "arc",
-      "attackMode": "heal",
+      "attackMode": "multi",
       "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "healAllyPct",
-          "value": 0.3
+          "type": "extraTargets",
+          "value": 1
+        },
+        {
+          "type": "splashPct",
+          "value": 0.15
         }
       ],
       "levelCurve": [
@@ -5493,8 +5917,12 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "healAllyPct",
-              "value": 0.3
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
             }
           ]
         },
@@ -5502,8 +5930,12 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "healAllyPct",
-              "value": 0.324
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
             }
           ]
         },
@@ -5511,8 +5943,12 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "healAllyPct",
-              "value": 0.348
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
             }
           ]
         },
@@ -5520,8 +5956,12 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "healAllyPct",
-              "value": 0.372
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
             }
           ]
         },
@@ -5529,8 +5969,12 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "healAllyPct",
-              "value": 0.396
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
             }
           ]
         }
@@ -5543,58 +5987,87 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "healAllyPct",
-                "value": 0.3
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.15
               }
             ],
-            "healAmount": 24
+            "attackPerHit": 30,
+            "splashDamage": 4
           },
           {
             "skillLevel": 2,
             "effects": [
               {
-                "type": "healAllyPct",
-                "value": 0.324
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.162
               }
             ],
-            "healAmount": 26
+            "attackPerHit": 30,
+            "splashDamage": 5
           },
           {
             "skillLevel": 3,
             "effects": [
               {
-                "type": "healAllyPct",
-                "value": 0.348
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.174
               }
             ],
-            "healAmount": 28
+            "attackPerHit": 30,
+            "splashDamage": 5
           },
           {
             "skillLevel": 4,
             "effects": [
               {
-                "type": "healAllyPct",
-                "value": 0.372
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.186
               }
             ],
-            "healAmount": 30
+            "attackPerHit": 30,
+            "splashDamage": 6
           },
           {
             "skillLevel": 5,
             "effects": [
               {
-                "type": "healAllyPct",
-                "value": 0.396
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.198
               }
             ],
-            "healAmount": 32
+            "attackPerHit": 30,
+            "splashDamage": 6
           }
         ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "primaryAndAdjacentEnemy"
       },
       "tags": [
         "rare",
         "rare",
-        "supply",
+        "attack",
         "unit"
       ]
     },
@@ -5607,7 +6080,7 @@
       "categoryLabel": "攻击",
       "name": "鱼叉捕猎者·平直点射",
       "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "visualDescription": "鱼叉直线投掷；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -5633,7 +6106,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "鱼叉捕猎者·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约30点）；邻格溅射15%攻击力（约4点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "鱼叉直线投掷；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
@@ -5799,6 +6272,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "primaryAndAdjacentEnemy"
+      },
       "tags": [
         "rare",
         "rare",
@@ -5813,18 +6290,18 @@
       "skillKind": "normal",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "利爪猎犬·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "利爪直线扑击；出手前摇缩短，弹道仍**平直**",
+      "name": "利爪猎犬·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约40点）",
+      "visualDescription": "利爪直线扑击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.08
+          "type": "atkPct",
+          "value": 0.05
         }
       ],
       "tags": [
@@ -5841,7 +6318,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "利爪猎犬·速射补给",
-      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.16s→约1.01s）。",
+      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.16s→约1.01s）。【触发】每10秒触发1次；持续5秒；目标：自身；攻击间隔缩短15%（1.16s→约1.01s）。",
       "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -5953,6 +6430,12 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
       "tags": [
         "rare",
         "rare",
@@ -5967,18 +6450,18 @@
       "skillKind": "normal",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "蝙蝠突袭者·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "骨刃直线斩；出手前摇缩短，弹道仍**平直**",
+      "name": "蝙蝠突袭者·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约38点）",
+      "visualDescription": "骨刃直线斩；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.08
+          "type": "atkPct",
+          "value": 0.05
         }
       ],
       "tags": [
@@ -5995,7 +6478,7 @@
       "category": "speed",
       "categoryLabel": "加速",
       "name": "蝙蝠突袭者·速射补给",
-      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.57s→约1.37s）。",
+      "description": "提升自身发射速度（缩短攻击间隔）15%。【稀有】发射频率+15%（间隔1.57s→约1.37s）。【触发】每10秒触发1次；持续5秒；目标：自身；攻击间隔缩短15%（1.57s→约1.37s）。",
       "visualDescription": "装填火花，弹道连发更密",
       "projectileStyle": "flat",
       "attackMode": "buff",
@@ -6107,6 +6590,12 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
       "tags": [
         "rare",
         "rare",
@@ -6123,7 +6612,7 @@
       "categoryLabel": "攻击",
       "name": "见习女巫·平直点射",
       "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约33点）",
-      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
+      "visualDescription": "魔法箭平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -6149,7 +6638,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "见习女巫·双联点射",
-      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约33点）；邻格溅射15%攻击力（约5点）。",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约33点）；邻格溅射15%攻击力（约5点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
       "visualDescription": "魔法箭平直射击；主目标+邻格溅射，平直双道",
       "projectileStyle": "flat",
       "attackMode": "multi",
@@ -6315,6 +6804,10 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "primaryAndAdjacentEnemy"
+      },
       "tags": [
         "rare",
         "rare",
@@ -6329,21 +6822,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重步兵·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "name": "重步兵·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约3点）",
+      "visualDescription": "塔盾格挡，平直盾击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.06,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.05
         }
       ],
       "tags": [
@@ -6360,7 +6850,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重步兵·单格护墙",
-      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤。【稀有】附加减伤10%（例：受击100点→实际约90点）。",
+      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤。【稀有】附加减伤10%（例：受击100点→实际约90点）。【触发】常驻被动。",
       "visualDescription": "石墙从地面平直升起，挡单格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -6549,6 +7039,9 @@
           }
         ]
       },
+      "activation": {
+        "trigger": "passive"
+      },
       "tags": [
         "rare",
         "rare",
@@ -6561,28 +7054,25 @@
       "heroId": "arrow_tower",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "高射塔·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "高射炮弹，高空抛物线；护体光效贴身，**平直**格挡反馈",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "高射塔·高抛点射",
+      "description": "单点高抛弹道，对目标造成基础攻击伤害（100%攻击力，L1约80点）",
+      "visualDescription": "高射炮弹，高空抛物线；**高抛**弹道落点单格",
       "projectileStyle": "arc",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.06,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.05
         }
       ],
       "tags": [
         "rare",
-        "defense",
+        "attack",
         "building"
       ]
     },
@@ -6591,28 +7081,25 @@
       "heroId": "arrow_tower",
       "slot": "rare",
       "skillKind": "special",
-      "category": "defense",
-      "categoryLabel": "防御",
-      "name": "高射塔·单格护墙",
-      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤。【稀有】附加减伤10%（例：受击100点→实际约90点）。",
-      "visualDescription": "石墙从地面平直升起，挡单格",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "高射塔·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）。【稀有】主目标造成100%攻击力（约80点）；邻格溅射15%攻击力（约12点）。【触发】每次普攻触发；目标：主目标及相邻敌方兵卡。",
+      "visualDescription": "高射炮弹，高空抛物线；主目标+邻格溅射，高抛双道",
       "projectileStyle": "arc",
-      "attackMode": "area_defense",
+      "attackMode": "multi",
       "unlockLevel": 5,
       "upgradeable": true,
       "maxLevel": 5,
       "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "wallTiles",
+          "type": "extraTargets",
           "value": 1
         },
         {
-          "type": "damageReductionPct",
-          "value": 0.1,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "splashPct",
+          "value": 0.15
         }
       ],
       "levelCurve": [
@@ -6620,15 +7107,12 @@
           "skillLevel": 1,
           "effects": [
             {
-              "type": "wallTiles",
+              "type": "extraTargets",
               "value": 1
             },
             {
-              "type": "damageReductionPct",
-              "value": 0.1,
-              "blocksTrajectory": [
-                "flat"
-              ]
+              "type": "splashPct",
+              "value": 0.15
             }
           ]
         },
@@ -6636,15 +7120,12 @@
           "skillLevel": 2,
           "effects": [
             {
-              "type": "wallTiles",
+              "type": "extraTargets",
               "value": 1
             },
             {
-              "type": "damageReductionPct",
-              "value": 0.108,
-              "blocksTrajectory": [
-                "flat"
-              ]
+              "type": "splashPct",
+              "value": 0.162
             }
           ]
         },
@@ -6652,15 +7133,12 @@
           "skillLevel": 3,
           "effects": [
             {
-              "type": "wallTiles",
+              "type": "extraTargets",
               "value": 1
             },
             {
-              "type": "damageReductionPct",
-              "value": 0.116,
-              "blocksTrajectory": [
-                "flat"
-              ]
+              "type": "splashPct",
+              "value": 0.174
             }
           ]
         },
@@ -6668,15 +7146,12 @@
           "skillLevel": 4,
           "effects": [
             {
-              "type": "wallTiles",
+              "type": "extraTargets",
               "value": 1
             },
             {
-              "type": "damageReductionPct",
-              "value": 0.124,
-              "blocksTrajectory": [
-                "flat"
-              ]
+              "type": "splashPct",
+              "value": 0.186
             }
           ]
         },
@@ -6684,15 +7159,12 @@
           "skillLevel": 5,
           "effects": [
             {
-              "type": "wallTiles",
+              "type": "extraTargets",
               "value": 1
             },
             {
-              "type": "damageReductionPct",
-              "value": 0.132,
-              "blocksTrajectory": [
-                "flat"
-              ]
+              "type": "splashPct",
+              "value": 0.198
             }
           ]
         }
@@ -6705,15 +7177,245 @@
             "skillLevel": 1,
             "effects": [
               {
-                "type": "wallTiles",
+                "type": "extraTargets",
                 "value": 1
               },
               {
-                "type": "damageReductionPct",
-                "value": 0.1,
+                "type": "splashPct",
+                "value": 0.15
+              }
+            ],
+            "attackPerHit": 80,
+            "splashDamage": 12
+          },
+          {
+            "skillLevel": 2,
+            "effects": [
+              {
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.162
+              }
+            ],
+            "attackPerHit": 80,
+            "splashDamage": 13
+          },
+          {
+            "skillLevel": 3,
+            "effects": [
+              {
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.174
+              }
+            ],
+            "attackPerHit": 80,
+            "splashDamage": 14
+          },
+          {
+            "skillLevel": 4,
+            "effects": [
+              {
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.186
+              }
+            ],
+            "attackPerHit": 80,
+            "splashDamage": 15
+          },
+          {
+            "skillLevel": 5,
+            "effects": [
+              {
+                "type": "extraTargets",
+                "value": 1
+              },
+              {
+                "type": "splashPct",
+                "value": 0.198
+              }
+            ],
+            "attackPerHit": 80,
+            "splashDamage": 16
+          }
+        ]
+      },
+      "activation": {
+        "trigger": "onBasicAttack",
+        "target": "primaryAndAdjacentEnemy"
+      },
+      "tags": [
+        "rare",
+        "rare",
+        "attack",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_heavy_shield_normal",
+      "heroId": "heavy_shield",
+      "slot": "normal",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重型盾·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约45点）",
+      "visualDescription": "盾面光刃，平直盾击；**平直**射向单格目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.05
+        }
+      ],
+      "tags": [
+        "rare",
+        "defense",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_heavy_shield_rare",
+      "heroId": "heavy_shield",
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重型盾·重盾护壁",
+      "description": "抵御自身1格平直攻击；后方建筑获得减伤。【稀有】自身1格完全抵御平直攻击；后方建筑免伤。【触发】常驻被动；自身1格抵御平直攻击；后方建筑免伤。",
+      "visualDescription": "巨型盾面升起，挡平直弹道；后方建筑笼罩护盾",
+      "projectileStyle": "flat",
+      "attackMode": "passive_defense",
+      "unlockLevel": 5,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
+      "effects": [
+        {
+          "type": "blockFlatTile",
+          "value": 1,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        },
+        {
+          "type": "rearBuildingDrPct",
+          "value": 1.0
+        }
+      ],
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "blockFlatTile",
+              "value": 1,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "rearBuildingDrPct",
+              "value": 1.0
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "blockFlatTile",
+              "value": 1,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "rearBuildingDrPct",
+              "value": 1.08
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "blockFlatTile",
+              "value": 1,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "rearBuildingDrPct",
+              "value": 1.16
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "blockFlatTile",
+              "value": 1,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "rearBuildingDrPct",
+              "value": 1.24
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "blockFlatTile",
+              "value": 1,
+              "blocksTrajectory": [
+                "flat"
+              ]
+            },
+            {
+              "type": "rearBuildingDrPct",
+              "value": 1.32
+            }
+          ]
+        }
+      ],
+      "damageExamples": {
+        "heroAttackL1": 45,
+        "heroHpL1": 420,
+        "levels": [
+          {
+            "skillLevel": 1,
+            "effects": [
+              {
+                "type": "blockFlatTile",
+                "value": 1,
                 "blocksTrajectory": [
                   "flat"
                 ]
+              },
+              {
+                "type": "rearBuildingDrPct",
+                "value": 1.0
               }
             ]
           },
@@ -6721,15 +7423,15 @@
             "skillLevel": 2,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 1
-              },
-              {
-                "type": "damageReductionPct",
-                "value": 0.108,
+                "type": "blockFlatTile",
+                "value": 1,
                 "blocksTrajectory": [
                   "flat"
                 ]
+              },
+              {
+                "type": "rearBuildingDrPct",
+                "value": 1.08
               }
             ]
           },
@@ -6737,15 +7439,15 @@
             "skillLevel": 3,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 1
-              },
-              {
-                "type": "damageReductionPct",
-                "value": 0.116,
+                "type": "blockFlatTile",
+                "value": 1,
                 "blocksTrajectory": [
                   "flat"
                 ]
+              },
+              {
+                "type": "rearBuildingDrPct",
+                "value": 1.16
               }
             ]
           },
@@ -6753,15 +7455,15 @@
             "skillLevel": 4,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 1
-              },
-              {
-                "type": "damageReductionPct",
-                "value": 0.124,
+                "type": "blockFlatTile",
+                "value": 1,
                 "blocksTrajectory": [
                   "flat"
                 ]
+              },
+              {
+                "type": "rearBuildingDrPct",
+                "value": 1.24
               }
             ]
           },
@@ -6769,18 +7471,26 @@
             "skillLevel": 5,
             "effects": [
               {
-                "type": "wallTiles",
-                "value": 1
-              },
-              {
-                "type": "damageReductionPct",
-                "value": 0.132,
+                "type": "blockFlatTile",
+                "value": 1,
                 "blocksTrajectory": [
                   "flat"
                 ]
+              },
+              {
+                "type": "rearBuildingDrPct",
+                "value": 1.32
               }
             ]
           }
+        ]
+      },
+      "activation": {
+        "trigger": "passive",
+        "scope": "selfTile",
+        "rearBuildingDr": true,
+        "blocksTrajectory": [
+          "flat"
         ]
       },
       "tags": [
@@ -6797,21 +7507,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "重锤卫士·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈",
+      "name": "重锤卫士·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约53点）",
+      "visualDescription": "重锤平直挥击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.051,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
@@ -6827,21 +7534,18 @@
       "skillKind": "normal",
       "category": "defense",
       "categoryLabel": "防御",
-      "name": "骷髅刀盾兵·铁壁",
-      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
-      "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈",
+      "name": "骷髅刀盾兵·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约24点）",
+      "visualDescription": "刀盾平直格挡；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.051,
-          "blocksTrajectory": [
-            "flat"
-          ]
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
@@ -6857,18 +7561,18 @@
       "skillKind": "normal",
       "category": "speed",
       "categoryLabel": "加速",
-      "name": "小野猪人·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "短矛轻快直线戳刺；出手前摇缩短，弹道仍**平直**",
+      "name": "小野猪人·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）",
+      "visualDescription": "短矛轻快直线戳刺；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.068
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
@@ -6884,18 +7588,18 @@
       "skillKind": "normal",
       "category": "supply",
       "categoryLabel": "补给",
-      "name": "长枪教头·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "name": "长枪教头·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约25点）",
+      "visualDescription": "锻造火花，平直补给友军；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.17
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
@@ -6909,25 +7613,25 @@
       "heroId": "militia",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "speed",
-      "categoryLabel": "加速",
-      "name": "短剑士·迅捷装填",
-      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
-      "visualDescription": "短剑平直快攻；出手前摇缩短，弹道仍**平直**",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "短剑士·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约30点）",
+      "visualDescription": "短剑平直快攻；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "fireRatePct",
-          "value": 0.068
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
         "common",
-        "speed",
+        "attack",
         "unit"
       ]
     },
@@ -6936,25 +7640,25 @@
       "heroId": "bone_archer",
       "slot": "normal",
       "skillKind": "normal",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "火枪手·应急包扎",
-      "description": "主动为自身恢复少量生命（约20%最大生命）",
-      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火枪手·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）（100%攻击力，L1约20点）",
+      "visualDescription": "火枪弹，平直射击；**平直**射向单格目标",
       "projectileStyle": "flat",
-      "attackMode": "self",
+      "attackMode": "single",
       "unlockLevel": 1,
       "upgradeable": false,
       "maxLevel": 1,
       "effects": [
         {
-          "type": "healPct",
-          "value": 0.17
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
       "tags": [
         "common",
-        "supply",
+        "attack",
         "unit"
       ]
     },

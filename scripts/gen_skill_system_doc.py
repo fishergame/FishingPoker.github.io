@@ -47,6 +47,21 @@ def skill_block(sk: dict | None) -> str:
     ]
     if sk.get("attackTrajectory"):
         lines.append(f"- 攻击弹道：**{sk['attackTrajectory']}**（穿透普通铁壁）")
+    if sk.get("activation"):
+        act = sk["activation"]
+        act_parts = []
+        if act.get("trigger") == "onBasicAttack":
+            act_parts.append("每次普攻触发")
+        elif act.get("trigger") == "passive":
+            act_parts.append("常驻被动")
+        elif act.get("trigger") == "active" and act.get("cooldownSec"):
+            act_parts.append(f"每{act['cooldownSec']}秒触发1次")
+        if act.get("durationSec"):
+            act_parts.append(f"持续{act['durationSec']}秒")
+        if act.get("target"):
+            act_parts.append(f"目标={act['target']}")
+        if act_parts:
+            lines.append(f"- 触发：{'；'.join(act_parts)}")
     if sk.get("upgradeable"):
         lines.append(f"- 可升级：1→{sk['maxLevel']} 级")
     ex = sk.get("damageExamples")
@@ -110,11 +125,18 @@ def gen_unified_skill_md(
         if c:
             cat_count[c] = cat_count.get(c, 0) + 1
 
+    combat_count = sum(1 for h in heroes.values() if h.get("heroId") != "gold_mine")
+    faction_count: dict[str, int] = {}
+    for h in heroes.values():
+        f = h.get("faction")
+        if f and h.get("heroId") != "gold_mine":
+            faction_count[f] = faction_count.get(f, 0) + 1
+
     lines: list[str] = [
         "# 技能体系 v3 · 完整文档",
         "",
         "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录",
-        "> 配表：`skill.json` v3.0.0 · `heroBattle.json` v3.0.0 · `bond.json` v2.0.0",
+        "> 配表：`skill.json` v3.2.0 · `heroBattle.json` v3.2.0 · `bond.json` v3.2.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
@@ -146,8 +168,10 @@ def gen_unified_skill_md(
         "- **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率",
         "",
         f"当前共 **{skill_count}** 个技能，覆盖 **{len(heroes)}** 位英雄。",
-        f"**定位分布（战斗英雄 36）**：攻击 14 · 防御 10 · 补给 6 · 加速 6",
-        f"**种族分布**：人族 10 · 兽族 9 · 亡灵 9 · 机械 9",
+        f"**定位分布（战斗英雄 {combat_count}）**："
+        + " · ".join(f"{CATEGORY_CN[k]} {cat_count.get(k, 0)}" for k in CATEGORY_CN),
+        f"**种族分布**："
+        + " · ".join(f"{FACTION_CN[k]} {faction_count.get(k, 0)}" for k in FACTION_CN),
         "",
         "---",
         "",
@@ -164,12 +188,14 @@ def gen_unified_skill_md(
         "",
         "## 三、四类技能与特技递进",
         "",
-        "| 类型 | 战术目标 | 普通技 | 稀有特技 | 史诗特技 | 传奇特技 |",
+        "| 类型 | 战术目标 | 普通技（普攻） | 稀有特技 | 史诗特技 | 传奇特技 |",
         "|:---|:---|:---|:---|:---|:---|",
-        "| **攻击** | 输出/击杀/亡灵 | 平直点射 | 双联点射（溅射） | 连锁穿透 | 高空重击 / 亡灵收割 |",
-        "| **防御** | 护墙/减伤 | 铁壁（仅挡平直） | 单格护墙 | 三格盾带（挡弧） | 全局圣域（挡弧） |",
-        "| **补给** | 回血 | 应急包扎 20% | 战地包扎 30% | 群体复苏 50% | 满血圣疗 |",
-        "| **加速** | 攻速/弹速 | 迅捷装填 | 速射补给 | 弹速增压 | 狂热号令 |",
+        "| **攻击** | 输出/击杀/亡灵 | 平直/高抛点射 | 双联点射（溅射） | 连锁穿透 | 高空重击 / 亡灵收割 |",
+        "| **防御** | 护墙/减伤 | 平直/高抛点射 | 单格护墙 / 重盾护壁 | 三格盾带（挡弧） | 全局圣域 / 天穹护盾 |",
+        "| **补给** | 回血 | 平直/高抛点射 | 战地包扎 30% | 群体复苏 50% | 满血圣疗（最低血友军） |",
+        "| **加速** | 攻速/弹速 | 平直/高抛点射 | 速射补给 | 弹速增压 | 狂热号令 |",
+        "",
+        "> **普攻**：所有战斗卡牌均拥有普攻（按弹道平直/高抛），特技另计触发间隔与持续时间。",
         "",
         "---",
         "",
@@ -189,7 +215,8 @@ def gen_unified_skill_md(
         "| **普通铁壁** | 仅 `flat` | 无法抵挡特技高抛 |",
         "| **稀有单格护墙**附加减伤 | 仅 `flat` | 护墙 + 平直减伤 |",
         "| **史诗三格盾带** | `flat` + `arc` | 范围内友军可挡高抛 |",
-        "| **传奇全局圣域** | `flat` + `arc` | 全队减伤，可挡高抛 |",
+        "| **重型盾·重盾护壁** | 仅 `flat` | 自身1格挡平直；后方建筑免伤 |",
+        "| **天穹·天穹护盾** | `flat`（被动）+ `arc`（激活） | 周围4格挡平直；每4秒激活5秒挡高抛 |",
         "",
         "### 4.3 对抗示例",
         "",
