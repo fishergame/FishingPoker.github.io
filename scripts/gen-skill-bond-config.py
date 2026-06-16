@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate skill.json, bond.json, heroBattle.json, docs/SKILL_BOND_REVIEW.md"""
+"""Generate skill.json, bond.json, heroBattle.json, docs/SKILL_BOND_REVIEW.md (v3)"""
 import json
 import subprocess
 from pathlib import Path
@@ -7,148 +7,71 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 STAT_GROWTH = 1.15
-MAX_CITY_DPS_MULTIPLIER = 1.45
+FIRE_RATE_GROWTH = 1.02
+PROJECTILE_SPEED_GROWTH = 1.03
+SPECIAL_SKILL_MAX = 5
+SPECIAL_SCALING_PER_LEVEL = 0.08
+SKILL_UPGRADE_FRAGMENTS = [5, 8, 12, 18]  # 特技 L1→2 … L4→5
 
 FACTIONS = ["wei", "shu", "wu", "qun"]
 FACTION_CN = {"wei": "魏", "shu": "蜀", "wu": "吴", "qun": "群雄"}
 
-ARCHETYPE_CN = {
-    "clear": "清场",
-    "guard": "守门",
-    "siege": "破城",
-    "tempo": "节奏",
+CATEGORY_CN = {
+    "attack": "攻击",
+    "defense": "防御",
+    "supply": "补给",
+    "speed": "加速",
 }
 
-# 翻卡玩法：每英雄定位（清场 / 守门 / 破城 / 节奏）
-HERO_ARCHETYPE: dict[str, str] = {
-    "dragon_knight": "clear",
-    "demon_lord": "clear",
-    "archmage": "clear",
-    "ranger": "siege",
-    "royal_knight": "guard",
-    "druid": "guard",
-    "lich_queen": "clear",
-    "blademaster": "clear",
-    "frost_dragon": "siege",
-    "crusher": "siege",
-    "helicopter": "siege",
-    "dread_knight": "clear",
-    "warlord": "guard",
-    "panda_monk": "clear",
-    "shaman": "clear",
-    "gargoyle": "guard",
-    "skeleton_giant": "guard",
-    "sniper": "siege",
-    "catapult_tower": "siege",
-    "catapult": "clear",
-    "cavalry": "clear",
-    "wyrmling": "clear",
-    "ballista": "siege",
-    "necromancer": "tempo",
-    "spear_orc": "clear",
-    "wolf_rider": "clear",
-    "skeleton_knight": "clear",
-    "archer": "siege",
-    "infantry": "guard",
-    "arrow_tower": "siege",
-    "bear_warrior": "guard",
-    "skeleton_warrior": "guard",
-    "goblin": "tempo",
-    "blacksmith": "guard",
-    "militia": "tempo",
-    "bone_archer": "siege",
-    "gold_mine": "tempo",
+QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
+QUALITY_SPECIAL_SLOT = {
+    "common": None,
+    "rare": "rare",
+    "epic": "epic",
+    "legendary": "legendary",
 }
+QUALITY_POWER = {"common": 0.85, "rare": 1.0, "epic": 1.12, "legendary": 1.25}
+SKILL_FRAG_Q_MULT = {"common": 1.0, "rare": 1.5, "epic": 2.5, "legendary": 4.0}
 
-QUALITY_SCALE = {
-    "common": 0.88,
-    "rare": 1.0,
-    "epic": 1.08,
-    "legendary": 1.15,
-}
-
-EFFECT_BOUNDS = {
-    "atkPct": (0.05, 0.25),
-    "atkSpeedPct": (0.05, 0.20),
-    "splashPct": (0.10, 0.35),
-    "cityDamagePct": (0.05, 0.20),
-    "unitHpPct": (0.05, 0.20),
-    "damageReductionPct": (0.05, 0.20),
-    "dotPctPerSec": (0.02, 0.08),
-    "lifestealPct": (0.05, 0.15),
-    "deployBurstPct": (0.30, 0.70),
-    "killGold": (5, 25),
-    "flipRefundPct": (0.10, 0.35),
-    "revealAdjacent": (1, 2),
-    "deployGold": (8, 30),
-    "taunt": (1, 1),
-    "executeBonusPct": (0.20, 0.50),
-}
-
-EXECUTE_THRESHOLD = 0.25
-
-BOND_TIER_EFFECTS = {
-    "faction": [
-        {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
-        {
-            "count": 4,
-            "effects": [
-                {"type": "atkPct", "value": 0.08},
-                {"type": "unitHpPct", "value": 0.05},
-            ],
-        },
-        {
-            "count": 6,
-            "effects": [
-                {"type": "atkPct", "value": 0.12},
-                {"type": "unitHpPct", "value": 0.08},
-                {"type": "cityDamagePct", "value": 0.05},
-            ],
-        },
-    ],
-    "range_melee": [
-        {"count": 2, "effects": [{"type": "unitHpPct", "value": 0.06}]},
-        {
-            "count": 4,
-            "effects": [
-                {"type": "unitHpPct", "value": 0.10},
-                {"type": "damageReductionPct", "value": 0.05},
-            ],
-        },
-        {
-            "count": 6,
-            "effects": [
-                {"type": "unitHpPct", "value": 0.15},
-                {"type": "damageReductionPct", "value": 0.08},
-            ],
-        },
-    ],
-    "range_ranged": [
-        {"count": 2, "effects": [{"type": "atkPct", "value": 0.06}]},
-        {
-            "count": 4,
-            "effects": [
-                {"type": "atkPct", "value": 0.10},
-                {"type": "atkSpeedPct", "value": 0.05},
-            ],
-        },
-        {
-            "count": 6,
-            "effects": [
-                {"type": "atkPct", "value": 0.15},
-                {"type": "atkSpeedPct", "value": 0.08},
-            ],
-        },
-    ],
-}
-
-# 清场传奇：部分英雄用处决/剧毒替代部署突袭
-CLEAR_LEGEND_VARIANT = {
-    "blademaster": "execute",
-    "archmage": "dot",
-    "lich_queen": "dot",
-    "panda_monk": "deploy_burst",
-    "catapult": "deploy_burst",
+# 英雄 → 技能倾向、弹道表现（取消远近战战斗逻辑，仅表现）
+HERO_PROFILE: dict[str, dict] = {
+    "dragon_knight": {"category": "attack", "projectile": "arc", "weapon": "龙息火球，高抛弧线落点单格"},
+    "demon_lord": {"category": "attack", "projectile": "arc", "weapon": "冰锥术，抛物线冻结打击"},
+    "archmage": {"category": "attack", "projectile": "arc", "weapon": "雷球高抛，落点范围电弧"},
+    "ranger": {"category": "attack", "projectile": "arc", "weapon": "荆棘箭雨，弧线覆盖单格"},
+    "royal_knight": {"category": "defense", "projectile": "flat", "weapon": "圣盾光波，平直盾击"},
+    "druid": {"category": "defense", "projectile": "flat", "weapon": "自然屏障，平直藤蔓盾"},
+    "lich_queen": {"category": "attack", "projectile": "arc", "weapon": "幽魂炮，高抛灵魂弹"},
+    "blademaster": {"category": "attack", "projectile": "flat", "weapon": "影刃直线突刺"},
+    "frost_dragon": {"category": "attack", "projectile": "arc", "weapon": "巨锤冰陨，高空重砸"},
+    "crusher": {"category": "attack", "projectile": "arc", "weapon": "破城锤，高抛砸击单格"},
+    "helicopter": {"category": "attack", "projectile": "flat", "weapon": "机炮连射，平直子弹"},
+    "dread_knight": {"category": "attack", "projectile": "flat", "weapon": "巨斧直线劈砍"},
+    "warlord": {"category": "defense", "projectile": "flat", "weapon": "双头咆哮盾墙，平直冲击波"},
+    "panda_monk": {"category": "attack", "projectile": "arc", "weapon": "炸药包高抛，落地爆炸"},
+    "shaman": {"category": "supply", "projectile": "flat", "weapon": "治疗花粉，平直飘向友军"},
+    "gargoyle": {"category": "defense", "projectile": "flat", "weapon": "石肤护壁，平直岩盾"},
+    "skeleton_giant": {"category": "defense", "projectile": "flat", "weapon": "巨石屏障，平直岩块"},
+    "sniper": {"category": "attack", "projectile": "flat", "weapon": "狙击弹，极快平直弹道"},
+    "catapult_tower": {"category": "attack", "projectile": "arc", "weapon": "石弹高抛，经典抛物线"},
+    "catapult": {"category": "attack", "projectile": "arc", "weapon": "自爆蜘蛛高抛投掷"},
+    "cavalry": {"category": "attack", "projectile": "flat", "weapon": "骑枪冲锋，平直突刺"},
+    "wyrmling": {"category": "attack", "projectile": "arc", "weapon": "幼龙火球，小抛物线"},
+    "ballista": {"category": "attack", "projectile": "arc", "weapon": "弩炮重矢，高抛穿透"},
+    "necromancer": {"category": "attack", "projectile": "arc", "weapon": "亡灵弹，弧线触发复活格"},
+    "spear_orc": {"category": "attack", "projectile": "flat", "weapon": "鱼叉直线投掷"},
+    "wolf_rider": {"category": "attack", "projectile": "flat", "weapon": "利爪直线扑击"},
+    "skeleton_knight": {"category": "attack", "projectile": "flat", "weapon": "骨刃直线斩"},
+    "archer": {"category": "attack", "projectile": "flat", "weapon": "魔法箭平直射击"},
+    "infantry": {"category": "defense", "projectile": "flat", "weapon": "塔盾格挡，平直盾击"},
+    "arrow_tower": {"category": "attack", "projectile": "arc", "weapon": "高射炮弹，高空抛物线"},
+    "bear_warrior": {"category": "defense", "projectile": "flat", "weapon": "重锤平直挥击"},
+    "skeleton_warrior": {"category": "defense", "projectile": "flat", "weapon": "刀盾平直格挡"},
+    "goblin": {"category": "speed", "projectile": "flat", "weapon": "短矛轻快直线戳刺"},
+    "blacksmith": {"category": "defense", "projectile": "flat", "weapon": "长枪平直突刺"},
+    "militia": {"category": "attack", "projectile": "flat", "weapon": "短剑平直快攻"},
+    "bone_archer": {"category": "attack", "projectile": "flat", "weapon": "火枪铅弹平直射击"},
+    "gold_mine": {"category": "supply", "projectile": "flat", "weapon": "矿车补给，无攻击弹道"},
 }
 
 
@@ -162,143 +85,241 @@ def load_heroes() -> list[dict]:
     return json.loads(subprocess.check_output(["node", "-e", script], cwd=ROOT, text=True))
 
 
-def infer_range(hero: dict) -> str:
-    if hero["type"] == "building":
-        return "ranged"
-    if hero.get("attackRange") is None:
-        return "melee"
-    return "ranged" if hero["attackRange"] > 2.5 else "melee"
-
-
-def infer_archetype(hero: dict) -> str:
+def profile_for(hero: dict) -> dict:
     hid = hero["id"]
-    if hid in HERO_ARCHETYPE:
-        return HERO_ARCHETYPE[hid]
-    rng = infer_range(hero)
+    if hid in HERO_PROFILE:
+        return HERO_PROFILE[hid]
     if hero["type"] == "resource":
-        return "tempo"
+        return {"category": "supply", "projectile": "flat", "weapon": "资源补给"}
     if hero["type"] == "building":
-        return "siege"
-    atk = hero.get("attack") or 0
-    hp = hero.get("unitHp") or 0
-    if hp >= 400 or (hp >= 250 and rng == "melee"):
-        return "guard"
-    if (hero.get("attackRange") or 0) >= 5 or atk >= 90:
-        return "siege"
-    return "clear"
+        return {"category": "attack", "projectile": "arc", "weapon": "建筑高抛炮击"}
+    return {"category": "attack", "projectile": "flat", "weapon": "平直射击"}
 
 
-def scale_value(base: float, quality: str) -> float:
-    return round(base * QUALITY_SCALE.get(quality, 1.0), 3)
+def qscale(quality: str, base: float) -> float:
+    return round(base * QUALITY_POWER.get(quality, 1.0), 3)
 
 
-def build_skill(hero: dict, slot: str, archetype: str) -> dict:
-    hid = hero["id"]
+def skill_value_at_level(base: float, skill_level: int) -> float:
+    return round(base * (1 + SPECIAL_SCALING_PER_LEVEL * (skill_level - 1)), 3)
+
+
+def build_normal_skill(hero: dict, prof: dict) -> dict:
     q = hero["quality"]
-    rng = infer_range(hero)
-    sid = f"skill_{hid}_{slot}"
-    unlock = {"normal": 1, "epic": 8, "legend": 20}[slot]
+    cat = prof["category"]
+    hid = hero["id"]
+    p = QUALITY_POWER[q]
 
-    if archetype == "clear":
-        if slot == "normal":
-            name, desc = "猎杀", "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡"
-            effects = [{"type": "atkPct", "value": scale_value(0.07, q)}]
-            phase, target = "always", "self"
-        elif slot == "epic":
-            name, desc = "横扫", "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）"
-            effects = [{"type": "splashPct", "value": scale_value(0.20, q)}]
-            phase, target = "field_only", "enemy_unit_adjacent"
-        else:
-            variant = CLEAR_LEGEND_VARIANT.get(hid, "deploy_burst")
-            if variant == "execute":
-                name, desc = "处决", f"攻击血量低于{int(EXECUTE_THRESHOLD * 100)}%的敌方兵卡时，伤害大幅提升"
-                effects = [
-                    {"type": "executeBonusPct", "value": scale_value(0.35, q), "threshold": EXECUTE_THRESHOLD},
-                ]
-                phase, target = "field_only", "enemy_unit"
-            elif variant == "dot":
-                name, desc = "剧毒", "普攻命中敌方兵卡后施加持续伤害（仅对单位，不对主城）"
-                effects = [{"type": "dotPctPerSec", "value": scale_value(0.05, q)}]
-                phase, target = "field_only", "enemy_unit"
-            else:
-                name, desc = "部署突袭", "翻卡落地时对最近敌方兵卡造成一次爆发伤害"
-                effects = [{"type": "deployBurstPct", "value": scale_value(0.50, q)}]
-                phase, target = "on_deploy", "enemy_unit_nearest"
+    if cat == "attack":
+        name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
+        vfx = "基础弹药**平直**射向单格目标；无高抛"
+        effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
+        attack_mode = "single"
+    elif cat == "defense":
+        name, desc = "铁壁", "自身受到的伤害降低，形成基础防护"
+        vfx = f"{prof['weapon']}；护体光效贴身，**平直**格挡反馈"
+        effects = [{"type": "damageReductionPct", "value": qscale(q, 0.06)}]
+        attack_mode = "self"
+    elif cat == "supply":
+        name, desc = "应急包扎", "主动为自身恢复少量生命（约20%最大生命）"
+        vfx = "绿色光粒平直飞向自身；**补给粒子**"
+        effects = [{"type": "healPct", "value": qscale(q, 0.20)}]
+        attack_mode = "self"
+    else:
+        name, desc = "迅捷装填", "提升发射间隔效率（攻速补给），弹道更快出手"
+        vfx = f"{prof['weapon']}；出手前摇缩短，弹道仍**平直**"
+        effects = [{"type": "fireRatePct", "value": qscale(q, 0.08)}]
+        attack_mode = "self"
 
-    elif archetype == "guard":
-        if slot == "normal":
-            name, desc = "坚盾", "提升自身生命，在前线阻挡更久"
-            effects = [{"type": "unitHpPct", "value": scale_value(0.08, q)}]
-            phase, target = "always", "self"
-        elif slot == "epic":
-            name, desc = "铁壁", "受到敌方兵卡攻击时减伤"
-            effects = [{"type": "damageReductionPct", "value": scale_value(0.12, q)}]
-            phase, target = "field_only", "self"
-        else:
-            name, desc = "嘲讽", "敌方兵卡优先攻击本单位，为队友争取攻城窗口"
-            effects = [{"type": "taunt", "value": 1}]
-            phase, target = "always", "self"
-
-    elif archetype == "siege":
-        if slot == "normal":
-            name, desc = "瞄准", "提升攻速，清场后更快转火主城"
-            effects = [{"type": "atkSpeedPct", "value": scale_value(0.08, q)}]
-            phase, target = "always", "self"
-        elif slot == "epic":
-            name, desc = "蓄力", "对敌方兵卡伤害提升，便于打开攻城通道"
-            effects = [{"type": "atkPct", "value": scale_value(0.10, q)}]
-            phase, target = "field_only", "self"
-        else:
-            name, desc = "破城", "场上无敌方兵卡时，对主城伤害大幅提升"
-            effects = [{"type": "cityDamagePct", "value": scale_value(0.12, q)}]
-            phase, target = "siege_only", "enemy_city"
-
-    else:  # tempo
-        if slot == "normal":
-            if hero["type"] == "resource":
-                name, desc = "矿脉", "翻开后获得额外金币"
-                effects = [{"type": "deployGold", "value": int(scale_value(12, q))}]
-                phase, target = "on_deploy", "self"
-            else:
-                name, desc = "轻装", "翻卡费用部分返还，加快铺场节奏"
-                effects = [{"type": "flipRefundPct", "value": scale_value(0.15, q)}]
-                phase, target = "on_deploy", "self"
-        elif slot == "epic":
-            name, desc = "战利", "击杀敌方兵卡后获得金币"
-            effects = [{"type": "killGold", "value": int(scale_value(10, q))}]
-            phase, target = "on_kill", "self"
-        else:
-            name, desc = "扩张", "翻卡落地时额外翻开相邻未翻格预览"
-            effects = [{"type": "revealAdjacent", "value": 1}]
-            phase, target = "on_deploy", "adjacent_cells"
+    if hero["type"] == "resource":
+        name, desc = "矿脉", "翻开获得额外金币，无战斗攻击"
+        vfx = "金币从矿口平直弹出"
+        effects = [{"type": "deployGold", "value": int(10 * p)}]
+        attack_mode = "none"
 
     return {
-        "skillId": sid,
+        "skillId": f"skill_{hid}_normal",
         "heroId": hid,
-        "slot": slot,
-        "archetype": archetype,
-        "archetypeLabel": ARCHETYPE_CN[archetype],
+        "slot": "normal",
+        "skillKind": "normal",
+        "category": cat,
+        "categoryLabel": CATEGORY_CN[cat],
         "name": f"{hero['name']}·{name}",
         "description": desc,
-        "unlockLevel": unlock,
-        "maxLevel": 10,
+        "visualDescription": vfx,
+        "projectileStyle": prof["projectile"],
+        "attackMode": attack_mode,
+        "unlockLevel": 1,
+        "upgradeable": False,
+        "maxLevel": 1,
         "effects": effects,
-        "scalingPerSkillLevel": 0.02,
-        "phase": phase,
-        "target": target,
-        "tags": [q, rng, hero["type"], archetype],
+        "tags": [q, cat, hero["type"]],
     }
+
+
+def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
+    q = hero["quality"]
+    cat = prof["category"]
+    hid = hero["id"]
+    tier_power = {"rare": 1.0, "epic": 1.35, "legendary": 1.75}[slot]
+
+    if cat == "attack":
+        if slot == "rare":
+            name, desc = "双联点射", "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）"
+            vfx = f"{prof['weapon']}；主目标+邻格溅射，{'高抛' if prof['projectile']=='arc' else '平直'}双道"
+            effects = [{"type": "extraTargets", "value": 1}, {"type": "splashPct", "value": qscale(q, 0.15 * tier_power)}]
+            attack_mode = "multi"
+        elif slot == "epic":
+            name, desc = "连锁穿透", "攻击可连锁2个敌方兵卡，造成递减伤害"
+            vfx = f"{'高抛爆炸链' if prof['projectile']=='arc' else '平直穿透'}，依次命中2格"
+            effects = [{"type": "chainTargets", "value": 2}, {"type": "atkPct", "value": qscale(q, 0.12 * tier_power)}]
+            attack_mode = "chain"
+        else:
+            if hid == "necromancer" or "skeleton" in hid or hid == "lich_queen":
+                name, desc = "亡灵收割", "击杀敌方兵卡后，翻开相邻已阵亡格并召唤亡灵单位"
+                vfx = "幽绿弧线落下，阵亡格复燃翻出亡灵牌"
+                effects = [{"type": "reviveAdjacentDead", "value": 1}, {"type": "executeThreshold", "value": 0.25}]
+            else:
+                name, desc = "高空重击", "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡"
+                vfx = f"{prof['weapon']}；**强抛物线**高空砸击，落地重击特效"
+                effects = [
+                    {"type": "atkPct", "value": qscale(q, 0.25 * tier_power)},
+                    {"type": "executeThreshold", "value": 0.30},
+                    {"type": "projectileArc", "value": 1},
+                ]
+            attack_mode = "single_kill"
+
+    elif cat == "defense":
+        if slot == "rare":
+            name, desc = "单格护墙", "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合"
+            vfx = "石墙从地面平直升起，挡单格"
+            effects = [{"type": "wallTiles", "value": 1}, {"type": "damageReductionPct", "value": qscale(q, 0.10 * tier_power)}]
+        elif slot == "epic":
+            name, desc = "三格盾带", "护墙扩展至三格，范围内友军减伤"
+            vfx = "弧形盾带展开，覆盖三格"
+            effects = [{"type": "wallTiles", "value": 3}, {"type": "allyDamageReductionPct", "value": qscale(q, 0.12 * tier_power)}]
+        else:
+            name, desc = "全局圣域", "短时全队减伤，并阻挡敌方全局突进一次"
+            vfx = "全场地坪升起光幕护罩，全局防护"
+            effects = [{"type": "globalDamageReductionPct", "value": qscale(q, 0.15 * tier_power)}, {"type": "blockRush", "value": 1}]
+        attack_mode = "area_defense"
+
+    elif cat == "supply":
+        if slot == "rare":
+            name, desc = "战地包扎", "为血量最低友军恢复30%生命"
+            vfx = "治疗光带平直飞向友军"
+            effects = [{"type": "healAllyPct", "value": qscale(q, 0.30 * tier_power)}]
+        elif slot == "epic":
+            name, desc = "群体复苏", "范围友军恢复50%生命"
+            vfx = "绿色光环扩散，范围内友军回血"
+            effects = [{"type": "healAreaPct", "value": qscale(q, 0.50 * tier_power)}]
+        else:
+            name, desc = "满血圣疗", "将目标友军恢复至满血，并净化一次减益"
+            vfx = "金色光柱从天而降，满血恢复"
+            effects = [{"type": "healFull", "value": 1}, {"type": "cleanse", "value": 1}]
+        attack_mode = "heal"
+
+    else:  # speed
+        if slot == "rare":
+            name, desc = "速射补给", "提升自身发射速度（缩短攻击间隔）15%"
+            vfx = "装填火花，弹道连发更密"
+            effects = [{"type": "fireRatePct", "value": qscale(q, 0.15 * tier_power)}]
+        elif slot == "epic":
+            name, desc = "弹速增压", "提升弹道飞行速度，并小幅提升攻速"
+            vfx = "弹道拖尾加速，平直/高抛均更快到达"
+            effects = [{"type": "projectileSpeedPct", "value": qscale(q, 0.20 * tier_power)}, {"type": "fireRatePct", "value": qscale(q, 0.10 * tier_power)}]
+        else:
+            name, desc = "狂热号令", "全队攻速提升，并翻开相邻1格"
+            vfx = "战鼓音波扩散，相邻格翻开预览"
+            effects = [{"type": "teamFireRatePct", "value": qscale(q, 0.18 * tier_power)}, {"type": "revealAdjacent", "value": 1}]
+        attack_mode = "buff"
+
+    base_effects = effects
+    level_curve = []
+    for lv in range(1, SPECIAL_SKILL_MAX + 1):
+        scaled = []
+        for e in base_effects:
+            if e["type"] in ("extraTargets", "chainTargets", "wallTiles", "reviveAdjacentDead", "revealAdjacent", "healFull", "cleanse", "blockRush", "projectileArc"):
+                scaled.append({**e})
+            else:
+                scaled.append({**e, "value": skill_value_at_level(e["value"], lv)})
+        level_curve.append({"skillLevel": lv, "effects": scaled})
+
+    return {
+        "skillId": f"skill_{hid}_{slot}",
+        "heroId": hid,
+        "slot": slot,
+        "skillKind": "special",
+        "category": cat,
+        "categoryLabel": CATEGORY_CN[cat],
+        "name": f"{hero['name']}·{name}",
+        "description": desc,
+        "visualDescription": vfx,
+        "projectileStyle": "arc" if slot == "legendary" and cat == "attack" else prof["projectile"],
+        "attackMode": attack_mode,
+        "unlockLevel": 1,
+        "upgradeable": True,
+        "maxLevel": SPECIAL_SKILL_MAX,
+        "scalingPerSkillLevel": SPECIAL_SCALING_PER_LEVEL,
+        "effects": level_curve[0]["effects"],
+        "levelCurve": level_curve,
+        "tags": [q, slot, cat, hero["type"]],
+    }
+
+
+def derive_combat_stats(hero: dict) -> dict:
+    """旧 attackSpeed 作 fireRate；新 attackSpeed = 弹道速度。"""
+    old_spd = hero.get("attackSpeed") or 1.0
+    prof = profile_for(hero)
+    if hero["type"] == "resource":
+        return {"fireRateL1": None, "attackSpeedL1": None, "attackIntervalL1": None}
+    if prof["projectile"] == "arc":
+        projectile = min(10, max(4.0, old_spd + 2.5))
+    else:
+        projectile = min(10, max(5.0, old_spd + 3.0))
+    fire_rate = round(old_spd, 2)
+    interval = round(2.2 / fire_rate, 2) if fire_rate else None
+    return {
+        "fireRateL1": fire_rate,
+        "attackSpeedL1": round(projectile, 2),
+        "attackIntervalL1": interval,
+        "projectileStyle": prof["projectile"],
+        "weaponVfx": prof["weapon"],
+    }
+
+
+def stat_at_level(l1: float, level: int, growth: float = STAT_GROWTH) -> int:
+    if l1 is None:
+        return None
+    return round(l1 * (growth ** (level - 1)))
 
 
 def gen_skills(heroes: list[dict]) -> list[dict]:
     skills = []
     for h in heroes:
-        if h["type"] == "resource" and h["id"] != "gold_mine":
-            continue
-        archetype = infer_archetype(h)
-        for slot in ("normal", "epic", "legend"):
-            skills.append(build_skill(h, slot, archetype))
+        prof = profile_for(h)
+        skills.append(build_normal_skill(h, prof))
+        slot = QUALITY_SPECIAL_SLOT.get(h["quality"])
+        if slot:
+            skills.append(build_special_skill(h, prof, slot))
     return skills
+
+
+def skill_upgrade_table() -> dict:
+    rows = []
+    for from_lv, frag in enumerate(SKILL_UPGRADE_FRAGMENTS, start=1):
+        row = {"fromLevel": from_lv, "toLevel": from_lv + 1, "baseFragments": frag, "byQuality": {}}
+        for q, mult in SKILL_FRAG_Q_MULT.items():
+            row["byQuality"][q] = max(1, round(frag * mult))
+        rows.append(row)
+    return {
+        "specialSkillMaxLevel": SPECIAL_SKILL_MAX,
+        "normalSkillUpgradeable": False,
+        "scalingPerLevel": SPECIAL_SCALING_PER_LEVEL,
+        "formula": "effect(L) = base * (1 + 0.08*(L-1))",
+        "fragmentCost": rows,
+        "goldCostFormula": "round(heroGoldNeed[level-1] * 0.15)  // 特技升级金币≈同级英雄升级的15%",
+    }
 
 
 def assign_faction(heroes: list[dict]) -> dict[str, str]:
@@ -321,49 +342,86 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
 
     entries = {}
     for h in heroes:
-        if h["id"] == "gold_mine":
-            hs = by_hero.get(h["id"], [])
-            by_slot = {s["slot"]: s["skillId"] for s in hs}
-            entries[h["id"]] = {
-                "heroId": h["id"],
-                "name": h["name"],
-                "archetype": "tempo",
-                "archetypeLabel": "节奏",
-                "bondEligible": False,
-                "note": "铸币坊不计入羁绊",
-                "skills": {
-                    "normal": by_slot.get("normal"),
-                    "epic": by_slot.get("epic"),
-                    "legend": by_slot.get("legend"),
-                    "epicUnlockLevel": 8,
-                    "legendUnlockLevel": 20,
-                },
-            }
-            continue
-        hs = by_hero.get(h["id"], [])
+        hid = h["id"]
+        hs = by_hero.get(hid, [])
         by_slot = {s["slot"]: s["skillId"] for s in hs}
-        archetype = infer_archetype(h)
-        entries[h["id"]] = {
-            "heroId": h["id"],
+        prof = profile_for(h)
+        combat = derive_combat_stats(h)
+        q = h["quality"]
+        skill_map = {"normal": by_slot.get("normal")}
+        special = QUALITY_SPECIAL_SLOT.get(q)
+        if special:
+            skill_map[special] = by_slot.get(special)
+
+        entries[hid] = {
+            "heroId": hid,
             "name": h["name"],
-            "faction": factions[h["id"]],
-            "range": infer_range(h),
-            "archetype": archetype,
-            "archetypeLabel": ARCHETYPE_CN[archetype],
-            "bondEligible": True,
-            "skills": {
-                "normal": by_slot.get("normal"),
-                "epic": by_slot.get("epic"),
-                "legend": by_slot.get("legend"),
-                "epicUnlockLevel": 8,
-                "legendUnlockLevel": 20,
+            "quality": q,
+            "qualityLabel": QUALITY_CN[q],
+            "faction": factions.get(hid),
+            "category": prof["category"],
+            "categoryLabel": CATEGORY_CN[prof["category"]],
+            "bondEligible": hid != "gold_mine",
+            "combatStats": {
+                **combat,
+                "formulas": {
+                    "attack": f"round(attackL1 * {STAT_GROWTH}^(heroLevel-1))",
+                    "unitHp": f"round(unitHpL1 * {STAT_GROWTH}^(heroLevel-1))",
+                    "buildingHp": f"round(buildingHpL1 * {STAT_GROWTH}^(heroLevel-1))",
+                    "fireRate": f"round(fireRateL1 * {FIRE_RATE_GROWTH}^(heroLevel-1), 2)",
+                    "attackSpeed": f"round(attackSpeedL1 * {PROJECTILE_SPEED_GROWTH}^(heroLevel-1), 2)  // 弹道速度",
+                    "attackInterval": "2.2 / fireRate",
+                },
+                "attackL1": h.get("attack"),
+                "unitHpL1": h.get("unitHp"),
+                "buildingHpL1": h.get("buildingHp"),
+                "samples": {
+                    "L1": {
+                        "attack": stat_at_level(h.get("attack"), 1),
+                        "unitHp": stat_at_level(h.get("unitHp"), 1),
+                        "fireRate": combat.get("fireRateL1"),
+                        "attackSpeed": combat.get("attackSpeedL1"),
+                    },
+                    "L15": {
+                        "attack": stat_at_level(h.get("attack"), 15),
+                        "unitHp": stat_at_level(h.get("unitHp"), 15),
+                        "fireRate": round((combat.get("fireRateL1") or 0) * (FIRE_RATE_GROWTH ** 14), 2) if combat.get("fireRateL1") else None,
+                        "attackSpeed": round((combat.get("attackSpeedL1") or 0) * (PROJECTILE_SPEED_GROWTH ** 14), 2) if combat.get("attackSpeedL1") else None,
+                    },
+                    "L30": {
+                        "attack": stat_at_level(h.get("attack"), 30),
+                        "unitHp": stat_at_level(h.get("unitHp"), 30),
+                        "fireRate": round((combat.get("fireRateL1") or 0) * (FIRE_RATE_GROWTH ** 29), 2) if combat.get("fireRateL1") else None,
+                        "attackSpeed": round((combat.get("attackSpeedL1") or 0) * (PROJECTILE_SPEED_GROWTH ** 29), 2) if combat.get("attackSpeedL1") else None,
+                    },
+                },
+            },
+            "skills": skill_map,
+            "skillSlotsByQuality": {
+                "common": ["normal"],
+                "rare": ["normal", "rare"],
+                "epic": ["normal", "epic"],
+                "legendary": ["normal", "legendary"],
             },
         }
     return {
-        "version": "2.0.0",
-        "description": "英雄战斗元数据：阵营、定位、技能ID（普通/史诗/传奇各一）",
+        "version": "3.0.0",
+        "description": "英雄战斗元数据 v3：品质决定特技槽；普通技不可升级，特技5级",
+        "rules": {
+            "noMeleeRangedLogic": True,
+            "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
+            "fireRateMeans": "发射频率（攻击间隔=2.2/fireRate）",
+            "projectileStyle": "flat=平直射击 arc=高抛重击",
+        },
         "heroes": entries,
     }
+
+
+BOND_CATEGORY = [
+    {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
+    {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}, {"type": "fireRatePct", "value": 0.05}]},
+    {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}, {"type": "healPct", "value": 0.05}]},
+]
 
 
 def gen_bond() -> dict:
@@ -374,188 +432,194 @@ def gen_bond() -> dict:
             "type": "faction",
             "name": FACTION_CN[fid],
             "faction": fid,
-            "tiers": BOND_TIER_EFFECTS["faction"],
+            "tiers": [
+                {"count": 2, "effects": [{"type": "atkPct", "value": 0.05}]},
+                {"count": 4, "effects": [{"type": "atkPct", "value": 0.08}, {"type": "unitHpPct", "value": 0.05}]},
+                {"count": 6, "effects": [{"type": "atkPct", "value": 0.12}, {"type": "unitHpPct", "value": 0.08}]},
+            ],
         })
-    bonds.append({
-        "bondId": "range_melee",
-        "type": "range",
-        "name": "近战",
-        "range": "melee",
-        "tiers": BOND_TIER_EFFECTS["range_melee"],
-    })
-    bonds.append({
-        "bondId": "range_ranged",
-        "type": "range",
-        "name": "远程",
-        "range": "ranged",
-        "tiers": BOND_TIER_EFFECTS["range_ranged"],
-    })
+    for cat, label in CATEGORY_CN.items():
+        bonds.append({
+            "bondId": f"category_{cat}",
+            "type": "skillCategory",
+            "name": f"{label}型",
+            "category": cat,
+            "tiers": BOND_CATEGORY,
+        })
     return {
-        "version": "1.0.0",
-        "description": "羁绊：4阵营+近战/远程；2/4/6 档激活，4张时同时激活2+4档",
+        "version": "2.0.0",
+        "description": "羁绊：4阵营 + 4技能定位型；近战/远程羁绊已移除",
         "rules": {
             "deckSize": 8,
             "excludeHeroIds": ["gold_mine"],
             "tierActivation": "atCount4ActivateTier2And4",
             "maxActiveFactionBonds": 1,
-            "maxActiveRangeBonds": 1,
-            "stacking": "additiveBeforeCap",
-            "cityDamageCapFromBonds": 0.05,
-            "recommendedCityDpsCap": MAX_CITY_DPS_MULTIPLIER,
+            "maxActiveCategoryBonds": 1,
         },
         "bonds": bonds,
     }
 
 
-def validate_skills(skills: list[dict]) -> list[str]:
-    errors = []
-    for s in skills:
-        for e in s["effects"]:
-            et = e["type"]
-            if et not in EFFECT_BOUNDS:
-                errors.append(f"{s['skillId']}: unknown effect {et}")
-                continue
-            lo, hi = EFFECT_BOUNDS[et]
-            val = e["value"]
-            if not (lo <= val <= hi):
-                errors.append(f"{s['skillId']}: {et}={val} outside [{lo},{hi}]")
-    return errors
-
-
-def gen_review_md(bond, skills, hero_battle) -> str:
-    issues = validate_skills(skills)
-    archetype_counts: dict[str, int] = {}
-    for h in hero_battle["heroes"].values():
-        arch = h.get("archetype")
-        if arch:
-            archetype_counts[arch] = archetype_counts.get(arch, 0) + 1
+def gen_review_md(skills: list[dict], hero_battle: dict, upgrade: dict) -> str:
+    heroes = hero_battle["heroes"]
+    cat_count: dict[str, int] = {}
+    for h in heroes.values():
+        c = h.get("category")
+        if c:
+            cat_count[c] = cat_count.get(c, 0) + 1
 
     lines = [
-        "# 技能 · 羁绊数值审查",
+        "# 技能体系 v3 · 品质分槽 · 四类技能",
         "",
-        "> 配表：`skill.json` · `bond.json` · `heroBattle.json`",
+        "> 配表：`skill.json` · `heroBattle.json` · `bond.json`",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
         "",
-        "## 一、翻卡技能体系（v2）",
+        "## 一、品质与技能槽",
         "",
-        "**每英雄 3 技能槽：** 普通（L1）· 史诗（L8）· 传奇（L20）；升级逻辑不变（技能最高 10 级，`scalingPerSkillLevel` 2%）。",
-        "",
-        "**四类定位：**",
-        "",
-        "| 定位 | 战术目标 | 普通 | 史诗 | 传奇 |",
-        "|:---|:---|:---|:---|:---|",
-        "| 清场 | 消灭敌方兵卡、打开攻城窗口 | 攻击% | 溅射 | 部署突袭/处决/剧毒 |",
-        "| 守门 | 拖延、保护后排翻卡 | 生命% | 减伤 | 嘲讽 |",
-        "| 破城 | 清场后拆主城 | 攻速% | 对单位攻击% | 对城伤害% |",
-        "| 节奏 | 多翻、多铺 | 返费/部署金 | 击杀返金 | 翻开相邻 |",
-        "",
-        "**定位分布：** "
-        + " · ".join(f"{ARCHETYPE_CN[k]} {v}" for k, v in sorted(archetype_counts.items())),
-        "",
-        "---",
-        "",
-        "## 二、效果类型与 phase",
-        "",
-        "| 效果 type | 区间 | phase 建议 |",
+        "| 卡牌品质 | 技能组成 | 可升级 |",
         "|:---|:---|:---|",
-    ]
-    phase_hints = {
-        "atkPct": "always / field_only",
-        "atkSpeedPct": "always",
-        "splashPct": "field_only",
-        "cityDamagePct": "siege_only",
-        "unitHpPct": "always",
-        "damageReductionPct": "field_only",
-        "dotPctPerSec": "field_only",
-        "deployBurstPct": "on_deploy",
-        "killGold": "on_kill",
-        "flipRefundPct": "on_deploy",
-        "revealAdjacent": "on_deploy",
-        "deployGold": "on_deploy",
-        "taunt": "always",
-        "executeBonusPct": "field_only",
-    }
-    for k, (lo, hi) in EFFECT_BOUNDS.items():
-        hint = phase_hints.get(k, "—")
-        if k in ("killGold", "deployGold", "revealAdjacent", "taunt"):
-            lines.append(f"| `{k}` | {lo}–{hi} | {hint} |")
-        else:
-            lines.append(f"| `{k}` | {int(lo * 100)}%–{int(hi * 100)}% | {hint} |")
-
-    lines += [
+        "| **普通** | 仅 **普通技能** | 普通技不可升级 |",
+        "| **稀有** | 普通 + **稀有特技** | 特技 1→5 级 |",
+        "| **史诗** | 普通 + **史诗特技** | 特技 1→5 级 |",
+        "| **传奇** | 普通 + **传奇特技** | 特技 1→5 级 |",
+        "",
+        "**取消远近战战斗逻辑**；`attackRange` 仅影响表现距离。",
+        "**attackSpeed** = 弹道飞行速度；**fireRate** = 发射频率（间隔 `2.2/fireRate` 秒）。",
         "",
         "---",
         "",
-        "## 三、羁绊摘要",
+        "## 二、四类技能定位",
         "",
-        "| 羁绊 | 2张 | 4张 | 6张 |",
+        "| 类型 | 战术目标 | 普通技（示例） | 特技递进（稀有→史诗→传奇） |",
         "|:---|:---|:---|:---|",
+        "| **攻击** | 单点/多点/击杀/亡灵复活 | 平直点射 | 双联→连锁→高空重击/亡灵收割 |",
+        "| **防御** | 护墙/减伤/全局保护 | 铁壁减伤 | 单格墙→三格带→全局圣域 |",
+        "| **补给** | 回血 20%/50%/满血 | 应急包扎20% | 30%单友→50%范围→满血圣疗 |",
+        "| **加速** | 攻速/弹速/铺场 | 迅捷装填 | 速射→弹速增压→狂热号令 |",
+        "",
+        f"**英雄定位分布：** " + " · ".join(f"{CATEGORY_CN[k]} {v}" for k, v in sorted(cat_count.items())),
+        "",
+        "---",
+        "",
+        "## 三、英雄属性公式（30 级）",
+        "",
+        "```",
+        f"attack(L)      = round(attackL1 * {STAT_GROWTH}^(L-1))",
+        f"unitHp(L)      = round(unitHpL1 * {STAT_GROWTH}^(L-1))",
+        f"buildingHp(L)  = round(buildingHpL1 * {STAT_GROWTH}^(L-1))",
+        f"fireRate(L)    = round(fireRateL1 * {FIRE_RATE_GROWTH}^(L-1), 2)   // 发射频率",
+        f"attackSpeed(L) = round(attackSpeedL1 * {PROJECTILE_SPEED_GROWTH}^(L-1), 2)  // 弹道速度",
+        "attackInterval = 2.2 / fireRate",
+        "```",
+        "",
+        "---",
+        "",
+        "## 四、特技升级消耗（5 级）",
+        "",
+        f"效果曲线：`effect(L) = base × (1 + {SPECIAL_SCALING_PER_LEVEL}×(L-1))`",
+        "",
+        "| 升级 | 基础碎片 | 普通 | 稀有 | 史诗 | 传奇 |",
+        "|:---:|:---:|:---:|:---:|:---:|:---:|",
     ]
-    for b in bond["bonds"]:
-        t2 = t4 = t6 = "—"
-        for t in b["tiers"]:
-            eff = "+".join(f"{e['type']}{int(e['value'] * 100)}%" for e in t["effects"])
-            if t["count"] == 2:
-                t2 = eff
-            elif t["count"] == 4:
-                t4 = eff
-            elif t["count"] == 6:
-                t6 = eff
-        lines.append(f"| {b['name']} | {t2} | {t4} | {t6} |")
+    for row in upgrade["fragmentCost"]:
+        bq = row["byQuality"]
+        lines.append(
+            f"| L{row['fromLevel']}→L{row['toLevel']} | {row['baseFragments']} "
+            f"| {bq['common']} | {bq['rare']} | {bq['epic']} | {bq['legendary']} |"
+        )
+    lines += [
+        "",
+        "金币消耗 ≈ 同级英雄升级金币 × **15%**（见 `heroLevel.json`）。",
+        "",
+        "---",
+        "",
+        "## 五、全英雄技能表",
+        "",
+        "| 英雄 | 品质 | 定位 | 弹道 | 普通技能 | 表现 | 特技 | 特技表现 |",
+        "|:---|:---|:---|:---|:---|:---|:---|:---|",
+    ]
+    skill_by_id = {s["skillId"]: s for s in skills}
+    for hid in sorted(heroes.keys()):
+        h = heroes[hid]
+        q = QUALITY_CN[h["quality"]]
+        sk = h["skills"]
+        normal = skill_by_id.get(sk.get("normal"), {})
+        special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
+        special = skill_by_id.get(special_id, {}) if special_id else {}
+        lines.append(
+            f"| {h['name']} | {q} | {h['categoryLabel']} | {h['combatStats'].get('projectileStyle', '—')} "
+            f"| {normal.get('name', '—').split('·')[-1] if normal else '—'} | {normal.get('visualDescription', '—')[:28]}… "
+            f"| {special.get('name', '—').split('·')[-1] if special else '—'} | {(special.get('visualDescription') or '—')[:28]}… |"
+        )
 
     lines += [
         "",
         "---",
         "",
-        "## 四、数值红线",
+        "## 六、特技等级曲线示例（攻击 · 传奇 · 高空重击 atkPct）",
         "",
-        "- 对城 DPS 合计建议 ≤ **1.45×**",
-        "- 全队 `cityDamagePct` cap **25%**",
-        "- 攻击类加成 cap **35%**",
-        "- 溅射 / DOT / 部署突袭 **不对主城**",
+        "以 base=0.25 为例：",
         "",
+        "| 特技等级 | 效果系数 |",
+        "|:---:|:---:|",
     ]
-
-    if issues:
-        lines += ["### 校验告警", ""]
-        for i in issues[:30]:
-            lines.append(f"- {i}")
-        lines.append("")
+    for lv in range(1, 6):
+        lines.append(f"| L{lv} | {skill_value_at_level(0.25, lv)} |")
 
     lines += [
+        "",
         "---",
         "",
-        "## 五、战斗接入",
+        "## 七、战斗接入",
         "",
-        "1. `battle-skill-runtime.js` 汇总技能加成",
-        "2. `battle-rules.js` 按 `phase` 分支结算",
-        "3. 翻卡即从卡组抽英雄，不再用品质随机模板",
+        "1. `heroBattle.json` → `combatStats` 读属性；`skills` 按品质取槽位",
+        "2. `skill.json` → 普通技 `upgradeable:false`；特技读 `levelCurve`",
+        "3. `battle-skill-runtime.js` 需适配 v3 effect 类型（healPct / fireRatePct 等）",
         "",
     ]
+    return "\n".join(lines)
+
+
+def gen_hero_table_md(hero_battle: dict) -> str:
+    lines = [
+        "# 全英雄属性与技能 v3",
+        "",
+        "> 生成：`python3 scripts/gen-skill-bond-config.py`",
+        "",
+        "| 英雄 | 品质 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普通技 | 特技 |",
+        "|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|",
+    ]
+    for hid in sorted(hero_battle["heroes"].keys()):
+        h = hero_battle["heroes"][hid]
+        cs = h["combatStats"]
+        sk = h["skills"]
+        sp = sk.get("rare") or sk.get("epic") or sk.get("legendary") or "—"
+        lines.append(
+            f"| {h['name']} | {h['qualityLabel']} | {h['categoryLabel']} "
+            f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
+            f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
+            f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
+            f"| {sk.get('normal', '—')} | {sp} |"
+        )
     return "\n".join(lines)
 
 
 if __name__ == "__main__":
     heroes = load_heroes()
     skills = gen_skills(heroes)
-    errors = validate_skills(skills)
-    if errors:
-        print("WARN:", len(errors), "skill validation issues")
-        for e in errors[:10]:
-            print(" ", e)
-
-    bond = gen_bond()
+    upgrade = skill_upgrade_table()
     hero_battle = gen_hero_battle(heroes, skills)
+    bond = gen_bond()
 
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "2.0.0",
-                "description": "翻卡技能：每英雄普通/史诗/传奇各一；清场/守门/破城/节奏",
-                "archetypes": ARCHETYPE_CN,
-                "effectBounds": EFFECT_BOUNDS,
+                "version": "3.0.0",
+                "description": "技能 v3：普通技+品质特技；攻击/防御/补给/加速",
+                "categories": CATEGORY_CN,
+                "skillUpgrade": upgrade,
                 "skillCount": len(skills),
                 "skills": skills,
             },
@@ -565,12 +629,11 @@ if __name__ == "__main__":
         + "\n",
         encoding="utf-8",
     )
-
-    (ROOT / "bond.json").write_text(json.dumps(bond, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (ROOT / "heroBattle.json").write_text(
         json.dumps(hero_battle, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
+    (ROOT / "bond.json").write_text(json.dumps(bond, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "docs" / "SKILL_BOND_REVIEW.md").write_text(gen_review_md(skills, hero_battle, upgrade) + "\n", encoding="utf-8")
+    (ROOT / "docs" / "SKILL_HERO_TABLE_V3.md").write_text(gen_hero_table_md(hero_battle) + "\n", encoding="utf-8")
 
-    review = gen_review_md(bond, skills, hero_battle)
-    (ROOT / "docs" / "SKILL_BOND_REVIEW.md").write_text(review + "\n", encoding="utf-8")
-    print(f"Wrote {len(skills)} skills for {len(hero_battle['heroes'])} heroes")
+    print(f"Wrote {len(skills)} skills, {len(hero_battle['heroes'])} heroes (v3)")

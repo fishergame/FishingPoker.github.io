@@ -1,2961 +1,4280 @@
 {
-  "version": "2.0.0",
-  "description": "翻卡技能：每英雄普通/史诗/传奇各一；清场/守门/破城/节奏",
-  "archetypes": {
-    "clear": "清场",
-    "guard": "守门",
-    "siege": "破城",
-    "tempo": "节奏"
+  "version": "3.0.0",
+  "description": "技能 v3：普通技+品质特技；攻击/防御/补给/加速",
+  "categories": {
+    "attack": "攻击",
+    "defense": "防御",
+    "supply": "补给",
+    "speed": "加速"
   },
-  "effectBounds": {
-    "atkPct": [
-      0.05,
-      0.25
+  "skillUpgrade": {
+    "specialSkillMaxLevel": 5,
+    "normalSkillUpgradeable": false,
+    "scalingPerLevel": 0.08,
+    "formula": "effect(L) = base * (1 + 0.08*(L-1))",
+    "fragmentCost": [
+      {
+        "fromLevel": 1,
+        "toLevel": 2,
+        "baseFragments": 5,
+        "byQuality": {
+          "common": 5,
+          "rare": 8,
+          "epic": 12,
+          "legendary": 20
+        }
+      },
+      {
+        "fromLevel": 2,
+        "toLevel": 3,
+        "baseFragments": 8,
+        "byQuality": {
+          "common": 8,
+          "rare": 12,
+          "epic": 20,
+          "legendary": 32
+        }
+      },
+      {
+        "fromLevel": 3,
+        "toLevel": 4,
+        "baseFragments": 12,
+        "byQuality": {
+          "common": 12,
+          "rare": 18,
+          "epic": 30,
+          "legendary": 48
+        }
+      },
+      {
+        "fromLevel": 4,
+        "toLevel": 5,
+        "baseFragments": 18,
+        "byQuality": {
+          "common": 18,
+          "rare": 27,
+          "epic": 45,
+          "legendary": 72
+        }
+      }
     ],
-    "atkSpeedPct": [
-      0.05,
-      0.2
-    ],
-    "splashPct": [
-      0.1,
-      0.35
-    ],
-    "cityDamagePct": [
-      0.05,
-      0.2
-    ],
-    "unitHpPct": [
-      0.05,
-      0.2
-    ],
-    "damageReductionPct": [
-      0.05,
-      0.2
-    ],
-    "dotPctPerSec": [
-      0.02,
-      0.08
-    ],
-    "lifestealPct": [
-      0.05,
-      0.15
-    ],
-    "deployBurstPct": [
-      0.3,
-      0.7
-    ],
-    "killGold": [
-      5,
-      25
-    ],
-    "flipRefundPct": [
-      0.1,
-      0.35
-    ],
-    "revealAdjacent": [
-      1,
-      2
-    ],
-    "deployGold": [
-      8,
-      30
-    ],
-    "taunt": [
-      1,
-      1
-    ],
-    "executeBonusPct": [
-      0.2,
-      0.5
-    ]
+    "goldCostFormula": "round(heroGoldNeed[level-1] * 0.15)  // 特技升级金币≈同级英雄升级的15%"
   },
-  "skillCount": 111,
+  "skillCount": 67,
   "skills": [
     {
       "skillId": "skill_dragon_knight_normal",
       "heroId": "dragon_knight",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙焰女王·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "龙焰女王·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "龙息火球，高抛弧线落点单格；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_dragon_knight_epic",
+      "skillId": "skill_dragon_knight_legendary",
       "heroId": "dragon_knight",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙焰女王·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "龙焰女王·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "龙息火球，高抛弧线落点单格；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_dragon_knight_legend",
-      "heroId": "dragon_knight",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙焰女王·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.575
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_demon_lord_normal",
       "heroId": "demon_lord",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "永冬之王·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "永冬之王·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "冰锥术，抛物线冻结打击；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_demon_lord_epic",
+      "skillId": "skill_demon_lord_legendary",
       "heroId": "demon_lord",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "永冬之王·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "永冬之王·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "冰锥术，抛物线冻结打击；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_demon_lord_legend",
-      "heroId": "demon_lord",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "永冬之王·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.575
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_archmage_normal",
       "heroId": "archmage",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "风暴女巫·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "风暴女巫·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "雷球高抛，落点范围电弧；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_archmage_epic",
+      "skillId": "skill_archmage_legendary",
       "heroId": "archmage",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "风暴女巫·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "风暴女巫·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "雷球高抛，落点范围电弧；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_archmage_legend",
-      "heroId": "archmage",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "风暴女巫·剧毒",
-      "description": "普攻命中敌方兵卡后施加持续伤害（仅对单位，不对主城）",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "dotPctPerSec",
-          "value": 0.057
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_ranger_normal",
       "heroId": "ranger",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "荆棘女王·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "荆棘女王·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "荆棘箭雨，弧线覆盖单格；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_ranger_epic",
-      "heroId": "ranger",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "荆棘女王·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.115
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_ranger_legend",
+      "skillId": "skill_ranger_legendary",
       "heroId": "ranger",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "荆棘女王·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "荆棘女王·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "荆棘箭雨，弧线覆盖单格；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.138
+          "type": "atkPct",
+          "value": 0.547
+        },
+        {
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_royal_knight_normal",
       "heroId": "royal_knight",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "圣盾领主·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_royal_knight_epic",
-      "heroId": "royal_knight",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "圣盾领主·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.138
+          "value": 0.075
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_royal_knight_legend",
+      "skillId": "skill_royal_knight_legendary",
       "heroId": "royal_knight",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "圣盾领主·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "圣盾领主·全局圣域",
+      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "taunt",
+          "type": "globalDamageReductionPct",
+          "value": 0.328
+        },
+        {
+          "type": "blockRush",
           "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.328
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.354
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.38
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.407
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.433
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "guard"
+        "legendary",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_druid_normal",
       "heroId": "druid",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "北境守护者·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_druid_epic",
-      "heroId": "druid",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "北境守护者·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "自然屏障，平直藤蔓盾；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.138
+          "value": 0.075
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_druid_legend",
+      "skillId": "skill_druid_legendary",
       "heroId": "druid",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "北境守护者·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "北境守护者·全局圣域",
+      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "taunt",
+          "type": "globalDamageReductionPct",
+          "value": 0.328
+        },
+        {
+          "type": "blockRush",
           "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.328
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.354
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.38
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.407
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.433
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "guard"
+        "legendary",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_lich_queen_normal",
       "heroId": "lich_queen",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幽灵船长·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幽灵船长·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "幽魂炮，高抛灵魂弹；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_lich_queen_epic",
+      "skillId": "skill_lich_queen_legendary",
       "heroId": "lich_queen",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幽灵船长·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幽灵船长·亡灵收割",
+      "description": "击杀敌方兵卡后，翻开相邻已阵亡格并召唤亡灵单位",
+      "visualDescription": "幽绿弧线落下，阵亡格复燃翻出亡灵牌",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_lich_queen_legend",
-      "heroId": "lich_queen",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幽灵船长·剧毒",
-      "description": "普攻命中敌方兵卡后施加持续伤害（仅对单位，不对主城）",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "reviveAdjacentDead",
+          "value": 1
+        },
         {
-          "type": "dotPctPerSec",
-          "value": 0.057
+          "type": "executeThreshold",
+          "value": 0.25
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "reviveAdjacentDead",
+              "value": 1
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.25
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "reviveAdjacentDead",
+              "value": 1
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.27
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "reviveAdjacentDead",
+              "value": 1
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.29
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "reviveAdjacentDead",
+              "value": 1
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.31
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "reviveAdjacentDead",
+              "value": 1
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.33
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_blademaster_normal",
       "heroId": "blademaster",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幻影刺客·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幻影刺客·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "影刃直线突刺；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_blademaster_epic",
+      "skillId": "skill_blademaster_legendary",
       "heroId": "blademaster",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幻影刺客·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幻影刺客·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "影刃直线突刺；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_blademaster_legend",
-      "heroId": "blademaster",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "幻影刺客·处决",
-      "description": "攻击血量低于25%的敌方兵卡时，伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "executeBonusPct",
-          "value": 0.402,
-          "threshold": 0.25
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_frost_dragon_normal",
       "heroId": "frost_dragon",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "寒冰巨魔·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "寒冰巨魔·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "巨锤冰陨，高空重砸；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_frost_dragon_epic",
-      "heroId": "frost_dragon",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "寒冰巨魔·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.115
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_frost_dragon_legend",
+      "skillId": "skill_frost_dragon_legendary",
       "heroId": "frost_dragon",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "寒冰巨魔·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "寒冰巨魔·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "巨锤冰陨，高空重砸；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.138
+          "type": "atkPct",
+          "value": 0.547
+        },
+        {
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_crusher_normal",
       "heroId": "crusher",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "重装破城者·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "重装破城者·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "破城锤，高抛砸击单格；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_crusher_epic",
-      "heroId": "crusher",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "重装破城者·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.115
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_crusher_legend",
+      "skillId": "skill_crusher_legendary",
       "heroId": "crusher",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "重装破城者·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "重装破城者·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "破城锤，高抛砸击单格；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.138
+          "type": "atkPct",
+          "value": 0.547
+        },
+        {
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "siege"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_helicopter_normal",
       "heroId": "helicopter",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "机械飞鹰·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "机械飞鹰·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "机炮连射，平直子弹；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_helicopter_epic",
-      "heroId": "helicopter",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "机械飞鹰·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.115
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_helicopter_legend",
+      "skillId": "skill_helicopter_legendary",
       "heroId": "helicopter",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "机械飞鹰·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "机械飞鹰·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "机炮连射，平直子弹；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.138
+          "type": "atkPct",
+          "value": 0.547
+        },
+        {
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "ranged",
-        "unit",
-        "siege"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_dread_knight_normal",
       "heroId": "dread_knight",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "巨斧酋长·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "巨斧酋长·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "巨斧直线劈砍；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_dread_knight_epic",
+      "skillId": "skill_dread_knight_legendary",
       "heroId": "dread_knight",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "巨斧酋长·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "巨斧酋长·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "巨斧直线劈砍；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_dread_knight_legend",
-      "heroId": "dread_knight",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "巨斧酋长·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.575
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_warlord_normal",
       "heroId": "warlord",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "双头奇美拉·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.092
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_warlord_epic",
-      "heroId": "warlord",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "双头奇美拉·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.138
+          "value": 0.075
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_warlord_legend",
+      "skillId": "skill_warlord_legendary",
       "heroId": "warlord",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "双头奇美拉·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "双头奇美拉·全局圣域",
+      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "visualDescription": "全场地坪升起光幕护罩，全局防护",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "taunt",
+          "type": "globalDamageReductionPct",
+          "value": 0.328
+        },
+        {
+          "type": "blockRush",
           "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.328
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.354
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.38
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.407
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "globalDamageReductionPct",
+              "value": 0.433
+            },
+            {
+              "type": "blockRush",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "guard"
+        "legendary",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_panda_monk_normal",
       "heroId": "panda_monk",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "爆破鬼才·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "爆破鬼才·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "炸药包高抛，落地爆炸；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.081
+          "value": 0.062
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_panda_monk_epic",
+      "skillId": "skill_panda_monk_legendary",
       "heroId": "panda_monk",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "爆破鬼才·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "legendary",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "爆破鬼才·高空重击",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "visualDescription": "炸药包高抛，落地爆炸；**强抛物线**高空砸击，落地重击特效",
+      "projectileStyle": "arc",
+      "attackMode": "single_kill",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.23
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "legendary",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_panda_monk_legend",
-      "heroId": "panda_monk",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "爆破鬼才·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "atkPct",
+          "value": 0.547
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.575
+          "type": "executeThreshold",
+          "value": 0.3
+        },
+        {
+          "type": "projectileArc",
+          "value": 1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.547
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.3
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.591
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.324
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.635
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.348
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.678
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.372
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.722
+            },
+            {
+              "type": "executeThreshold",
+              "value": 0.396
+            },
+            {
+              "type": "projectileArc",
+              "value": 1
+            }
+          ]
+        }
+      ],
       "tags": [
         "legendary",
-        "melee",
-        "unit",
-        "clear"
+        "legendary",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_shaman_normal",
       "heroId": "shaman",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "藤蔓萨满·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "藤蔓萨满·应急包扎",
+      "description": "主动为自身恢复少量生命（约20%最大生命）",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "atkPct",
-          "value": 0.076
+          "type": "healPct",
+          "value": 0.224
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "supply",
+        "unit"
       ]
     },
     {
       "skillId": "skill_shaman_epic",
       "heroId": "shaman",
       "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "藤蔓萨满·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "藤蔓萨满·群体复苏",
+      "description": "范围友军恢复50%生命",
+      "visualDescription": "绿色光环扩散，范围内友军回血",
+      "projectileStyle": "flat",
+      "attackMode": "heal",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.216
+          "type": "healAreaPct",
+          "value": 0.756
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "epic",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_shaman_legend",
-      "heroId": "shaman",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "藤蔓萨满·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "deployBurstPct",
-          "value": 0.54
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "healAreaPct",
+              "value": 0.756
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "healAreaPct",
+              "value": 0.816
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "healAreaPct",
+              "value": 0.877
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "healAreaPct",
+              "value": 0.937
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "healAreaPct",
+              "value": 0.998
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "epic",
+        "supply",
+        "unit"
       ]
     },
     {
       "skillId": "skill_gargoyle_normal",
       "heroId": "gargoyle",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "鹰女·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "鹰女·铁壁",
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "unitHpPct",
-          "value": 0.086
+          "type": "damageReductionPct",
+          "value": 0.067
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_gargoyle_epic",
       "heroId": "gargoyle",
       "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "鹰女·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "鹰女·三格盾带",
+      "description": "护墙扩展至三格，范围内友军减伤",
+      "visualDescription": "弧形盾带展开，覆盖三格",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.13
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
-      "tags": [
-        "epic",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_gargoyle_legend",
-      "heroId": "gargoyle",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "鹰女·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "wallTiles",
+          "value": 3
+        },
         {
-          "type": "taunt",
-          "value": 1
+          "type": "allyDamageReductionPct",
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.239
+            }
+          ]
+        }
+      ],
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "guard"
+        "epic",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_skeleton_giant_normal",
       "heroId": "skeleton_giant",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "巨石魔像·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "巨石魔像·铁壁",
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "unitHpPct",
-          "value": 0.086
+          "type": "damageReductionPct",
+          "value": 0.067
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_skeleton_giant_epic",
       "heroId": "skeleton_giant",
       "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "巨石魔像·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "巨石魔像·三格盾带",
+      "description": "护墙扩展至三格，范围内友军减伤",
+      "visualDescription": "弧形盾带展开，覆盖三格",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "damageReductionPct",
-          "value": 0.13
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
-      "tags": [
-        "epic",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_skeleton_giant_legend",
-      "heroId": "skeleton_giant",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "巨石魔像·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "wallTiles",
+          "value": 3
+        },
         {
-          "type": "taunt",
-          "value": 1
+          "type": "allyDamageReductionPct",
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 3
+            },
+            {
+              "type": "allyDamageReductionPct",
+              "value": 0.239
+            }
+          ]
+        }
+      ],
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "guard"
+        "epic",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_sniper_normal",
       "heroId": "sniper",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "雇佣兵·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "雇佣兵·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "狙击弹，极快平直弹道；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "atkSpeedPct",
-          "value": 0.086
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_sniper_epic",
       "heroId": "sniper",
       "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "雇佣兵·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "雇佣兵·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "平直穿透，依次命中2格",
+      "projectileStyle": "flat",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "chainTargets",
+          "value": 2
+        },
         {
           "type": "atkPct",
-          "value": 0.108
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
-      "tags": [
-        "epic",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_sniper_legend",
-      "heroId": "sniper",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "雇佣兵·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "cityDamagePct",
-          "value": 0.13
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "siege"
+        "epic",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_catapult_tower_normal",
       "heroId": "catapult_tower",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "炮楼·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "炮楼·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "石弹高抛，经典抛物线；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "atkSpeedPct",
-          "value": 0.086
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "building",
-        "siege"
+        "attack",
+        "building"
       ]
     },
     {
       "skillId": "skill_catapult_tower_epic",
       "heroId": "catapult_tower",
       "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "炮楼·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "炮楼·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "高抛爆炸链，依次命中2格",
+      "projectileStyle": "arc",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "chainTargets",
+          "value": 2
+        },
         {
           "type": "atkPct",
-          "value": 0.108
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
-      "tags": [
-        "epic",
-        "ranged",
-        "building",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_catapult_tower_legend",
-      "heroId": "catapult_tower",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "炮楼·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "cityDamagePct",
-          "value": 0.13
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
       "tags": [
         "epic",
-        "ranged",
-        "building",
-        "siege"
+        "epic",
+        "attack",
+        "building"
       ]
     },
     {
       "skillId": "skill_catapult_normal",
       "heroId": "catapult",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "自爆蜘蛛·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "自爆蜘蛛·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "自爆蜘蛛高抛投掷；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.076
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_catapult_epic",
       "heroId": "catapult",
       "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "自爆蜘蛛·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "自爆蜘蛛·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "高抛爆炸链，依次命中2格",
+      "projectileStyle": "arc",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.216
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "epic",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_catapult_legend",
-      "heroId": "catapult",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "自爆蜘蛛·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "chainTargets",
+          "value": 2
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.54
+          "type": "atkPct",
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
+        }
+      ],
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "epic",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_cavalry_normal",
       "heroId": "cavalry",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙骑士·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "龙骑士·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "骑枪冲锋，平直突刺；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.076
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_cavalry_epic",
       "heroId": "cavalry",
       "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙骑士·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "龙骑士·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "平直穿透，依次命中2格",
+      "projectileStyle": "flat",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.216
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "epic",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_cavalry_legend",
-      "heroId": "cavalry",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "龙骑士·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "chainTargets",
+          "value": 2
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.54
+          "type": "atkPct",
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
+        }
+      ],
       "tags": [
         "epic",
-        "melee",
-        "unit",
-        "clear"
+        "epic",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_wyrmling_normal",
       "heroId": "wyrmling",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "火龙·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火龙·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "幼龙火球，小抛物线；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.076
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_wyrmling_epic",
       "heroId": "wyrmling",
       "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "火龙·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火龙·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "高抛爆炸链，依次命中2格",
+      "projectileStyle": "arc",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "splashPct",
-          "value": 0.216
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "epic",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_wyrmling_legend",
-      "heroId": "wyrmling",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "火龙·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+          "type": "chainTargets",
+          "value": 2
+        },
         {
-          "type": "deployBurstPct",
-          "value": 0.54
+          "type": "atkPct",
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
+        }
+      ],
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "clear"
+        "epic",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_ballista_normal",
       "heroId": "ballista",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "弩车·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "弩车·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "弩炮重矢，高抛穿透；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "atkSpeedPct",
-          "value": 0.086
+          "type": "atkPct",
+          "value": 0.056
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_ballista_epic",
       "heroId": "ballista",
       "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "弩车·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "弩车·连锁穿透",
+      "description": "攻击可连锁2个敌方兵卡，造成递减伤害",
+      "visualDescription": "高抛爆炸链，依次命中2格",
+      "projectileStyle": "arc",
+      "attackMode": "chain",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "chainTargets",
+          "value": 2
+        },
         {
           "type": "atkPct",
-          "value": 0.108
+          "value": 0.181
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
-      "tags": [
-        "epic",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_ballista_legend",
-      "heroId": "ballista",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "弩车·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "cityDamagePct",
-          "value": 0.13
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.181
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.195
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.21
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.224
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "chainTargets",
+              "value": 2
+            },
+            {
+              "type": "atkPct",
+              "value": 0.239
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
       "tags": [
         "epic",
-        "ranged",
-        "unit",
-        "siege"
+        "epic",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_necromancer_normal",
       "heroId": "necromancer",
       "slot": "normal",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "骷髅魔导师·轻装",
-      "description": "翻卡费用部分返还，加快铺场节奏",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "骷髅魔导师·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "亡灵弹，弧线触发复活格；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "flipRefundPct",
+          "type": "atkPct",
+          "value": 0.05
+        }
+      ],
+      "tags": [
+        "rare",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_necromancer_rare",
+      "heroId": "necromancer",
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "骷髅魔导师·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "亡灵弹，弧线触发复活格；主目标+邻格溅射，高抛双道",
+      "projectileStyle": "arc",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
+      "effects": [
+        {
+          "type": "extraTargets",
+          "value": 1
+        },
+        {
+          "type": "splashPct",
           "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "self",
-      "tags": [
-        "rare",
-        "ranged",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_necromancer_epic",
-      "heroId": "necromancer",
-      "slot": "epic",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "骷髅魔导师·战利",
-      "description": "击杀敌方兵卡后获得金币",
-      "unlockLevel": 8,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "killGold",
-          "value": 10
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_kill",
-      "target": "self",
       "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_necromancer_legend",
-      "heroId": "necromancer",
-      "slot": "legend",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "骷髅魔导师·扩张",
-      "description": "翻卡落地时额外翻开相邻未翻格预览",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "revealAdjacent",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "adjacent_cells",
-      "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "tempo"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_spear_orc_normal",
       "heroId": "spear_orc",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "鱼叉捕猎者·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "鱼叉捕猎者·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "鱼叉直线投掷；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.07
+          "value": 0.05
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_spear_orc_epic",
+      "skillId": "skill_spear_orc_rare",
       "heroId": "spear_orc",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "鱼叉捕猎者·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "鱼叉捕猎者·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "鱼叉直线投掷；主目标+邻格溅射，平直双道",
+      "projectileStyle": "flat",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "extraTargets",
+          "value": 1
+        },
         {
           "type": "splashPct",
-          "value": 0.2
+          "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "rare",
-        "ranged",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_spear_orc_legend",
-      "heroId": "spear_orc",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "鱼叉捕猎者·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "deployBurstPct",
-          "value": 0.5
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
       "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "clear"
+        "rare",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_wolf_rider_normal",
       "heroId": "wolf_rider",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "利爪猎犬·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "利爪猎犬·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "利爪直线扑击；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.07
+          "value": 0.05
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_wolf_rider_epic",
+      "skillId": "skill_wolf_rider_rare",
       "heroId": "wolf_rider",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "利爪猎犬·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "利爪猎犬·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "利爪直线扑击；主目标+邻格溅射，平直双道",
+      "projectileStyle": "flat",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "extraTargets",
+          "value": 1
+        },
         {
           "type": "splashPct",
-          "value": 0.2
+          "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "rare",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_wolf_rider_legend",
-      "heroId": "wolf_rider",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "利爪猎犬·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "deployBurstPct",
-          "value": 0.5
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "clear"
+        "rare",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_skeleton_knight_normal",
       "heroId": "skeleton_knight",
       "slot": "normal",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "蝙蝠突袭者·猎杀",
-      "description": "翻卡出击后普攻伤害提升，擅长快速清理敌方兵卡",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "蝙蝠突袭者·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "骨刃直线斩；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.07
+          "value": 0.05
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "clear"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_skeleton_knight_epic",
+      "skillId": "skill_skeleton_knight_rare",
       "heroId": "skeleton_knight",
-      "slot": "epic",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "蝙蝠突袭者·横扫",
-      "description": "对敌方兵卡造成伤害时，溅射相邻敌方单位（不对主城生效）",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "蝙蝠突袭者·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "骨刃直线斩；主目标+邻格溅射，平直双道",
+      "projectileStyle": "flat",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
+        {
+          "type": "extraTargets",
+          "value": 1
+        },
         {
           "type": "splashPct",
-          "value": 0.2
+          "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "enemy_unit_adjacent",
-      "tags": [
-        "rare",
-        "melee",
-        "unit",
-        "clear"
-      ]
-    },
-    {
-      "skillId": "skill_skeleton_knight_legend",
-      "heroId": "skeleton_knight",
-      "slot": "legend",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
-      "name": "蝙蝠突袭者·部署突袭",
-      "description": "翻卡落地时对最近敌方兵卡造成一次爆发伤害",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
+      "levelCurve": [
         {
-          "type": "deployBurstPct",
-          "value": 0.5
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "enemy_unit_nearest",
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "clear"
+        "rare",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_archer_normal",
       "heroId": "archer",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "见习女巫·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "见习女巫·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "魔法箭平直射击；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.08
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "rare",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_archer_epic",
-      "heroId": "archer",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "见习女巫·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.1
+          "value": 0.05
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_archer_legend",
+      "skillId": "skill_archer_rare",
       "heroId": "archer",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "见习女巫·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "见习女巫·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "魔法箭平直射击；主目标+邻格溅射，平直双道",
+      "projectileStyle": "flat",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.12
+          "type": "extraTargets",
+          "value": 1
+        },
+        {
+          "type": "splashPct",
+          "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
+        }
+      ],
       "tags": [
         "rare",
-        "ranged",
-        "unit",
-        "siege"
+        "rare",
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_infantry_normal",
       "heroId": "infantry",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "重步兵·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.08
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "rare",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_infantry_epic",
-      "heroId": "infantry",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "重步兵·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.12
+          "value": 0.06
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
-      "skillId": "skill_infantry_legend",
+      "skillId": "skill_infantry_rare",
       "heroId": "infantry",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "重步兵·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重步兵·单格护墙",
+      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合",
+      "visualDescription": "石墙从地面平直升起，挡单格",
+      "projectileStyle": "flat",
+      "attackMode": "area_defense",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "taunt",
+          "type": "wallTiles",
           "value": 1
+        },
+        {
+          "type": "damageReductionPct",
+          "value": 0.1
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.1
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.108
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.116
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.124
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "wallTiles",
+              "value": 1
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.132
+            }
+          ]
+        }
+      ],
       "tags": [
         "rare",
-        "melee",
-        "unit",
-        "guard"
+        "rare",
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_arrow_tower_normal",
       "heroId": "arrow_tower",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "高射塔·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "高射塔·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "高射炮弹，高空抛物线；弹道：**平直**，单目标",
+      "projectileStyle": "arc",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.08
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "rare",
-        "ranged",
-        "building",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_arrow_tower_epic",
-      "heroId": "arrow_tower",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "高射塔·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.1
+          "value": 0.05
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "rare",
-        "ranged",
-        "building",
-        "siege"
+        "attack",
+        "building"
       ]
     },
     {
-      "skillId": "skill_arrow_tower_legend",
+      "skillId": "skill_arrow_tower_rare",
       "heroId": "arrow_tower",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "高射塔·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
+      "slot": "rare",
+      "skillKind": "special",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "高射塔·双联点射",
+      "description": "每次攻击额外命中1个相邻敌方兵卡（多目标伤害）",
+      "visualDescription": "高射炮弹，高空抛物线；主目标+邻格溅射，高抛双道",
+      "projectileStyle": "arc",
+      "attackMode": "multi",
+      "unlockLevel": 1,
+      "upgradeable": true,
+      "maxLevel": 5,
+      "scalingPerSkillLevel": 0.08,
       "effects": [
         {
-          "type": "cityDamagePct",
-          "value": 0.12
+          "type": "extraTargets",
+          "value": 1
+        },
+        {
+          "type": "splashPct",
+          "value": 0.15
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
+      "levelCurve": [
+        {
+          "skillLevel": 1,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.15
+            }
+          ]
+        },
+        {
+          "skillLevel": 2,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.162
+            }
+          ]
+        },
+        {
+          "skillLevel": 3,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.174
+            }
+          ]
+        },
+        {
+          "skillLevel": 4,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.186
+            }
+          ]
+        },
+        {
+          "skillLevel": 5,
+          "effects": [
+            {
+              "type": "extraTargets",
+              "value": 1
+            },
+            {
+              "type": "splashPct",
+              "value": 0.198
+            }
+          ]
+        }
+      ],
       "tags": [
         "rare",
-        "ranged",
-        "building",
-        "siege"
+        "rare",
+        "attack",
+        "building"
       ]
     },
     {
       "skillId": "skill_bear_warrior_normal",
       "heroId": "bear_warrior",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "重锤卫士·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.07
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_bear_warrior_epic",
-      "heroId": "bear_warrior",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "重锤卫士·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.106
+          "value": 0.051
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_bear_warrior_legend",
-      "heroId": "bear_warrior",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "重锤卫士·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "taunt",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_skeleton_warrior_normal",
       "heroId": "skeleton_warrior",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "骷髅刀盾兵·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.07
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_skeleton_warrior_epic",
-      "heroId": "skeleton_warrior",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "骷髅刀盾兵·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.106
+          "value": 0.051
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_skeleton_warrior_legend",
-      "heroId": "skeleton_warrior",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "骷髅刀盾兵·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "taunt",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_goblin_normal",
       "heroId": "goblin",
       "slot": "normal",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "小野猪人·轻装",
-      "description": "翻卡费用部分返还，加快铺场节奏",
+      "skillKind": "normal",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "小野猪人·迅捷装填",
+      "description": "提升发射间隔效率（攻速补给），弹道更快出手",
+      "visualDescription": "短矛轻快直线戳刺；出手前摇缩短，弹道仍**平直**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "flipRefundPct",
-          "value": 0.132
+          "type": "fireRatePct",
+          "value": 0.068
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_goblin_epic",
-      "heroId": "goblin",
-      "slot": "epic",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "小野猪人·战利",
-      "description": "击杀敌方兵卡后获得金币",
-      "unlockLevel": 8,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "killGold",
-          "value": 8
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_kill",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_goblin_legend",
-      "heroId": "goblin",
-      "slot": "legend",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "小野猪人·扩张",
-      "description": "翻卡落地时额外翻开相邻未翻格预览",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "revealAdjacent",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "adjacent_cells",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "tempo"
+        "speed",
+        "unit"
       ]
     },
     {
       "skillId": "skill_blacksmith_normal",
       "heroId": "blacksmith",
       "slot": "normal",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "长枪教头·坚盾",
-      "description": "提升自身生命，在前线阻挡更久",
-      "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "unitHpPct",
-          "value": 0.07
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_blacksmith_epic",
-      "heroId": "blacksmith",
-      "slot": "epic",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "skillKind": "normal",
+      "category": "defense",
+      "categoryLabel": "防御",
       "name": "长枪教头·铁壁",
-      "description": "受到敌方兵卡攻击时减伤",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "description": "自身受到的伤害降低，形成基础防护",
+      "visualDescription": "长枪平直突刺；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.106
+          "value": 0.051
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "unit",
-        "guard"
-      ]
-    },
-    {
-      "skillId": "skill_blacksmith_legend",
-      "heroId": "blacksmith",
-      "slot": "legend",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
-      "name": "长枪教头·嘲讽",
-      "description": "敌方兵卡优先攻击本单位，为队友争取攻城窗口",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "taunt",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "guard"
+        "defense",
+        "unit"
       ]
     },
     {
       "skillId": "skill_militia_normal",
       "heroId": "militia",
       "slot": "normal",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "短剑士·轻装",
-      "description": "翻卡费用部分返还，加快铺场节奏",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "短剑士·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "短剑平直快攻；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
-          "type": "flipRefundPct",
-          "value": 0.132
+          "type": "atkPct",
+          "value": 0.043
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_militia_epic",
-      "heroId": "militia",
-      "slot": "epic",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "短剑士·战利",
-      "description": "击杀敌方兵卡后获得金币",
-      "unlockLevel": 8,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "killGold",
-          "value": 8
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_kill",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_militia_legend",
-      "heroId": "militia",
-      "slot": "legend",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "短剑士·扩张",
-      "description": "翻卡落地时额外翻开相邻未翻格预览",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "revealAdjacent",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "adjacent_cells",
-      "tags": [
-        "common",
-        "melee",
-        "unit",
-        "tempo"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_bone_archer_normal",
       "heroId": "bone_archer",
       "slot": "normal",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "火枪手·瞄准",
-      "description": "提升攻速，清场后更快转火主城",
+      "skillKind": "normal",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火枪手·平直点射",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
+      "visualDescription": "火枪铅弹平直射击；弹道：**平直**，单目标",
+      "projectileStyle": "flat",
+      "attackMode": "single",
       "unlockLevel": 1,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "atkSpeedPct",
-          "value": 0.07
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "always",
-      "target": "self",
-      "tags": [
-        "common",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_bone_archer_epic",
-      "heroId": "bone_archer",
-      "slot": "epic",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "火枪手·蓄力",
-      "description": "对敌方兵卡伤害提升，便于打开攻城通道",
-      "unlockLevel": 8,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "atkPct",
-          "value": 0.088
+          "value": 0.043
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "field_only",
-      "target": "self",
       "tags": [
         "common",
-        "ranged",
-        "unit",
-        "siege"
-      ]
-    },
-    {
-      "skillId": "skill_bone_archer_legend",
-      "heroId": "bone_archer",
-      "slot": "legend",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
-      "name": "火枪手·破城",
-      "description": "场上无敌方兵卡时，对主城伤害大幅提升",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "cityDamagePct",
-          "value": 0.106
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "siege_only",
-      "target": "enemy_city",
-      "tags": [
-        "common",
-        "ranged",
-        "unit",
-        "siege"
+        "attack",
+        "unit"
       ]
     },
     {
       "skillId": "skill_gold_mine_normal",
       "heroId": "gold_mine",
       "slot": "normal",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
+      "skillKind": "normal",
+      "category": "supply",
+      "categoryLabel": "补给",
       "name": "采矿机·矿脉",
-      "description": "翻开后获得额外金币",
+      "description": "翻开获得额外金币，无战斗攻击",
+      "visualDescription": "金币从矿口平直弹出",
+      "projectileStyle": "flat",
+      "attackMode": "none",
       "unlockLevel": 1,
-      "maxLevel": 10,
+      "upgradeable": false,
+      "maxLevel": 1,
       "effects": [
         {
           "type": "deployGold",
-          "value": 10
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "self",
-      "tags": [
-        "common",
-        "melee",
-        "resource",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_gold_mine_epic",
-      "heroId": "gold_mine",
-      "slot": "epic",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "采矿机·战利",
-      "description": "击杀敌方兵卡后获得金币",
-      "unlockLevel": 8,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "killGold",
           "value": 8
         }
       ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_kill",
-      "target": "self",
       "tags": [
         "common",
-        "melee",
-        "resource",
-        "tempo"
-      ]
-    },
-    {
-      "skillId": "skill_gold_mine_legend",
-      "heroId": "gold_mine",
-      "slot": "legend",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
-      "name": "采矿机·扩张",
-      "description": "翻卡落地时额外翻开相邻未翻格预览",
-      "unlockLevel": 20,
-      "maxLevel": 10,
-      "effects": [
-        {
-          "type": "revealAdjacent",
-          "value": 1
-        }
-      ],
-      "scalingPerSkillLevel": 0.02,
-      "phase": "on_deploy",
-      "target": "adjacent_cells",
-      "tags": [
-        "common",
-        "melee",
-        "resource",
-        "tempo"
+        "supply",
+        "resource"
       ]
     }
   ]

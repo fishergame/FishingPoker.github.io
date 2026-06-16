@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
-  "description": "羁绊：4阵营+近战/远程；2/4/6 档激活，4张时同时激活2+4档",
+  "version": "2.0.0",
+  "description": "羁绊：4阵营 + 4技能定位型；近战/远程羁绊已移除",
   "rules": {
     "deckSize": 8,
     "excludeHeroIds": [
@@ -8,10 +8,7 @@
     ],
     "tierActivation": "atCount4ActivateTier2And4",
     "maxActiveFactionBonds": 1,
-    "maxActiveRangeBonds": 1,
-    "stacking": "additiveBeforeCap",
-    "cityDamageCapFromBonds": 0.05,
-    "recommendedCityDpsCap": 1.45
+    "maxActiveCategoryBonds": 1
   },
   "bonds": [
     {
@@ -52,10 +49,6 @@
             {
               "type": "unitHpPct",
               "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
             }
           ]
         }
@@ -99,10 +92,6 @@
             {
               "type": "unitHpPct",
               "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
             }
           ]
         }
@@ -146,10 +135,6 @@
             {
               "type": "unitHpPct",
               "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
             }
           ]
         }
@@ -193,27 +178,23 @@
             {
               "type": "unitHpPct",
               "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
             }
           ]
         }
       ]
     },
     {
-      "bondId": "range_melee",
-      "type": "range",
-      "name": "近战",
-      "range": "melee",
+      "bondId": "category_attack",
+      "type": "skillCategory",
+      "name": "攻击型",
+      "category": "attack",
       "tiers": [
         {
           "count": 2,
           "effects": [
             {
-              "type": "unitHpPct",
-              "value": 0.06
+              "type": "atkPct",
+              "value": 0.05
             }
           ]
         },
@@ -221,54 +202,11 @@
           "count": 4,
           "effects": [
             {
-              "type": "unitHpPct",
-              "value": 0.1
-            },
-            {
-              "type": "damageReductionPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "unitHpPct",
-              "value": 0.15
-            },
-            {
-              "type": "damageReductionPct",
+              "type": "atkPct",
               "value": 0.08
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "range_ranged",
-      "type": "range",
-      "name": "远程",
-      "range": "ranged",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.06
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.1
             },
             {
-              "type": "atkSpeedPct",
+              "type": "fireRatePct",
               "value": 0.05
             }
           ]
@@ -278,11 +216,140 @@
           "effects": [
             {
               "type": "atkPct",
-              "value": 0.15
+              "value": 0.12
             },
             {
-              "type": "atkSpeedPct",
+              "type": "healPct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "category_defense",
+      "type": "skillCategory",
+      "name": "防御型",
+      "category": "defense",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
               "value": 0.08
+            },
+            {
+              "type": "fireRatePct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "healPct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "category_supply",
+      "type": "skillCategory",
+      "name": "补给型",
+      "category": "supply",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "fireRatePct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "healPct",
+              "value": 0.05
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "category_speed",
+      "type": "skillCategory",
+      "name": "加速型",
+      "category": "speed",
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.08
+            },
+            {
+              "type": "fireRatePct",
+              "value": 0.05
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "atkPct",
+              "value": 0.12
+            },
+            {
+              "type": "healPct",
+              "value": 0.05
             }
           ]
         }

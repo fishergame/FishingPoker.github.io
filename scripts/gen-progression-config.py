@@ -527,7 +527,7 @@ def gen_progression_tables_md(arena, chest, account, hero):
         "| **砖头经济** | 宝箱/账号/对局砖头 | `chest.json` · `accountLevel.json` · 本文 §二/§四 |",
         "| **战斗平衡** | 对局时长、主城血量、攻城模拟 | [`docs/BATTLE_BALANCE.md`](BATTLE_BALANCE.md) |",
         "| **主城最终表** | 场次×等级全量 HP + 时长 | [`docs/MAIN_CITY_MATCH_FINAL.md`](MAIN_CITY_MATCH_FINAL.md) |",
-        "| **技能/羁绊** | 技能效果、羁绊档位、接入审查 | [`docs/SKILL_BOND_REVIEW.md`](SKILL_BOND_REVIEW.md) |",
+        "| **技能/羁绊** | 技能 v3 品质分槽、四类技能、属性公式 | [`docs/SKILL_BOND_REVIEW.md`](SKILL_BOND_REVIEW.md) · [`docs/SKILL_HERO_TABLE_V3.md`](SKILL_HERO_TABLE_V3.md) |",
         "",
         "---",
         "",

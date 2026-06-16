@@ -3,7 +3,10 @@
  * 字段：id, name, avatar, quality, starter, level, power, buildingHp,
  *       attack, unitHp, attackSpeed, attackRange, income, type
  *
- * attackSpeed：1 级攻速，上限 10（极快），随升级提升
+ * 战斗属性 v3（详见 heroBattle.json → combatStats）：
+ * - attackSpeed（本表遗留字段）≈ 发射频率 fireRate；弹道速度见 heroBattle.json
+ * - attackRange：仅表现距离，不参与远近战判定
+ * - 英雄 30 级：attack/unitHp ×1.15/级；fireRate ×1.02/级；弹道速度 ×1.03/级
  */
 const HeroesConfig = {
   DECK_SIZE: 8,
