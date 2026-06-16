@@ -277,8 +277,13 @@ interface CardAggregateData {
 | 模块 | tabId | 内容 |
 |------|-------|------|
 | **礼包** | `giftPacks` | 四阵营卡牌礼包（人族/兽族/亡灵/机械）；广告转盘获取；**无月卡、无神器** |
-| **基础** | `basic` | 每日优惠、通用卡直购、砖头礼包 |
+| **基础** | `basic` | **每日优惠**、**钻石转盘四档**（广告转盘）、**砖头四档**（1 广告 + 3 钻石）；**无通用卡包** |
 | 竞技场 | `arena` | 一期不做 |
+
+**基础页（`basic`）**：
+- **每日优惠**：保留原 6 格 + 轮换池
+- **钻石转盘**（无限购）：120 / 280 / 720 / 1680 四档；均转盘+看广告；脚本概率/连败保底/暴击见 `docs/SHOP_AND_ECONOMY.md` §7
+- **砖头四档**（无限购）：看广告 50 砖；99 钻→100 砖；500 钻→600 砖；2000 钻→3000 砖
 
 **礼包页（`giftPacks`）**：
 - 4 个礼包，角色池来自 `bond.json`，**互不重叠**
@@ -637,7 +642,7 @@ class DouyinAdapter {
 | 竞技场礼包 | arenaId, unlockTrophy, items[], price, expireAt |
 | 每日优惠 | dailyRefresh, discountPrice, originalPrice |
 
-排序：竞技场模块按 `arenaId` 升序；特卖/基础按 `sortWeight` 降序。
+排序：礼包页按 `sortWeight` 降序（售罄沉底）；基础区按配置序。
 
 ---
 

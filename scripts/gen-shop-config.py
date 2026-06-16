@@ -48,6 +48,177 @@ FACTION_PACK_CONTENTS = [
     },
 ]
 
+# 基础区 · 钻石转盘四档
+DIAMOND_WHEEL_TIERS = [
+    {
+        "tierId": 1,
+        "productId": "diamond_wheel_120",
+        "name": "钻石×120",
+        "label": "一小把",
+        "reward": {"type": "diamond", "amount": 120},
+        "wheel": {
+            "slotCount": 3,
+            "adSlotCount": 2,
+            "winSlotCount": 1,
+            "displayProbability": "1/3",
+            "probabilityModel": "scripted",
+            "scriptedWinOnSpin": {
+                "dailyFirstSessionWinOnSpin": 2,
+                "cycle": [2, 3, 4, 3],
+                "note": "非真概率；按累计转动次数脚本命中；每日首次会话第2转必中",
+            },
+        },
+        "sortWeight": 40,
+    },
+    {
+        "tierId": 2,
+        "productId": "diamond_wheel_280",
+        "name": "钻石×280",
+        "label": "一袋",
+        "reward": {"type": "diamond", "amount": 280},
+        "wheel": {
+            "slotCount": 4,
+            "adSlotCount": 3,
+            "winSlotCount": 1,
+            "displayProbability": "1/4",
+            "probabilityModel": "scripted",
+            "scriptedWinOnSpin": {
+                "dailyFirstSessionWinOnSpin": 3,
+                "cycle": [5, 4],
+                "note": "非真概率；每日首次会话第3转必中；之后 5转/4转 循环",
+            },
+        },
+        "sortWeight": 30,
+    },
+    {
+        "tierId": 3,
+        "productId": "diamond_wheel_720",
+        "name": "钻石×720",
+        "label": "一箱",
+        "reward": {"type": "diamond", "amount": 720},
+        "wheel": {
+            "slotCount": 5,
+            "adSlotCount": 4,
+            "winSlotCount": 1,
+            "displayProbability": "1/5",
+            "probabilityModel": "pity_loss_streak",
+            "pity": {
+                "message": "触发连败保底，再转 {withinSpins} 次内必中",
+                "useTrueRandomInPityWindow": True,
+                "sessions": [
+                    {
+                        "sessionIndex": 1,
+                        "triggerOnSpin": 3,
+                        "guaranteedWithinSpins": 2,
+                        "note": "首次购买：第3转仍失败则触发，2次内真随机必中",
+                    },
+                    {
+                        "sessionIndex": 2,
+                        "triggerOnSpin": 4,
+                        "guaranteedWithinSpins": 3,
+                        "note": "第二次：第4转触发，3次内真随机必中",
+                    },
+                ],
+                "cycleAfterSession2": {
+                    "triggerOnSpinCycle": [3, 4],
+                    "guaranteedWithinSpinsCycle": [2, 3],
+                    "note": "之后循环：第3转触发保底(2次内必中)、第4转触发保底(3次内必中)",
+                },
+            },
+        },
+        "sortWeight": 20,
+    },
+    {
+        "tierId": 4,
+        "productId": "diamond_wheel_1680",
+        "name": "钻石×1680",
+        "label": "巨藏",
+        "reward": {"type": "diamond", "amount": 1680},
+        "wheel": {
+            "slotCount": 7,
+            "adSlotCount": 6,
+            "winSlotCount": 1,
+            "displayProbability": "1/7",
+            "probabilityModel": "crit_and_pity",
+            "critMechanism": {
+                "activateAfterConsecutiveAdFailures": 3,
+                "bonusPerAdSlotHit": 100,
+                "accumulatesUntilWin": True,
+                "adSlotUILabel": "+100钻石",
+                "note": "第3次连续看广告仍失败后，看广告格显示+100钻；再转到看广告则奖励累加直至中奖",
+            },
+            "pity": {
+                "guaranteedWithinSpinsMin": 8,
+                "guaranteedWithinSpinsMax": 10,
+                "useTrueRandomInWindow": True,
+                "note": "默认 8～10 转内必中（窗口内真随机）",
+            },
+        },
+        "sortWeight": 10,
+    },
+]
+
+BRICK_PACK_TIERS = [
+    {
+        "tierId": 1,
+        "productId": "brick_pack_ad_50",
+        "name": "砖头×50",
+        "reward": {"type": "brick", "amount": 50},
+        "purchaseModel": "watch_ad",
+        "purchase": {"ad": True, "diamond": None},
+        "note": "直接看广告领取",
+        "sortWeight": 40,
+    },
+    {
+        "tierId": 2,
+        "productId": "brick_pack_100",
+        "name": "砖头×100",
+        "reward": {"type": "brick", "amount": 100},
+        "purchaseModel": "diamond",
+        "purchase": {"diamond": 99, "ad": False},
+        "note": "99 钻石购买",
+        "sortWeight": 30,
+    },
+    {
+        "tierId": 3,
+        "productId": "brick_pack_600",
+        "name": "砖头×600",
+        "reward": {"type": "brick", "amount": 600},
+        "purchaseModel": "diamond",
+        "purchase": {"diamond": 500, "ad": False},
+        "note": "500 钻石购买",
+        "sortWeight": 20,
+    },
+    {
+        "tierId": 4,
+        "productId": "brick_pack_3000",
+        "name": "砖头×3000",
+        "reward": {"type": "brick", "amount": 3000},
+        "purchaseModel": "diamond",
+        "purchase": {"diamond": 2000, "ad": False},
+        "note": "2000 钻石购买",
+        "sortWeight": 10,
+    },
+]
+
+BASIC_AD_FLOW = {
+    "completionNotGuaranteed": True,
+    "onIncompleteReturn": "wheel_page",
+    "preserveSpinResult": True,
+    "preserveSpinCount": True,
+    "preserveCritBonus": True,
+    "onAdLoadFail": {
+        "stayOnWheel": True,
+        "doNotAdvanceSpinCount": True,
+    },
+    "buttons": {
+        "spin": "抽奖",
+        "watchAd": "看广告",
+        "continueSpin": "继续抽奖",
+        "claim": "领取",
+    },
+}
+
 WHEEL_SLOTS = [
     {
         "slotId": "free",
@@ -158,6 +329,74 @@ def faction_pack_products(factions: dict[str, dict]) -> list[dict]:
             }
         )
     return products
+
+
+def basic_zone(daily_slots: list, daily_rotation: list) -> dict:
+    return {
+        "name": "基础区",
+        "tabId": "basic",
+        "note": "仅每日优惠、钻石转盘、砖头购买；无通用卡包；IAP 未接入",
+        "removedModules": ["universalCardPacks", "iapDiamondRecharge"],
+        "purchaseLimitPolicy": "none",
+        "dailyDeals": {
+            "slotCount": 6,
+            "refresh": {
+                "adCooldownHours": 2,
+                "maxAdRefreshesPerDay": 12,
+                "manualRefreshDiamond": 20,
+                "manualRefreshLimitPerDay": 6,
+            },
+            "slots": daily_slots,
+            "rotationPool": daily_rotation,
+        },
+        "diamondWheel": {
+            "enabled": True,
+            "purchaseModel": "ad_wheel",
+            "purchaseLimit": None,
+            "note": "四档均走转盘+看广告；非真概率档位见各 tier 配置",
+            "sharedAdFlow": BASIC_AD_FLOW,
+            "tiers": [
+                {
+                    **tier,
+                    "purchaseLimit": None,
+                    "wheel": {
+                        **tier["wheel"],
+                        "slots": _build_wheel_slots(
+                            tier["wheel"]["adSlotCount"],
+                            tier["wheel"]["winSlotCount"],
+                        ),
+                    },
+                }
+                for tier in DIAMOND_WHEEL_TIERS
+            ],
+        },
+        "brickPacks": {
+            "currency": "brick",
+            "purchaseLimit": None,
+            "note": "四档砖头礼包；无限购",
+            "packs": [{**p, "purchaseLimit": None} for p in BRICK_PACK_TIERS],
+        },
+    }
+
+
+def _build_wheel_slots(ad_count: int, win_count: int) -> list[dict]:
+    total = ad_count + win_count
+    slots = []
+    for i in range(ad_count):
+        slots.append({
+            "slotId": f"ad_{i + 1}",
+            "type": "watch_ad",
+            "label": "看广告",
+            "displayWeight": round(1 / total, 4),
+        })
+    for i in range(win_count):
+        slots.append({
+            "slotId": f"win_{i + 1}",
+            "type": "win",
+            "label": "获得钻石",
+            "displayWeight": round(1 / total, 4),
+        })
+    return slots
 
 
 def gift_pack_zone(factions: dict[str, dict]) -> dict:
@@ -359,83 +598,9 @@ def gen_shop() -> dict:
         },
     ]
 
-    universal_packs = [
-        {
-            "productId": "universal_rare_30",
-            "name": "稀有通用卡×30",
-            "quality": "rare",
-            "count": 30,
-            "priceCny": 18,
-            "dailyLimit": 4,
-            "exchangeRule": "兑换为指定英雄稀有卡/碎片",
-        },
-        {
-            "productId": "universal_epic_30",
-            "name": "史诗通用卡×30",
-            "quality": "epic",
-            "count": 30,
-            "priceCny": 18,
-            "dailyLimit": 4,
-            "exchangeRule": "兑换为指定英雄史诗卡/碎片",
-        },
-        {
-            "productId": "universal_legendary_30",
-            "name": "传奇通用卡×30",
-            "quality": "legendary",
-            "count": 30,
-            "priceCny": 18,
-            "dailyLimit": 4,
-            "exchangeRule": "兑换为指定英雄传奇卡/碎片",
-        },
-    ]
-
-    diamond_tiers = [
-        {"tierId": 1, "priceCny": 6, "diamond": 60, "bonus": 0, "label": "一小把"},
-        {"tierId": 2, "priceCny": 12, "diamond": 130, "bonus": 10, "label": "一袋"},
-        {"tierId": 3, "priceCny": 30, "diamond": 330, "bonus": 30, "label": "一箱"},
-        {"tierId": 4, "priceCny": 68, "diamond": 750, "bonus": 90, "label": "一大箱"},
-        {"tierId": 5, "priceCny": 128, "diamond": 1580, "bonus": 220, "label": "宝库"},
-        {"tierId": 6, "priceCny": 328, "diamond": 4280, "bonus": 780, "label": "巨藏"},
-    ]
-
-    brick_packs = [
-        {
-            "productId": "brick_pack_s",
-            "name": "砖头×40",
-            "reward": {"type": "brick", "amount": 40},
-            "purchase": {"gold": None, "diamond": 25},
-            "dailyLimit": 3,
-            "note": "约 L1 升级量 70%；仅钻石",
-        },
-        {
-            "productId": "brick_pack_m",
-            "name": "砖头×100",
-            "reward": {"type": "brick", "amount": 100},
-            "purchase": {"gold": None, "diamond": 58},
-            "dailyLimit": 2,
-            "note": "约 L1–L3 一级量",
-        },
-        {
-            "productId": "brick_pack_l",
-            "name": "砖头×250",
-            "reward": {"type": "brick", "amount": 250},
-            "purchase": {"gold": None, "diamond": 128},
-            "dailyLimit": 1,
-            "note": "中后期补仓",
-        },
-        {
-            "productId": "brick_pack_xl",
-            "name": "砖头×600",
-            "reward": {"type": "brick", "amount": 600},
-            "purchase": {"gold": None, "diamond": 268},
-            "weeklyLimit": 2,
-            "note": "大包单价更低",
-        },
-    ]
-
     return {
-        "version": "2.0.0",
-        "description": "商店 v2：礼包页(四阵营卡牌礼包·广告转盘) + 基础区(每日优惠/通用卡/钻石/砖头)",
+        "version": "2.1.0",
+        "description": "商店 v2.1：礼包(四阵营转盘) + 基础(每日优惠/钻石转盘四档/砖头四档)",
         "tabs": [
             {"tabId": "giftPacks", "name": "礼包", "enabled": True},
             {"tabId": "basic", "name": "基础", "enabled": True},
@@ -443,56 +608,26 @@ def gen_shop() -> dict:
         ],
         "iapPolicy": {
             "directPurchaseEnabled": False,
-            "note": "IAP 未接入前，礼包统一走看广告转盘；广告完成不保证 100%",
+            "note": "IAP 未接入；礼包与钻石均走看广告转盘；广告完成不保证 100%",
         },
         "zones": {
             "giftPacks": gift_pack_zone(factions),
-            "basic": {
-                "name": "基础区",
-                "tabId": "basic",
-                "dailyDeals": {
-                    "slotCount": 6,
-                    "refresh": {
-                        "adCooldownHours": 2,
-                        "maxAdRefreshesPerDay": 12,
-                        "manualRefreshDiamond": 20,
-                        "manualRefreshLimitPerDay": 6,
-                    },
-                    "slots": daily_slots,
-                    "rotationPool": daily_rotation,
-                },
-                "universalCardPacks": {
-                    "dailyLimitPerSku": 4,
-                    "dailyRefreshAt": "04:00",
-                    "maxCardsPerQualityPerDay": 120,
-                    "packs": universal_packs,
-                },
-                "diamondRecharge": {
-                    "enabled": False,
-                    "note": "IAP 未接入；钻石改由看广告等方式获取",
-                    "tiers": diamond_tiers,
-                },
-                "brickPacks": {
-                    "currency": "brick",
-                    "purchaseCurrency": "diamond",
-                    "pricingNote": "仅钻石；大包单价递减（0.63→0.45 钻/砖）",
-                    "packs": brick_packs,
-                },
-            },
+            "basic": basic_zone(daily_slots, daily_rotation),
         },
         "pricingReference": {
             "goldPerCard": GOLD_PER,
             "diamondPerCard": DIAMOND_PER,
             "brickPackDiamondPerBrick": {
-                "small": round(brick_packs[0]["purchase"]["diamond"] / brick_packs[0]["reward"]["amount"], 2),
-                "large": round(brick_packs[-1]["purchase"]["diamond"] / brick_packs[-1]["reward"]["amount"], 2),
+                "ad_tier": 0,
+                "tier2": round(BRICK_PACK_TIERS[1]["purchase"]["diamond"] / BRICK_PACK_TIERS[1]["reward"]["amount"], 3),
+                "tier4": round(BRICK_PACK_TIERS[3]["purchase"]["diamond"] / BRICK_PACK_TIERS[3]["reward"]["amount"], 3),
             },
-            "formula": "总价 = 单价 × 张数；所有每日优惠由此推导",
+            "formula": "总价 = 单价 × 张数；每日优惠卡牌价格由此推导",
             "examples": {
                 "epic5": "史诗×5 = 150×5 = 750金 / 8×5 = 40钻",
                 "legendary5": "传奇×5 = 400×5 = 2000金 / 20×5 = 100钻",
             },
-            "note": "每日优惠可用金币或钻石；礼包区不走标价直购",
+            "note": "基础区无通用卡包；钻石四档走转盘；砖头四档无限购",
         },
     }
 
@@ -501,11 +636,11 @@ def estimate_economy(shop: dict) -> dict:
     battle_cards_day = 20 * 10
     battle_month = battle_cards_day * 30
     ad_month_cards = (5 + 20 + 35 * 0.3) * 30
-    small_rare_month = 30 * 30
     pack_contents = shop["zones"]["giftPacks"]["products"][0]["contents"]
     cards_per_claim = sum(c["count"] for c in pack_contents)
-    # 4 阵营 × 4 次/日 × 170 张（理论满勤）
     pack_month_max = cards_per_claim * 4 * 4 * 30
+    diamond_tiers = shop["zones"]["basic"]["diamondWheel"]["tiers"]
+    diamond_day_scripted_min = sum(t["reward"]["amount"] for t in diamond_tiers[:2])  # rough low estimate
     deck_frag = FRAG_PER_HERO * DECK_SIZE
     all_heroes_frag = FRAG_PER_HERO * HERO_COUNT
 
@@ -526,13 +661,15 @@ def estimate_economy(shop: dict) -> dict:
         "monthlyCardsEstimate": {
             "f2p_battleOnly": battle_month,
             "ad_player": battle_month + ad_month_cards,
-            "small_payer_18daily": battle_month + small_rare_month,
             "gift_pack_max_grind": pack_month_max,
         },
         "gapAnalysis": {
             "monthsToCoreDeck8F2P": round(deck_frag / battle_month, 1),
             "monthsToCoreDeck8Ad": round(deck_frag / (battle_month + ad_month_cards), 1),
-            "monthsToCoreDeck8SmallPayer": round(deck_frag / (battle_month + small_rare_month), 1),
+        },
+        "diamondWheel": {
+            "tierCount": len(diamond_tiers),
+            "rewards": [t["reward"]["amount"] for t in diamond_tiers],
         },
     }
 
@@ -581,9 +718,10 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "4. [每日档位保底分配](#四每日档位保底分配)",
         "5. [用户状态字段](#五用户状态字段)",
         "6. [基础区 · 每日优惠](#六基础区--每日优惠)",
-        "7. [基础区 · 通用卡/钻石/砖头](#七基础区--通用卡钻石砖头)",
-        "8. [品质单价基准](#八品质单价基准)",
-        "9. [经济补足粗算](#九经济补足粗算)",
+        "7. [基础区 · 钻石转盘四档](#七基础区--钻石转盘四档)",
+        "8. [基础区 · 砖头四档](#八基础区--砖头四档)",
+        "9. [品质单价基准](#九品质单价基准)",
+        "10. [经济补足粗算](#十经济补足粗算)",
         "",
         "---",
         "",
@@ -722,6 +860,8 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "## 六、基础区 · 每日优惠",
         "",
+        "> 基础区已移除**通用卡包**；钻石/砖头**无限购**。",
+        "",
         f"广告刷新 CD **{shop['zones']['basic']['dailyDeals']['refresh']['adCooldownHours']}小时**；手动刷新 **20钻**（日限6次）。",
         "",
         "| 格 | 商品 | 金币价 | 钻石价 | 广告 | 验算 |",
@@ -755,54 +895,108 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         calc = f"{GOLD_PER[q]}×{n}={GOLD_PER[q]*n}"
         lines.append(f"| {s['name']} | {g_s} | {d} | {ad} | {calc} |")
 
+    basic = shop["zones"]["basic"]
+    dw = basic["diamondWheel"]
     lines += [
         "",
         "---",
         "",
-        "## 七、基础区 · 通用卡/钻石/砖头",
+        "## 七、基础区 · 钻石转盘四档",
         "",
-        "### 通用卡直购（¥18/30张，每品质日限4次）",
+        f"> {dw['note']} · **无限购**",
         "",
-        "| SKU | 日满购 |",
-        "|:---|:---:|:---:|",
+        "### 7.1 档位一览",
+        "",
+        "| 档 | productId | 奖励 | 格数 | 展示概率 | 概率模型 |",
+        "|:---:|:---|:---:|:---:|:---:|:---|",
     ]
-    for p in shop["zones"]["basic"]["universalCardPacks"]["packs"]:
-        lines.append(f"| {p['name']} | {p['count']*p['dailyLimit']}张 |")
-
-    dr = shop["zones"]["basic"]["diamondRecharge"]
-    lines += [
-        "",
-        f"### 钻石充值（{'已配置，IAP 关闭' if not dr['enabled'] else '开启'}）",
-        "",
-        f"> {dr['note']}",
-        "",
-        "| 档位 | 价格 | 合计钻石 |",
-        "|:---:|:---:|:---:|:---:|",
-    ]
-    for t in dr["tiers"]:
-        lines.append(f"| {t['tierId']} | ¥{t['priceCny']} | {t['diamond']+t['bonus']} |")
+    for t in dw["tiers"]:
+        w = t["wheel"]
+        lines.append(
+            f"| {t['tierId']} | `{t['productId']}` | {t['reward']['amount']}钻 | "
+            f"{w['slotCount']} | {w['displayProbability']} | `{w['probabilityModel']}` |"
+        )
 
     lines += [
         "",
-        "### 砖头礼包（钻石 · 四档）",
+        "### 7.2 交互流程（与礼包转盘共用广告回退规则）",
         "",
-        "> 主城翻格升级消耗砖头；见 `docs/MAIN_CITY_PROGRESSION.md`",
+        "```",
+        "点击档位 → 转盘页 → [抽奖]",
+        "    → 停在「看广告」→ 播广告（可能未看完返回，指针与计数保留）",
+        "    → 停在「获得钻石」→ 通用奖励页入账",
+        "广告未看完：回转盘页，主按钮 [看广告] / [继续抽奖]",
+        "```",
         "",
-        "| 商品 | 砖头 | 钻石 | 钻/砖 | 限购 |",
-        "|:---|:---:|:---:|:---:|:---|",
+        "### 7.3 第一档 · 120 钻（3 格：2 看广告 + 1 获奖）",
+        "",
+        "- 展示概率：各 **1/3**",
+        "- **非真概率**，按累计转动次数脚本命中",
+        "- 每日**首次会话**：第 **2** 转必中",
+        "- 之后循环：**2 → 3 → 4 → 3** 转命中",
+        "",
+        "### 7.4 第二档 · 280 钻（4 格：3 看广告 + 1 获奖）",
+        "",
+        "- 展示概率：各 **1/4**",
+        "- **非真概率**",
+        "- 每日首次会话：第 **3** 转必中",
+        "- 之后循环：**5 → 4** 转命中",
+        "",
+        "### 7.5 第三档 · 720 钻（5 格：4 看广告 + 1 获奖）",
+        "",
+        "- 展示概率：各 **1/5**",
+        "- **连败保底**（保底窗口内为**真随机**）：",
+        "  - **第 1 次**购买：第 3 转仍失败 → 提示「触发连败保底，再转 2 次内必中」",
+        "  - **第 2 次**购买：第 4 转触发 → **3 次内必中**",
+        "  - **之后循环**：第 3 转触发(2次内必中) ↔ 第 4 转触发(3次内必中)",
+        "",
+        "### 7.6 第四档 · 1680 钻（7 格：6 看广告 + 1 获奖）",
+        "",
+        "- 展示概率：各 **1/7**",
+        "- **暴击**：第 3 次连续看广告仍失败后，看广告格显示 **「+100钻石」**；",
+        "  若再次转到看广告，奖励 **1680→1780→…** 累加直至中奖",
+        "- **默认保底**：**8～10 转**内必中（窗口内真随机）",
+        "",
+        "### 7.7 按钮文案",
+        "",
+        "| 键 | 文案 |",
+        "|:---|:---|",
     ]
-    for p in shop["zones"]["basic"]["brickPacks"]["packs"]:
-        lim = f"日{p['dailyLimit']}" if "dailyLimit" in p else f"周{p['weeklyLimit']}"
+    for k, v in dw["sharedAdFlow"]["buttons"].items():
+        lines.append(f"| `{k}` | {v} |")
+
+    bp = basic["brickPacks"]
+    lines += [
+        "",
+        "---",
+        "",
+        "## 八、基础区 · 砖头四档",
+        "",
+        f"> {bp['note']} · **无限购**",
+        "",
+        "| 档 | productId | 砖头 | 获取方式 | 消耗 | 钻/砖 |",
+        "|:---:|:---|:---:|:---|:---:|:---:|",
+    ]
+    for p in bp["packs"]:
         amt = p["reward"]["amount"]
-        dia = p["purchase"]["diamond"]
-        unit = round(dia / amt, 2)
-        lines.append(f"| {p['name']} | {amt} | {dia} | {unit} | {lim} |")
+        if p["purchaseModel"] == "watch_ad":
+            cost = "看广告"
+            unit = "—"
+        else:
+            dia = p["purchase"]["diamond"]
+            cost = f"{dia} 钻石"
+            unit = str(round(dia / amt, 3))
+        lines.append(f"| {p['tierId']} | `{p['productId']}` | {amt} | {cost} | — | {unit} |")
 
     lines += [
         "",
+        "**交互**：",
+        "- 第 1 档：点购买 → 看广告 → 领取 50 砖",
+        "- 第 2～4 档：点购买 → 扣钻石 → 通用奖励页",
+        "",
         "---",
         "",
-        "## 八、品质单价基准",
+        "## 九、品质单价基准",
         "",
         "| 品质 | 金币/张 | 钻石/张 |",
         "|:---|:---:|:---:|:---:|",
@@ -817,11 +1011,12 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "---",
         "",
-        "## 九、经济补足粗算",
+        "## 十、经济补足粗算",
         "",
         f"- 核心8卡满级需碎片：**{economy['targets']['coreDeckFrag']:,}**",
         f"- 单礼包单次领取：**{efp['cardsPerClaim']}** 张（传20+史50+稀100）",
         f"- 四礼包满勤日上限：**{efp['maxCardsPerDayAllPacks']}** 张",
+        f"- 钻石转盘四档奖励：**{' / '.join(str(x) for x in economy['diamondWheel']['rewards'])}** 钻",
         "",
         "| 玩家 | 月获卡(粗算) | 核心8卡满级 |",
         "|:---|:---:|:---:|:---:|",
