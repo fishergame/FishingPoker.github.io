@@ -25,6 +25,42 @@ const SkillConfig = {
     return this.HERO_BATTLE[heroId] || null;
   },
 
+  /** 特技升级行（fromLevel→toLevel） */
+  getUpgradeCostRow(slot, fromLevel) {
+    const rows = this.SKILL_UPGRADE.upgradeCost || this.SKILL_UPGRADE.diamondCost || [];
+    return rows.find((r) => r.slot === slot && r.fromLevel === fromLevel) || null;
+  },
+
+  /**
+   * 广告抵扣后钻石价（仅 epic/legendary）
+   * @param {number} baseDiamond
+   * @param {number} adsWatchedToday 0~3
+   */
+  applyAdDiscount(baseDiamond, adsWatchedToday = 0) {
+    const ad = this.SKILL_UPGRADE.adDiscount || {};
+    const pct = Math.min(
+      (ad.maxDiscountPct ?? 0.3),
+      (adsWatchedToday || 0) * (ad.percentPerAd ?? 0.1),
+    );
+    return Math.max(1, Math.ceil(baseDiamond * (1 - pct)));
+  },
+
+  /** 当日广告 UI 状态（供升级面板） */
+  getAdDiscountUiState(adsWatchedToday = 0, cooldownRemainingSec = 0) {
+    const ad = this.SKILL_UPGRADE.adDiscount || {};
+    const max = ad.maxAdsPerDay ?? 3;
+    const watched = Math.min(max, adsWatchedToday || 0);
+    const exhausted = watched >= max;
+    return {
+      watchAdButtonLabel: exhausted ? (ad.buttonExhaustedLabel || '已抵扣30%') : (ad.ui?.watchAdButton || '看广告抵扣10%'),
+      hintBelowButton: watched > 0 && !exhausted ? (ad.hintAfterWatch || '抵扣仅今日生效') : (exhausted ? (ad.hintAfterWatch || '抵扣仅今日生效') : ''),
+      discountPct: Math.min(ad.maxDiscountPct ?? 0.3, watched * (ad.percentPerAd ?? 0.1)),
+      canWatchAd: !exhausted && cooldownRemainingSec <= 0,
+      adsWatchedToday: watched,
+      maxAdsPerDay: max,
+    };
+  },
+
   /** 按英雄等级返回已解锁技能（普通 L1 / 史诗 L8 / 传奇 L20） */
   getHeroSkills(heroId, heroLevel = 30, skillLevels = {}) {
     const ids = BattleSkillRuntime.getUnlockedSkillIds(heroId, heroLevel);

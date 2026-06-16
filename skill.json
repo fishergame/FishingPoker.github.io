@@ -1,6 +1,6 @@
 {
-  "version": "3.5.0",
-  "description": "技能 v3.5：普通技能3种族克制被动 + 1/2/特技",
+  "version": "3.6.0",
+  "description": "技能 v3.6：稀有金币升级 / 史诗传奇钻石阶梯 + 广告抵扣",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -49,112 +49,307 @@
     "normalSkillUpgradeable": false,
     "scalingPerLevel": 0.08,
     "formula": "effect(L) = base * (1 + 0.08*(L-1))",
-    "currency": "diamond",
+    "currencyBySlot": {
+      "rare": "gold",
+      "epic": "diamond",
+      "legendary": "diamond"
+    },
+    "currency": "mixed",
     "fragmentCost": null,
     "unlockByHeroLevel": {
       "rare": 5,
       "epic": 10,
       "legendary": 20
     },
-    "diamondCostFormula": "diamond = round(heroGoldNeed[unlockBase + skillLv - 2] × 0.045 × premium)；premium: rare×2.0 epic×2.5 legendary×3.0；仅钻石，无碎片",
+    "goldCostFormula": "gold = round(heroGoldNeed[unlockBase + skillLv - 2] × 0.85)；仅稀有特技",
+    "diamondCostFormula": "史诗/传奇使用固定阶梯钻石表 SKILL_UPGRADE_DIAMOND（末档约千级，避免破万）",
+    "diamondCnyReference": "约 ¥0.1/钻（对照 shop 首充 ¥6≈60钻）",
+    "upgradeCost": [
+      {
+        "slot": "rare",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "currency": "gold",
+        "heroGoldReference": 1200,
+        "heroLevelContext": 5,
+        "goldCost": 1020,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "currency": "gold",
+        "heroGoldReference": 1800,
+        "heroLevelContext": 6,
+        "goldCost": 1530,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "currency": "gold",
+        "heroGoldReference": 2600,
+        "heroLevelContext": 7,
+        "goldCost": 2210,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "currency": "gold",
+        "heroGoldReference": 3500,
+        "heroLevelContext": 8,
+        "goldCost": 2975,
+        "diamondCost": null
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "currency": "diamond",
+        "heroGoldReference": 13800,
+        "heroLevelContext": 10,
+        "diamondCost": 200,
+        "goldCost": null,
+        "priceCnyReference": 20.0
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "currency": "diamond",
+        "heroGoldReference": 17000,
+        "heroLevelContext": 11,
+        "diamondCost": 380,
+        "goldCost": null,
+        "priceCnyReference": 38.0
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "currency": "diamond",
+        "heroGoldReference": 20500,
+        "heroLevelContext": 12,
+        "diamondCost": 620,
+        "goldCost": null,
+        "priceCnyReference": 62.0
+      },
+      {
+        "slot": "epic",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "currency": "diamond",
+        "heroGoldReference": 24300,
+        "heroLevelContext": 13,
+        "diamondCost": 980,
+        "goldCost": null,
+        "priceCnyReference": 98.0
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "currency": "diamond",
+        "heroGoldReference": 151000,
+        "heroLevelContext": 20,
+        "diamondCost": 280,
+        "goldCost": null,
+        "priceCnyReference": 28.0
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "currency": "diamond",
+        "heroGoldReference": 167500,
+        "heroLevelContext": 21,
+        "diamondCost": 520,
+        "goldCost": null,
+        "priceCnyReference": 52.0
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "currency": "diamond",
+        "heroGoldReference": 184500,
+        "heroLevelContext": 22,
+        "diamondCost": 880,
+        "goldCost": null,
+        "priceCnyReference": 88.0
+      },
+      {
+        "slot": "legendary",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "currency": "diamond",
+        "heroGoldReference": 202000,
+        "heroLevelContext": 23,
+        "diamondCost": 1480,
+        "goldCost": null,
+        "priceCnyReference": 148.0
+      }
+    ],
+    "goldCost": [
+      {
+        "slot": "rare",
+        "fromLevel": 1,
+        "toLevel": 2,
+        "currency": "gold",
+        "heroGoldReference": 1200,
+        "heroLevelContext": 5,
+        "goldCost": 1020,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 2,
+        "toLevel": 3,
+        "currency": "gold",
+        "heroGoldReference": 1800,
+        "heroLevelContext": 6,
+        "goldCost": 1530,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 3,
+        "toLevel": 4,
+        "currency": "gold",
+        "heroGoldReference": 2600,
+        "heroLevelContext": 7,
+        "goldCost": 2210,
+        "diamondCost": null
+      },
+      {
+        "slot": "rare",
+        "fromLevel": 4,
+        "toLevel": 5,
+        "currency": "gold",
+        "heroGoldReference": 3500,
+        "heroLevelContext": 8,
+        "goldCost": 2975,
+        "diamondCost": null
+      }
+    ],
     "diamondCost": [
       {
-        "slot": "rare",
-        "fromLevel": 1,
-        "toLevel": 2,
-        "diamondCost": 108,
-        "heroGoldReference": 1200,
-        "heroLevelContext": 5
-      },
-      {
-        "slot": "rare",
-        "fromLevel": 2,
-        "toLevel": 3,
-        "diamondCost": 162,
-        "heroGoldReference": 1800,
-        "heroLevelContext": 6
-      },
-      {
-        "slot": "rare",
-        "fromLevel": 3,
-        "toLevel": 4,
-        "diamondCost": 234,
-        "heroGoldReference": 2600,
-        "heroLevelContext": 7
-      },
-      {
-        "slot": "rare",
-        "fromLevel": 4,
-        "toLevel": 5,
-        "diamondCost": 315,
-        "heroGoldReference": 3500,
-        "heroLevelContext": 8
-      },
-      {
         "slot": "epic",
         "fromLevel": 1,
         "toLevel": 2,
-        "diamondCost": 1552,
+        "currency": "diamond",
         "heroGoldReference": 13800,
-        "heroLevelContext": 10
+        "heroLevelContext": 10,
+        "diamondCost": 200,
+        "goldCost": null,
+        "priceCnyReference": 20.0
       },
       {
         "slot": "epic",
         "fromLevel": 2,
         "toLevel": 3,
-        "diamondCost": 1912,
+        "currency": "diamond",
         "heroGoldReference": 17000,
-        "heroLevelContext": 11
+        "heroLevelContext": 11,
+        "diamondCost": 380,
+        "goldCost": null,
+        "priceCnyReference": 38.0
       },
       {
         "slot": "epic",
         "fromLevel": 3,
         "toLevel": 4,
-        "diamondCost": 2306,
+        "currency": "diamond",
         "heroGoldReference": 20500,
-        "heroLevelContext": 12
+        "heroLevelContext": 12,
+        "diamondCost": 620,
+        "goldCost": null,
+        "priceCnyReference": 62.0
       },
       {
         "slot": "epic",
         "fromLevel": 4,
         "toLevel": 5,
-        "diamondCost": 2734,
+        "currency": "diamond",
         "heroGoldReference": 24300,
-        "heroLevelContext": 13
+        "heroLevelContext": 13,
+        "diamondCost": 980,
+        "goldCost": null,
+        "priceCnyReference": 98.0
       },
       {
         "slot": "legendary",
         "fromLevel": 1,
         "toLevel": 2,
-        "diamondCost": 20385,
+        "currency": "diamond",
         "heroGoldReference": 151000,
-        "heroLevelContext": 20
+        "heroLevelContext": 20,
+        "diamondCost": 280,
+        "goldCost": null,
+        "priceCnyReference": 28.0
       },
       {
         "slot": "legendary",
         "fromLevel": 2,
         "toLevel": 3,
-        "diamondCost": 22612,
+        "currency": "diamond",
         "heroGoldReference": 167500,
-        "heroLevelContext": 21
+        "heroLevelContext": 21,
+        "diamondCost": 520,
+        "goldCost": null,
+        "priceCnyReference": 52.0
       },
       {
         "slot": "legendary",
         "fromLevel": 3,
         "toLevel": 4,
-        "diamondCost": 24908,
+        "currency": "diamond",
         "heroGoldReference": 184500,
-        "heroLevelContext": 22
+        "heroLevelContext": 22,
+        "diamondCost": 880,
+        "goldCost": null,
+        "priceCnyReference": 88.0
       },
       {
         "slot": "legendary",
         "fromLevel": 4,
         "toLevel": 5,
-        "diamondCost": 27270,
+        "currency": "diamond",
         "heroGoldReference": 202000,
-        "heroLevelContext": 23
+        "heroLevelContext": 23,
+        "diamondCost": 1480,
+        "goldCost": null,
+        "priceCnyReference": 148.0
       }
-    ]
+    ],
+    "adDiscount": {
+      "enabled": true,
+      "appliesToSlots": [
+        "epic",
+        "legendary"
+      ],
+      "percentPerAd": 0.1,
+      "maxAdsPerDay": 3,
+      "maxDiscountPct": 0.3,
+      "cooldownSec": 3600,
+      "hintAfterWatch": "抵扣仅今日生效",
+      "buttonExhaustedLabel": "已抵扣30%",
+      "resetPolicy": "daily_local_midnight",
+      "ui": {
+        "watchAdButton": "看广告抵扣10%",
+        "hintBelowButtonAfterWatch": "抵扣仅今日生效",
+        "exhaustedButtonLabel": "已抵扣30%",
+        "upgradeButtonShowsDiscountedDiamond": true,
+        "exampleLegendaryL5": {
+          "baseDiamond": 1480,
+          "afterMaxAds": 1036
+        }
+      }
+    }
   },
   "skillCount": 147,
   "skills": [

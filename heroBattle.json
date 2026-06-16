@@ -1,6 +1,6 @@
 {
-  "version": "3.5.0",
-  "description": "英雄战斗元数据 v3.5：普通技能1/2/3 + 种族克制被动",
+  "version": "3.6.0",
+  "description": "英雄战斗元数据 v3.6：特技金币/钻石分级升级 + 广告抵扣",
   "rules": {
     "noMeleeRangedLogic": true,
     "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -11,7 +11,25 @@
       "epic": 10,
       "legendary": 20
     },
-    "specialSkillUpgradeCurrency": "diamond"
+    "specialSkillUpgradeCurrencyBySlot": {
+      "rare": "gold",
+      "epic": "diamond",
+      "legendary": "diamond"
+    },
+    "skillAdDiscount": {
+      "enabled": true,
+      "appliesToSlots": [
+        "epic",
+        "legendary"
+      ],
+      "percentPerAd": 0.1,
+      "maxAdsPerDay": 3,
+      "maxDiscountPct": 0.3,
+      "cooldownSec": 3600,
+      "hintAfterWatch": "抵扣仅今日生效",
+      "buttonExhaustedLabel": "已抵扣30%",
+      "resetPolicy": "daily_local_midnight"
+    }
   },
   "heroes": {
     "dragon_knight": {

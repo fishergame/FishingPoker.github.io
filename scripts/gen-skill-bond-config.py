@@ -17,8 +17,30 @@ SPECIAL_SCALING_PER_LEVEL = 0.08
 SKILL_UPGRADE_FRAGMENTS = [5, 8, 12, 18]  # 特技 L1→2 … L4→5
 
 SPECIAL_UNLOCK_HERO_LEVEL = {"rare": 5, "epic": 10, "legendary": 20}
-SKILL_DIAMOND_PREMIUM = {"rare": 2.0, "epic": 2.5, "legendary": 3.0}
-GOLD_TO_DIAMOND_RATE = 0.045
+
+# 特技升级：稀有=金币；史诗/传奇=钻石（固定阶梯，避免破万）
+SKILL_UPGRADE_CURRENCY = {"rare": "gold", "epic": "diamond", "legendary": "diamond"}
+# 稀有金币 ≈ 同级英雄升级参考 × 系数
+SKILL_UPGRADE_GOLD_MULT = 0.85
+# 史诗/传奇钻石：L1→2 … L4→5（末档约千级，非破万）
+SKILL_UPGRADE_DIAMOND = {
+    "epic": [200, 380, 620, 980],
+    "legendary": [280, 520, 880, 1480],
+}
+# 充值参考：shop 首档 ¥6≈60钻 → 1钻≈¥0.10
+DIAMOND_CNY_RATE = 0.10
+
+SKILL_AD_DISCOUNT = {
+    "enabled": True,
+    "appliesToSlots": ["epic", "legendary"],
+    "percentPerAd": 0.10,
+    "maxAdsPerDay": 3,
+    "maxDiscountPct": 0.30,
+    "cooldownSec": 3600,
+    "hintAfterWatch": "抵扣仅今日生效",
+    "buttonExhaustedLabel": "已抵扣30%",
+    "resetPolicy": "daily_local_midnight",
+}
 
 FACTIONS = ["human", "beast", "undead", "mechanical"]
 FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
@@ -990,35 +1012,68 @@ def load_hero_level() -> dict:
 
 def skill_upgrade_table(hero_level: dict) -> dict:
     gold_by_q = hero_level["goldNeedByQuality"]
+    upgrade_rows = []
     diamond_rows = []
+    gold_rows = []
     for slot, unlock in SPECIAL_UNLOCK_HERO_LEVEL.items():
-        q = slot
+        currency = SKILL_UPGRADE_CURRENCY[slot]
         for from_lv in range(1, SPECIAL_SKILL_MAX):
             gold_idx = min(max(0, unlock + from_lv - 2), 29)
-            gold_ref = gold_by_q[q][gold_idx]
-            premium = SKILL_DIAMOND_PREMIUM[q]
-            diamond = max(30, round(gold_ref * GOLD_TO_DIAMOND_RATE * premium))
-            diamond_rows.append({
+            gold_ref = gold_by_q[slot][gold_idx]
+            row = {
                 "slot": slot,
                 "fromLevel": from_lv,
                 "toLevel": from_lv + 1,
-                "diamondCost": diamond,
+                "currency": currency,
                 "heroGoldReference": gold_ref,
                 "heroLevelContext": unlock + from_lv - 1,
-            })
+            }
+            if currency == "gold":
+                gold_cost = max(50, round(gold_ref * SKILL_UPGRADE_GOLD_MULT))
+                row["goldCost"] = gold_cost
+                row["diamondCost"] = None
+                gold_rows.append({**row})
+            else:
+                diamond = SKILL_UPGRADE_DIAMOND[slot][from_lv - 1]
+                row["diamondCost"] = diamond
+                row["goldCost"] = None
+                row["priceCnyReference"] = round(diamond * DIAMOND_CNY_RATE, 1)
+                diamond_rows.append({**row})
+            upgrade_rows.append(row)
+
     return {
         "specialSkillMaxLevel": SPECIAL_SKILL_MAX,
         "normalSkillUpgradeable": False,
         "scalingPerLevel": SPECIAL_SCALING_PER_LEVEL,
         "formula": "effect(L) = base * (1 + 0.08*(L-1))",
-        "currency": "diamond",
+        "currencyBySlot": SKILL_UPGRADE_CURRENCY,
+        "currency": "mixed",
         "fragmentCost": None,
         "unlockByHeroLevel": SPECIAL_UNLOCK_HERO_LEVEL,
-        "diamondCostFormula": (
-            "diamond = round(heroGoldNeed[unlockBase + skillLv - 2] × 0.045 × premium)；"
-            "premium: rare×2.0 epic×2.5 legendary×3.0；仅钻石，无碎片"
+        "goldCostFormula": (
+            f"gold = round(heroGoldNeed[unlockBase + skillLv - 2] × {SKILL_UPGRADE_GOLD_MULT})；"
+            "仅稀有特技"
         ),
+        "diamondCostFormula": (
+            "史诗/传奇使用固定阶梯钻石表 SKILL_UPGRADE_DIAMOND（末档约千级，避免破万）"
+        ),
+        "diamondCnyReference": f"约 ¥{DIAMOND_CNY_RATE}/钻（对照 shop 首充 ¥6≈60钻）",
+        "upgradeCost": upgrade_rows,
+        "goldCost": gold_rows,
         "diamondCost": diamond_rows,
+        "adDiscount": {
+            **SKILL_AD_DISCOUNT,
+            "ui": {
+                "watchAdButton": "看广告抵扣10%",
+                "hintBelowButtonAfterWatch": SKILL_AD_DISCOUNT["hintAfterWatch"],
+                "exhaustedButtonLabel": SKILL_AD_DISCOUNT["buttonExhaustedLabel"],
+                "upgradeButtonShowsDiscountedDiamond": True,
+                "exampleLegendaryL5": {
+                    "baseDiamond": SKILL_UPGRADE_DIAMOND["legendary"][-1],
+                    "afterMaxAds": round(SKILL_UPGRADE_DIAMOND["legendary"][-1] * (1 - SKILL_AD_DISCOUNT["maxDiscountPct"])),
+                },
+            },
+        },
     }
 
 
@@ -1126,15 +1181,16 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             },
         }
     return {
-        "version": "3.5.0",
-        "description": "英雄战斗元数据 v3.5：普通技能1/2/3 + 种族克制被动",
+        "version": "3.6.0",
+        "description": "英雄战斗元数据 v3.6：特技金币/钻石分级升级 + 广告抵扣",
         "rules": {
             "noMeleeRangedLogic": True,
             "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
             "fireRateMeans": "发射频率（攻击间隔=2.2/fireRate）",
             "projectileStyle": "flat=平直射击 arc=高抛重击",
             "skillUnlockByHeroLevel": SPECIAL_UNLOCK_HERO_LEVEL,
-            "specialSkillUpgradeCurrency": "diamond",
+            "specialSkillUpgradeCurrencyBySlot": SKILL_UPGRADE_CURRENCY,
+            "skillAdDiscount": SKILL_AD_DISCOUNT,
         },
         "heroes": entries,
     }
@@ -1182,7 +1238,7 @@ def gen_bond(heroes: list[dict]) -> dict:
             "tiers": FACTION_BOND_TIERS[fid],
         })
     return {
-        "version": "3.5.0",
+        "version": "3.6.0",
         "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
         "rules": {
             "deckSize": 8,
@@ -1214,8 +1270,8 @@ if __name__ == "__main__":
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "3.5.0",
-                "description": "技能 v3.5：普通技能3种族克制被动 + 1/2/特技",
+                "version": "3.6.0",
+                "description": "技能 v3.6：稀有金币升级 / 史诗传奇钻石阶梯 + 广告抵扣",
                 "categories": CATEGORY_CN,
                 "combatRules": {
                     "attackInterval": {

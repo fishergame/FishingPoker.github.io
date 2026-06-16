@@ -125,7 +125,7 @@ def gen_unified_skill_md(
         "# 技能体系 v3 · 完整文档",
         "",
         "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊",
-        "> 配表：`skill.json` v3.5.0 · `heroBattle.json` v3.5.0 · `bond.json` v3.5.0",
+        "> 配表：`skill.json` v3.6.0 · `heroBattle.json` v3.6.0 · `bond.json` v3.6.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
@@ -299,28 +299,71 @@ def gen_unified_skill_md(
         "| **传奇特技** | **L20** | 传奇品质卡牌 |",
         "| **普通技能** | L1 | 始终拥有，不可升级 |",
         "",
-        "### 6.2 升级消耗（仅钻石）",
+        "### 6.2 升级消耗",
         "",
-        "特技升级**不使用碎片**，仅消耗**钻石**；同档参考英雄升级金币折算后 × 溢价系数（稀有×2.0 / 史诗×2.5 / 传奇×3.0），高于普通英雄升级。",
+        "| 特技档 | 货币 | 说明 |",
+        "|:---|:---:|:---|",
+        "| **稀有** | **金币** | `gold ≈ heroGoldNeed × 0.85`（参考同级英雄升级） |",
+        "| **史诗** | **钻石** | 固定阶梯 200→380→620→**980** |",
+        "| **传奇** | **钻石** | 固定阶梯 280→520→880→**1480** |",
         "",
         f"效果曲线：`effect(L) = base × (1 + {SPECIAL_SCALING_PER_LEVEL} × (L-1))`",
         "",
-        "| 特技档 | 升级 | 钻石消耗 | 参考英雄金币 |",
-        "|:---|:---:|:---:|:---:|",
+        f"充值参考：{upgrade.get('diamondCnyReference', '')}。",
+        "旧公式（英雄金币×0.045×溢价）在传奇末档会破万钻（约¥2700+），已废弃。",
+        "",
+        "#### 稀有 · 金币",
+        "",
+        "| 升级 | 金币 | 参考英雄金币 |",
+        "|:---|:---:|:---:|",
     ]
 
-    unlock = upgrade.get("unlockByHeroLevel", {"rare": 5, "epic": 10, "legendary": 20})
-    for row in upgrade.get("diamondCost", []):
+    for row in upgrade.get("goldCost", []):
         slot_cn = {"rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(row["slot"], row["slot"])
         lines.append(
-            f"| {slot_cn} | L{row['fromLevel']}→L{row['toLevel']} | **{row['diamondCost']}** | {row.get('heroGoldReference', '—')} |"
+            f"| {slot_cn} L{row['fromLevel']}→L{row['toLevel']} | **{row['goldCost']}** | {row.get('heroGoldReference', '—')} |"
         )
 
     lines += [
         "",
-        f"公式：`{upgrade.get('diamondCostFormula', '')}`",
+        "#### 史诗 / 传奇 · 钻石",
         "",
-        "### 6.3 特技等级曲线示例（传奇高空重击 atkPct，base=0.25）",
+        "| 特技档 | 升级 | 钻石 | 约合 | 折后(看满3次广告) |",
+        "|:---|:---:|:---:|:---:|:---:|",
+    ]
+
+    for row in upgrade.get("diamondCost", []):
+        slot_cn = {"rare": "稀有", "epic": "史诗", "legendary": "传奇"}.get(row["slot"], row["slot"])
+        base = row["diamondCost"]
+        disc = round(base * 0.7)
+        cny = row.get("priceCnyReference", round(base * 0.1, 1))
+        lines.append(
+            f"| {slot_cn} | L{row['fromLevel']}→L{row['toLevel']} | **{base}** | ¥{cny} | **{disc}** |"
+        )
+
+    ad = upgrade.get("adDiscount", {})
+    lines += [
+        "",
+        "### 6.3 广告抵扣（史诗/传奇钻石升级）",
+        "",
+        "| 规则 | 值 |",
+        "|:---|:---|",
+        f"| 每次抵扣 | **{int(ad.get('percentPerAd', 0.1) * 100)}%** |",
+        f"| 每日次数 | **{ad.get('maxAdsPerDay', 3)}** 次 |",
+        f"| 冷却 | **{ad.get('cooldownSec', 3600) // 3600}** 小时/次 |",
+        f"| 上限 | **{int(ad.get('maxDiscountPct', 0.3) * 100)}%** |",
+        f"| 生效 | 仅当日（每日零点重置） |",
+        "",
+        "**客户端交互**",
+        "",
+        "1. 用户点击「看广告抵扣10%」→ 播放广告成功后，按钮下方展示：**抵扣仅今日生效**",
+        f"2. 每看完 1 次：当日累计抵扣 +10%；冷却 {ad.get('cooldownSec', 3600) // 3600} 小时后可再看",
+        f"3. 看完 {ad.get('maxAdsPerDay', 3)} 次后：广告按钮文案变为 **{ad.get('buttonExhaustedLabel', '已抵扣30%')}**",
+        "4. 升级按钮上的钻石数显示为折后价：`ceil(原价 × (1 - 当日抵扣%))`",
+        "",
+        "示例（传奇 L4→5）：原价 **1480** 钻 → 看满 3 次后 **1036** 钻",
+        "",
+        "### 6.4 特技等级曲线示例（传奇高空重击 atkPct，base=0.25）",
         "",
         "| 特技等级 | 效果系数 |",
         "|:---:|:---:|",

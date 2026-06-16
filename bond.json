@@ -1,5 +1,5 @@
 {
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
   "rules": {
     "deckSize": 8,
