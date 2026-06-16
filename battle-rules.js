@@ -5,6 +5,27 @@ const BattleRules = (() => {
   const C = BattleConfig;
   const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
+  const FACTION_COUNTER = {
+    human: 'mechanical',
+    mechanical: 'beast',
+    beast: 'undead',
+    undead: 'human',
+  };
+  const FACTION_COUNTER_BONUS = 0.10;
+
+  function getFactionCounterBonus(attacker, defender) {
+    if (!attacker || !defender) return 0;
+    const aFaction = attacker.faction;
+    const dFaction = defender.faction;
+    if (aFaction && dFaction && FACTION_COUNTER[aFaction] === dFaction) {
+      return FACTION_COUNTER_BONUS;
+    }
+    if (aFaction === 'human' && defender.unitType === 'building') {
+      return FACTION_COUNTER_BONUS;
+    }
+    return 0;
+  }
+
   let battleContext = {
     loaded: false,
     playerDeck: [],
@@ -406,6 +427,11 @@ const BattleRules = (() => {
   function calcUnitDamage(attacker, rawDamage, targetHero, isFieldCombat) {
     let dmg = rawDamage;
     const mods = attacker.combatMods || {};
+
+    if (isFieldCombat && targetHero) {
+      const counter = getFactionCounterBonus(attacker, targetHero);
+      if (counter > 0) dmg = Math.round(dmg * (1 + counter));
+    }
 
     if (isFieldCombat && mods.executeThreshold != null && targetHero.maxHp > 0) {
       const ratio = targetHero.hp / targetHero.maxHp;

@@ -49,6 +49,15 @@ def skill_block(sk: dict | None) -> str:
         lines.append(f"- 攻击弹道：**{sk['attackTrajectory']}**（穿透普通铁壁）")
     if sk.get("upgradeable"):
         lines.append(f"- 可升级：1→{sk['maxLevel']} 级")
+    ex = sk.get("damageExamples")
+    if ex and ex.get("levels"):
+        lv1 = ex["levels"][0]
+        if lv1.get("attackPerHit"):
+            lines.append(f"- L1伤害示例：约 **{lv1['attackPerHit']}** 点/击（基础攻{ex.get('heroAttackL1')}）")
+        if lv1.get("splashDamage"):
+            lines.append(f"- L1溅射示例：约 **{lv1['splashDamage']}** 点")
+        if lv1.get("healAmount"):
+            lines.append(f"- L1治疗示例：约 **{lv1['healAmount']}** 点")
     return "\n".join(lines)
 
 
@@ -196,6 +205,19 @@ def gen_unified_skill_md(
         "| `attackTrajectory` | 攻击特技弹道（`arc`） |",
         "| `bypassesNormalDefense` | 穿透普通铁壁 |",
         "| `combatRules.trajectory` | skill.json 全局规则 |",
+        "",
+        "### 4.4 种族克制（普攻额外伤害）",
+        "",
+        "在**普通攻击基础伤害**上，额外叠加 **+10%** 克制加成：",
+        "",
+        "| 攻击方 | 克制目标 |",
+        "|:---|:---|",
+        "| **人族** | 机械（含建筑单位） |",
+        "| **机械** | 兽族 |",
+        "| **兽族** | 亡灵 |",
+        "| **亡灵** | 人族 |",
+        "",
+        "循环：**人族 → 机械 → 兽族 → 亡灵 → 人族**。",
         "",
         "---",
         "",

@@ -23,6 +23,20 @@ GOLD_TO_DIAMOND_RATE = 0.045
 FACTIONS = ["human", "beast", "undead", "mechanical"]
 FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
 
+FACTION_COUNTER_BONUS = 0.10
+FACTION_COUNTER_CYCLE = {
+    "human": "mechanical",
+    "mechanical": "beast",
+    "beast": "undead",
+    "undead": "human",
+}
+FACTION_COUNTER_LABEL = {
+    "human": "人族 → 机械（含建筑）",
+    "mechanical": "机械 → 兽族",
+    "beast": "兽族 → 亡灵",
+    "undead": "亡灵 → 人族",
+}
+
 CATEGORY_CN = {
     "attack": "攻击",
     "defense": "防御",
@@ -132,6 +146,164 @@ def skill_value_at_level(base: float, skill_level: int) -> float:
     return round(base * (1 + SPECIAL_SCALING_PER_LEVEL * (skill_level - 1)), 3)
 
 
+def hero_atk_l1(hero: dict) -> int:
+    return int(hero.get("attack") or 0)
+
+
+def hero_hp_l1(hero: dict) -> int:
+    return int(hero.get("unitHp") or hero.get("buildingHp") or 0)
+
+
+def pct_label(value: float) -> str:
+    return f"{int(round(value * 100))}%"
+
+
+def effect_val(effects: list[dict], etype: str, default=0.0) -> float:
+    for e in effects:
+        if e.get("type") == etype:
+            return float(e.get("value") or 0)
+    return default
+
+
+def enrich_special_description(
+    hero: dict,
+    cat: str,
+    slot: str,
+    base_desc: str,
+    effects: list[dict],
+    prof: dict,
+    skill_name: str,
+) -> str:
+    """为稀有/史诗/传奇特技补充基于 L1 属性的具体数值说明。"""
+    slot_cn = {"rare": "稀有", "epic": "史诗", "legendary": "传奇"}[slot]
+    atk = hero_atk_l1(hero)
+    hp = hero_hp_l1(hero)
+    parts = [base_desc.rstrip("。")]
+
+    if cat == "attack":
+        if slot == "rare":
+            splash = effect_val(effects, "splashPct")
+            splash_dmg = round(atk * splash) if atk else 0
+            parts.append(
+                f"【{slot_cn}】主目标造成100%攻击力"
+                f"{'（约' + str(atk) + '点）' if atk else ''}；"
+                f"邻格溅射{pct_label(splash)}攻击力"
+                f"{'（约' + str(splash_dmg) + '点）' if atk else ''}"
+            )
+        elif slot == "epic":
+            atk_b = effect_val(effects, "atkPct")
+            boosted = round(atk * (1 + atk_b)) if atk else 0
+            parts.append(
+                f"【{slot_cn}】单次伤害提升至{pct_label(1 + atk_b)}攻击力"
+                f"{'（' + str(atk) + '→' + str(boosted) + '点）' if atk else ''}，连锁命中2格"
+            )
+        else:
+            if "亡灵收割" in skill_name:
+                exec_t = effect_val(effects, "executeThreshold", 0.25)
+                parts.append(
+                    f"【{slot_cn}】依托基础攻击"
+                    f"{'（约' + str(atk) + '点/击）' if atk else ''}；"
+                    f"击杀后复燃相邻阵亡格；目标≤{pct_label(exec_t)}生命时更易斩杀"
+                )
+            else:
+                atk_b = effect_val(effects, "atkPct")
+                boosted = round(atk * (1 + atk_b)) if atk else 0
+                exec_t = effect_val(effects, "executeThreshold", 0.30)
+                parts.append(
+                    f"【{slot_cn}】造成{pct_label(1 + atk_b)}攻击力伤害"
+                    f"{'（' + str(atk) + '→' + str(boosted) + '点）' if atk else ''}；"
+                    f"目标生命≤{pct_label(exec_t)}时触发斩杀加成"
+                )
+    elif cat == "defense":
+        if slot == "rare":
+            dr = effect_val(effects, "damageReductionPct")
+            parts.append(
+                f"【{slot_cn}】附加减伤{pct_label(dr)}"
+                f"（例：受击100点→实际约{round(100 * (1 - dr))}点）"
+            )
+        elif slot == "epic":
+            dr = effect_val(effects, "allyDamageReductionPct")
+            parts.append(
+                f"【{slot_cn}】范围友军减伤{pct_label(dr)}"
+                f"（例：受击100点→约{round(100 * (1 - dr))}点）"
+            )
+        else:
+            dr = effect_val(effects, "globalDamageReductionPct")
+            parts.append(
+                f"【{slot_cn}】全队减伤{pct_label(dr)}"
+                f"（例：受击100点→约{round(100 * (1 - dr))}点）"
+            )
+    elif cat == "supply":
+        if slot == "rare":
+            heal = effect_val(effects, "healAllyPct")
+            heal_amt = round(hp * heal) if hp else 0
+            parts.append(
+                f"【{slot_cn}】为友军恢复{pct_label(heal)}最大生命"
+                f"{'（例：HP' + str(hp) + '→约+' + str(heal_amt) + '点）' if hp else ''}"
+            )
+        elif slot == "epic":
+            heal = effect_val(effects, "healAreaPct")
+            heal_amt = round(hp * heal) if hp else 0
+            parts.append(
+                f"【{slot_cn}】范围友军恢复{pct_label(heal)}生命"
+                f"{'（例：HP' + str(hp) + '→约+' + str(heal_amt) + '点）' if hp else ''}"
+            )
+        else:
+            parts.append(
+                f"【{slot_cn}】将目标恢复至满血"
+                f"{'（例：HP' + str(hp) + '拉满）' if hp else ''}，并净化减益"
+            )
+    else:  # speed
+        fire_rate = float(hero.get("attackSpeed") or 1.0)
+        interval = round(2.2 / fire_rate, 2) if fire_rate else None
+        if slot == "rare":
+            fr = effect_val(effects, "fireRatePct")
+            new_iv = round(interval / (1 + fr), 2) if interval else None
+            parts.append(
+                f"【{slot_cn}】发射频率+{pct_label(fr)}"
+                f"{f'（间隔{interval}s→约{new_iv}s）' if interval and new_iv else ''}"
+            )
+        elif slot == "epic":
+            ps = effect_val(effects, "projectileSpeedPct")
+            fr = effect_val(effects, "fireRatePct")
+            new_iv = round(interval / (1 + fr), 2) if interval else None
+            parts.append(
+                f"【{slot_cn}】弹道速度+{pct_label(ps)}、发射频率+{pct_label(fr)}"
+                f"{f'（间隔{interval}s→约{new_iv}s）' if interval and new_iv else ''}"
+            )
+        else:
+            fr = effect_val(effects, "teamFireRatePct")
+            parts.append(f"【{slot_cn}】全队发射频率+{pct_label(fr)}")
+
+    return "。".join(parts) + "。"
+
+
+def build_damage_examples(hero: dict, cat: str, slot: str, base_effects: list[dict]) -> dict:
+    atk = hero_atk_l1(hero)
+    hp = hero_hp_l1(hero)
+    rows = []
+    for lv in range(1, SPECIAL_SKILL_MAX + 1):
+        scaled = []
+        for e in base_effects:
+            if e["type"] in (
+                "extraTargets", "chainTargets", "wallTiles", "reviveAdjacentDead",
+                "revealAdjacent", "healFull", "cleanse", "blockRush", "projectileArc",
+                "executeThreshold",
+            ):
+                scaled.append({**e})
+            else:
+                scaled.append({**e, "value": skill_value_at_level(e["value"], lv)})
+        row = {"skillLevel": lv, "effects": scaled}
+        if cat == "attack" and atk:
+            atk_b = effect_val(scaled, "atkPct")
+            row["attackPerHit"] = round(atk * (1 + atk_b)) if atk_b else atk
+            row["splashDamage"] = round(atk * effect_val(scaled, "splashPct"))
+        if cat == "supply" and hp:
+            row["healAmount"] = round(hp * effect_val(scaled, "healAllyPct", effect_val(scaled, "healAreaPct")))
+        rows.append(row)
+    return {"heroAttackL1": atk or None, "heroHpL1": hp or None, "levels": rows}
+
+
 def build_normal_skill(hero: dict, prof: dict) -> dict:
     q = hero["quality"]
     cat = prof["category"]
@@ -140,6 +312,8 @@ def build_normal_skill(hero: dict, prof: dict) -> dict:
 
     if cat == "attack":
         name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
+        if hero_atk_l1(hero):
+            desc += f"（100%攻击力，L1约{hero_atk_l1(hero)}点）"
         vfx = "基础弹药**平直**射向单格目标；无高抛"
         effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
         attack_mode = "single"
@@ -301,6 +475,8 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
                 scaled.append({**e, "value": skill_value_at_level(e["value"], lv)})
         level_curve.append({"skillLevel": lv, "effects": scaled})
 
+    desc = enrich_special_description(hero, cat, slot, desc, base_effects, prof, name)
+
     skill = {
         "skillId": f"skill_{hid}_{slot}",
         "heroId": hid,
@@ -319,6 +495,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
         "scalingPerSkillLevel": SPECIAL_SCALING_PER_LEVEL,
         "effects": level_curve[0]["effects"],
         "levelCurve": level_curve,
+        "damageExamples": build_damage_examples(hero, cat, slot, base_effects),
         "tags": [q, slot, cat, hero["type"]],
     }
     if cat == "attack" and any(e.get("type") == "projectileArc" for e in base_effects):
@@ -443,6 +620,7 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             "category": prof["category"],
             "categoryLabel": CATEGORY_CN[prof["category"]],
             "bondEligible": hid != "gold_mine",
+            "unitType": h.get("type", "unit"),
             "combatStats": {
                 **combat,
                 "formulas": {
@@ -594,6 +772,14 @@ def gen_bond(heroes: list[dict]) -> dict:
             "maxActiveFactionBonds": 1,
             "maxActiveCategoryBonds": 1,
             "factions": FACTION_CN,
+            "factionCounter": {
+                "bonusPct": FACTION_COUNTER_BONUS,
+                "cycle": [
+                    {"attacker": atk, "strongVs": def_f, "label": FACTION_COUNTER_LABEL[atk]}
+                    for atk, def_f in FACTION_COUNTER_CYCLE.items()
+                ],
+                "note": "普攻在基础伤害上额外叠加克制加成；人族对机械族（含建筑单位）+10%",
+            },
         },
         "bonds": bonds,
     }
@@ -618,7 +804,13 @@ if __name__ == "__main__":
                         "flat": "平直弹道（普通攻击、双联/连锁特技）",
                         "arc": "高抛弹道（传奇攻击特技「高空重击」等）",
                         "defenseRule": "普通防御 blocksTrajectory 仅含 flat；史诗及以上特技防御含 flat+arc",
-                    }
+                    },
+                    "factionCounter": {
+                        "bonusPct": FACTION_COUNTER_BONUS,
+                        "cycle": FACTION_COUNTER_CYCLE,
+                        "labels": FACTION_COUNTER_LABEL,
+                        "rule": "人族克机械 → 机械克兽族 → 兽族克亡灵 → 亡灵克人族；克制时普攻额外+10%伤害",
+                    },
                 },
                 "skillUpgrade": upgrade,
                 "skillCount": len(skills),

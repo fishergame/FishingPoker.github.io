@@ -14,6 +14,32 @@
       "beast": "兽族",
       "undead": "亡灵",
       "mechanical": "机械"
+    },
+    "factionCounter": {
+      "bonusPct": 0.1,
+      "cycle": [
+        {
+          "attacker": "human",
+          "strongVs": "mechanical",
+          "label": "人族 → 机械（含建筑）"
+        },
+        {
+          "attacker": "mechanical",
+          "strongVs": "beast",
+          "label": "机械 → 兽族"
+        },
+        {
+          "attacker": "beast",
+          "strongVs": "undead",
+          "label": "兽族 → 亡灵"
+        },
+        {
+          "attacker": "undead",
+          "strongVs": "human",
+          "label": "亡灵 → 人族"
+        }
+      ],
+      "note": "普攻在基础伤害上额外叠加克制加成；人族对机械族（含建筑单位）+10%"
     }
   },
   "bonds": [
