@@ -1,11 +1,9 @@
 """Generate unified docs/SKILL_SYSTEM.md from skill v3 config data."""
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SIM_APPENDIX_PATH = ROOT / "docs" / "_SKILL_SIM_APPENDIX.md"
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
@@ -100,39 +98,6 @@ def skill_block(sk: dict | None) -> str:
     return "\n".join(lines)
 
 
-def migrate_legacy_sim_appendix() -> str:
-    """One-time merge of v2 sim reports into appendix source file."""
-    chunks: list[str] = []
-    legacy = [
-        ("SKILL_BATTLE_SIM_REPORT.md", "A.1 定位单挑与自动对战（v2 原型）"),
-        ("SKILL_BATTLE_SIM_REPORT_REAL_HP.md", "A.2 真实主城 HP 多阶段对战（v2 原型）"),
-    ]
-    for fname, heading in legacy:
-        path = ROOT / "docs" / fname
-        if not path.exists():
-            continue
-        text = path.read_text(encoding="utf-8")
-        text = re.sub(r"^#\s+.+\n+", "", text, count=1)
-        chunks.append(f"### {heading}\n\n> 历史模拟数据，基于 v2 技能原型；请运行 `node scripts/sim-battle.js` 后执行 `python3 scripts/gen-skill-bond-config.py` 刷新。\n\n{text.strip()}")
-    if not chunks:
-        return (
-            "> 暂无模拟数据。运行：\n"
-            "> - `node scripts/sim-battle.js --battles=50 --level=20`\n"
-            "> - `node scripts/sim-battle.js --real --multi --battles=25`\n"
-            "> 然后 `python3 scripts/gen-skill-bond-config.py` 合入本文档。"
-        )
-    return "\n\n---\n\n".join(chunks)
-
-
-def load_sim_appendix() -> str:
-    if not SIM_APPENDIX_PATH.exists():
-        body = migrate_legacy_sim_appendix()
-        SIM_APPENDIX_PATH.parent.mkdir(parents=True, exist_ok=True)
-        SIM_APPENDIX_PATH.write_text(body + "\n", encoding="utf-8")
-        return body
-    return SIM_APPENDIX_PATH.read_text(encoding="utf-8").strip()
-
-
 def gen_unified_skill_md(
     skills: list[dict],
     hero_battle: dict,
@@ -159,7 +124,7 @@ def gen_unified_skill_md(
     lines: list[str] = [
         "# 技能体系 v3 · 完整文档",
         "",
-        "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录",
+        "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊",
         "> 配表：`skill.json` v3.5.0 · `heroBattle.json` v3.5.0 · `bond.json` v3.5.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
@@ -179,7 +144,6 @@ def gen_unified_skill_md(
         "10. [技能一览速查表](#十技能一览速查表)",
         "11. [全英雄技能详表](#十一全英雄技能详表)",
         "12. [战斗接入与文件索引](#十二战斗接入与文件索引)",
-        "13. [附录：对战模拟](#附录对战模拟)",
         "",
         "---",
         "",
@@ -540,18 +504,10 @@ def gen_unified_skill_md(
         "| `battle-skill-runtime.js` | `trajectoryDefense`、`primaryAttackTrajectory` |",
         "| `battle-rules.js` | 按 `attackTrajectory` 结算减伤 |",
         "| `skill-config.js` | 配表加载 |",
-        "| `scripts/sim-battle.js` | 对战模拟 → `docs/_SKILL_SIM_APPENDIX.md` |",
         "",
         "**维护流程**",
         "",
-        "1. 改配表逻辑后：`python3 scripts/gen-skill-bond-config.py`（生 JSON + 本文档）",
-        "2. 重跑模拟后：`node scripts/sim-battle.js …`，再执行步骤 1 合入附录",
-        "",
-        "---",
-        "",
-        "## 附录：对战模拟",
-        "",
-        load_sim_appendix(),
+        "改配表逻辑后：`python3 scripts/gen-skill-bond-config.py`（生 JSON + 本文档）",
         "",
     ]
 
