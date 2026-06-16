@@ -32,6 +32,10 @@ const ShopConfig = {
     return this.GIFT_PRODUCTS_BY_ID[productId] || null;
   },
 
+  getGiftPackCards(productId) {
+    return this.getGiftPack(productId)?.contents?.cards || [];
+  },
+
   getDiamondWheelTier(productId) {
     return this.DIAMOND_WHEEL_BY_ID[productId] || null;
   },
@@ -52,12 +56,27 @@ const ShopConfig = {
     return this.BASIC.diamondWheel?.sharedAdFlow || null;
   },
 
-  /** 礼包：每日重置时洗牌档位池（free/ad_1/ad_2/ad_3 各 1） */
-  createDailyTierDeck() {
-    const keys = this.GIFT_PACKS.wheelSpin?.dailyTierDeck?.tierKeys || [
-      'free', 'ad_1', 'ad_2', 'ad_3',
-    ];
-    const deck = [...keys];
+  giftPackRefreshDays() {
+    return this.GIFT_PACKS.refreshCycleDays
+      || this.GIFT_PACKS.products?.[0]?.refreshCycleDays
+      || 3;
+  },
+
+  giftPackPurchaseLimit() {
+    return this.GIFT_PACKS.purchaseLimitPerCycle
+      || this.GIFT_PACKS.products?.[0]?.purchaseLimitPerCycle
+      || 5;
+  },
+
+  /** 礼包：周期重置时洗牌档位池（5 档：免费×1 + ad1×2 + ad2×1 + ad3×1） */
+  createCycleTierDeck() {
+    const dist = this.GIFT_PACKS.wheelSpin?.dailyTierDeck?.guaranteedDistribution || {
+      free: 1, ad_1: 2, ad_2: 1, ad_3: 1,
+    };
+    const deck = [];
+    Object.entries(dist).forEach(([key, count]) => {
+      for (let i = 0; i < count; i += 1) deck.push(key);
+    });
     for (let i = deck.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -84,11 +103,16 @@ const ShopConfig = {
     return tpl.replace('{remainingAfterForfeit}', String(remainingAfterForfeit));
   },
 
-  /**
-   * 钻石转盘 · 脚本档位：返回本次会话第 spinIndex 转是否应命中
-   * @param {object} tier diamondWheel tier config
-   * @param {object} state { spinIndex, sessionIndex, isDailyFirstSession }
-   */
+  /** 领取礼包：直接入卡库的 3 张英雄卡 */
+  buildDirectGrantRewards(productId) {
+    return this.getGiftPackCards(productId).map((c) => ({
+      heroId: c.heroId,
+      quality: c.quality,
+      count: c.count,
+      grantMode: c.grantMode || 'direct_to_collection',
+    }));
+  },
+
   shouldScriptedDiamondWin(tier, state) {
     const wheel = tier?.wheel;
     if (!wheel || wheel.probabilityModel !== 'scripted') return false;
@@ -103,19 +127,12 @@ const ShopConfig = {
     return spin === cycle[cycleIdx];
   },
 
-  /**
-   * 钻石转盘 · 第三档连败保底：是否进入保底窗口
-   */
   getDiamondPityState(tier, state) {
     const pity = tier?.wheel?.pity;
     if (!pity || tier.wheel.probabilityModel !== 'pity_loss_streak') return null;
     const session = state.sessionIndex || 1;
-    if (session === 1) {
-      return pity.sessions?.[0] || null;
-    }
-    if (session === 2) {
-      return pity.sessions?.[1] || null;
-    }
+    if (session === 1) return pity.sessions?.[0] || null;
+    if (session === 2) return pity.sessions?.[1] || null;
     const cycle = pity.cycleAfterSession2;
     if (!cycle) return null;
     const idx = (session - 3) % 2;
@@ -127,27 +144,25 @@ const ShopConfig = {
     };
   },
 
-  /**
-   * 钻石转盘 · 第四档暴击：当前奖励钻石（含累加）
-   */
   getDiamondCritReward(tier, critStacks = 0) {
     const base = tier?.reward?.amount || 0;
     const bonus = tier?.wheel?.critMechanism?.bonusPerAdSlotHit || 0;
     return base + critStacks * bonus;
   },
 
-  createPackDailyState(productId) {
+  createPackCycleState(productId) {
     const pack = this.getGiftPack(productId);
-    const limit = pack?.dailyPurchaseLimit || 4;
+    const limit = pack?.purchaseLimitPerCycle || this.giftPackPurchaseLimit();
+    const cards = pack?.contents?.cards || [];
     return {
       productId,
-      dateKey: null,
+      cycleKey: null,
+      cycleStartAt: null,
       purchasesRemaining: limit,
-      tierDeck: this.createDailyTierDeck(),
+      tierDeck: this.createCycleTierDeck(),
       currentSession: null,
       soldOut: false,
-      displayLegendaryHeroId: null,
-      displayHeroIds: [],
+      featuredHeroIds: cards.map((c) => c.heroId),
     };
   },
 

@@ -1,6 +1,6 @@
 {
-  "version": "2.1.0",
-  "description": "商店 v2.1：礼包(四阵营转盘) + 基础(每日优惠/钻石转盘四档/砖头四档)",
+  "version": "2.2.0",
+  "description": "商店 v2.2：礼包(3天5次·3张指定英雄卡直入库) + 基础(每日优惠/钻石转盘/砖头)",
   "tabs": [
     {
       "tabId": "giftPacks",
@@ -35,7 +35,9 @@
         "hero_pack_premium"
       ],
       "purchaseModel": "ad_wheel",
-      "dailyResetAt": "04:00",
+      "refreshCycleDays": 3,
+      "refreshAt": "04:00",
+      "purchaseLimitPerCycle": 5,
       "listSort": {
         "availableFirst": true,
         "soldOutBottom": true,
@@ -81,7 +83,7 @@
           "note": "展示等概率；实际档位由当日 tierDeck 保底分配"
         },
         "dailyTierDeck": {
-          "description": "每日每礼包 4 次购买，预洗牌 4 档各 1 次",
+          "description": "每周期每礼包 5 次购买，预洗牌 5 档",
           "tierKeys": [
             "free",
             "ad_1",
@@ -90,11 +92,11 @@
           ],
           "guaranteedDistribution": {
             "free": 1,
-            "ad_1": 1,
+            "ad_1": 2,
             "ad_2": 1,
             "ad_3": 1
           },
-          "shuffleOnDailyReset": true,
+          "shuffleOnCycleReset": true,
           "drawFromRemainingOnly": true
         },
         "adFlow": {
@@ -130,17 +132,17 @@
         }
       },
       "userStateSchema": {
-        "scope": "perUserPerPackPerDay",
+        "scope": "perUserPerPackPerCycle",
         "fields": {
-          "dateKey": "YYYY-MM-DD",
-          "purchasesRemaining": "0-4",
+          "cycleKey": "周期标识（每3天刷新）",
+          "cycleStartAt": "周期开始时间",
+          "purchasesRemaining": "0-5",
           "tierDeck": "剩余未抽中的 tierKey 列表",
           "currentSession": "null | { tierKey, spinSlotId, adsRequired, adsWatched }",
           "soldOut": "purchasesRemaining === 0",
-          "displayLegendaryHeroId": "当前展示传奇",
-          "displayHeroIds": "其他预览卡"
+          "featuredHeroIds": "本周期3张卡绑定的 heroId（传奇/史诗/稀有各1）"
         },
-        "crossDayPolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新日重置"
+        "crossCyclePolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新周期重置，featuredHeroIds 重新抽取"
       },
       "products": [
         {
@@ -161,44 +163,60 @@
             "royal_knight",
             "shaman"
           ],
-          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "heroPoolNote": "四礼包角色池互不重叠；每周期刷新3名展示/发放英雄",
           "sortWeight": 100,
-          "dailyPurchaseLimit": 4,
+          "refreshCycleDays": 3,
+          "refreshAt": "04:00",
+          "purchaseLimitPerCycle": 5,
           "purchaseModel": "ad_wheel",
-          "contents": [
-            {
-              "type": "heroCard",
-              "quality": "legendary",
-              "count": 20,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "epic",
-              "count": 50,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "rare",
-              "count": 100,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
-            }
-          ],
+          "contents": {
+            "cardCount": 3,
+            "grantMode": "direct_to_collection",
+            "grantNote": "共3张卡：传奇×20 + 史诗×50 + 稀有×100，各绑定1名本阵营英雄",
+            "cards": [
+              {
+                "slot": 1,
+                "type": "heroCard",
+                "heroId": "archmage",
+                "quality": "legendary",
+                "count": 20,
+                "grantMode": "direct_to_collection",
+                "label": "传奇卡牌×20",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 2,
+                "type": "heroCard",
+                "heroId": "shaman",
+                "quality": "epic",
+                "count": 50,
+                "grantMode": "direct_to_collection",
+                "label": "史诗卡牌×50",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 3,
+                "type": "heroCard",
+                "heroId": "archer",
+                "quality": "rare",
+                "count": 100,
+                "grantMode": "direct_to_collection",
+                "label": "稀有卡牌×100",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              }
+            ]
+          },
           "displayRefresh": {
-            "onClaim": true,
-            "legendaryPreview": true,
-            "otherHeroPreview": true,
-            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+            "onCycleReset": true,
+            "cycleDays": 3,
+            "pickFromHeroPool": true,
+            "note": "每3天按本阵营重新抽取1传奇+1史诗+1稀有展示；周期内5次购尽后售罄"
           },
           "soldOut": {
             "buttonLabel": "售罄",
             "dimmed": true,
             "sortToBottom": true,
-            "toast": "今日购买已达上限，请明日再来。"
+            "toast": "本周期购买已达上限（5/5），3天后刷新。"
           }
         },
         {
@@ -218,44 +236,60 @@
             "wolf_rider",
             "wyrmling"
           ],
-          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "heroPoolNote": "四礼包角色池互不重叠；每周期刷新3名展示/发放英雄",
           "sortWeight": 99,
-          "dailyPurchaseLimit": 4,
+          "refreshCycleDays": 3,
+          "refreshAt": "04:00",
+          "purchaseLimitPerCycle": 5,
           "purchaseModel": "ad_wheel",
-          "contents": [
-            {
-              "type": "heroCard",
-              "quality": "legendary",
-              "count": 20,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "epic",
-              "count": 50,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "rare",
-              "count": 100,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
-            }
-          ],
+          "contents": {
+            "cardCount": 3,
+            "grantMode": "direct_to_collection",
+            "grantNote": "共3张卡：传奇×20 + 史诗×50 + 稀有×100，各绑定1名本阵营英雄",
+            "cards": [
+              {
+                "slot": 1,
+                "type": "heroCard",
+                "heroId": "dragon_knight",
+                "quality": "legendary",
+                "count": 20,
+                "grantMode": "direct_to_collection",
+                "label": "传奇卡牌×20",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 2,
+                "type": "heroCard",
+                "heroId": "cavalry",
+                "quality": "epic",
+                "count": 50,
+                "grantMode": "direct_to_collection",
+                "label": "史诗卡牌×50",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 3,
+                "type": "heroCard",
+                "heroId": "spear_orc",
+                "quality": "rare",
+                "count": 100,
+                "grantMode": "direct_to_collection",
+                "label": "稀有卡牌×100",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              }
+            ]
+          },
           "displayRefresh": {
-            "onClaim": true,
-            "legendaryPreview": true,
-            "otherHeroPreview": true,
-            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+            "onCycleReset": true,
+            "cycleDays": 3,
+            "pickFromHeroPool": true,
+            "note": "每3天按本阵营重新抽取1传奇+1史诗+1稀有展示；周期内5次购尽后售罄"
           },
           "soldOut": {
             "buttonLabel": "售罄",
             "dimmed": true,
             "sortToBottom": true,
-            "toast": "今日购买已达上限，请明日再来。"
+            "toast": "本周期购买已达上限（5/5），3天后刷新。"
           }
         },
         {
@@ -275,44 +309,60 @@
             "skeleton_knight",
             "skeleton_warrior"
           ],
-          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "heroPoolNote": "四礼包角色池互不重叠；每周期刷新3名展示/发放英雄",
           "sortWeight": 98,
-          "dailyPurchaseLimit": 4,
+          "refreshCycleDays": 3,
+          "refreshAt": "04:00",
+          "purchaseLimitPerCycle": 5,
           "purchaseModel": "ad_wheel",
-          "contents": [
-            {
-              "type": "heroCard",
-              "quality": "legendary",
-              "count": 20,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "epic",
-              "count": 50,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "rare",
-              "count": 100,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
-            }
-          ],
+          "contents": {
+            "cardCount": 3,
+            "grantMode": "direct_to_collection",
+            "grantNote": "共3张卡：传奇×20 + 史诗×50 + 稀有×100，各绑定1名本阵营英雄",
+            "cards": [
+              {
+                "slot": 1,
+                "type": "heroCard",
+                "heroId": "crusher",
+                "quality": "legendary",
+                "count": 20,
+                "grantMode": "direct_to_collection",
+                "label": "传奇卡牌×20",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 2,
+                "type": "heroCard",
+                "heroId": "catapult",
+                "quality": "epic",
+                "count": 50,
+                "grantMode": "direct_to_collection",
+                "label": "史诗卡牌×50",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 3,
+                "type": "heroCard",
+                "heroId": "necromancer",
+                "quality": "rare",
+                "count": 100,
+                "grantMode": "direct_to_collection",
+                "label": "稀有卡牌×100",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              }
+            ]
+          },
           "displayRefresh": {
-            "onClaim": true,
-            "legendaryPreview": true,
-            "otherHeroPreview": true,
-            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+            "onCycleReset": true,
+            "cycleDays": 3,
+            "pickFromHeroPool": true,
+            "note": "每3天按本阵营重新抽取1传奇+1史诗+1稀有展示；周期内5次购尽后售罄"
           },
           "soldOut": {
             "buttonLabel": "售罄",
             "dimmed": true,
             "sortToBottom": true,
-            "toast": "今日购买已达上限，请明日再来。"
+            "toast": "本周期购买已达上限（5/5），3天后刷新。"
           }
         },
         {
@@ -333,44 +383,60 @@
             "sky_dome",
             "sniper"
           ],
-          "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+          "heroPoolNote": "四礼包角色池互不重叠；每周期刷新3名展示/发放英雄",
           "sortWeight": 97,
-          "dailyPurchaseLimit": 4,
+          "refreshCycleDays": 3,
+          "refreshAt": "04:00",
+          "purchaseLimitPerCycle": 5,
           "purchaseModel": "ad_wheel",
-          "contents": [
-            {
-              "type": "heroCard",
-              "quality": "legendary",
-              "count": 20,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "epic",
-              "count": 50,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片"
-            },
-            {
-              "type": "heroCard",
-              "quality": "rare",
-              "count": 100,
-              "pool": "faction",
-              "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片"
-            }
-          ],
+          "contents": {
+            "cardCount": 3,
+            "grantMode": "direct_to_collection",
+            "grantNote": "共3张卡：传奇×20 + 史诗×50 + 稀有×100，各绑定1名本阵营英雄",
+            "cards": [
+              {
+                "slot": 1,
+                "type": "heroCard",
+                "heroId": "helicopter",
+                "quality": "legendary",
+                "count": 20,
+                "grantMode": "direct_to_collection",
+                "label": "传奇卡牌×20",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 2,
+                "type": "heroCard",
+                "heroId": "ballista",
+                "quality": "epic",
+                "count": 50,
+                "grantMode": "direct_to_collection",
+                "label": "史诗卡牌×50",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              },
+              {
+                "slot": 3,
+                "type": "heroCard",
+                "heroId": "arrow_tower",
+                "quality": "rare",
+                "count": 100,
+                "grantMode": "direct_to_collection",
+                "label": "稀有卡牌×100",
+                "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）"
+              }
+            ]
+          },
           "displayRefresh": {
-            "onClaim": true,
-            "legendaryPreview": true,
-            "otherHeroPreview": true,
-            "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示"
+            "onCycleReset": true,
+            "cycleDays": 3,
+            "pickFromHeroPool": true,
+            "note": "每3天按本阵营重新抽取1传奇+1史诗+1稀有展示；周期内5次购尽后售罄"
           },
           "soldOut": {
             "buttonLabel": "售罄",
             "dimmed": true,
             "sortToBottom": true,
-            "toast": "今日购买已达上限，请明日再来。"
+            "toast": "本周期购买已达上限（5/5），3天后刷新。"
           }
         }
       ]

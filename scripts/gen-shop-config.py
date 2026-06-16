@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Generate shop.json and docs/SHOP_AND_ECONOMY.md"""
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -23,29 +24,14 @@ FACTION_PACK_PRODUCT_ID = {
     "mechanical": "hero_pack_mechanical",
 }
 
-# 与原 hero_pack_premium 一致的内容结构
-FACTION_PACK_CONTENTS = [
-    {
-        "type": "heroCard",
-        "quality": "legendary",
-        "count": 20,
-        "pool": "faction",
-        "exchangeRule": "兑换为指定本阵营传奇英雄卡/碎片",
-    },
-    {
-        "type": "heroCard",
-        "quality": "epic",
-        "count": 50,
-        "pool": "faction",
-        "exchangeRule": "兑换为指定本阵营史诗英雄卡/碎片",
-    },
-    {
-        "type": "heroCard",
-        "quality": "rare",
-        "count": 100,
-        "pool": "faction",
-        "exchangeRule": "兑换为指定本阵营稀有英雄卡/碎片",
-    },
+# 礼包：每周期 3 天刷新，5 次购买；每次领取 3 张指定英雄卡（非兑换池）
+GIFT_PACK_REFRESH_DAYS = 3
+GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE = 5
+
+GIFT_PACK_CARD_SLOTS = [
+    {"slot": 1, "quality": "legendary", "count": 20, "label": "传奇卡牌"},
+    {"slot": 2, "quality": "epic", "count": 50, "label": "史诗卡牌"},
+    {"slot": 3, "quality": "rare", "count": 100, "label": "稀有卡牌"},
 ]
 
 # 基础区 · 钻石转盘四档
@@ -297,10 +283,58 @@ def card_purchase(
     }
 
 
-def faction_pack_products(factions: dict[str, dict]) -> list[dict]:
+def load_hero_qualities() -> dict[str, str]:
+    script = r"""
+    const fs=require('fs');
+    const code=fs.readFileSync('heroes-config.js','utf8').replace('const HeroesConfig','var HeroesConfig');
+    eval(code);
+    const m={};
+    for (const h of HeroesConfig.HEROES) if (h.type!=='resource') m[h.id]=h.quality;
+    console.log(JSON.stringify(m));
+    """
+    return json.loads(subprocess.check_output(
+        ["node", "-e", script], cwd=ROOT, text=True
+    ))
+
+
+def pick_featured_hero_ids(pool: list[str], qualities: dict[str, str]) -> dict[str, str | None]:
+    out: dict[str, str | None] = {}
+    for q in ("legendary", "epic", "rare"):
+        candidates = sorted(h for h in pool if qualities.get(h) == q)
+        out[q] = candidates[0] if candidates else None
+    return out
+
+
+def build_pack_contents(pool: list[str], qualities: dict[str, str]) -> dict:
+    featured = pick_featured_hero_ids(pool, qualities)
+    cards = []
+    for slot_def in GIFT_PACK_CARD_SLOTS:
+        q = slot_def["quality"]
+        hid = featured.get(q)
+        cards.append({
+            "slot": slot_def["slot"],
+            "type": "heroCard",
+            "heroId": hid,
+            "quality": q,
+            "count": slot_def["count"],
+            "grantMode": "direct_to_collection",
+            "label": f"{slot_def['label']}×{slot_def['count']}",
+            "note": "单一名英雄；直接入卡库，可立即升级使用（非兑换、非多角色拆分）",
+        })
+    return {
+        "cardCount": 3,
+        "grantMode": "direct_to_collection",
+        "grantNote": "共3张卡：传奇×20 + 史诗×50 + 稀有×100，各绑定1名本阵营英雄",
+        "cards": cards,
+    }
+
+
+def faction_pack_products(factions: dict[str, dict], qualities: dict[str, str]) -> list[dict]:
     products = []
     for idx, fid in enumerate(FACTION_PACK_ORDER):
         meta = factions[fid]
+        pool = meta["heroIds"]
+        contents = build_pack_contents(pool, qualities)
         products.append(
             {
                 "productId": FACTION_PACK_PRODUCT_ID[fid],
@@ -308,23 +342,25 @@ def faction_pack_products(factions: dict[str, dict]) -> list[dict]:
                 "faction": fid,
                 "factionLabel": meta["name"],
                 "bondId": meta["bondId"],
-                "heroPool": meta["heroIds"],
-                "heroPoolNote": "四礼包角色池互不重叠；不含金矿等资源卡",
+                "heroPool": pool,
+                "heroPoolNote": "四礼包角色池互不重叠；每周期刷新3名展示/发放英雄",
                 "sortWeight": 100 - idx,
-                "dailyPurchaseLimit": 4,
+                "refreshCycleDays": GIFT_PACK_REFRESH_DAYS,
+                "refreshAt": "04:00",
+                "purchaseLimitPerCycle": GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE,
                 "purchaseModel": "ad_wheel",
-                "contents": [dict(c) for c in FACTION_PACK_CONTENTS],
+                "contents": contents,
                 "displayRefresh": {
-                    "onClaim": True,
-                    "legendaryPreview": True,
-                    "otherHeroPreview": True,
-                    "note": "领取完成后按本阵营刷新传奇预览与其他卡牌展示",
+                    "onCycleReset": True,
+                    "cycleDays": GIFT_PACK_REFRESH_DAYS,
+                    "pickFromHeroPool": True,
+                    "note": "每3天按本阵营重新抽取1传奇+1史诗+1稀有展示；周期内5次购尽后售罄",
                 },
                 "soldOut": {
                     "buttonLabel": "售罄",
                     "dimmed": True,
                     "sortToBottom": True,
-                    "toast": "今日购买已达上限，请明日再来。",
+                    "toast": f"本周期购买已达上限（{GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE}/{GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE}），{GIFT_PACK_REFRESH_DAYS}天后刷新。",
                 },
             }
         )
@@ -407,7 +443,9 @@ def gift_pack_zone(factions: dict[str, dict]) -> dict:
         "note": "仅卡牌礼包；暂不做月卡与神器；IAP 未接入时统一走看广告转盘",
         "removedProducts": ["monthly_card", "artifact_pack_starter", "hero_pack_premium"],
         "purchaseModel": "ad_wheel",
-        "dailyResetAt": "04:00",
+        "refreshCycleDays": GIFT_PACK_REFRESH_DAYS,
+        "refreshAt": "04:00",
+        "purchaseLimitPerCycle": GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE,
         "listSort": {
             "availableFirst": True,
             "soldOutBottom": True,
@@ -424,15 +462,15 @@ def gift_pack_zone(factions: dict[str, dict]) -> dict:
                 "note": "展示等概率；实际档位由当日 tierDeck 保底分配",
             },
             "dailyTierDeck": {
-                "description": "每日每礼包 4 次购买，预洗牌 4 档各 1 次",
+                "description": f"每周期每礼包 {GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE} 次购买，预洗牌 5 档",
                 "tierKeys": ["free", "ad_1", "ad_2", "ad_3"],
                 "guaranteedDistribution": {
                     "free": 1,
-                    "ad_1": 1,
+                    "ad_1": 2,
                     "ad_2": 1,
                     "ad_3": 1,
                 },
-                "shuffleOnDailyReset": True,
+                "shuffleOnCycleReset": True,
                 "drawFromRemainingOnly": True,
             },
             "adFlow": {
@@ -468,19 +506,19 @@ def gift_pack_zone(factions: dict[str, dict]) -> dict:
             },
         },
         "userStateSchema": {
-            "scope": "perUserPerPackPerDay",
+            "scope": "perUserPerPackPerCycle",
             "fields": {
-                "dateKey": "YYYY-MM-DD",
-                "purchasesRemaining": "0-4",
+                "cycleKey": "周期标识（每3天刷新）",
+                "cycleStartAt": "周期开始时间",
+                "purchasesRemaining": f"0-{GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE}",
                 "tierDeck": "剩余未抽中的 tierKey 列表",
                 "currentSession": "null | { tierKey, spinSlotId, adsRequired, adsWatched }",
                 "soldOut": "purchasesRemaining === 0",
-                "displayLegendaryHeroId": "当前展示传奇",
-                "displayHeroIds": "其他预览卡",
+                "featuredHeroIds": "本周期3张卡绑定的 heroId（传奇/史诗/稀有各1）",
             },
-            "crossDayPolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新日重置",
+            "crossCyclePolicy": "进行中的 currentSession 作废，次数与 tierDeck 按新周期重置，featuredHeroIds 重新抽取",
         },
-        "products": faction_pack_products(factions),
+        "products": faction_pack_products(factions, load_hero_qualities()),
     }
 
 
@@ -599,8 +637,8 @@ def gen_shop() -> dict:
     ]
 
     return {
-        "version": "2.1.0",
-        "description": "商店 v2.1：礼包(四阵营转盘) + 基础(每日优惠/钻石转盘四档/砖头四档)",
+        "version": "2.2.0",
+        "description": "商店 v2.2：礼包(3天5次·3张指定英雄卡直入库) + 基础(每日优惠/钻石转盘/砖头)",
         "tabs": [
             {"tabId": "giftPacks", "name": "礼包", "enabled": True},
             {"tabId": "basic", "name": "基础", "enabled": True},
@@ -637,8 +675,9 @@ def estimate_economy(shop: dict) -> dict:
     battle_month = battle_cards_day * 30
     ad_month_cards = (5 + 20 + 35 * 0.3) * 30
     pack_contents = shop["zones"]["giftPacks"]["products"][0]["contents"]
-    cards_per_claim = sum(c["count"] for c in pack_contents)
-    pack_month_max = cards_per_claim * 4 * 4 * 30
+    cards_per_claim = sum(c["count"] for c in pack_contents["cards"])
+    cycles_per_month = 30 / GIFT_PACK_REFRESH_DAYS
+    pack_month_max = cards_per_claim * GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE * 4 * cycles_per_month
     diamond_tiers = shop["zones"]["basic"]["diamondWheel"]["tiers"]
     diamond_day_scripted_min = sum(t["reward"]["amount"] for t in diamond_tiers[:2])  # rough low estimate
     deck_frag = FRAG_PER_HERO * DECK_SIZE
@@ -654,9 +693,12 @@ def estimate_economy(shop: dict) -> dict:
         },
         "factionGiftPack": {
             "packCount": len(shop["zones"]["giftPacks"]["products"]),
-            "dailyPurchasesPerPack": 4,
+            "refreshCycleDays": GIFT_PACK_REFRESH_DAYS,
+            "purchasesPerPackPerCycle": GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE,
             "cardsPerClaim": cards_per_claim,
-            "maxCardsPerDayAllPacks": cards_per_claim * 4 * 4,
+            "heroesPerClaim": pack_contents["cardCount"],
+            "grantMode": pack_contents["grantMode"],
+            "maxCardsPerCycleAllPacks": cards_per_claim * GIFT_PACK_PURCHASE_LIMIT_PER_CYCLE * 4,
         },
         "monthlyCardsEstimate": {
             "f2p_battleOnly": battle_month,
@@ -684,15 +726,12 @@ def _fmt_price_row(quality: str, count: int, purchase: dict) -> str:
     return f"| {QUALITY_CN[quality]}×{count} | {unit_g} | {unit_d} | {g_s} | {d_s} |"
 
 
-def _contents_summary(contents: list[dict]) -> str:
+def _contents_summary(contents: dict) -> str:
+    cards = contents.get("cards") or []
     parts = []
-    for c in contents:
+    for c in cards:
         if c["type"] == "heroCard":
-            parts.append(f"{QUALITY_CN[c['quality']]}{c['count']}张")
-        elif c["type"] == "diamond":
-            parts.append(f"钻石{c['amount']}")
-        else:
-            parts.append(str(c))
+            parts.append(f"{c.get('heroId','?')}·{QUALITY_CN[c['quality']]}{c['count']}")
     return " + ".join(parts)
 
 
@@ -715,7 +754,7 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "1. [商店页签](#一商店页签)",
         "2. [礼包页 · 四阵营卡牌礼包](#二礼包页--四阵营卡牌礼包)",
         "3. [转盘与广告交互流程](#三转盘与广告交互流程)",
-        "4. [每日档位保底分配](#四每日档位保底分配)",
+        "4. [周期档位保底分配](#四周期档位保底分配)",
         "5. [用户状态字段](#五用户状态字段)",
         "6. [基础区 · 每日优惠](#六基础区--每日优惠)",
         "7. [基础区 · 钻石转盘四档](#七基础区--钻石转盘四档)",
@@ -745,35 +784,43 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "**范围**：仅卡牌礼包；**不做**月卡、神器。",
         "",
-        f"**限购**：每礼包每日 **{gp['products'][0]['dailyPurchaseLimit']}** 次；**{shop['iapPolicy']['note']}**",
+        f"**周期**：每 **{gp.get('refreshCycleDays', 3)}** 天刷新；每礼包 **{gp.get('purchaseLimitPerCycle', 5)}/{gp.get('purchaseLimitPerCycle', 5)}** 次购买机会（每次购买走转盘，逻辑不变）。",
         "",
-        "**单次领取内容**（与原角色礼包一致，池限定为本阵营）：",
+        f"> {shop['iapPolicy']['note']}",
         "",
-        "| 品质 | 数量 | 兑换规则 |",
-        "|:---|:---:|:---|",
+        "**单次领取内容**（共 **3 张卡**，各 **1 名英雄**，直接入卡库可升级，**非兑换**）：",
+        "",
+        "| 槽位 | 品质 | 数量 | 发放方式 |",
+        "|:---:|:---|:---:|:---|",
     ]
-    for c in gp["products"][0]["contents"]:
-        lines.append(f"| {QUALITY_CN[c['quality']]} | {c['count']} | {c['exchangeRule']} |")
-
-    lines += [
-        "",
-        "**四礼包角色池互不重叠**（来源 `bond.json`）：",
-        "",
-        "| 礼包 | productId | 阵营 | 池内英雄数 |",
-        "|:---|:---|:---|:---:|",
-    ]
-    for p in gp["products"]:
+    sample_cards = gp["products"][0]["contents"]["cards"]
+    for c in sample_cards:
         lines.append(
-            f"| {p['name']} | `{p['productId']}` | {p['factionLabel']} | {len(p['heroPool'])} |"
+            f"| {c['slot']} | {QUALITY_CN[c['quality']]} | {c['count']} | 指定英雄 `{c['heroId']}` · 直入库 |"
         )
 
     lines += [
         "",
-        "**列表排序**：有剩余次数在上；售罄置灰沉底。",
+        f"> {gp['products'][0]['contents']['grantNote']}",
+        "",
+        "**四礼包角色池互不重叠**（来源 `bond.json`）；每周期从池内各抽 1 名传奇/史诗/稀有展示：",
+        "",
+        "| 礼包 | productId | 阵营 | 本周期示例（传/史/稀） |",
+        "|:---|:---|:---|:---|",
+    ]
+    for p in gp["products"]:
+        ids = [c["heroId"] for c in p["contents"]["cards"]]
+        lines.append(
+            f"| {p['name']} | `{p['productId']}` | {p['factionLabel']} | {' / '.join(ids)} |"
+        )
+
+    lines += [
+        "",
+        "**列表排序**：有剩余次数在上；本周期 5/5 用尽后售罄置灰沉底。",
         "",
         "**售罄**：按钮「售罄」；点击 Toast「" + gp["products"][0]["soldOut"]["toast"] + "」",
         "",
-        "**领取后**：按本阵营刷新传奇预览 + 其他卡牌展示。",
+        f"**周期刷新**：每 {gp.get('refreshCycleDays', 3)} 天（{gp.get('refreshAt', '04:00')}）重新抽取 3 名英雄并重置购买次数。",
         "",
         "---",
         "",
@@ -808,6 +855,7 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "    → 点 [放弃机会]：扣 1 次，不发奖",
         "",
         "四次用完 → 售罄置灰沉底",
+        "本周期 5/5 用尽 → 售罄至下周期刷新",
         "```",
         "",
         "### 3.3 按钮文案（配表）",
@@ -828,11 +876,13 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "",
         "---",
         "",
-        "## 四、每日档位保底分配",
+        "## 四、周期档位保底分配",
         "",
         wheel["dailyTierDeck"]["description"],
         "",
-        "| 档位 | 当日次数 |",
+        f"> 每 **{gp.get('refreshCycleDays', 3)}** 天重置一次；非每日。",
+        "",
+        "| 档位 | 本周期次数 |",
         "|:---|:---:|",
     ]
     for tier, cnt in wheel["dailyTierDeck"]["guaranteedDistribution"].items():
@@ -841,7 +891,7 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
 
     lines += [
         "",
-        "> 每次购买从**当日剩余档位池**抽取；4 次用完后恰好各档各 1 次。",
+        "> 每次购买从**本周期剩余档位池**抽取；5 次用完后恰好发完 5 档（免费×1 + 看1广告×2 + 看2×1 + 看3×1）。",
         "",
         "---",
         "",
@@ -852,7 +902,7 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
     ]
     for k, v in gp["userStateSchema"]["fields"].items():
         lines.append(f"| `{k}` | {v} |")
-    lines.append(f"| 跨日 | {gp['userStateSchema']['crossDayPolicy']} |")
+    lines.append(f"| 跨周期 | {gp['userStateSchema']['crossCyclePolicy']} |")
 
     lines += [
         "",
@@ -1014,8 +1064,8 @@ def gen_shop_md(shop: dict, economy: dict) -> str:
         "## 十、经济补足粗算",
         "",
         f"- 核心8卡满级需碎片：**{economy['targets']['coreDeckFrag']:,}**",
-        f"- 单礼包单次领取：**{efp['cardsPerClaim']}** 张（传20+史50+稀100）",
-        f"- 四礼包满勤日上限：**{efp['maxCardsPerDayAllPacks']}** 张",
+        f"- 单礼包单次领取：**{efp['cardsPerClaim']}** 张（{efp['heroesPerClaim']}英雄：传20+史50+稀100）· **直入库**",
+        f"- 四礼包满勤每周期上限：**{efp['maxCardsPerCycleAllPacks']}** 张",
         f"- 钻石转盘四档奖励：**{' / '.join(str(x) for x in economy['diamondWheel']['rewards'])}** 钻",
         "",
         "| 玩家 | 月获卡(粗算) | 核心8卡满级 |",
