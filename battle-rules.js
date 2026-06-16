@@ -270,7 +270,11 @@ const BattleRules = (() => {
       const target = findNearestEnemyUnit(state, attackerCell);
       if (target?.hero) {
         const burst = Math.round(hero.atk * mods.deployBurstPct);
-        const dealt = applyDamageToHero(target.hero, burst, { isFieldCombat: true });
+        const traj = hero.combatMods?.primaryAttackTrajectory || 'flat';
+        const dealt = applyDamageToHero(target.hero, burst, {
+          isFieldCombat: true,
+          attackTrajectory: traj,
+        });
         state.events.push({
           type: 'skill_deploy_burst',
           source: attackerCell,
@@ -414,17 +418,23 @@ const BattleRules = (() => {
   }
 
   function applyDamageToHero(hero, rawDamage, options = {}) {
-    const { isFieldCombat = true } = options;
+    const { isFieldCombat = true, attackTrajectory = 'flat' } = options;
     let dmg = rawDamage;
-    const red = hero.combatMods?.damageReductionPct || 0;
-    if (isFieldCombat && red > 0) {
-      dmg = Math.round(dmg * (1 - red));
+    let red = 0;
+    if (isFieldCombat) {
+      const td = hero.combatMods?.trajectoryDefense;
+      if (td) {
+        red = attackTrajectory === 'arc' ? (td.arc || 0) : (td.flat || 0);
+      } else {
+        red = hero.combatMods?.damageReductionPct || 0;
+      }
+      if (red > 0) dmg = Math.round(dmg * (1 - red));
     }
     hero.hp = Math.max(0, hero.hp - dmg);
     return dmg;
   }
 
-  function applySplash(state, attackerCell, primaryTarget, rawDamage) {
+  function applySplash(state, attackerCell, primaryTarget, rawDamage, attackTrajectory = 'flat') {
     const splashPct = attackerCell.hero?.combatMods?.splashPct || 0;
     if (!attackerCell.hero || splashPct <= 0) return;
     if (primaryTarget.kind !== 'hero') return;
@@ -440,7 +450,10 @@ const BattleRules = (() => {
       const cell = state.cells[key];
       if (!cell?.hero || cell.hero.hp <= 0) continue;
       if (cell === primaryTarget.cell) continue;
-      const dealt = applyDamageToHero(cell.hero, splashDmg, { isFieldCombat: true });
+      const dealt = applyDamageToHero(cell.hero, splashDmg, {
+        isFieldCombat: true,
+        attackTrajectory,
+      });
       state.events.push({
         type: 'damage',
         source: attackerCell,
@@ -532,15 +545,20 @@ const BattleRules = (() => {
 
       if (target.kind === 'hero') {
         const raw = calcUnitDamage(hero, hero.atk, target.cell.hero, true);
-        const dealt = applyDamageToHero(target.cell.hero, raw, { isFieldCombat: true });
+        const traj = hero.combatMods?.primaryAttackTrajectory || 'flat';
+        const dealt = applyDamageToHero(target.cell.hero, raw, {
+          isFieldCombat: true,
+          attackTrajectory: traj,
+        });
         state.events.push({
           type: 'damage',
           source: cell,
           target: target.cell,
           amount: dealt,
           splash: false,
+          attackTrajectory: traj,
         });
-        applySplash(state, cell, target, hero.atk);
+        applySplash(state, cell, target, hero.atk, traj);
         const dotPct = hero.combatMods?.dotPctPerSec || 0;
         if (dotPct > 0) applyDotOnHit(target.cell.hero, dotPct);
         if (target.cell.hero.hp <= 0) onHeroKilled(state, target.cell, cell.side, cell);

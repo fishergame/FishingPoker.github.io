@@ -116,9 +116,16 @@ def build_normal_skill(hero: dict, prof: dict) -> dict:
         effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
         attack_mode = "single"
     elif cat == "defense":
-        name, desc = "铁壁", "自身受到的伤害降低，形成基础防护"
+        name = "铁壁"
+        desc = "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击"
         vfx = f"{prof['weapon']}；护体光效贴身，**平直**格挡反馈"
-        effects = [{"type": "damageReductionPct", "value": qscale(q, 0.06)}]
+        effects = [
+            {
+                "type": "damageReductionPct",
+                "value": qscale(q, 0.06),
+                "blocksTrajectory": ["flat"],
+            }
+        ]
         attack_mode = "self"
     elif cat == "supply":
         name, desc = "应急包扎", "主动为自身恢复少量生命（约20%最大生命）"
@@ -180,7 +187,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
                 vfx = "幽绿弧线落下，阵亡格复燃翻出亡灵牌"
                 effects = [{"type": "reviveAdjacentDead", "value": 1}, {"type": "executeThreshold", "value": 0.25}]
             else:
-                name, desc = "高空重击", "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡"
+                name, desc = "高空重击", "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁"
                 vfx = f"{prof['weapon']}；**强抛物线**高空砸击，落地重击特效"
                 effects = [
                     {"type": "atkPct", "value": qscale(q, 0.25 * tier_power)},
@@ -191,17 +198,38 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
 
     elif cat == "defense":
         if slot == "rare":
-            name, desc = "单格护墙", "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合"
+            name, desc = "单格护墙", "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤"
             vfx = "石墙从地面平直升起，挡单格"
-            effects = [{"type": "wallTiles", "value": 1}, {"type": "damageReductionPct", "value": qscale(q, 0.10 * tier_power)}]
+            effects = [
+                {"type": "wallTiles", "value": 1},
+                {
+                    "type": "damageReductionPct",
+                    "value": qscale(q, 0.10 * tier_power),
+                    "blocksTrajectory": ["flat"],
+                },
+            ]
         elif slot == "epic":
-            name, desc = "三格盾带", "护墙扩展至三格，范围内友军减伤"
+            name, desc = "三格盾带", "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）"
             vfx = "弧形盾带展开，覆盖三格"
-            effects = [{"type": "wallTiles", "value": 3}, {"type": "allyDamageReductionPct", "value": qscale(q, 0.12 * tier_power)}]
+            effects = [
+                {"type": "wallTiles", "value": 3},
+                {
+                    "type": "allyDamageReductionPct",
+                    "value": qscale(q, 0.12 * tier_power),
+                    "blocksTrajectory": ["flat", "arc"],
+                },
+            ]
         else:
-            name, desc = "全局圣域", "短时全队减伤，并阻挡敌方全局突进一次"
+            name, desc = "全局圣域", "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次"
             vfx = "全场地坪升起光幕护罩，全局防护"
-            effects = [{"type": "globalDamageReductionPct", "value": qscale(q, 0.15 * tier_power)}, {"type": "blockRush", "value": 1}]
+            effects = [
+                {
+                    "type": "globalDamageReductionPct",
+                    "value": qscale(q, 0.15 * tier_power),
+                    "blocksTrajectory": ["flat", "arc"],
+                },
+                {"type": "blockRush", "value": 1},
+            ]
         attack_mode = "area_defense"
 
     elif cat == "supply":
@@ -245,7 +273,7 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
                 scaled.append({**e, "value": skill_value_at_level(e["value"], lv)})
         level_curve.append({"skillLevel": lv, "effects": scaled})
 
-    return {
+    skill = {
         "skillId": f"skill_{hid}_{slot}",
         "heroId": hid,
         "slot": slot,
@@ -265,6 +293,10 @@ def build_special_skill(hero: dict, prof: dict, slot: str) -> dict:
         "levelCurve": level_curve,
         "tags": [q, slot, cat, hero["type"]],
     }
+    if cat == "attack" and any(e.get("type") == "projectileArc" for e in base_effects):
+        skill["attackTrajectory"] = "arc"
+        skill["bypassesNormalDefense"] = True
+    return skill
 
 
 def derive_combat_stats(hero: dict) -> dict:
@@ -495,7 +527,7 @@ def gen_review_md(skills: list[dict], hero_battle: dict, upgrade: dict) -> str:
         "| 类型 | 战术目标 | 普通技（示例） | 特技递进（稀有→史诗→传奇） |",
         "|:---|:---|:---|:---|",
         "| **攻击** | 单点/多点/击杀/亡灵复活 | 平直点射 | 双联→连锁→高空重击/亡灵收割 |",
-        "| **防御** | 护墙/减伤/全局保护 | 铁壁减伤 | 单格墙→三格带→全局圣域 |",
+        "| **防御** | 护墙/减伤/全局保护 | 铁壁减伤（仅挡平直） | 单格墙→三格带（挡弧）→全局圣域（挡弧） |",
         "| **补给** | 回血 20%/50%/满血 | 应急包扎20% | 30%单友→50%范围→满血圣疗 |",
         "| **加速** | 攻速/弹速/铺场 | 迅捷装填 | 速射→弹速增压→狂热号令 |",
         "",
@@ -572,7 +604,18 @@ def gen_review_md(skills: list[dict], hero_battle: dict, upgrade: dict) -> str:
         "",
         "---",
         "",
-        "## 七、战斗接入",
+        "## 七、弹道与防御",
+        "",
+        "| 弹道 | 来源 | 普通铁壁 | 史诗+特技防御 |",
+        "|:---|:---|:---:|:---:|",
+        "| **flat** 平直 | 普通攻击技、双联/连锁特技 | ✅ 减伤 | ✅ 减伤 |",
+        "| **arc** 高抛 | 传奇攻击特技「高空重击」等 | ❌ 穿透 | ✅ 减伤 |",
+        "",
+        "配表字段：`effects[].blocksTrajectory`（防御）、`attackTrajectory` + `bypassesNormalDefense`（高抛攻击）。",
+        "",
+        "---",
+        "",
+        "## 八、战斗接入",
         "",
         "1. `heroBattle.json` → `combatStats` 读属性；`skills` 按品质取槽位",
         "2. `skill.json` → 普通技 `upgradeable:false`；特技读 `levelCurve`",
@@ -619,6 +662,13 @@ if __name__ == "__main__":
                 "version": "3.0.0",
                 "description": "技能 v3：普通技+品质特技；攻击/防御/补给/加速",
                 "categories": CATEGORY_CN,
+                "combatRules": {
+                    "trajectory": {
+                        "flat": "平直弹道（普通攻击、双联/连锁特技）",
+                        "arc": "高抛弹道（传奇攻击特技「高空重击」等）",
+                        "defenseRule": "普通防御 blocksTrajectory 仅含 flat；史诗及以上特技防御含 flat+arc",
+                    }
+                },
                 "skillUpgrade": upgrade,
                 "skillCount": len(skills),
                 "skills": skills,

@@ -7,6 +7,13 @@
     "supply": "补给",
     "speed": "加速"
   },
+  "combatRules": {
+    "trajectory": {
+      "flat": "平直弹道（普通攻击、双联/连锁特技）",
+      "arc": "高抛弹道（传奇攻击特技「高空重击」等）",
+      "defenseRule": "普通防御 blocksTrajectory 仅含 flat；史诗及以上特技防御含 flat+arc"
+    }
+  },
   "skillUpgrade": {
     "specialSkillMaxLevel": 5,
     "normalSkillUpgradeable": false,
@@ -70,8 +77,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙焰女王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "龙息火球，高抛弧线落点单格；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -97,7 +104,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙焰女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "龙息火球，高抛弧线落点单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -211,7 +218,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_demon_lord_normal",
@@ -221,8 +230,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "永冬之王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "冰锥术，抛物线冻结打击；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -248,7 +257,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "永冬之王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "冰锥术，抛物线冻结打击；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -362,7 +371,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_archmage_normal",
@@ -372,8 +383,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "风暴女巫·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "雷球高抛，落点范围电弧；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -399,7 +410,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "风暴女巫·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "雷球高抛，落点范围电弧；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -513,7 +524,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_ranger_normal",
@@ -523,8 +536,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "荆棘女王·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "荆棘箭雨，弧线覆盖单格；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -550,7 +563,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "荆棘女王·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "荆棘箭雨，弧线覆盖单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -664,7 +677,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_royal_knight_normal",
@@ -674,7 +689,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "圣盾领主·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -684,7 +699,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.075
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -701,7 +719,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "圣盾领主·全局圣域",
-      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次",
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -712,7 +730,11 @@
       "effects": [
         {
           "type": "globalDamageReductionPct",
-          "value": 0.328
+          "value": 0.328,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         },
         {
           "type": "blockRush",
@@ -725,7 +747,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.328
+              "value": 0.328,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -738,7 +764,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.354
+              "value": 0.354,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -751,7 +781,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.38
+              "value": 0.38,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -764,7 +798,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.407
+              "value": 0.407,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -777,7 +815,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.433
+              "value": 0.433,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -801,7 +843,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "北境守护者·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "自然屏障，平直藤蔓盾；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -811,7 +853,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.075
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -828,7 +873,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "北境守护者·全局圣域",
-      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次",
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -839,7 +884,11 @@
       "effects": [
         {
           "type": "globalDamageReductionPct",
-          "value": 0.328
+          "value": 0.328,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         },
         {
           "type": "blockRush",
@@ -852,7 +901,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.328
+              "value": 0.328,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -865,7 +918,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.354
+              "value": 0.354,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -878,7 +935,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.38
+              "value": 0.38,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -891,7 +952,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.407
+              "value": 0.407,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -904,7 +969,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.433
+              "value": 0.433,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -928,8 +997,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幽灵船长·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "幽魂炮，高抛灵魂弹；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1055,8 +1124,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幻影刺客·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "影刃直线突刺；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1082,7 +1151,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幻影刺客·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "影刃直线突刺；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1196,7 +1265,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_frost_dragon_normal",
@@ -1206,8 +1277,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "寒冰巨魔·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "巨锤冰陨，高空重砸；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1233,7 +1304,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "寒冰巨魔·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "巨锤冰陨，高空重砸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1347,7 +1418,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_crusher_normal",
@@ -1357,8 +1430,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "重装破城者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "破城锤，高抛砸击单格；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1384,7 +1457,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "重装破城者·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "破城锤，高抛砸击单格；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1498,7 +1571,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_helicopter_normal",
@@ -1508,8 +1583,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "机械飞鹰·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "机炮连射，平直子弹；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1535,7 +1610,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "机械飞鹰·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "机炮连射，平直子弹；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1649,7 +1724,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_dread_knight_normal",
@@ -1659,8 +1736,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "巨斧酋长·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "巨斧直线劈砍；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1686,7 +1763,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "巨斧酋长·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "巨斧直线劈砍；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -1800,7 +1877,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_warlord_normal",
@@ -1810,7 +1889,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "双头奇美拉·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -1820,7 +1899,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.075
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -1837,7 +1919,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "双头奇美拉·全局圣域",
-      "description": "短时全队减伤，并阻挡敌方全局突进一次",
+      "description": "短时全队减伤（可挡平直与高抛），并阻挡敌方全局突进一次",
       "visualDescription": "全场地坪升起光幕护罩，全局防护",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -1848,7 +1930,11 @@
       "effects": [
         {
           "type": "globalDamageReductionPct",
-          "value": 0.328
+          "value": 0.328,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         },
         {
           "type": "blockRush",
@@ -1861,7 +1947,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.328
+              "value": 0.328,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -1874,7 +1964,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.354
+              "value": 0.354,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -1887,7 +1981,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.38
+              "value": 0.38,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -1900,7 +1998,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.407
+              "value": 0.407,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -1913,7 +2015,11 @@
           "effects": [
             {
               "type": "globalDamageReductionPct",
-              "value": 0.433
+              "value": 0.433,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             },
             {
               "type": "blockRush",
@@ -1937,8 +2043,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "爆破鬼才·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "炸药包高抛，落地爆炸；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -1964,7 +2070,7 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "爆破鬼才·高空重击",
-      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡",
+      "description": "高抛弹道，对单格造成巨额伤害并概率直接击杀低血兵卡；可穿透普通铁壁",
       "visualDescription": "炸药包高抛，落地爆炸；**强抛物线**高空砸击，落地重击特效",
       "projectileStyle": "arc",
       "attackMode": "single_kill",
@@ -2078,7 +2184,9 @@
         "legendary",
         "attack",
         "unit"
-      ]
+      ],
+      "attackTrajectory": "arc",
+      "bypassesNormalDefense": true
     },
     {
       "skillId": "skill_shaman_normal",
@@ -2191,7 +2299,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "鹰女·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -2201,7 +2309,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.067
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -2218,7 +2329,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "鹰女·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）",
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -2233,7 +2344,11 @@
         },
         {
           "type": "allyDamageReductionPct",
-          "value": 0.181
+          "value": 0.181,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         }
       ],
       "levelCurve": [
@@ -2246,7 +2361,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.181
+              "value": 0.181,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2259,7 +2378,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.195
+              "value": 0.195,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2272,7 +2395,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.21
+              "value": 0.21,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2285,7 +2412,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.224
+              "value": 0.224,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2298,7 +2429,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.239
+              "value": 0.239,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         }
@@ -2318,7 +2453,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "巨石魔像·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -2328,7 +2463,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.067
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -2345,7 +2483,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "巨石魔像·三格盾带",
-      "description": "护墙扩展至三格，范围内友军减伤",
+      "description": "护墙扩展至三格，范围内友军减伤（可挡平直与高抛）",
       "visualDescription": "弧形盾带展开，覆盖三格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -2360,7 +2498,11 @@
         },
         {
           "type": "allyDamageReductionPct",
-          "value": 0.181
+          "value": 0.181,
+          "blocksTrajectory": [
+            "flat",
+            "arc"
+          ]
         }
       ],
       "levelCurve": [
@@ -2373,7 +2515,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.181
+              "value": 0.181,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2386,7 +2532,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.195
+              "value": 0.195,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2399,7 +2549,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.21
+              "value": 0.21,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2412,7 +2566,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.224
+              "value": 0.224,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         },
@@ -2425,7 +2583,11 @@
             },
             {
               "type": "allyDamageReductionPct",
-              "value": 0.239
+              "value": 0.239,
+              "blocksTrajectory": [
+                "flat",
+                "arc"
+              ]
             }
           ]
         }
@@ -2445,8 +2607,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "雇佣兵·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "狙击弹，极快平直弹道；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2572,8 +2734,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "炮楼·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "石弹高抛，经典抛物线；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2699,8 +2861,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "自爆蜘蛛·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "自爆蜘蛛高抛投掷；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2826,8 +2988,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙骑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "骑枪冲锋，平直突刺；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -2953,8 +3115,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火龙·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "幼龙火球，小抛物线；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3080,8 +3242,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "弩车·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "弩炮重矢，高抛穿透；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3207,8 +3369,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "骷髅魔导师·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "亡灵弹，弧线触发复活格；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3334,8 +3496,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "鱼叉捕猎者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "鱼叉直线投掷；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3461,8 +3623,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "利爪猎犬·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "利爪直线扑击；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3588,8 +3750,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "蝙蝠突袭者·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "骨刃直线斩；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3715,8 +3877,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "见习女巫·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "魔法箭平直射击；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -3842,7 +4004,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重步兵·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -3852,7 +4014,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.06
+          "value": 0.06,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -3869,7 +4034,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重步兵·单格护墙",
-      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合",
+      "description": "在自身前方生成护墙，阻挡单格敌方兵卡前进1回合；附加平直减伤",
       "visualDescription": "石墙从地面平直升起，挡单格",
       "projectileStyle": "flat",
       "attackMode": "area_defense",
@@ -3884,7 +4049,10 @@
         },
         {
           "type": "damageReductionPct",
-          "value": 0.1
+          "value": 0.1,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "levelCurve": [
@@ -3897,7 +4065,10 @@
             },
             {
               "type": "damageReductionPct",
-              "value": 0.1
+              "value": 0.1,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -3910,7 +4081,10 @@
             },
             {
               "type": "damageReductionPct",
-              "value": 0.108
+              "value": 0.108,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -3923,7 +4097,10 @@
             },
             {
               "type": "damageReductionPct",
-              "value": 0.116
+              "value": 0.116,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -3936,7 +4113,10 @@
             },
             {
               "type": "damageReductionPct",
-              "value": 0.124
+              "value": 0.124,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         },
@@ -3949,7 +4129,10 @@
             },
             {
               "type": "damageReductionPct",
-              "value": 0.132
+              "value": 0.132,
+              "blocksTrajectory": [
+                "flat"
+              ]
             }
           ]
         }
@@ -3969,8 +4152,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "高射塔·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "高射炮弹，高空抛物线；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "arc",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -4096,7 +4279,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重锤卫士·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -4106,7 +4289,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.051
+          "value": 0.051,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -4123,7 +4309,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "骷髅刀盾兵·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -4133,7 +4319,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.051
+          "value": 0.051,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -4177,7 +4366,7 @@
       "category": "defense",
       "categoryLabel": "防御",
       "name": "长枪教头·铁壁",
-      "description": "自身受到的伤害降低，形成基础防护",
+      "description": "仅抵挡平直弹道伤害；无法抵挡特技高抛攻击",
       "visualDescription": "长枪平直突刺；护体光效贴身，**平直**格挡反馈",
       "projectileStyle": "flat",
       "attackMode": "self",
@@ -4187,7 +4376,10 @@
       "effects": [
         {
           "type": "damageReductionPct",
-          "value": 0.051
+          "value": 0.051,
+          "blocksTrajectory": [
+            "flat"
+          ]
         }
       ],
       "tags": [
@@ -4204,8 +4396,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "短剑士·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "短剑平直快攻；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
@@ -4231,8 +4423,8 @@
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火枪手·平直点射",
-      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害",
-      "visualDescription": "火枪铅弹平直射击；弹道：**平直**，单目标",
+      "description": "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）",
+      "visualDescription": "基础弹药**平直**射向单格目标；无高抛",
       "projectileStyle": "flat",
       "attackMode": "single",
       "unlockLevel": 1,
