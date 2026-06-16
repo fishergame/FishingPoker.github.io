@@ -212,6 +212,9 @@ const BattleSkillRuntime = (() => {
   }
 
   function defaultDeck() {
+    if (typeof HeroesConfig !== 'undefined' && HeroesConfig.getStarterDeckIds) {
+      return HeroesConfig.getStarterDeckIds();
+    }
     const deck = HeroesConfig.DEFAULT_DECK.filter(Boolean);
     return deck.length > 0 ? deck : HeroesConfig.HEROES.filter((h) => h.starter).map((h) => h.id);
   }

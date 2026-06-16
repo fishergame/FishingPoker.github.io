@@ -5,6 +5,26 @@
 
 ---
 
+## 零、开局赠送卡组
+
+> 单一数据源：`heroes-config.js → DEFAULT_DECK`（`getStarterGrantIds()`）
+> 新号赠送 **7** 张，卡组容量 **8** 槽，第 8 槽留空。
+
+| # | id | 名称 | 品质 | 类型 | 阵营 |
+|:---:|:---|:---|:---:|:---|:---|
+| 1 | `dragon_knight` | 龙焰女王 | legendary | unit | — |
+| 2 | `archer` | 见习女巫 | rare | unit | — |
+| 3 | `infantry` | 重步兵 | rare | unit | — |
+| 4 | `arrow_tower` | 高射塔 | rare | building | — |
+| 5 | `bear_warrior` | 重锤卫士 | common | unit | — |
+| 6 | `skeleton_warrior` | 骷髅刀盾兵 | common | unit | — |
+| 7 | `gold_mine` | 采矿机 | common | resource | 无阵营 |
+| 8 | — | （空槽） | — | — | 待玩家装配 |
+
+阵营对照见 `bond.json`；`gold_mine` 不参与羁绊。
+
+---
+
 ## 一、技能表在哪里？
 
 ### 1. 翻牌对战 · 按品质被动（已实现在 `battle-config.js`）
@@ -55,8 +75,9 @@
 
 ## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）
 
-**默认编队**（6 张可攻击卡 + 采矿机）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
-**L1 编队攻城 DPS**：194.5
+**开局赠送**（7 张，`heroes-config.js → DEFAULT_DECK` 过滤空槽）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
+**第 8 槽**：空槽，待玩家自行装配（`DEFAULT_DECK[7] = null`）
+**L1 编队攻城 DPS**（7 张已装）：194.5
 
 | 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |
 |:---:|:---:|:---:|:---:|

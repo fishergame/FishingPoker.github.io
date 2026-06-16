@@ -13,6 +13,8 @@
     "gold_mine"
   ],
   "deckSize": 8,
+  "starterGrantCount": 7,
+  "starterEmptySlots": 1,
   "formulas": {
     "matchDurationSec": "90 + (arenaId-1)*10, max 180",
     "mainCityHp": "mainCity.json → round(1500 * 1.15^(mainCityLevel-1))",

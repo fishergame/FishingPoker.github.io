@@ -11,10 +11,6 @@ ROOT = Path(__file__).resolve().parents[1]
 STAT_GROWTH = 1.15
 ATTACK_INTERVAL_BASE = 2.2
 MAX_ATTACK_SPEED = 10
-DEFAULT_DECK = [
-    "dragon_knight", "archer", "infantry", "arrow_tower",
-    "bear_warrior", "skeleton_warrior", "gold_mine",
-]
 MATCH_DURATION_BASE = 90
 MATCH_DURATION_STEP = 10
 MATCH_DURATION_MAX = 180
@@ -78,6 +74,18 @@ def load_heroes() -> list[dict]:
     return json.loads(out)
 
 
+def load_default_deck() -> list[str]:
+    """从 heroes-config.js 提取开局默认编队（过滤空槽）。"""
+    script = r"""
+    const fs = require('fs');
+    const code = fs.readFileSync('heroes-config.js','utf8').replace('const HeroesConfig','var HeroesConfig');
+    eval(code);
+    console.log(JSON.stringify(HeroesConfig.getStarterDeckIds()));
+    """
+    out = subprocess.check_output(["node", "-e", script], cwd=ROOT, text=True)
+    return json.loads(out)
+
+
 def attack_interval(speed: float | None) -> float | None:
     if speed is None or speed <= 0:
         return None
@@ -131,9 +139,9 @@ def siege_seconds(city_hp: int, dps: float) -> float | None:
     return city_hp / dps
 
 
-def gen_battle_balance(heroes: list[dict]) -> dict:
+def gen_battle_balance(heroes: list[dict], default_deck: list[str]) -> dict:
     heroes_map = {h["id"]: h for h in heroes}
-    default_dps_l1 = deck_city_dps(heroes_map, DEFAULT_DECK, 1)
+    default_dps_l1 = deck_city_dps(heroes_map, default_deck, 1)
 
     arenas = []
     for aid in range(1, 11):
@@ -147,8 +155,10 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
         "description": "对局时长按竞技场；主城 HP/产金见 mainCity.json",
         "mainCityConfig": "mainCity.json",
         "statGrowthRate": STAT_GROWTH,
-        "defaultDeck": DEFAULT_DECK,
+        "defaultDeck": default_deck,
         "deckSize": 8,
+        "starterGrantCount": len(default_deck),
+        "starterEmptySlots": 8 - len(default_deck),
         "formulas": {
             "matchDurationSec": f"{MATCH_DURATION_BASE} + (arenaId-1)*{MATCH_DURATION_STEP}, max {MATCH_DURATION_MAX}",
             "mainCityHp": f"mainCity.json → round({MAIN_CITY_HP_L1} * 1.15^(mainCityLevel-1))",
@@ -167,7 +177,48 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
     }
 
 
-def gen_markdown(data: dict, heroes_map: dict) -> str:
+def load_hero_factions() -> dict[str, str]:
+    bond = json.loads((ROOT / "bond.json").read_text(encoding="utf-8"))
+    out: dict[str, str] = {}
+    for b in bond.get("bonds", []):
+        if b.get("type") != "faction":
+            continue
+        label = b.get("name", b.get("faction", ""))
+        for hid in b.get("heroIds", []):
+            out[hid] = label
+    return out
+
+
+def gen_starter_deck_md(default_deck: list[str], heroes_map: dict, factions: dict[str, str]) -> list[str]:
+    """开局赠送卡组说明（从 heroes-config.js 同步）。"""
+    lines = [
+        "## 零、开局赠送卡组",
+        "",
+        "> 单一数据源：`heroes-config.js → DEFAULT_DECK`（`getStarterGrantIds()`）",
+        f"> 新号赠送 **{len(default_deck)}** 张，卡组容量 **8** 槽，第 8 槽留空。",
+        "",
+        "| # | id | 名称 | 品质 | 类型 | 阵营 |",
+        "|:---:|:---|:---|:---:|:---|:---|",
+    ]
+    for i, hid in enumerate(default_deck, 1):
+        h = heroes_map.get(hid, {})
+        q = h.get("quality", "?")
+        faction = factions.get(hid, "无阵营" if hid == "gold_mine" else "—")
+        lines.append(
+            f"| {i} | `{hid}` | {h.get('name', '?')} | {q} | {h.get('type', '?')} | {faction} |"
+        )
+    lines += [
+        "| 8 | — | （空槽） | — | — | 待玩家装配 |",
+        "",
+        "阵营对照见 `bond.json`；`gold_mine` 不参与羁绊。",
+        "",
+        "---",
+        "",
+    ]
+    return lines
+
+
+def gen_markdown(data: dict, heroes_map: dict, factions: dict[str, str]) -> str:
     sim_levels = list(range(1, 31))
     sim_arenas = [1, 3, 5, 7, 10]
 
@@ -179,6 +230,9 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
         "",
         "---",
         "",
+    ]
+    lines += gen_starter_deck_md(data["defaultDeck"], heroes_map, factions)
+    lines += [
         "## 一、技能表在哪里？",
         "",
         "### 1. 翻牌对战 · 按品质被动（已实现在 `battle-config.js`）",
@@ -228,15 +282,17 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
         "",
         "## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）",
         "",
-        f"**默认编队**（6 张可攻击卡 + 采矿机）：`{', '.join(DEFAULT_DECK)}`",
-        f"**L1 编队攻城 DPS**：{data['formulas']['defaultDeckL1CityDps']}",
+        f"**开局赠送**（7 张，`heroes-config.js → DEFAULT_DECK` 过滤空槽）：`{', '.join(data['defaultDeck'])}`",
+        f"**第 8 槽**：空槽，待玩家自行装配（`DEFAULT_DECK[7] = null`）",
+        f"**L1 编队攻城 DPS**（7 张已装）：{data['formulas']['defaultDeckL1CityDps']}",
         "",
         "| 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |",
         "|:---:|:---:|:---:|:---:|",
     ]
+    default_deck = data["defaultDeck"]
     for lv in [1, 5, 10, 15, 20, 25, 30]:
         hp = main_city_hp(lv)
-        dps = deck_city_dps(heroes_map, DEFAULT_DECK, lv)
+        dps = deck_city_dps(heroes_map, default_deck, lv)
         t = siege_seconds(hp, dps)
         lines.append(f"| L{lv} | {hp:,} | {dps:.0f} | {t:.1f}s |")
 
@@ -277,15 +333,17 @@ def gen_final_table_md(data: dict) -> str:
 
 if __name__ == "__main__":
     heroes = load_heroes()
+    default_deck = load_default_deck()
+    factions = load_hero_factions()
     heroes_map = {h["id"]: h for h in heroes}
-    data = gen_battle_balance(heroes)
+    data = gen_battle_balance(heroes, default_deck)
 
     out = ROOT / "battleBalance.json"
     out.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {out}")
 
     md = ROOT / "docs" / "BATTLE_BALANCE.md"
-    md.write_text(gen_markdown(data, heroes_map) + "\n", encoding="utf-8")
+    md.write_text(gen_markdown(data, heroes_map, factions) + "\n", encoding="utf-8")
     print(f"Wrote {md}")
 
     final_md = ROOT / "docs" / "MAIN_CITY_MATCH_FINAL.md"
