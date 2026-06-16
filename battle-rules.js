@@ -114,12 +114,17 @@ const BattleRules = (() => {
     const quality = rollQuality(cost);
     const heroId = BattleSkillRuntime.pickDeckHero(getDeck(side), quality);
     if (!heroId) return null;
-    return BattleSkillRuntime.buildCombatHero(heroId, {
+    const cfg = typeof HeroesConfig !== 'undefined' ? HeroesConfig.getById(heroId) : null;
+    const options = {
       heroLevel: battleContext.heroLevels[heroId] || 1,
       skillLevels: battleContext.skillLevels,
       flipCost: cost,
       side,
-    });
+    };
+    if (cfg?.type === 'resource') {
+      return BattleSkillRuntime.buildResourceHero(heroId, options);
+    }
+    return BattleSkillRuntime.buildCombatHero(heroId, options);
   }
 
   function createCell(side, row, col) {
@@ -158,6 +163,7 @@ const BattleRules = (() => {
 
   function createInitialState() {
     return {
+      // 局内金币（in_match_only）：翻牌消耗；对战结束清零，不可带入局外
       playerGold: C.START_GOLD,
       enemyGold: C.START_GOLD,
       playerCityHp: C.MAIN_CITY_HP,
@@ -557,7 +563,7 @@ const BattleRules = (() => {
 
     for (const key of Object.keys(state.cells)) {
       const cell = state.cells[key];
-      if (!cell.hero || cell.hero.hp <= 0) continue;
+      if (!cell.hero || cell.hero.hp <= 0 || cell.hero.unitType === 'resource') continue;
 
       const hero = cell.hero;
       hero.attackTimer -= dt;
@@ -619,6 +625,36 @@ const BattleRules = (() => {
       state.enemyGold += C.GOLD_PER_SEC;
     }
     return accumulator;
+  }
+
+  /** 金矿周期产局内金币；每张金矿独立计时（perInstance） */
+  function tickMineGold(state, dt) {
+    if (state.gameOver) return;
+
+    for (const key of Object.keys(state.cells)) {
+      const cell = state.cells[key];
+      const hero = cell.hero;
+      if (!hero || hero.hp <= 0 || hero.unitType !== 'resource') continue;
+
+      const mine = hero.mineProduction;
+      if (!mine?.goldPerTick || !mine.intervalSec) continue;
+
+      hero.mineTimer = (hero.mineTimer || 0) + dt;
+      while (hero.mineTimer >= mine.intervalSec) {
+        hero.mineTimer -= mine.intervalSec;
+        const amount = mine.goldPerTick;
+        setGold(state, cell.side, getGold(state, cell.side) + amount);
+        state.events.push({
+          type: 'mine_gold',
+          side: cell.side,
+          row: cell.row,
+          col: cell.col,
+          heroId: hero.heroId,
+          amount,
+          scope: mine.scope || 'in_match_only',
+        });
+      }
+    }
   }
 
   function tickTimer(state, dt) {
@@ -744,6 +780,7 @@ const BattleRules = (() => {
     flipCard,
     tickCombat,
     tickGold,
+    tickMineGold,
     tickTimer,
     checkWin,
     runAiFlip,

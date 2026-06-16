@@ -77,7 +77,8 @@ const HeroesConfig = {
     { id: 'blacksmith', name: '长枪教头', avatar: '🔧', quality: 'common', starter: false, level: 1, type: 'unit', power: 83, buildingHp: 100, attack: 25, unitHp: 200, attackSpeed: 0.9, attackRange: 1 },
     { id: 'militia', name: '短剑士', avatar: '🗡', quality: 'common', starter: false, level: 1, type: 'unit', power: 65, buildingHp: 100, attack: 30, unitHp: 100, attackSpeed: 1.1, attackRange: 1.2 },
     { id: 'bone_archer', name: '火枪手', avatar: '🔫', quality: 'common', starter: false, level: 1, type: 'unit', power: 57, buildingHp: 100, attack: 20, unitHp: 80, attackSpeed: 1.0, attackRange: 5 },
-    { id: 'gold_mine', name: '采矿机', avatar: '⛏', quality: 'common', starter: true, level: 1, type: 'resource', power: null, buildingHp: 200, attack: null, unitHp: null, attackSpeed: null, attackRange: null, income: 10 },
+  // 金矿：独立资源卡，无阵营；income=每周期局内金币，incomeIntervalSec=周期秒数（升级缩短）
+    { id: 'gold_mine', name: '金矿', avatar: '⛏', quality: 'common', starter: true, level: 1, type: 'resource', power: null, buildingHp: 200, attack: null, unitHp: null, attackSpeed: null, attackRange: null, income: 10, incomeIntervalSec: 6 },
   ],
 
   getById(id) {

@@ -5,7 +5,8 @@
     "attack": "攻击",
     "defense": "防御",
     "supply": "补给",
-    "speed": "加速"
+    "speed": "加速",
+    "resource": "资源"
   },
   "combatRules": {
     "attackInterval": {
@@ -42,6 +43,16 @@
         "undead": "亡灵 → 人族"
       },
       "rule": "人族克机械 → 机械克兽族 → 兽族克亡灵 → 亡灵克人族；克制时普攻额外+10%伤害"
+    },
+    "inMatchGold": {
+      "scope": "in_match_only",
+      "note": "局内翻牌金币；对战结束清零，不可带入局外账户",
+      "sources": [
+        "主城秒产",
+        "翻资源格",
+        "金矿周期产出",
+        "击杀赏金技能"
+      ]
     }
   },
   "skillUpgrade": {
@@ -10981,11 +10992,11 @@
       "heroId": "gold_mine",
       "slot": "normal_2",
       "skillKind": "normal_skill_2",
-      "category": "supply",
-      "categoryLabel": "补给",
-      "name": "采矿机·普通技能2·矿脉",
-      "description": "翻开获得额外金币，无战斗攻击",
-      "visualDescription": "金币从矿口平直弹出",
+      "category": "resource",
+      "categoryLabel": "资源",
+      "name": "金矿·普通技能2·淘金",
+      "description": "每约6.0秒产出局内金币（L1单次10）；英雄升级缩短周期（L30约3.38秒/次）；场上每张金矿独立计时叠加；金币仅本局翻牌可用，对战结束清零",
+      "visualDescription": "金币从矿口弹出；**局内金币**，不可带入局外",
       "projectileStyle": "flat",
       "attackMode": "none",
       "unlockLevel": 1,
@@ -10993,17 +11004,23 @@
       "maxLevel": 1,
       "effects": [
         {
-          "type": "deployGold",
-          "value": 8
+          "type": "mineGoldPerTick",
+          "value": 10,
+          "scope": "in_match_only"
         }
       ],
       "activation": {
-        "trigger": "onDeploy"
+        "trigger": "periodic",
+        "intervalSecL1": 6.0,
+        "intervalGrowthPerHeroLevel": 1.02,
+        "intervalFormula": "intervalSecL1 / intervalGrowthPerHeroLevel^(heroLevel-1)",
+        "perInstance": true,
+        "scope": "in_match_only"
       },
       "tags": [
         "common",
         "normal_skill_2",
-        "supply",
+        "resource",
         "resource"
       ]
     }

@@ -55,7 +55,7 @@
 
 ## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）
 
-**默认编队**（6 张可攻击卡 + 采矿机）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
+**默认编队**（6 张可攻击卡 + 金矿）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
 **L1 编队攻城 DPS**：194.5
 
 | 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |

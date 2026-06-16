@@ -64,7 +64,12 @@ CATEGORY_CN = {
     "defense": "防御",
     "supply": "补给",
     "speed": "加速",
+    "resource": "资源",
 }
+
+# 金矿：局内周期产金（对战结束清零，不可带入局外）
+GOLD_MINE_INTERVAL_L1 = 6.0
+GOLD_MINE_INTERVAL_GROWTH = FIRE_RATE_GROWTH  # 英雄升级缩短周期，产出更快
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 QUALITY_SPECIAL_SLOT = {
@@ -92,7 +97,7 @@ HERO_FACTION: dict[str, str] = {
     "crusher": "undead", "catapult": "undead", "demon_lord": "undead",
     # 机械
     "helicopter": "mechanical", "catapult_tower": "mechanical", "arrow_tower": "mechanical",
-    "ballista": "mechanical", "gold_mine": "mechanical", "panda_monk": "mechanical",
+    "ballista": "mechanical", "panda_monk": "mechanical",
     "sniper": "mechanical", "gargoyle": "mechanical", "ranger": "mechanical",
     "heavy_shield": "mechanical", "sky_dome": "mechanical",
     "shaman": "human",
@@ -136,7 +141,7 @@ HERO_PROFILE: dict[str, dict] = {
     "blacksmith": {"category": "supply", "projectile": "flat", "weapon": "锻造火花，平直补给友军"},
     "militia": {"category": "attack", "projectile": "flat", "weapon": "短剑平直快攻"},
     "bone_archer": {"category": "attack", "projectile": "flat", "weapon": "火枪弹，平直射击"},
-    "gold_mine": {"category": "supply", "projectile": "flat", "weapon": "矿车补给，无攻击弹道"},
+    "gold_mine": {"category": "resource", "projectile": "flat", "weapon": "周期产金，无攻击弹道"},
     "heavy_shield": {"category": "defense", "projectile": "flat", "weapon": "盾面光刃，平直盾击"},
     "sky_dome": {"category": "defense", "projectile": "arc", "weapon": "穹顶光束，高抛能量弹"},
 }
@@ -262,7 +267,7 @@ def profile_for(hero: dict) -> dict:
     if hid in HERO_PROFILE:
         return HERO_PROFILE[hid]
     if hero["type"] == "resource":
-        return {"category": "supply", "projectile": "flat", "weapon": "资源补给"}
+        return {"category": "resource", "projectile": "flat", "weapon": "周期产金，无攻击弹道"}
     if hero["type"] == "building":
         return {"category": "attack", "projectile": "arc", "weapon": "建筑高抛炮击"}
     return {"category": "attack", "projectile": "flat", "weapon": "平直射击"}
@@ -646,11 +651,32 @@ def build_trait_skill(hero: dict, prof: dict) -> dict:
     block_feedback = None
 
     if hero["type"] == "resource":
-        name, desc = "矿脉", "翻开获得额外金币，无战斗攻击"
-        vfx = "金币从矿口平直弹出"
-        effects = [{"type": "deployGold", "value": int(10 * p)}]
+        interval_l1 = float(hero.get("incomeIntervalSec") or GOLD_MINE_INTERVAL_L1)
+        gold_per_tick = int(hero.get("income") or 10)
+        interval_l30 = round(interval_l1 / (GOLD_MINE_INTERVAL_GROWTH ** 29), 2)
+        name = "淘金"
+        desc = (
+            f"每约{interval_l1}秒产出局内金币（L1单次{gold_per_tick}）；"
+            f"英雄升级缩短周期（L30约{interval_l30}秒/次）；"
+            "场上每张金矿独立计时叠加；金币仅本局翻牌可用，对战结束清零"
+        )
+        vfx = "金币从矿口弹出；**局内金币**，不可带入局外"
+        effects = [
+            {
+                "type": "mineGoldPerTick",
+                "value": gold_per_tick,
+                "scope": "in_match_only",
+            }
+        ]
         attack_mode = "none"
-        activation = {"trigger": "onDeploy"}
+        activation = {
+            "trigger": "periodic",
+            "intervalSecL1": interval_l1,
+            "intervalGrowthPerHeroLevel": GOLD_MINE_INTERVAL_GROWTH,
+            "intervalFormula": "intervalSecL1 / intervalGrowthPerHeroLevel^(heroLevel-1)",
+            "perInstance": True,
+            "scope": "in_match_only",
+        }
     elif cat == "attack":
         name, desc = "战意凝集", "短时提升自身攻击力"
         vfx = "战意光晕贴身，刀刃/弹道泛光"
@@ -1083,8 +1109,6 @@ def assign_faction(heroes: list[dict]) -> dict[str, str]:
         hid = h["id"]
         if hid in HERO_FACTION:
             mapping[hid] = HERO_FACTION[hid]
-        elif h["type"] == "resource":
-            mapping[hid] = "mechanical"
     return mapping
 
 
@@ -1118,16 +1142,17 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
         if not by_slot.get("normal_1"):
             base_slots = [s for s in base_slots if s != "normal_1"]
 
-        entries[hid] = {
+        faction = factions.get(hid)
+        entry = {
             "heroId": hid,
             "name": h["name"],
             "quality": q,
             "qualityLabel": QUALITY_CN[q],
-            "faction": factions.get(hid),
-            "factionLabel": FACTION_CN.get(factions.get(hid), "—"),
+            "faction": faction,
+            "factionLabel": FACTION_CN[faction] if faction else "无",
             "category": prof["category"],
             "categoryLabel": CATEGORY_CN[prof["category"]],
-            "bondEligible": hid != "gold_mine",
+            "bondEligible": h["type"] != "resource",
             "unitType": h.get("type", "unit"),
             "combatStats": {
                 **combat,
@@ -1180,6 +1205,33 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
                 "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁",
             },
         }
+        if h["type"] == "resource":
+            interval_l1 = float(h.get("incomeIntervalSec") or GOLD_MINE_INTERVAL_L1)
+            gold_per_tick = int(h.get("income") or 10)
+            entry["resourceProduction"] = {
+                "goldPerTick": gold_per_tick,
+                "intervalSecL1": interval_l1,
+                "intervalGrowthPerHeroLevel": GOLD_MINE_INTERVAL_GROWTH,
+                "intervalFormula": "intervalSecL1 / intervalGrowthPerHeroLevel^(heroLevel-1)",
+                "perInstance": True,
+                "scope": "in_match_only",
+                "note": "局内经济金币，仅本局翻牌消耗；对战结束清零，不可带入局外账户",
+                "samples": {
+                    "L1": {
+                        "goldPerTick": gold_per_tick,
+                        "intervalSec": interval_l1,
+                    },
+                    "L15": {
+                        "goldPerTick": gold_per_tick,
+                        "intervalSec": round(interval_l1 / (GOLD_MINE_INTERVAL_GROWTH ** 14), 2),
+                    },
+                    "L30": {
+                        "goldPerTick": gold_per_tick,
+                        "intervalSec": round(interval_l1 / (GOLD_MINE_INTERVAL_GROWTH ** 29), 2),
+                    },
+                },
+            }
+        entries[hid] = entry
     return {
         "version": "3.6.0",
         "description": "英雄战斗元数据 v3.6：特技金币/钻石分级升级 + 广告抵扣",
@@ -1292,6 +1344,11 @@ if __name__ == "__main__":
                         "cycle": FACTION_COUNTER_CYCLE,
                         "labels": FACTION_COUNTER_LABEL,
                         "rule": "人族克机械 → 机械克兽族 → 兽族克亡灵 → 亡灵克人族；克制时普攻额外+10%伤害",
+                    },
+                    "inMatchGold": {
+                        "scope": "in_match_only",
+                        "note": "局内翻牌金币；对战结束清零，不可带入局外账户",
+                        "sources": ["主城秒产", "翻资源格", "金矿周期产出", "击杀赏金技能"],
                     },
                 },
                 "skillUpgrade": upgrade,

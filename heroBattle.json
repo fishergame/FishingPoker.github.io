@@ -3448,13 +3448,13 @@
     },
     "gold_mine": {
       "heroId": "gold_mine",
-      "name": "采矿机",
+      "name": "金矿",
       "quality": "common",
       "qualityLabel": "普通",
-      "faction": "mechanical",
-      "factionLabel": "机械",
-      "category": "supply",
-      "categoryLabel": "补给",
+      "faction": null,
+      "factionLabel": "无",
+      "category": "resource",
+      "categoryLabel": "资源",
       "bondEligible": false,
       "unitType": "resource",
       "combatStats": {
@@ -3521,6 +3521,29 @@
         "epic": 10,
         "legendary": 20,
         "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
+      },
+      "resourceProduction": {
+        "goldPerTick": 10,
+        "intervalSecL1": 6.0,
+        "intervalGrowthPerHeroLevel": 1.02,
+        "intervalFormula": "intervalSecL1 / intervalGrowthPerHeroLevel^(heroLevel-1)",
+        "perInstance": true,
+        "scope": "in_match_only",
+        "note": "局内经济金币，仅本局翻牌消耗；对战结束清零，不可带入局外账户",
+        "samples": {
+          "L1": {
+            "goldPerTick": 10,
+            "intervalSec": 6.0
+          },
+          "L15": {
+            "goldPerTick": 10,
+            "intervalSec": 4.55
+          },
+          "L30": {
+            "goldPerTick": 10,
+            "intervalSec": 3.38
+          }
+        }
       }
     }
   }

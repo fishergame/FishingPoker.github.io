@@ -34,7 +34,7 @@
 - **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率
 
 当前共 **147** 个技能，覆盖 **39** 位英雄。
-**定位分布（战斗英雄 38）**：攻击 22 · 防御 9 · 补给 4 · 加速 4
+**定位分布（战斗英雄 38）**：攻击 22 · 防御 9 · 补给 3 · 加速 4
 **种族分布**：人族 10 · 兽族 9 · 亡灵 9 · 机械 10
 
 ---
@@ -96,7 +96,7 @@
 | **兽族** | 亡灵 | 对亡灵单位伤害 +10% |
 | **亡灵** | 人族 | 对人族单位伤害 +10% |
 
-> 采矿机等资源卡无普通技能1/3，仅有矿脉（普通技能2）。
+> 金矿等资源卡无阵营、无普通技能1/3，仅有淘金（普通技能2·周期产局内金币）。
 
 ---
 
@@ -259,7 +259,8 @@ attackInterval = 2.2 / fireRate
 | `teamFireRatePct` | 加速 | 全队攻速 |
 | `revealAdjacent` | 加速 | 翻开相邻格 |
 | `reviveChancePct` | 亡灵羁绊 | 复活/复燃概率加成 |
-| `deployGold` | 补给 | 翻开获得金币（采矿机） |
+| `mineGoldPerTick` | 资源 | 周期产出局内金币（金矿；`scope=in_match_only`） |
+| `deployGold` | 补给 | （已废弃）翻开一次性金币，请用 `mineGoldPerTick` |
 | `factionCounterDamagePct` | 克制 | 对克制种族伤害 +10%（普通技能3） |
 
 ---
@@ -268,7 +269,16 @@ attackInterval = 2.2 / fireRate
 
 版本：bond.json v3.6.0
 
-卡组 8 张（不含采矿机）；最多激活 **1 条阵营羁绊**。技能定位羁绊已取消。
+卡组 8 张（不含金矿）；最多激活 **1 条阵营羁绊**。技能定位羁绊已取消。
+
+### 局内金币 vs 局外金币
+
+| 类型 | 作用域 | 说明 |
+|:---|:---|:---|
+| **局内金币** | `in_match_only` | 对战内翻牌消耗；主城秒产、资源格、金矿周期产出、击杀赏金等均属此类；**对战结束清零** |
+| **局外金币** | 账户持久 | 主城养成、英雄升级、商店等；与局内金币**分开结算** |
+
+**金矿规则**：每张独立计时，场上 N 张 = N 路产出叠加；英雄等级越高，周期越短（产出越快）。
 
 ### 8.1 种族阵营羁绊（人族 / 兽族 / 亡灵 / 机械）
 
@@ -304,7 +314,7 @@ attackInterval = 2.2 / fireRate
 
 #### 机械
 
-**成员（11）**：高射塔 · 弩车 · 炮楼 · 鹰女 · 采矿机 · 重型盾 · 机械飞鹰 · 爆破鬼才 · 荆棘女王 · 天穹 · 雇佣兵
+**成员（10）**：高射塔 · 弩车 · 炮楼 · 鹰女 · 重型盾 · 机械飞鹰 · 爆破鬼才 · 荆棘女王 · 天穹 · 雇佣兵
 
 | 数量 | 效果 |
 |:---:|:---|
@@ -337,7 +347,7 @@ attackInterval = 2.2 / fireRate
 | 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | 70 | 1040 | 1.2 | 4.0 | 1.83 | arc | skill_frost_dragon_normal_1 | skill_frost_dragon_normal_2 | skill_frost_dragon_normal_3 | skill_frost_dragon_legendary |
 | 鹰女 | 史诗 | 机械 | 防御 | 60 | 300 | 1.5 | 5.0 | 1.47 | flat | skill_gargoyle_normal_1 | skill_gargoyle_normal_2 | skill_gargoyle_normal_3 | skill_gargoyle_epic |
 | 小野猪人 | 普通 | 兽族 | 加速 | 20 | 80 | 1.3 | 5.0 | 1.69 | flat | skill_goblin_normal_1 | skill_goblin_normal_2 | skill_goblin_normal_3 | — |
-| 采矿机 | 普通 | 机械 | 补给 | None | None | None | None | None | — | — | skill_gold_mine_normal_2 | — | — |
+| 金矿 | 普通 | 无 | 资源 | None | None | None | None | None | — | — | skill_gold_mine_normal_2 | — | — |
 | 重型盾 | 稀有 | 机械 | 防御 | 45 | None | 0.7 | 5.0 | 3.14 | flat | skill_heavy_shield_normal_1 | skill_heavy_shield_normal_2 | skill_heavy_shield_normal_3 | skill_heavy_shield_rare |
 | 机械飞鹰 | 传奇 | 机械 | 攻击 | 110 | 700 | 1.6 | 5.0 | 1.38 | flat | skill_helicopter_normal_1 | skill_helicopter_normal_2 | skill_helicopter_normal_3 | skill_helicopter_legendary |
 | 重步兵 | 稀有 | 人族 | 防御 | 3 | 250 | 0.9 | 5.0 | 2.44 | flat | skill_infantry_normal_1 | skill_infantry_normal_2 | skill_infantry_normal_3 | skill_infantry_rare |
@@ -383,7 +393,7 @@ attackInterval = 2.2 / fireRate
 | 寒冰巨魔 | 传奇 | 亡灵 | 攻击 | arc | 高抛点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
 | 鹰女 | 史诗 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 三格盾带 | L10 | — |
 | 小野猪人 | 普通 | 兽族 | 加速 | flat | 平直点射 | 迅捷装填 | 种族克制 | — | L— | — |
-| 采矿机 | 普通 | 机械 | 补给 | — | — | 矿脉 | — | — | L— | — |
+| 金矿 | 普通 | 无 | 资源 | — | — | 淘金 | — | — | L— | — |
 | 重型盾 | 稀有 | 机械 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 重盾护壁 | L5 | — |
 | 机械飞鹰 | 传奇 | 机械 | 攻击 | flat | 平直点射 | 战意凝集 | 种族克制 | 高空重击 | L20 | ✅ |
 | 重步兵 | 稀有 | 人族 | 防御 | flat | 平直点射 | 铁壁 | 种族克制 | 单格护墙 | L5 | — |
@@ -1191,11 +1201,11 @@ attackInterval = 2.2 / fireRate
 
 ---
 
-### 采矿机（普通 · 机械 · 补给）
+### 金矿（普通 · 无 · 资源）
 
 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 阵营 |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| None | None | None | None | None | — | 机械 |
+| None | None | None | None | None | — | 无 |
 
 #### 普通技能1（主动攻击）
 
@@ -1203,10 +1213,10 @@ attackInterval = 2.2 / fireRate
 
 #### 普通技能2（被动）
 
-**采矿机·普通技能2·矿脉** (`skill_gold_mine_normal_2`)
-- 描述：翻开获得额外金币，无战斗攻击
-- 表现：金币从矿口平直弹出
-- 效果：deployGold=8
+**金矿·普通技能2·淘金** (`skill_gold_mine_normal_2`)
+- 描述：每约6.0秒产出局内金币（L1单次10）；英雄升级缩短周期（L30约3.38秒/次）；场上每张金矿独立计时叠加；金币仅本局翻牌可用，对战结束清零
+- 表现：金币从矿口弹出；**局内金币**，不可带入局外
+- 效果：mineGoldPerTick=10
 
 #### 普通技能3（种族克制）
 

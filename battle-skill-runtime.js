@@ -26,6 +26,7 @@ const BattleSkillRuntime = (() => {
     const { skills } = meta;
     const ids = [];
     if (skills.normal_1) ids.push(skills.normal_1);
+    if (skills.normal_2) ids.push(skills.normal_2);
     if (skills.normal_3) ids.push(skills.normal_3);
     // v3.3 兼容
     if (skills.basic_attack) ids.push(skills.basic_attack);
@@ -142,6 +143,57 @@ const BattleSkillRuntime = (() => {
   }
 
   /**
+   * 资源卡（金矿）：周期产局内金币，无攻击
+   */
+  function buildResourceHero(heroId, options = {}) {
+    const {
+      heroLevel = 1,
+      flipCost = 0,
+      side = 'player',
+    } = options;
+
+    const cfg = HeroesConfig.getById(heroId);
+    if (!cfg || cfg.type !== 'resource') return null;
+
+    const meta = SkillConfig.HERO_BATTLE[heroId] || {};
+    const prod = meta.resourceProduction || {};
+    const growth = prod.intervalGrowthPerHeroLevel || 1.02;
+    const intervalL1 = prod.intervalSecL1 || cfg.incomeIntervalSec || 6;
+    const goldPerTick = prod.goldPerTick || cfg.income || 10;
+    const intervalSec = intervalL1 / (growth ** (heroLevel - 1));
+
+    const hpScale = BattleConfig.COMBAT_HP_SCALE || 1;
+    const statGrowth = HeroLevelConfig?.STAT_GROWTH_RATE || 1.15;
+    const hp = Math.round(statAtLevel(cfg.buildingHp, heroLevel, statGrowth) * hpScale);
+
+    return {
+      heroId,
+      quality: cfg.quality,
+      name: cfg.name,
+      unitType: 'resource',
+      faction: null,
+      factionLabel: '无',
+      hp,
+      maxHp: hp,
+      atk: 0,
+      atkInterval: null,
+      attackTimer: 0,
+      flipCost,
+      side,
+      heroLevel,
+      skillIds: getUnlockedSkillIds(heroId, heroLevel),
+      combatMods: {},
+      mineProduction: {
+        goldPerTick,
+        intervalSec,
+        scope: 'in_match_only',
+        perInstance: true,
+      },
+      mineTimer: Math.random() * intervalSec * 0.5,
+    };
+  }
+
+  /**
    * 从英雄配表 + 技能生成战斗单位
    */
   function buildCombatHero(heroId, options = {}) {
@@ -254,9 +306,13 @@ const BattleSkillRuntime = (() => {
 
   function pickDeckHero(deckIds, qualityHint = null) {
     const pool = deckIds
-      .filter((id) => id && id !== 'gold_mine')
+      .filter(Boolean)
       .map((id) => HeroesConfig.getById(id))
-      .filter((h) => h && h.type !== 'resource');
+      .filter((h) => {
+        if (!h) return false;
+        if (h.type === 'resource') return h.id === 'gold_mine';
+        return true;
+      });
 
     if (pool.length === 0) return null;
 
@@ -280,6 +336,7 @@ const BattleSkillRuntime = (() => {
     getUnlockedSkillIds,
     getActiveSkills,
     buildCombatHero,
+    buildResourceHero,
     pickDeckHero,
     defaultDeck,
     statAtLevel,
