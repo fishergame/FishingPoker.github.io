@@ -9,7 +9,7 @@ SIM_APPENDIX_PATH = ROOT / "docs" / "_SKILL_SIM_APPENDIX.md"
 
 QUALITY_CN = {"common": "普通", "rare": "稀有", "epic": "史诗", "legendary": "传奇"}
 FACTION_CN = {"human": "人族", "beast": "兽族", "undead": "亡灵", "mechanical": "机械"}
-SLOT_CN = {"normal": "普通技", "rare": "稀有特技", "epic": "史诗特技", "legendary": "传奇特技"}
+SLOT_CN = {"basic_attack": "普攻", "normal": "定位特性", "rare": "稀有特技", "epic": "史诗特技", "legendary": "传奇特技"}
 CATEGORY_CN = {
     "attack": "攻击",
     "defense": "防御",
@@ -136,7 +136,7 @@ def gen_unified_skill_md(
         "# 技能体系 v3 · 完整文档",
         "",
         "> **唯一合流文档** — 设计规则、配表、英雄详表、羁绊、对战模拟附录",
-        "> 配表：`skill.json` v3.2.0 · `heroBattle.json` v3.2.0 · `bond.json` v3.2.0",
+        "> 配表：`skill.json` v3.3.0 · `heroBattle.json` v3.3.0 · `bond.json` v3.3.0",
         "> 生成：`python3 scripts/gen-skill-bond-config.py`",
         "",
         "---",
@@ -161,10 +161,11 @@ def gen_unified_skill_md(
         "",
         "## 一、设计总览",
         "",
-        "技能体系 v3 以**卡牌品质**决定特技槽位，每位英雄拥有 **1 个普通技能** + **0~1 个品质特技**：",
+        "技能体系 v3 以**卡牌品质**决定特技槽位。每位战斗英雄拥有 **普攻 + 定位特性** 两个普通层技能，外加 **0~1 个品质特技**：",
         "",
-        "- **普通技**：开局即拥有，**不可升级**",
-        "- **特技**：按品质解锁（稀有/史诗/传奇），**可升至 5 级**",
+        "- **普攻**（`basic_attack`）：开局即拥有，按弹道发射基础攻击，不可升级",
+        "- **定位特性**（`normal`）：按攻击/防御/补给/加速设定效果，含触发间隔与持续时间，不可升级",
+        "- **特技**：按品质解锁（稀有/史诗/传奇），可升至 5 级",
         "- **取消近战/远程战斗逻辑**：`attackRange` 仅表现；`attackSpeed` = 弹道速度；`fireRate` = 发射频率",
         "",
         f"当前共 **{skill_count}** 个技能，覆盖 **{len(heroes)}** 位英雄。",
@@ -177,25 +178,32 @@ def gen_unified_skill_md(
         "",
         "## 二、品质与技能槽",
         "",
-        "| 卡牌品质 | 技能组成 | 普通技 | 特技 |",
-        "|:---|:---|:---:|:---:|",
-        "| **普通** | 仅普通技能 | ✅ | — |",
-        "| **稀有** | 普通 + 稀有特技 | ✅ | 稀有特技 ×1 |",
-        "| **史诗** | 普通 + 史诗特技 | ✅ | 史诗特技 ×1 |",
-        "| **传奇** | 普通 + 传奇特技 | ✅ | 传奇特技 ×1 |",
+        "| 卡牌品质 | 技能组成 | 普攻 | 定位特性 | 特技 |",
+        "|:---|:---|:---:|:---:|:---:|",
+        "| **普通** | 普攻 + 定位特性 | ✅ | ✅ | — |",
+        "| **稀有** | 普攻 + 定位特性 + 稀有特技 | ✅ | ✅ | 稀有特技 ×1 |",
+        "| **史诗** | 普攻 + 定位特性 + 史诗特技 | ✅ | ✅ | 史诗特技 ×1 |",
+        "| **传奇** | 普攻 + 定位特性 + 传奇特技 | ✅ | ✅ | 传奇特技 ×1 |",
         "",
         "---",
         "",
         "## 三、四类技能与特技递进",
         "",
-        "| 类型 | 战术目标 | 普通技（普攻） | 稀有特技 | 史诗特技 | 传奇特技 |",
-        "|:---|:---|:---|:---|:---|:---|",
-        "| **攻击** | 输出/击杀/亡灵 | 平直/高抛点射 | 双联点射（溅射） | 连锁穿透 | 高空重击 / 亡灵收割 |",
-        "| **防御** | 护墙/减伤 | 平直/高抛点射 | 单格护墙 / 重盾护壁 | 三格盾带（挡弧） | 全局圣域 / 天穹护盾 |",
-        "| **补给** | 回血 | 平直/高抛点射 | 战地包扎 30% | 群体复苏 50% | 满血圣疗（最低血友军） |",
-        "| **加速** | 攻速/弹速 | 平直/高抛点射 | 速射补给 | 弹速增压 | 狂热号令 |",
+        "| 类型 | 战术目标 | 普攻 | 定位特性（触发/持续） | 稀有特技 | 史诗特技 | 传奇特技 |",
+        "|:---|:---|:---|:---|:---|:---|:---|",
+        "| **攻击** | 输出/击杀 | 平直/高抛点射 | 战意凝集（12s/4s） | 双联点射 | 连锁穿透 | 高空重击 / 亡灵收割 |",
+        "| **防御** | 护墙/减伤 | 平直/高抛点射 | 铁壁（10s/5s，挡平直） | 单格护墙 / 重盾护壁 | 三格盾带 | 全局圣域 / 天穹护盾 |",
+        "| **补给** | 回血 | 平直/高抛点射 | 应急包扎（10s，20%自疗） | 战地包扎 | 群体复苏 | 满血圣疗 |",
+        "| **加速** | 攻速/弹速 | 平直/高抛点射 | 迅捷装填（10s/5s） | 速射补给 | 弹速增压 | 狂热号令 |",
         "",
-        "> **普攻**：所有战斗卡牌均拥有普攻（按弹道平直/高抛），特技另计触发间隔与持续时间。",
+        "### 3.1 定位特性触发节奏（L1）",
+        "",
+        "| 定位 | 特性名 | 触发间隔 | 持续时间 | 效果概要 |",
+        "|:---|:---|:---:|:---:|:---|",
+        "| 攻击 | 战意凝集 | 12秒 | 4秒 | 自身攻击力 +8%（品质缩放） |",
+        "| 防御 | 铁壁 | 10秒 | 5秒 | 抵挡平直弹道，减伤约6% |",
+        "| 补给 | 应急包扎 | 10秒 | 即时 | 自身恢复20%最大生命 |",
+        "| 加速 | 迅捷装填 | 10秒 | 5秒 | 发射频率 +8% |",
         "",
         "---",
         "",
@@ -369,8 +377,8 @@ def gen_unified_skill_md(
         "",
         "## 九、英雄属性速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普通技 ID | 特技 ID |",
-        "|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|",
+        "| 英雄 | 品质 | 种族 | 定位 | 攻击L1 | 生命L1 | 发射L1 | 弹道速L1 | 间隔 | 弹道 | 普攻 ID | 定位特性 ID | 特技 ID |",
+        "|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|:---|:---|:---|:---|",
     ]
 
     for hid in sorted(heroes.keys()):
@@ -383,7 +391,7 @@ def gen_unified_skill_md(
             f"| {cs.get('attackL1', '—')} | {cs.get('unitHpL1', '—')} "
             f"| {cs.get('fireRateL1', '—')} | {cs.get('attackSpeedL1', '—')} "
             f"| {cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} "
-            f"| {sk.get('normal', '—')} | {sp} |"
+            f"| {sk.get('basic_attack', '—')} | {sk.get('normal', '—')} | {sp} |"
         )
 
     lines += [
@@ -392,14 +400,15 @@ def gen_unified_skill_md(
         "",
         "## 十、技能一览速查表",
         "",
-        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普通技能 | 特技 | 解锁等级 | 高抛穿透 |",
-        "|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|",
+        "| 英雄 | 品质 | 种族 | 定位 | 弹道 | 普攻 | 定位特性 | 特技 | 解锁等级 | 高抛穿透 |",
+        "|:---|:---|:---|:---|:---|:---|:---|:---|:---:|:---:|",
     ]
 
     for hid in sorted(heroes.keys()):
         h = heroes[hid]
         sk = h["skills"]
         normal = skill_by_id.get(sk.get("normal"), {})
+        basic = skill_by_id.get(sk.get("basic_attack"), {})
         special_id = sk.get("rare") or sk.get("epic") or sk.get("legendary")
         special = skill_by_id.get(special_id, {}) if special_id else {}
         arc = "✅" if special.get("attackTrajectory") == "arc" else "—"
@@ -407,6 +416,7 @@ def gen_unified_skill_md(
         lines.append(
             f"| {h['name']} | {QUALITY_CN[h['quality']]} | {h.get('factionLabel', '—')} | {h['categoryLabel']} "
             f"| {h['combatStats'].get('projectileStyle', '—')} "
+            f"| {(basic.get('name') or '—').split('·')[-1] if basic else '—'} "
             f"| {(normal.get('name') or '—').split('·')[-1]} "
             f"| {(special.get('name') or '—').split('·')[-1] if special else '—'} | L{unlock_lv} | {arc} |"
         )
@@ -435,7 +445,11 @@ def gen_unified_skill_md(
             f"{cs.get('attackIntervalL1', '—')} | {cs.get('projectileStyle', '—')} | {h.get('factionLabel', h.get('faction', '—'))} |"
         )
         lines.append("")
-        lines.append("#### 普通技能")
+        lines.append("#### 普攻")
+        lines.append("")
+        lines.append(skill_block(skill_by_id.get(sk.get("basic_attack"))))
+        lines.append("")
+        lines.append("#### 定位特性")
         lines.append("")
         lines.append(skill_block(skill_by_id.get(sk.get("normal"))))
         lines.append("")

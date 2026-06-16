@@ -25,6 +25,7 @@ const BattleSkillRuntime = (() => {
     if (!meta?.skills) return [];
     const { skills } = meta;
     const ids = [];
+    if (skills.basic_attack) ids.push(skills.basic_attack);
     if (skills.normal) ids.push(skills.normal);
     const cfg = typeof HeroesConfig !== 'undefined' ? HeroesConfig.getById(heroId) : null;
     const q = cfg?.quality;

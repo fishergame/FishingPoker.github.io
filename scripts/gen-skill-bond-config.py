@@ -162,6 +162,14 @@ TARGET_CN = {
     "singleEnemy": "单格敌方兵卡",
 }
 
+# 定位特性技（normal 槽）触发节奏：所有战斗卡牌 = 普攻 + 定位特性
+NORMAL_TRAIT_ACTIVATION: dict[str, dict] = {
+    "attack": {"trigger": "active", "cooldownSec": 12, "durationSec": 4, "target": "self"},
+    "defense": {"trigger": "active", "cooldownSec": 10, "durationSec": 5, "target": "self"},
+    "supply": {"trigger": "active", "cooldownSec": 10, "durationSec": 0, "target": "self"},
+    "speed": {"trigger": "active", "cooldownSec": 10, "durationSec": 5, "target": "self"},
+}
+
 
 def load_heroes() -> list[dict]:
     script = r"""
@@ -399,7 +407,93 @@ def build_damage_examples(hero: dict, cat: str, slot: str, base_effects: list[di
     return {"heroAttackL1": atk or None, "heroHpL1": hp or None, "levels": rows}
 
 
-def build_normal_skill(hero: dict, prof: dict) -> dict:
+def build_basic_attack_skill(hero: dict, prof: dict) -> dict | None:
+    """普攻：所有战斗单位按弹道发射基础攻击。"""
+    if hero["type"] == "resource":
+        return None
+    q = hero["quality"]
+    cat = prof["category"]
+    hid = hero["id"]
+    projectile = prof["projectile"]
+    if projectile == "arc":
+        name, desc = "高抛点射", "单点高抛弹道，对目标造成基础攻击伤害"
+        vfx = f"{prof['weapon']}；**高抛**弹道落点单格"
+    else:
+        name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
+        vfx = f"{prof['weapon']}；**平直**射向单格目标"
+    if hero_atk_l1(hero):
+        desc += f"（100%攻击力，L1约{hero_atk_l1(hero)}点）"
+    return {
+        "skillId": f"skill_{hid}_basic_attack",
+        "heroId": hid,
+        "slot": "basic_attack",
+        "skillKind": "basic_attack",
+        "category": cat,
+        "categoryLabel": CATEGORY_CN[cat],
+        "name": f"{hero['name']}·{name}",
+        "description": desc,
+        "visualDescription": vfx,
+        "projectileStyle": projectile,
+        "attackMode": "single",
+        "unlockLevel": 1,
+        "upgradeable": False,
+        "maxLevel": 1,
+        "effects": [{"type": "atkPct", "value": qscale(q, 0.05)}],
+        "activation": {"trigger": "onBasicAttack"},
+        "tags": [q, "basic_attack", cat, hero["type"]],
+    }
+
+
+def enrich_trait_description(hero: dict, cat: str, base_desc: str, effects: list[dict]) -> str:
+    """为定位特性技补充触发间隔、持续与数值示例。"""
+    act = NORMAL_TRAIT_ACTIVATION[cat]
+    hp = hero_hp_l1(hero)
+    atk = hero_atk_l1(hero)
+    parts = [base_desc.rstrip("。")]
+    cd = act.get("cooldownSec")
+    dur = act.get("durationSec", 0)
+    if cd:
+        parts.append(f"每{cd}秒触发1次")
+    if dur and dur > 0:
+        parts.append(f"持续{dur}秒")
+    target = act.get("target")
+    if target and target in TARGET_CN:
+        parts.append(f"目标：{TARGET_CN[target]}")
+
+    if cat == "attack":
+        atk_b = effect_val(effects, "atkPct")
+        boosted = round(atk * (1 + atk_b)) if atk else 0
+        parts.append(
+            f"攻击力提升{pct_label(atk_b)}"
+            f"{'（' + str(atk) + '→' + str(boosted) + '点）' if atk else ''}"
+        )
+    elif cat == "defense":
+        dr = effect_val(effects, "damageReductionPct")
+        parts.append(
+            f"抵挡平直弹道，减伤{pct_label(dr)}"
+            f"（例：受击100点→约{round(100 * (1 - dr))}点）"
+        )
+    elif cat == "supply":
+        heal = effect_val(effects, "healPct")
+        heal_amt = round(hp * heal) if hp else 0
+        parts.append(
+            f"恢复{pct_label(heal)}最大生命"
+            f"{'（例：HP' + str(hp) + '→约+' + str(heal_amt) + '点）' if hp else ''}"
+        )
+    else:
+        fr = effect_val(effects, "fireRatePct")
+        fire_rate = float(hero.get("attackSpeed") or 1.0)
+        interval = round(2.2 / fire_rate, 2) if fire_rate else None
+        new_iv = round(interval / (1 + fr), 2) if interval else None
+        parts.append(
+            f"发射频率+{pct_label(fr)}"
+            f"{f'（间隔{interval}s→约{new_iv}s）' if interval and new_iv else ''}"
+        )
+    return "。".join(parts) + "。"
+
+
+def build_trait_skill(hero: dict, prof: dict) -> dict:
+    """定位特性技：按攻击/防御/补给/加速设定效果与触发节奏。"""
     q = hero["quality"]
     cat = prof["category"]
     hid = hero["id"]
@@ -410,37 +504,60 @@ def build_normal_skill(hero: dict, prof: dict) -> dict:
         vfx = "金币从矿口平直弹出"
         effects = [{"type": "deployGold", "value": int(10 * p)}]
         attack_mode = "none"
-        projectile = prof["projectile"]
+        activation = {"trigger": "onDeploy"}
+    elif cat == "attack":
+        name, desc = "战意凝集", "短时提升自身攻击力"
+        vfx = "战意光晕贴身，刀刃/弹道泛光"
+        effects = [{"type": "atkPct", "value": qscale(q, 0.08)}]
+        attack_mode = "self_buff"
+        activation = dict(NORMAL_TRAIT_ACTIVATION[cat])
+    elif cat == "defense":
+        name = "铁壁"
+        desc = "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击"
+        vfx = f"{prof['weapon']}；护体光效贴身，**平直**格挡反馈"
+        effects = [
+            {
+                "type": "damageReductionPct",
+                "value": qscale(q, 0.06),
+                "blocksTrajectory": ["flat"],
+            }
+        ]
+        attack_mode = "self"
+        activation = dict(NORMAL_TRAIT_ACTIVATION[cat])
+    elif cat == "supply":
+        name, desc = "应急包扎", "为自身恢复少量生命"
+        vfx = "绿色光粒平直飞向自身；**补给粒子**"
+        effects = [{"type": "healPct", "value": qscale(q, 0.20)}]
+        attack_mode = "self"
+        activation = dict(NORMAL_TRAIT_ACTIVATION[cat])
     else:
-        projectile = prof["projectile"]
-        if projectile == "arc":
-            name, desc = "高抛点射", "单点高抛弹道，对目标造成基础攻击伤害"
-            vfx = f"{prof['weapon']}；**高抛**弹道落点单格"
-        else:
-            name, desc = "平直点射", "单点平直弹道，对目标兵卡造成基础攻击伤害（无抛物线）"
-            vfx = f"{prof['weapon']}；**平直**射向单格目标"
-        if hero_atk_l1(hero):
-            desc += f"（100%攻击力，L1约{hero_atk_l1(hero)}点）"
-        effects = [{"type": "atkPct", "value": qscale(q, 0.05)}]
-        attack_mode = "single"
+        name, desc = "迅捷装填", "短时提升发射间隔效率（攻速补给）"
+        vfx = f"{prof['weapon']}；出手前摇缩短，弹道仍**平直**"
+        effects = [{"type": "fireRatePct", "value": qscale(q, 0.08)}]
+        attack_mode = "self"
+        activation = dict(NORMAL_TRAIT_ACTIVATION[cat])
+
+    if hero["type"] != "resource":
+        desc = enrich_trait_description(hero, cat, desc, effects)
 
     return {
         "skillId": f"skill_{hid}_normal",
         "heroId": hid,
         "slot": "normal",
-        "skillKind": "normal",
+        "skillKind": "trait",
         "category": cat,
         "categoryLabel": CATEGORY_CN[cat],
         "name": f"{hero['name']}·{name}",
         "description": desc,
         "visualDescription": vfx,
-        "projectileStyle": projectile,
+        "projectileStyle": prof["projectile"],
         "attackMode": attack_mode,
         "unlockLevel": 1,
         "upgradeable": False,
         "maxLevel": 1,
         "effects": effects,
-        "tags": [q, cat, hero["type"]],
+        "activation": activation,
+        "tags": [q, "trait", cat, hero["type"]],
     }
 
 
@@ -650,7 +767,10 @@ def gen_skills(heroes: list[dict]) -> list[dict]:
     skills = []
     for h in heroes:
         prof = profile_for(h)
-        skills.append(build_normal_skill(h, prof))
+        basic = build_basic_attack_skill(h, prof)
+        if basic:
+            skills.append(basic)
+        skills.append(build_trait_skill(h, prof))
         slot = QUALITY_SPECIAL_SLOT.get(h["quality"])
         if slot:
             skills.append(build_special_skill(h, prof, slot))
@@ -720,10 +840,15 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
         prof = profile_for(h)
         combat = derive_combat_stats(h)
         q = h["quality"]
-        skill_map = {"normal": by_slot.get("normal")}
+        skill_map = {}
+        if by_slot.get("basic_attack"):
+            skill_map["basic_attack"] = by_slot["basic_attack"]
+        skill_map["normal"] = by_slot.get("normal")
         special = QUALITY_SPECIAL_SLOT.get(q)
         if special:
             skill_map[special] = by_slot.get(special)
+
+        base_slots = ["basic_attack", "normal"] if by_slot.get("basic_attack") else ["normal"]
 
         entries[hid] = {
             "heroId": hid,
@@ -772,21 +897,23 @@ def gen_hero_battle(heroes: list[dict], skills: list[dict]) -> dict:
             },
             "skills": skill_map,
             "skillSlotsByQuality": {
-                "common": ["normal"],
-                "rare": ["normal", "rare"],
-                "epic": ["normal", "epic"],
-                "legendary": ["normal", "legendary"],
+                "common": base_slots,
+                "rare": [*base_slots, "rare"],
+                "epic": [*base_slots, "epic"],
+                "legendary": [*base_slots, "legendary"],
             },
             "skillUnlock": {
+                "basic_attack": 1,
+                "normal": 1,
                 "rare": SPECIAL_UNLOCK_HERO_LEVEL["rare"],
                 "epic": SPECIAL_UNLOCK_HERO_LEVEL["epic"],
                 "legendary": SPECIAL_UNLOCK_HERO_LEVEL["legendary"],
-                "description": "英雄达到对应等级解锁品质特技；普通技 L1 即拥有",
+                "description": "普攻与定位特性 L1 即拥有；英雄达到对应等级解锁品质特技",
             },
         }
     return {
-        "version": "3.2.0",
-        "description": "英雄战斗元数据 v3.2：全员普攻 + 重盾/天穹 + 特技 activation",
+        "version": "3.3.0",
+        "description": "英雄战斗元数据 v3.3：普攻 + 定位特性双普通技 + 特技",
         "rules": {
             "noMeleeRangedLogic": True,
             "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
@@ -841,7 +968,7 @@ def gen_bond(heroes: list[dict]) -> dict:
             "tiers": FACTION_BOND_TIERS[fid],
         })
     return {
-        "version": "3.2.0",
+        "version": "3.3.0",
         "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
         "rules": {
             "deckSize": 8,
@@ -873,8 +1000,8 @@ if __name__ == "__main__":
     (ROOT / "skill.json").write_text(
         json.dumps(
             {
-                "version": "3.2.0",
-                "description": "技能 v3.2：全员普攻 + 重盾/天穹防御建筑 + 特技触发间隔",
+                "version": "3.3.0",
+                "description": "技能 v3.3：普攻 + 定位特性（触发/持续）+ 品质特技",
                 "categories": CATEGORY_CN,
                 "combatRules": {
                     "trajectory": {

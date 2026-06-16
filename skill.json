@@ -1,6 +1,6 @@
 {
-  "version": "3.2.0",
-  "description": "技能 v3.2：全员普攻 + 重盾/天穹防御建筑 + 特技触发间隔",
+  "version": "3.3.0",
+  "description": "技能 v3.3：普攻 + 定位特性（触发/持续）+ 品质特技",
   "categories": {
     "attack": "攻击",
     "defense": "防御",
@@ -142,13 +142,13 @@
       }
     ]
   },
-  "skillCount": 71,
+  "skillCount": 109,
   "skills": [
     {
-      "skillId": "skill_dragon_knight_normal",
+      "skillId": "skill_dragon_knight_basic_attack",
       "heroId": "dragon_knight",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "龙焰女王·高抛点射",
@@ -165,8 +165,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_dragon_knight_normal",
+      "heroId": "dragon_knight",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "龙焰女王·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（88→97点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -403,10 +441,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_demon_lord_normal",
+      "skillId": "skill_demon_lord_basic_attack",
       "heroId": "demon_lord",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "永冬之王·高抛点射",
@@ -423,8 +461,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_demon_lord_normal",
+      "heroId": "demon_lord",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "永冬之王·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -661,10 +737,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_archmage_normal",
+      "skillId": "skill_archmage_basic_attack",
       "heroId": "archmage",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "风暴女巫·高抛点射",
@@ -681,8 +757,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_archmage_normal",
+      "heroId": "archmage",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "风暴女巫·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（100→110点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -919,10 +1033,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_ranger_normal",
+      "skillId": "skill_ranger_basic_attack",
       "heroId": "ranger",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "荆棘女王·平直点射",
@@ -939,8 +1053,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_ranger_normal",
+      "heroId": "ranger",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "荆棘女王·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（50→55点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -1177,10 +1329,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_royal_knight_normal",
+      "skillId": "skill_royal_knight_basic_attack",
       "heroId": "royal_knight",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "圣盾领主·平直点射",
@@ -1197,8 +1349,49 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_royal_knight_normal",
+      "heroId": "royal_knight",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "圣盾领主·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
+      "visualDescription": "圣盾光波，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "defense",
         "unit"
       ]
@@ -1424,10 +1617,10 @@
       ]
     },
     {
-      "skillId": "skill_druid_normal",
+      "skillId": "skill_druid_basic_attack",
       "heroId": "druid",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "supply",
       "categoryLabel": "补给",
       "name": "北境守护者·平直点射",
@@ -1444,8 +1637,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "supply",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_druid_normal",
+      "heroId": "druid",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "北境守护者·应急包扎",
+      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复25%最大生命（例：HP700→约+175点）。",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "healPct",
+          "value": 0.25
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 0,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "supply",
         "unit"
       ]
@@ -1632,10 +1863,10 @@
       ]
     },
     {
-      "skillId": "skill_lich_queen_normal",
+      "skillId": "skill_lich_queen_basic_attack",
       "heroId": "lich_queen",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幽灵船长·高抛点射",
@@ -1652,8 +1883,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_lich_queen_normal",
+      "heroId": "lich_queen",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幽灵船长·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -1844,10 +2113,10 @@
       ]
     },
     {
-      "skillId": "skill_blademaster_normal",
+      "skillId": "skill_blademaster_basic_attack",
       "heroId": "blademaster",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "幻影刺客·平直点射",
@@ -1864,8 +2133,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_blademaster_normal",
+      "heroId": "blademaster",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "幻影刺客·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（150→165点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -2102,10 +2409,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_frost_dragon_normal",
+      "skillId": "skill_frost_dragon_basic_attack",
       "heroId": "frost_dragon",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "寒冰巨魔·高抛点射",
@@ -2122,8 +2429,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_frost_dragon_normal",
+      "heroId": "frost_dragon",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "寒冰巨魔·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（70→77点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -2360,10 +2705,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_crusher_normal",
+      "skillId": "skill_crusher_basic_attack",
       "heroId": "crusher",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "重装破城者·高抛点射",
@@ -2380,8 +2725,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_crusher_normal",
+      "heroId": "crusher",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "重装破城者·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（200→220点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -2618,10 +3001,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_helicopter_normal",
+      "skillId": "skill_helicopter_basic_attack",
       "heroId": "helicopter",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "机械飞鹰·平直点射",
@@ -2638,8 +3021,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_helicopter_normal",
+      "heroId": "helicopter",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "机械飞鹰·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（110→121点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -2876,10 +3297,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_dread_knight_normal",
+      "skillId": "skill_dread_knight_basic_attack",
       "heroId": "dread_knight",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "巨斧酋长·平直点射",
@@ -2896,8 +3317,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_dread_knight_normal",
+      "heroId": "dread_knight",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "巨斧酋长·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（90→99点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -3134,10 +3593,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_warlord_normal",
+      "skillId": "skill_warlord_basic_attack",
       "heroId": "warlord",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "双头奇美拉·平直点射",
@@ -3154,8 +3613,49 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_warlord_normal",
+      "heroId": "warlord",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "双头奇美拉·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
+      "visualDescription": "双头咆哮盾墙，平直冲击波；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "defense",
         "unit"
       ]
@@ -3381,10 +3881,10 @@
       ]
     },
     {
-      "skillId": "skill_panda_monk_normal",
+      "skillId": "skill_panda_monk_basic_attack",
       "heroId": "panda_monk",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "爆破鬼才·高抛点射",
@@ -3401,8 +3901,46 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_panda_monk_normal",
+      "heroId": "panda_monk",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "爆破鬼才·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升10%（160→176点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.1
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "attack",
         "unit"
       ]
@@ -3639,10 +4177,10 @@
       "bypassesNormalDefense": true
     },
     {
-      "skillId": "skill_sky_dome_normal",
+      "skillId": "skill_sky_dome_basic_attack",
       "heroId": "sky_dome",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "天穹·高抛点射",
@@ -3659,8 +4197,49 @@
           "value": 0.062
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "legendary",
+        "basic_attack",
+        "defense",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_sky_dome_normal",
+      "heroId": "sky_dome",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "天穹·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤8%（例：受击100点→约92点）。",
+      "visualDescription": "穹顶光束，高抛能量弹；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "arc",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.075,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "legendary",
+        "trait",
         "defense",
         "building"
       ]
@@ -3937,10 +4516,10 @@
       ]
     },
     {
-      "skillId": "skill_shaman_normal",
+      "skillId": "skill_shaman_basic_attack",
       "heroId": "shaman",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "supply",
       "categoryLabel": "补给",
       "name": "藤蔓萨满·平直点射",
@@ -3957,8 +4536,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "supply",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_shaman_normal",
+      "heroId": "shaman",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "藤蔓萨满·应急包扎",
+      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复22%最大生命（例：HP96→约+22点）。",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "healPct",
+          "value": 0.224
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 0,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "supply",
         "unit"
       ]
@@ -4102,10 +4719,10 @@
       ]
     },
     {
-      "skillId": "skill_gargoyle_normal",
+      "skillId": "skill_gargoyle_basic_attack",
       "heroId": "gargoyle",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "鹰女·平直点射",
@@ -4122,8 +4739,49 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_gargoyle_normal",
+      "heroId": "gargoyle",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "鹰女·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。",
+      "visualDescription": "石肤护壁，平直岩盾；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "defense",
         "unit"
       ]
@@ -4349,10 +5007,10 @@
       ]
     },
     {
-      "skillId": "skill_skeleton_giant_normal",
+      "skillId": "skill_skeleton_giant_basic_attack",
       "heroId": "skeleton_giant",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "巨石魔像·平直点射",
@@ -4369,8 +5027,49 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_skeleton_giant_normal",
+      "heroId": "skeleton_giant",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "巨石魔像·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤7%（例：受击100点→约93点）。",
+      "visualDescription": "巨石屏障，平直岩块；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.067,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "defense",
         "unit"
       ]
@@ -4596,10 +5295,10 @@
       ]
     },
     {
-      "skillId": "skill_sniper_normal",
+      "skillId": "skill_sniper_basic_attack",
       "heroId": "sniper",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "雇佣兵·平直点射",
@@ -4616,8 +5315,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_sniper_normal",
+      "heroId": "sniper",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "雇佣兵·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（60→65点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "attack",
         "unit"
       ]
@@ -4808,10 +5545,10 @@
       ]
     },
     {
-      "skillId": "skill_catapult_tower_normal",
+      "skillId": "skill_catapult_tower_basic_attack",
       "heroId": "catapult_tower",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "炮楼·高抛点射",
@@ -4828,8 +5565,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "attack",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_catapult_tower_normal",
+      "heroId": "catapult_tower",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "炮楼·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（100→109点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "attack",
         "building"
       ]
@@ -5020,10 +5795,10 @@
       ]
     },
     {
-      "skillId": "skill_catapult_normal",
+      "skillId": "skill_catapult_basic_attack",
       "heroId": "catapult",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "自爆蜘蛛·高抛点射",
@@ -5040,8 +5815,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_catapult_normal",
+      "heroId": "catapult",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "自爆蜘蛛·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（200→218点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "attack",
         "unit"
       ]
@@ -5232,10 +6045,10 @@
       ]
     },
     {
-      "skillId": "skill_cavalry_normal",
+      "skillId": "skill_cavalry_basic_attack",
       "heroId": "cavalry",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "speed",
       "categoryLabel": "加速",
       "name": "龙骑士·平直点射",
@@ -5252,8 +6065,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "speed",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_cavalry_normal",
+      "heroId": "cavalry",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "龙骑士·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+9%（间隔1.16s→约1.06s）。",
+      "visualDescription": "骑枪冲锋，平直突刺；出手前摇缩短，弹道仍**平直**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "fireRatePct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "speed",
         "unit"
       ]
@@ -5436,10 +6287,10 @@
       ]
     },
     {
-      "skillId": "skill_wyrmling_normal",
+      "skillId": "skill_wyrmling_basic_attack",
       "heroId": "wyrmling",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火龙·高抛点射",
@@ -5456,8 +6307,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_wyrmling_normal",
+      "heroId": "wyrmling",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火龙·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（68→74点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "attack",
         "unit"
       ]
@@ -5648,10 +6537,10 @@
       ]
     },
     {
-      "skillId": "skill_ballista_normal",
+      "skillId": "skill_ballista_basic_attack",
       "heroId": "ballista",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "弩车·高抛点射",
@@ -5668,8 +6557,46 @@
           "value": 0.056
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "epic",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_ballista_normal",
+      "heroId": "ballista",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "弩车·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升9%（90→98点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.09
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "epic",
+        "trait",
         "attack",
         "unit"
       ]
@@ -5860,10 +6787,10 @@
       ]
     },
     {
-      "skillId": "skill_necromancer_normal",
+      "skillId": "skill_necromancer_basic_attack",
       "heroId": "necromancer",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "骷髅魔导师·高抛点射",
@@ -5880,8 +6807,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_necromancer_normal",
+      "heroId": "necromancer",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "骷髅魔导师·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "attack",
         "unit"
       ]
@@ -6072,10 +7037,10 @@
       ]
     },
     {
-      "skillId": "skill_spear_orc_normal",
+      "skillId": "skill_spear_orc_basic_attack",
       "heroId": "spear_orc",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "鱼叉捕猎者·平直点射",
@@ -6092,8 +7057,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_spear_orc_normal",
+      "heroId": "spear_orc",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "鱼叉捕猎者·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（30→32点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "attack",
         "unit"
       ]
@@ -6284,10 +7287,10 @@
       ]
     },
     {
-      "skillId": "skill_wolf_rider_normal",
+      "skillId": "skill_wolf_rider_basic_attack",
       "heroId": "wolf_rider",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "speed",
       "categoryLabel": "加速",
       "name": "利爪猎犬·平直点射",
@@ -6304,8 +7307,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "speed",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_wolf_rider_normal",
+      "heroId": "wolf_rider",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "利爪猎犬·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.16s→约1.07s）。",
+      "visualDescription": "利爪直线扑击；出手前摇缩短，弹道仍**平直**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "fireRatePct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "speed",
         "unit"
       ]
@@ -6444,10 +7485,10 @@
       ]
     },
     {
-      "skillId": "skill_skeleton_knight_normal",
+      "skillId": "skill_skeleton_knight_basic_attack",
       "heroId": "skeleton_knight",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "speed",
       "categoryLabel": "加速",
       "name": "蝙蝠突袭者·平直点射",
@@ -6464,8 +7505,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "speed",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_skeleton_knight_normal",
+      "heroId": "skeleton_knight",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "蝙蝠突袭者·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+8%（间隔1.57s→约1.45s）。",
+      "visualDescription": "骨刃直线斩；出手前摇缩短，弹道仍**平直**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "fireRatePct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "speed",
         "unit"
       ]
@@ -6604,10 +7683,10 @@
       ]
     },
     {
-      "skillId": "skill_archer_normal",
+      "skillId": "skill_archer_basic_attack",
       "heroId": "archer",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "见习女巫·平直点射",
@@ -6624,8 +7703,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_archer_normal",
+      "heroId": "archer",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "见习女巫·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（33→36点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "attack",
         "unit"
       ]
@@ -6816,10 +7933,10 @@
       ]
     },
     {
-      "skillId": "skill_infantry_normal",
+      "skillId": "skill_infantry_basic_attack",
       "heroId": "infantry",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重步兵·平直点射",
@@ -6836,8 +7953,49 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_infantry_normal",
+      "heroId": "infantry",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重步兵·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。",
+      "visualDescription": "塔盾格挡，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.06,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "defense",
         "unit"
       ]
@@ -7050,10 +8208,10 @@
       ]
     },
     {
-      "skillId": "skill_arrow_tower_normal",
+      "skillId": "skill_arrow_tower_basic_attack",
       "heroId": "arrow_tower",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "高射塔·高抛点射",
@@ -7070,8 +8228,46 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "attack",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_arrow_tower_normal",
+      "heroId": "arrow_tower",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "高射塔·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升8%（80→86点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "arc",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.08
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "attack",
         "building"
       ]
@@ -7262,10 +8458,10 @@
       ]
     },
     {
-      "skillId": "skill_heavy_shield_normal",
+      "skillId": "skill_heavy_shield_basic_attack",
       "heroId": "heavy_shield",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重型盾·平直点射",
@@ -7282,8 +8478,49 @@
           "value": 0.05
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "rare",
+        "basic_attack",
+        "defense",
+        "building"
+      ]
+    },
+    {
+      "skillId": "skill_heavy_shield_normal",
+      "heroId": "heavy_shield",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重型盾·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤6%（例：受击100点→约94点）。",
+      "visualDescription": "盾面光刃，平直盾击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.06,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "rare",
+        "trait",
         "defense",
         "building"
       ]
@@ -7501,10 +8738,10 @@
       ]
     },
     {
-      "skillId": "skill_bear_warrior_normal",
+      "skillId": "skill_bear_warrior_basic_attack",
       "heroId": "bear_warrior",
-      "slot": "normal",
-      "skillKind": "normal",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "重锤卫士·平直点射",
@@ -7521,17 +8758,58 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_skeleton_warrior_normal",
-      "heroId": "skeleton_warrior",
+      "skillId": "skill_bear_warrior_normal",
+      "heroId": "bear_warrior",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "重锤卫士·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。",
+      "visualDescription": "重锤平直挥击；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.051,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_skeleton_warrior_basic_attack",
+      "heroId": "skeleton_warrior",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "defense",
       "categoryLabel": "防御",
       "name": "骷髅刀盾兵·平直点射",
@@ -7548,17 +8826,58 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
         "defense",
         "unit"
       ]
     },
     {
-      "skillId": "skill_goblin_normal",
-      "heroId": "goblin",
+      "skillId": "skill_skeleton_warrior_normal",
+      "heroId": "skeleton_warrior",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "name": "骷髅刀盾兵·铁壁",
+      "description": "短时抵挡平直弹道伤害；无法抵挡特技高抛攻击。每10秒触发1次。持续5秒。目标：自身。抵挡平直弹道，减伤5%（例：受击100点→约95点）。",
+      "visualDescription": "刀盾平直格挡；护体光效贴身，**平直**格挡反馈",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "damageReductionPct",
+          "value": 0.051,
+          "blocksTrajectory": [
+            "flat"
+          ]
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
+        "defense",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_goblin_basic_attack",
+      "heroId": "goblin",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "speed",
       "categoryLabel": "加速",
       "name": "小野猪人·平直点射",
@@ -7575,17 +8894,55 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
         "speed",
         "unit"
       ]
     },
     {
-      "skillId": "skill_blacksmith_normal",
-      "heroId": "blacksmith",
+      "skillId": "skill_goblin_normal",
+      "heroId": "goblin",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
+      "category": "speed",
+      "categoryLabel": "加速",
+      "name": "小野猪人·迅捷装填",
+      "description": "短时提升发射间隔效率（攻速补给）。每10秒触发1次。持续5秒。目标：自身。发射频率+7%（间隔1.69s→约1.58s）。",
+      "visualDescription": "短矛轻快直线戳刺；出手前摇缩短，弹道仍**平直**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "fireRatePct",
+          "value": 0.068
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 5,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
+        "speed",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_blacksmith_basic_attack",
+      "heroId": "blacksmith",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "supply",
       "categoryLabel": "补给",
       "name": "长枪教头·平直点射",
@@ -7602,17 +8959,55 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
         "supply",
         "unit"
       ]
     },
     {
-      "skillId": "skill_militia_normal",
-      "heroId": "militia",
+      "skillId": "skill_blacksmith_normal",
+      "heroId": "blacksmith",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
+      "category": "supply",
+      "categoryLabel": "补给",
+      "name": "长枪教头·应急包扎",
+      "description": "为自身恢复少量生命。每10秒触发1次。目标：自身。恢复17%最大生命（例：HP200→约+34点）。",
+      "visualDescription": "绿色光粒平直飞向自身；**补给粒子**",
+      "projectileStyle": "flat",
+      "attackMode": "self",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "healPct",
+          "value": 0.17
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 10,
+        "durationSec": 0,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
+        "supply",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_militia_basic_attack",
+      "heroId": "militia",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "短剑士·平直点射",
@@ -7629,17 +9024,55 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
         "attack",
         "unit"
       ]
     },
     {
-      "skillId": "skill_bone_archer_normal",
-      "heroId": "bone_archer",
+      "skillId": "skill_militia_normal",
+      "heroId": "militia",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "短剑士·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（30→32点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.068
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_bone_archer_basic_attack",
+      "heroId": "bone_archer",
+      "slot": "basic_attack",
+      "skillKind": "basic_attack",
       "category": "attack",
       "categoryLabel": "攻击",
       "name": "火枪手·平直点射",
@@ -7656,8 +9089,46 @@
           "value": 0.043
         }
       ],
+      "activation": {
+        "trigger": "onBasicAttack"
+      },
       "tags": [
         "common",
+        "basic_attack",
+        "attack",
+        "unit"
+      ]
+    },
+    {
+      "skillId": "skill_bone_archer_normal",
+      "heroId": "bone_archer",
+      "slot": "normal",
+      "skillKind": "trait",
+      "category": "attack",
+      "categoryLabel": "攻击",
+      "name": "火枪手·战意凝集",
+      "description": "短时提升自身攻击力。每12秒触发1次。持续4秒。目标：自身。攻击力提升7%（20→21点）。",
+      "visualDescription": "战意光晕贴身，刀刃/弹道泛光",
+      "projectileStyle": "flat",
+      "attackMode": "self_buff",
+      "unlockLevel": 1,
+      "upgradeable": false,
+      "maxLevel": 1,
+      "effects": [
+        {
+          "type": "atkPct",
+          "value": 0.068
+        }
+      ],
+      "activation": {
+        "trigger": "active",
+        "cooldownSec": 12,
+        "durationSec": 4,
+        "target": "self"
+      },
+      "tags": [
+        "common",
+        "trait",
         "attack",
         "unit"
       ]
@@ -7666,7 +9137,7 @@
       "skillId": "skill_gold_mine_normal",
       "heroId": "gold_mine",
       "slot": "normal",
-      "skillKind": "normal",
+      "skillKind": "trait",
       "category": "supply",
       "categoryLabel": "补给",
       "name": "采矿机·矿脉",
@@ -7683,8 +9154,12 @@
           "value": 8
         }
       ],
+      "activation": {
+        "trigger": "onDeploy"
+      },
       "tags": [
         "common",
+        "trait",
         "supply",
         "resource"
       ]
