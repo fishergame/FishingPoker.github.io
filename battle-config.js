@@ -39,13 +39,68 @@ const BattleConfig = {
    */
   CITY_ATTACK_REQUIRES_CLEAR_FIELD: true,
 
-  /** 翻牌费用档位：越贵越容易出高品质英雄 */
-  FLIP_COSTS: [10, 20, 50],
+  /** 翻牌费用档位（角色格：低/中/高） */
+  FLIP_COSTS: [50, 100, 250],
 
+  /**
+   * 新手前 N 局：低级角色格（50 金）额外开放传奇掉落。
+   * playerMatchNumber = 已完成局数 + 1（本局序号，1 起算）。
+   */
+  NEWBIE_MATCHES: {
+    enabled: true,
+    maxMatchIndex: 3,
+    storageKey: 'codename_x_battle_matches_played',
+    /** 仅对 hero_low 费用生效 */
+    heroLowCost: 50,
+  },
+
+  /**
+   * 翻开费用 → 英雄品质概率（常规局，第 4 局起低级格不出传奇）。
+   * 键 50_newbie：前 3 局低级格专用。
+   */
   QUALITY_BY_COST: {
-    10: { common: 0.7, rare: 0.25, epic: 0.05, legendary: 0 },
-    20: { common: 0.4, rare: 0.4, epic: 0.18, legendary: 0.02 },
-    50: { common: 0.1, rare: 0.3, epic: 0.45, legendary: 0.15 },
+    50: { common: 0.55, rare: 0.45, epic: 0, legendary: 0 },
+    '50_newbie': { common: 0.50, rare: 0.40, epic: 0.05, legendary: 0.05 },
+    100: { common: 0.20, rare: 0.25, epic: 0.50, legendary: 0.05 },
+    250: { common: 0, rare: 0.20, epic: 0.20, legendary: 0.60 },
+    /** 兼容旧预览费用（10/20 金） */
+    10: { common: 0.70, rare: 0.25, epic: 0.05, legendary: 0 },
+    20: { common: 0.40, rare: 0.40, epic: 0.18, legendary: 0.02 },
+  },
+
+  /** 格子类型一览（策划表；费用单位：局内金币） */
+  FLIP_GRID_TYPES: {
+    gold_mine: {
+      label: '金矿格子',
+      cost: 50,
+      previewType: 'resource',
+      note: '必开',
+    },
+    mystery: {
+      label: '随机问好格子',
+      cost: 25,
+      previewType: 'mystery',
+      outcomes: { empty: 0.60, gold_mine: 0.20, building: 0.20 },
+    },
+    hero_low: {
+      label: '低级角色',
+      cost: 50,
+      previewType: 'hero',
+      qualityKey: 50,
+      newbieQualityKey: '50_newbie',
+    },
+    hero_mid: {
+      label: '中级角色',
+      cost: 100,
+      previewType: 'hero',
+      qualityKey: 100,
+    },
+    hero_high: {
+      label: '高级角色',
+      cost: 250,
+      previewType: 'hero',
+      qualityKey: 250,
+    },
   },
 
   HERO_TEMPLATES: {
@@ -85,6 +140,7 @@ const BattleConfig = {
 
   RESOURCE_GOLD: 28,
   MYSTERY_GOLD: 15,
+  MYSTERY_COST: 25,
 
   /** 开局主城四周固定预览（与场景图一致） */
   INITIAL_PREVIEWS: [

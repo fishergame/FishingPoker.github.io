@@ -11,6 +11,7 @@ const BattleRules = (() => {
     enemyDeck: [],
     heroLevels: {},
     skillLevels: {},
+    playerMatchNumber: 1,
   };
 
   async function loadConfig() {
@@ -33,6 +34,9 @@ const BattleRules = (() => {
     if (options.enemyDeck) battleContext.enemyDeck = options.enemyDeck.filter(Boolean);
     if (options.heroLevels) battleContext.heroLevels = { ...options.heroLevels };
     if (options.skillLevels) battleContext.skillLevels = { ...options.skillLevels };
+    if (options.playerMatchNumber != null) {
+      battleContext.playerMatchNumber = options.playerMatchNumber;
+    }
     if (Object.keys(SkillConfig.SKILLS || {}).length > 0) {
       battleContext.loaded = true;
       if (battleContext.playerDeck.length === 0) {
@@ -67,8 +71,53 @@ const BattleRules = (() => {
     return row === pos.row && col === pos.col;
   }
 
-  function rollQuality(cost) {
-    const table = C.QUALITY_BY_COST[cost] || C.QUALITY_BY_COST[20];
+  function readPlayerMatchNumber() {
+    const cfg = C.NEWBIE_MATCHES;
+    if (!cfg?.storageKey) return 1;
+    try {
+      const storage = typeof localStorage !== 'undefined' ? localStorage : null;
+      if (!storage) return 1;
+      const completed = parseInt(storage.getItem(cfg.storageKey) || '0', 10);
+      return Number.isFinite(completed) ? completed + 1 : 1;
+    } catch {
+      return 1;
+    }
+  }
+
+  function recordMatchCompleted() {
+    const cfg = C.NEWBIE_MATCHES;
+    if (!cfg?.storageKey) return;
+    try {
+      const storage = typeof localStorage !== 'undefined' ? localStorage : null;
+      if (!storage) return;
+      const completed = parseInt(storage.getItem(cfg.storageKey) || '0', 10);
+      storage.setItem(cfg.storageKey, String(completed + 1));
+    } catch {
+      /* noop */
+    }
+  }
+
+  function isNewbieMatch(matchNumber = battleContext.playerMatchNumber) {
+    const cfg = C.NEWBIE_MATCHES;
+    if (!cfg?.enabled) return false;
+    return matchNumber <= (cfg.maxMatchIndex || 0);
+  }
+
+  function getQualityTable(cost, matchNumber = battleContext.playerMatchNumber) {
+    const cfg = C.NEWBIE_MATCHES;
+    if (
+      cfg?.enabled
+      && cost === cfg.heroLowCost
+      && isNewbieMatch(matchNumber)
+      && C.QUALITY_BY_COST['50_newbie']
+    ) {
+      return C.QUALITY_BY_COST['50_newbie'];
+    }
+    return C.QUALITY_BY_COST[cost] || C.QUALITY_BY_COST[50] || C.QUALITY_BY_COST[20];
+  }
+
+  function rollQuality(cost, matchNumber = battleContext.playerMatchNumber) {
+    const table = getQualityTable(cost, matchNumber);
     const r = Math.random();
     let acc = 0;
     for (const q of ['common', 'rare', 'epic', 'legendary']) {
@@ -85,12 +134,17 @@ const BattleRules = (() => {
       const cost = costs[Math.floor(Math.random() * costs.length)];
       return { previewType: 'hero', cost };
     }
-    if (roll < 0.82) return { previewType: 'resource', cost: 20 };
-    return { previewType: 'mystery', cost: 10 };
+    if (roll < 0.82) return { previewType: 'resource', cost: C.FLIP_GRID_TYPES?.gold_mine?.cost || 50 };
+    return { previewType: 'mystery', cost: C.MYSTERY_COST || 25 };
+  }
+
+  function matchNumberForSide(side) {
+    if (side === 'player') return battleContext.playerMatchNumber;
+    return (C.NEWBIE_MATCHES?.maxMatchIndex || 0) + 1;
   }
 
   function spawnHeroFromDeck(side, cost) {
-    const quality = rollQuality(cost);
+    const quality = rollQuality(cost, matchNumberForSide(side));
     const heroId = BattleSkillRuntime.pickDeckHero(getDeck(side), quality);
     if (!heroId) return null;
     return BattleSkillRuntime.buildCombatHero(heroId, {
@@ -135,7 +189,9 @@ const BattleRules = (() => {
     return cells;
   }
 
-  function createInitialState() {
+  function createInitialState(options = {}) {
+    const playerMatchNumber = options.playerMatchNumber ?? readPlayerMatchNumber();
+    battleContext.playerMatchNumber = playerMatchNumber;
     return {
       playerGold: C.START_GOLD,
       enemyGold: C.START_GOLD,
@@ -149,6 +205,9 @@ const BattleRules = (() => {
       result: null,
       timeLeft: C.MATCH_DURATION_SEC,
       enemyFlipCd: C.ENEMY_FLIP_INTERVAL * 0.5,
+      playerMatchNumber,
+      isNewbieMatch: isNewbieMatch(playerMatchNumber),
+      matchRecorded: false,
       cells: {
         ...createBoard('player'),
         ...createBoard('enemy'),
@@ -200,7 +259,7 @@ const BattleRules = (() => {
         ? spawnHeroFromDeck(side, cost)
         : null;
       if (hero) return { contentType: 'hero', hero };
-      const quality = rollQuality(cost);
+      const quality = rollQuality(cost, matchNumberForSide(side));
       return {
         contentType: 'hero',
         hero: {
@@ -611,6 +670,10 @@ const BattleRules = (() => {
 
   function endGame(state, winner, reason) {
     state.gameOver = true;
+    if (!state.matchRecorded) {
+      state.matchRecorded = true;
+      recordMatchCompleted();
+    }
     state.result = { winner, reason };
     state.events.push({ type: 'game_over', winner, reason });
   }
@@ -712,5 +775,10 @@ const BattleRules = (() => {
     formatTime,
     canAttackEnemyMainCity,
     findAttackTarget,
+    getQualityTable,
+    isNewbieMatch,
+    readPlayerMatchNumber,
+    recordMatchCompleted,
+    rollQuality,
   };
 })();
