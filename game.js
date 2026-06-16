@@ -300,6 +300,8 @@ function updateUI() {
     hint.textContent = '无回合限制：随时翻牌；暂无可翻卡，等待金币恢复';
   } else if (!affordable) {
     hint.textContent = `金币不足（每秒 +${C.GOLD_PER_SEC}），战斗仍在继续`;
+  } else if (state.isNewbieMatch) {
+    hint.textContent = `新手福利（第 ${state.playerMatchNumber} 局）：50 金低级角色格可出传奇！点击亮起卡牌翻牌`;
   } else {
     hint.textContent = '点击亮起卡牌翻牌；先清对方攻击卡，才能打主城';
   }
