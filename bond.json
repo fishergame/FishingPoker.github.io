@@ -1,255 +1,64 @@
 {
-  "version": "1.0.0",
-  "description": "羁绊：4阵营+近战/远程；2/4/6 档激活，4张时同时激活2+4档",
+  "version": "3.6.0",
+  "description": "羁绊：仅种族阵营（人族/兽族/亡灵/机械）",
   "rules": {
     "deckSize": 8,
     "excludeHeroIds": [
       "gold_mine"
     ],
-    "tierActivation": "atCount4ActivateTier2And4",
+    "tierActivation": "atCount2And4And6",
     "maxActiveFactionBonds": 1,
-    "maxActiveRangeBonds": 1,
-    "stacking": "additiveBeforeCap",
-    "cityDamageCapFromBonds": 0.05,
-    "recommendedCityDpsCap": 1.45
+    "factions": {
+      "human": "人族",
+      "beast": "兽族",
+      "undead": "亡灵",
+      "mechanical": "机械"
+    },
+    "factionCounter": {
+      "bonusPct": 0.1,
+      "cycle": [
+        {
+          "attacker": "human",
+          "strongVs": "mechanical",
+          "label": "人族 → 机械（含建筑）"
+        },
+        {
+          "attacker": "mechanical",
+          "strongVs": "beast",
+          "label": "机械 → 兽族"
+        },
+        {
+          "attacker": "beast",
+          "strongVs": "undead",
+          "label": "兽族 → 亡灵"
+        },
+        {
+          "attacker": "undead",
+          "strongVs": "human",
+          "label": "亡灵 → 人族"
+        }
+      ],
+      "note": "普攻在基础伤害上额外叠加克制加成；人族对机械族（含建筑单位）+10%"
+    }
   },
   "bonds": [
     {
-      "bondId": "faction_wei",
+      "bondId": "faction_human",
       "type": "faction",
-      "name": "魏",
-      "faction": "wei",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "faction_shu",
-      "type": "faction",
-      "name": "蜀",
-      "faction": "shu",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "faction_wu",
-      "type": "faction",
-      "name": "吴",
-      "faction": "wu",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "faction_qun",
-      "type": "faction",
-      "name": "群雄",
-      "faction": "qun",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.08
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "atkPct",
-              "value": 0.12
-            },
-            {
-              "type": "unitHpPct",
-              "value": 0.08
-            },
-            {
-              "type": "cityDamagePct",
-              "value": 0.05
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "range_melee",
-      "type": "range",
-      "name": "近战",
-      "range": "melee",
-      "tiers": [
-        {
-          "count": 2,
-          "effects": [
-            {
-              "type": "unitHpPct",
-              "value": 0.06
-            }
-          ]
-        },
-        {
-          "count": 4,
-          "effects": [
-            {
-              "type": "unitHpPct",
-              "value": 0.1
-            },
-            {
-              "type": "damageReductionPct",
-              "value": 0.05
-            }
-          ]
-        },
-        {
-          "count": 6,
-          "effects": [
-            {
-              "type": "unitHpPct",
-              "value": 0.15
-            },
-            {
-              "type": "damageReductionPct",
-              "value": 0.08
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "bondId": "range_ranged",
-      "type": "range",
-      "name": "远程",
-      "range": "ranged",
+      "name": "人族",
+      "faction": "human",
+      "heroIds": [
+        "archer",
+        "archmage",
+        "blacksmith",
+        "blademaster",
+        "bone_archer",
+        "druid",
+        "infantry",
+        "militia",
+        "royal_knight",
+        "shaman"
+      ],
       "tiers": [
         {
           "count": 2,
@@ -268,8 +77,8 @@
               "value": 0.1
             },
             {
-              "type": "atkSpeedPct",
-              "value": 0.05
+              "type": "unitHpPct",
+              "value": 0.04
             }
           ]
         },
@@ -278,11 +87,166 @@
           "effects": [
             {
               "type": "atkPct",
-              "value": 0.15
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_beast",
+      "type": "faction",
+      "name": "兽族",
+      "faction": "beast",
+      "heroIds": [
+        "bear_warrior",
+        "cavalry",
+        "dragon_knight",
+        "dread_knight",
+        "goblin",
+        "spear_orc",
+        "warlord",
+        "wolf_rider",
+        "wyrmling"
+      ],
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.06
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.1
             },
             {
-              "type": "atkSpeedPct",
+              "type": "atkPct",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "fireRatePct",
+              "value": 0.14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_undead",
+      "type": "faction",
+      "name": "亡灵",
+      "faction": "undead",
+      "heroIds": [
+        "catapult",
+        "crusher",
+        "demon_lord",
+        "frost_dragon",
+        "lich_queen",
+        "necromancer",
+        "skeleton_giant",
+        "skeleton_knight",
+        "skeleton_warrior"
+      ],
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "healPct",
               "value": 0.08
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "healPct",
+              "value": 0.12
+            },
+            {
+              "type": "damageReductionPct",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "reviveChancePct",
+              "value": 0.05
+            },
+            {
+              "type": "healPct",
+              "value": 0.08
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "bondId": "faction_mechanical",
+      "type": "faction",
+      "name": "机械",
+      "faction": "mechanical",
+      "heroIds": [
+        "arrow_tower",
+        "ballista",
+        "catapult_tower",
+        "gargoyle",
+        "heavy_shield",
+        "helicopter",
+        "panda_monk",
+        "ranger",
+        "sky_dome",
+        "sniper"
+      ],
+      "tiers": [
+        {
+          "count": 2,
+          "effects": [
+            {
+              "type": "projectileSpeedPct",
+              "value": 0.08
+            }
+          ]
+        },
+        {
+          "count": 4,
+          "effects": [
+            {
+              "type": "damageReductionPct",
+              "value": 0.06
+            },
+            {
+              "type": "projectileSpeedPct",
+              "value": 0.04
+            }
+          ]
+        },
+        {
+          "count": 6,
+          "effects": [
+            {
+              "type": "damageReductionPct",
+              "value": 0.1
+            },
+            {
+              "type": "projectileSpeedPct",
+              "value": 0.1
             }
           ]
         }

@@ -1,596 +1,3549 @@
 {
-  "version": "2.0.0",
-  "description": "英雄战斗元数据：阵营、定位、技能ID（普通/史诗/传奇各一）",
+  "version": "3.6.0",
+  "description": "英雄战斗元数据 v3.6：特技金币/钻石分级升级 + 广告抵扣",
+  "rules": {
+    "noMeleeRangedLogic": true,
+    "attackSpeedMeans": "弹道飞行速度（表现+命中时机）",
+    "fireRateMeans": "发射频率（攻击间隔=2.2/fireRate）",
+    "projectileStyle": "flat=平直射击 arc=高抛重击",
+    "skillUnlockByHeroLevel": {
+      "rare": 5,
+      "epic": 10,
+      "legendary": 20
+    },
+    "specialSkillUpgradeCurrencyBySlot": {
+      "rare": "gold",
+      "epic": "diamond",
+      "legendary": "diamond"
+    },
+    "skillAdDiscount": {
+      "enabled": true,
+      "appliesToSlots": [
+        "epic",
+        "legendary"
+      ],
+      "percentPerAd": 0.1,
+      "maxAdsPerDay": 3,
+      "maxDiscountPct": 0.3,
+      "cooldownSec": 3600,
+      "hintAfterWatch": "抵扣仅今日生效",
+      "buttonExhaustedLabel": "已抵扣30%",
+      "resetPolicy": "daily_local_midnight"
+    }
+  },
   "heroes": {
     "dragon_knight": {
       "heroId": "dragon_knight",
       "name": "龙焰女王",
-      "faction": "shu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 2.8,
+        "attackSpeedL1": 5.3,
+        "attackIntervalL1": 0.79,
+        "projectileStyle": "arc",
+        "weaponVfx": "龙息火球，高抛弧线落点单格",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 88,
+        "unitHpL1": 950,
+        "buildingHpL1": 560,
+        "samples": {
+          "L1": {
+            "attack": 88,
+            "unitHp": 950,
+            "fireRate": 2.8,
+            "attackSpeed": 5.3
+          },
+          "L15": {
+            "attack": 623,
+            "unitHp": 6722,
+            "fireRate": 3.69,
+            "attackSpeed": 8.02
+          },
+          "L30": {
+            "attack": 5067,
+            "unitHp": 54697,
+            "fireRate": 4.97,
+            "attackSpeed": 12.49
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_dragon_knight_normal",
-        "epic": "skill_dragon_knight_epic",
-        "legend": "skill_dragon_knight_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_dragon_knight_normal_1",
+        "normal_2": "skill_dragon_knight_normal_2",
+        "normal_3": "skill_dragon_knight_normal_3",
+        "legendary": "skill_dragon_knight_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "demon_lord": {
       "heroId": "demon_lord",
       "name": "永冬之王",
-      "faction": "wei",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 2,
+        "attackSpeedL1": 4.5,
+        "attackIntervalL1": 1.1,
+        "projectileStyle": "arc",
+        "weaponVfx": "冰锥术，抛物线冻结打击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 70,
+        "unitHpL1": 700,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 70,
+            "unitHp": 700,
+            "fireRate": 2,
+            "attackSpeed": 4.5
+          },
+          "L15": {
+            "attack": 495,
+            "unitHp": 4953,
+            "fireRate": 2.64,
+            "attackSpeed": 6.81
+          },
+          "L30": {
+            "attack": 4030,
+            "unitHp": 40303,
+            "fireRate": 3.55,
+            "attackSpeed": 10.6
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_demon_lord_normal",
-        "epic": "skill_demon_lord_epic",
-        "legend": "skill_demon_lord_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_demon_lord_normal_1",
+        "normal_2": "skill_demon_lord_normal_2",
+        "normal_3": "skill_demon_lord_normal_3",
+        "legendary": "skill_demon_lord_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archmage": {
       "heroId": "archmage",
       "name": "风暴女巫",
-      "faction": "shu",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 2.2,
+        "projectileStyle": "arc",
+        "weaponVfx": "雷球高抛，落点范围电弧",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 100,
+        "unitHpL1": 800,
+        "buildingHpL1": 500,
+        "samples": {
+          "L1": {
+            "attack": 100,
+            "unitHp": 800,
+            "fireRate": 1,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 708,
+            "unitHp": 5661,
+            "fireRate": 1.32,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 5758,
+            "unitHp": 46060,
+            "fireRate": 1.78,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_archmage_normal",
-        "epic": "skill_archmage_epic",
-        "legend": "skill_archmage_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_archmage_normal_1",
+        "normal_2": "skill_archmage_normal_2",
+        "normal_3": "skill_archmage_normal_3",
+        "legendary": "skill_archmage_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ranger": {
       "heroId": "ranger",
       "name": "荆棘女王",
-      "faction": "shu",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 2.6,
+        "attackSpeedL1": 5.6,
+        "attackIntervalL1": 0.85,
+        "projectileStyle": "flat",
+        "weaponVfx": "荆棘箭，平直射击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 50,
+        "unitHpL1": 160,
+        "buildingHpL1": 200,
+        "samples": {
+          "L1": {
+            "attack": 50,
+            "unitHp": 160,
+            "fireRate": 2.6,
+            "attackSpeed": 5.6
+          },
+          "L15": {
+            "attack": 354,
+            "unitHp": 1132,
+            "fireRate": 3.43,
+            "attackSpeed": 8.47
+          },
+          "L30": {
+            "attack": 2879,
+            "unitHp": 9212,
+            "fireRate": 4.62,
+            "attackSpeed": 13.2
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_ranger_normal",
-        "epic": "skill_ranger_epic",
-        "legend": "skill_ranger_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_ranger_normal_1",
+        "normal_2": "skill_ranger_normal_2",
+        "normal_3": "skill_ranger_normal_3",
+        "legendary": "skill_ranger_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "royal_knight": {
       "heroId": "royal_knight",
       "name": "圣盾领主",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.8,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.22,
+        "projectileStyle": "flat",
+        "weaponVfx": "圣盾光波，平直盾击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 70,
+        "unitHpL1": 800,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 70,
+            "unitHp": 800,
+            "fireRate": 1.8,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 495,
+            "unitHp": 5661,
+            "fireRate": 2.38,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 4030,
+            "unitHp": 46060,
+            "fireRate": 3.2,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_royal_knight_normal",
-        "epic": "skill_royal_knight_epic",
-        "legend": "skill_royal_knight_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_royal_knight_normal_1",
+        "normal_2": "skill_royal_knight_normal_2",
+        "normal_3": "skill_royal_knight_normal_3",
+        "legendary": "skill_royal_knight_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "druid": {
       "heroId": "druid",
       "name": "北境守护者",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.5,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.47,
+        "projectileStyle": "flat",
+        "weaponVfx": "自然花粉，平直治疗波",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 70,
+        "unitHpL1": 700,
+        "buildingHpL1": 400,
+        "samples": {
+          "L1": {
+            "attack": 70,
+            "unitHp": 700,
+            "fireRate": 1.5,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 495,
+            "unitHp": 4953,
+            "fireRate": 1.98,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 4030,
+            "unitHp": 40303,
+            "fireRate": 2.66,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_druid_normal",
-        "epic": "skill_druid_epic",
-        "legend": "skill_druid_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_druid_normal_1",
+        "normal_2": "skill_druid_normal_2",
+        "normal_3": "skill_druid_normal_3",
+        "legendary": "skill_druid_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "lich_queen": {
       "heroId": "lich_queen",
       "name": "幽灵船长",
-      "faction": "shu",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.4,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 1.57,
+        "projectileStyle": "arc",
+        "weaponVfx": "幽魂炮，高抛灵魂弹",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 70,
+        "unitHpL1": 860,
+        "buildingHpL1": 400,
+        "samples": {
+          "L1": {
+            "attack": 70,
+            "unitHp": 860,
+            "fireRate": 1.4,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 495,
+            "unitHp": 6085,
+            "fireRate": 1.85,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 4030,
+            "unitHp": 49515,
+            "fireRate": 2.49,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_lich_queen_normal",
-        "epic": "skill_lich_queen_epic",
-        "legend": "skill_lich_queen_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_lich_queen_normal_1",
+        "normal_2": "skill_lich_queen_normal_2",
+        "normal_3": "skill_lich_queen_normal_3",
+        "legendary": "skill_lich_queen_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blademaster": {
       "heroId": "blademaster",
       "name": "幻影刺客",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 2.4,
+        "attackSpeedL1": 5.4,
+        "attackIntervalL1": 0.92,
+        "projectileStyle": "flat",
+        "weaponVfx": "影刃直线突刺",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 150,
+        "unitHpL1": 960,
+        "buildingHpL1": 500,
+        "samples": {
+          "L1": {
+            "attack": 150,
+            "unitHp": 960,
+            "fireRate": 2.4,
+            "attackSpeed": 5.4
+          },
+          "L15": {
+            "attack": 1061,
+            "unitHp": 6793,
+            "fireRate": 3.17,
+            "attackSpeed": 8.17
+          },
+          "L30": {
+            "attack": 8636,
+            "unitHp": 55272,
+            "fireRate": 4.26,
+            "attackSpeed": 12.73
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_blademaster_normal",
-        "epic": "skill_blademaster_epic",
-        "legend": "skill_blademaster_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_blademaster_normal_1",
+        "normal_2": "skill_blademaster_normal_2",
+        "normal_3": "skill_blademaster_normal_3",
+        "legendary": "skill_blademaster_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "frost_dragon": {
       "heroId": "frost_dragon",
       "name": "寒冰巨魔",
-      "faction": "wei",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.2,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 1.83,
+        "projectileStyle": "arc",
+        "weaponVfx": "巨锤冰陨，高空重砸",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 70,
+        "unitHpL1": 1040,
+        "buildingHpL1": 500,
+        "samples": {
+          "L1": {
+            "attack": 70,
+            "unitHp": 1040,
+            "fireRate": 1.2,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 495,
+            "unitHp": 7359,
+            "fireRate": 1.58,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 4030,
+            "unitHp": 59878,
+            "fireRate": 2.13,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_frost_dragon_normal",
-        "epic": "skill_frost_dragon_epic",
-        "legend": "skill_frost_dragon_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_frost_dragon_normal_1",
+        "normal_2": "skill_frost_dragon_normal_2",
+        "normal_3": "skill_frost_dragon_normal_3",
+        "legendary": "skill_frost_dragon_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "crusher": {
       "heroId": "crusher",
       "name": "重装破城者",
-      "faction": "qun",
-      "range": "melee",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.8,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 2.75,
+        "projectileStyle": "arc",
+        "weaponVfx": "破城锤，高抛砸击单格",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 200,
+        "unitHpL1": 1500,
+        "buildingHpL1": 400,
+        "samples": {
+          "L1": {
+            "attack": 200,
+            "unitHp": 1500,
+            "fireRate": 0.8,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 1415,
+            "unitHp": 10614,
+            "fireRate": 1.06,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 11515,
+            "unitHp": 86363,
+            "fireRate": 1.42,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_crusher_normal",
-        "epic": "skill_crusher_epic",
-        "legend": "skill_crusher_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_crusher_normal_1",
+        "normal_2": "skill_crusher_normal_2",
+        "normal_3": "skill_crusher_normal_3",
+        "legendary": "skill_crusher_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "helicopter": {
       "heroId": "helicopter",
       "name": "机械飞鹰",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.6,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.38,
+        "projectileStyle": "flat",
+        "weaponVfx": "机炮连射，平直子弹",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 110,
+        "unitHpL1": 700,
+        "buildingHpL1": 400,
+        "samples": {
+          "L1": {
+            "attack": 110,
+            "unitHp": 700,
+            "fireRate": 1.6,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 778,
+            "unitHp": 4953,
+            "fireRate": 2.11,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 6333,
+            "unitHp": 40303,
+            "fireRate": 2.84,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_helicopter_normal",
-        "epic": "skill_helicopter_epic",
-        "legend": "skill_helicopter_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_helicopter_normal_1",
+        "normal_2": "skill_helicopter_normal_2",
+        "normal_3": "skill_helicopter_normal_3",
+        "legendary": "skill_helicopter_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "dread_knight": {
       "heroId": "dread_knight",
       "name": "巨斧酋长",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 2.5,
+        "attackSpeedL1": 5.5,
+        "attackIntervalL1": 0.88,
+        "projectileStyle": "flat",
+        "weaponVfx": "巨斧直线劈砍",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 90,
+        "unitHpL1": 900,
+        "buildingHpL1": 500,
+        "samples": {
+          "L1": {
+            "attack": 90,
+            "unitHp": 900,
+            "fireRate": 2.5,
+            "attackSpeed": 5.5
+          },
+          "L15": {
+            "attack": 637,
+            "unitHp": 6368,
+            "fireRate": 3.3,
+            "attackSpeed": 8.32
+          },
+          "L30": {
+            "attack": 5182,
+            "unitHp": 51818,
+            "fireRate": 4.44,
+            "attackSpeed": 12.96
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_dread_knight_normal",
-        "epic": "skill_dread_knight_epic",
-        "legend": "skill_dread_knight_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_dread_knight_normal_1",
+        "normal_2": "skill_dread_knight_normal_2",
+        "normal_3": "skill_dread_knight_normal_3",
+        "legendary": "skill_dread_knight_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "warlord": {
       "heroId": "warlord",
       "name": "双头奇美拉",
-      "faction": "shu",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.3,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.69,
+        "projectileStyle": "flat",
+        "weaponVfx": "双头咆哮盾墙，平直冲击波",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 120,
+        "unitHpL1": 1040,
+        "buildingHpL1": 500,
+        "samples": {
+          "L1": {
+            "attack": 120,
+            "unitHp": 1040,
+            "fireRate": 1.3,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 849,
+            "unitHp": 7359,
+            "fireRate": 1.72,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 6909,
+            "unitHp": 59878,
+            "fireRate": 2.31,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_warlord_normal",
-        "epic": "skill_warlord_epic",
-        "legend": "skill_warlord_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_warlord_normal_1",
+        "normal_2": "skill_warlord_normal_2",
+        "normal_3": "skill_warlord_normal_3",
+        "legendary": "skill_warlord_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "panda_monk": {
       "heroId": "panda_monk",
       "name": "爆破鬼才",
-      "faction": "wei",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.4,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 1.57,
+        "projectileStyle": "arc",
+        "weaponVfx": "炸药包高抛，落地爆炸",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 160,
+        "unitHpL1": 960,
+        "buildingHpL1": 400,
+        "samples": {
+          "L1": {
+            "attack": 160,
+            "unitHp": 960,
+            "fireRate": 1.4,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 1132,
+            "unitHp": 6793,
+            "fireRate": 1.85,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 9212,
+            "unitHp": 55272,
+            "fireRate": 2.49,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_panda_monk_normal",
-        "epic": "skill_panda_monk_epic",
-        "legend": "skill_panda_monk_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_panda_monk_normal_1",
+        "normal_2": "skill_panda_monk_normal_2",
+        "normal_3": "skill_panda_monk_normal_3",
+        "legendary": "skill_panda_monk_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
+      }
+    },
+    "sky_dome": {
+      "heroId": "sky_dome",
+      "name": "天穹",
+      "quality": "legendary",
+      "qualityLabel": "传奇",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.6,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 3.67,
+        "projectileStyle": "arc",
+        "weaponVfx": "穹顶光束，高抛能量弹",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 65,
+        "unitHpL1": null,
+        "buildingHpL1": 480,
+        "samples": {
+          "L1": {
+            "attack": 65,
+            "unitHp": null,
+            "fireRate": 0.6,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 460,
+            "unitHp": null,
+            "fireRate": 0.79,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 3742,
+            "unitHp": null,
+            "fireRate": 1.07,
+            "attackSpeed": 9.43
+          }
+        }
+      },
+      "skills": {
+        "normal_1": "skill_sky_dome_normal_1",
+        "normal_2": "skill_sky_dome_normal_2",
+        "normal_3": "skill_sky_dome_normal_3",
+        "legendary": "skill_sky_dome_legendary"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "shaman": {
       "heroId": "shaman",
       "name": "藤蔓萨满",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.2,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.83,
+        "projectileStyle": "flat",
+        "weaponVfx": "治疗花粉，平直飘向友军",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 58,
+        "unitHpL1": 96,
+        "buildingHpL1": 360,
+        "samples": {
+          "L1": {
+            "attack": 58,
+            "unitHp": 96,
+            "fireRate": 1.2,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 410,
+            "unitHp": 679,
+            "fireRate": 1.58,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 3339,
+            "unitHp": 5527,
+            "fireRate": 2.13,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_shaman_normal",
-        "epic": "skill_shaman_epic",
-        "legend": "skill_shaman_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_shaman_normal_1",
+        "normal_2": "skill_shaman_normal_2",
+        "normal_3": "skill_shaman_normal_3",
+        "epic": "skill_shaman_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gargoyle": {
       "heroId": "gargoyle",
       "name": "鹰女",
-      "faction": "shu",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.5,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.47,
+        "projectileStyle": "flat",
+        "weaponVfx": "石肤护壁，平直岩盾",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 60,
+        "unitHpL1": 300,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 60,
+            "unitHp": 300,
+            "fireRate": 1.5,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 425,
+            "unitHp": 2123,
+            "fireRate": 1.98,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 3455,
+            "unitHp": 17273,
+            "fireRate": 2.66,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_gargoyle_normal",
-        "epic": "skill_gargoyle_epic",
-        "legend": "skill_gargoyle_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_gargoyle_normal_1",
+        "normal_2": "skill_gargoyle_normal_2",
+        "normal_3": "skill_gargoyle_normal_3",
+        "epic": "skill_gargoyle_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_giant": {
       "heroId": "skeleton_giant",
       "name": "巨石魔像",
-      "faction": "wei",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.6,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 3.67,
+        "projectileStyle": "flat",
+        "weaponVfx": "巨石屏障，平直岩块",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 60,
+        "unitHpL1": 400,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 60,
+            "unitHp": 400,
+            "fireRate": 0.6,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 425,
+            "unitHp": 2830,
+            "fireRate": 0.79,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 3455,
+            "unitHp": 23030,
+            "fireRate": 1.07,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_skeleton_giant_normal",
-        "epic": "skill_skeleton_giant_epic",
-        "legend": "skill_skeleton_giant_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_skeleton_giant_normal_1",
+        "normal_2": "skill_skeleton_giant_normal_2",
+        "normal_3": "skill_skeleton_giant_normal_3",
+        "epic": "skill_skeleton_giant_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "sniper": {
       "heroId": "sniper",
       "name": "雇佣兵",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.2,
+        "projectileStyle": "flat",
+        "weaponVfx": "狙击弹，极快平直弹道",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 60,
+        "unitHpL1": 120,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 60,
+            "unitHp": 120,
+            "fireRate": 1,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 425,
+            "unitHp": 849,
+            "fireRate": 1.32,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 3455,
+            "unitHp": 6909,
+            "fireRate": 1.78,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_sniper_normal",
-        "epic": "skill_sniper_epic",
-        "legend": "skill_sniper_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_sniper_normal_1",
+        "normal_2": "skill_sniper_normal_2",
+        "normal_3": "skill_sniper_normal_3",
+        "epic": "skill_sniper_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult_tower": {
       "heroId": "catapult_tower",
       "name": "炮楼",
-      "faction": "shu",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.7,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 3.14,
+        "projectileStyle": "arc",
+        "weaponVfx": "石弹高抛，经典抛物线",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 100,
+        "unitHpL1": null,
+        "buildingHpL1": 200,
+        "samples": {
+          "L1": {
+            "attack": 100,
+            "unitHp": null,
+            "fireRate": 0.7,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 708,
+            "unitHp": null,
+            "fireRate": 0.92,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 5758,
+            "unitHp": null,
+            "fireRate": 1.24,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_catapult_tower_normal",
-        "epic": "skill_catapult_tower_epic",
-        "legend": "skill_catapult_tower_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_catapult_tower_normal_1",
+        "normal_2": "skill_catapult_tower_normal_2",
+        "normal_3": "skill_catapult_tower_normal_3",
+        "epic": "skill_catapult_tower_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "catapult": {
       "heroId": "catapult",
       "name": "自爆蜘蛛",
-      "faction": "wei",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.5,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 4.4,
+        "projectileStyle": "arc",
+        "weaponVfx": "自爆蜘蛛高抛投掷",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 200,
+        "unitHpL1": 480,
+        "buildingHpL1": 550,
+        "samples": {
+          "L1": {
+            "attack": 200,
+            "unitHp": 480,
+            "fireRate": 0.5,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 1415,
+            "unitHp": 3396,
+            "fireRate": 0.66,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 11515,
+            "unitHp": 27636,
+            "fireRate": 0.89,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_catapult_normal",
-        "epic": "skill_catapult_epic",
-        "legend": "skill_catapult_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_catapult_normal_1",
+        "normal_2": "skill_catapult_normal_2",
+        "normal_3": "skill_catapult_normal_3",
+        "epic": "skill_catapult_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "cavalry": {
       "heroId": "cavalry",
       "name": "龙骑士",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.9,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.16,
+        "projectileStyle": "flat",
+        "weaponVfx": "骑枪冲锋，平直突刺",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 50,
+        "unitHpL1": 300,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 50,
+            "unitHp": 300,
+            "fireRate": 1.9,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 354,
+            "unitHp": 2123,
+            "fireRate": 2.51,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 2879,
+            "unitHp": 17273,
+            "fireRate": 3.37,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_cavalry_normal",
-        "epic": "skill_cavalry_epic",
-        "legend": "skill_cavalry_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_cavalry_normal_1",
+        "normal_2": "skill_cavalry_normal_2",
+        "normal_3": "skill_cavalry_normal_3",
+        "epic": "skill_cavalry_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wyrmling": {
       "heroId": "wyrmling",
       "name": "火龙",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.8,
+        "attackSpeedL1": 4.3,
+        "attackIntervalL1": 1.22,
+        "projectileStyle": "arc",
+        "weaponVfx": "幼龙火球，小抛物线",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 68,
+        "unitHpL1": 430,
+        "buildingHpL1": 460,
+        "samples": {
+          "L1": {
+            "attack": 68,
+            "unitHp": 430,
+            "fireRate": 1.8,
+            "attackSpeed": 4.3
+          },
+          "L15": {
+            "attack": 481,
+            "unitHp": 3043,
+            "fireRate": 2.38,
+            "attackSpeed": 6.5
+          },
+          "L30": {
+            "attack": 3915,
+            "unitHp": 24757,
+            "fireRate": 3.2,
+            "attackSpeed": 10.13
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_wyrmling_normal",
-        "epic": "skill_wyrmling_epic",
-        "legend": "skill_wyrmling_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_wyrmling_normal_1",
+        "normal_2": "skill_wyrmling_normal_2",
+        "normal_3": "skill_wyrmling_normal_3",
+        "epic": "skill_wyrmling_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "ballista": {
       "heroId": "ballista",
       "name": "弩车",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "epic",
+      "qualityLabel": "史诗",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.5,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 4.4,
+        "projectileStyle": "arc",
+        "weaponVfx": "弩炮重矢，高抛穿透",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 90,
+        "unitHpL1": 200,
+        "buildingHpL1": 550,
+        "samples": {
+          "L1": {
+            "attack": 90,
+            "unitHp": 200,
+            "fireRate": 0.5,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 637,
+            "unitHp": 1415,
+            "fireRate": 0.66,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 5182,
+            "unitHp": 11515,
+            "fireRate": 0.89,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_ballista_normal",
-        "epic": "skill_ballista_epic",
-        "legend": "skill_ballista_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_ballista_normal_1",
+        "normal_2": "skill_ballista_normal_2",
+        "normal_3": "skill_ballista_normal_3",
+        "epic": "skill_ballista_epic"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "necromancer": {
       "heroId": "necromancer",
       "name": "骷髅魔导师",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.1,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 2.0,
+        "projectileStyle": "arc",
+        "weaponVfx": "亡灵弹，弧线触发复活格",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 30,
+        "unitHpL1": 80,
+        "buildingHpL1": 200,
+        "samples": {
+          "L1": {
+            "attack": 30,
+            "unitHp": 80,
+            "fireRate": 1.1,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 212,
+            "unitHp": 566,
+            "fireRate": 1.45,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 1727,
+            "unitHp": 4606,
+            "fireRate": 1.95,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_necromancer_normal",
-        "epic": "skill_necromancer_epic",
-        "legend": "skill_necromancer_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_necromancer_normal_1",
+        "normal_2": "skill_necromancer_normal_2",
+        "normal_3": "skill_necromancer_normal_3",
+        "rare": "skill_necromancer_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "spear_orc": {
       "heroId": "spear_orc",
       "name": "鱼叉捕猎者",
-      "faction": "wei",
-      "range": "ranged",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.2,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.83,
+        "projectileStyle": "flat",
+        "weaponVfx": "鱼叉直线投掷",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 30,
+        "unitHpL1": 120,
+        "buildingHpL1": 200,
+        "samples": {
+          "L1": {
+            "attack": 30,
+            "unitHp": 120,
+            "fireRate": 1.2,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 212,
+            "unitHp": 849,
+            "fireRate": 1.58,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1727,
+            "unitHp": 6909,
+            "fireRate": 2.13,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_spear_orc_normal",
-        "epic": "skill_spear_orc_epic",
-        "legend": "skill_spear_orc_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_spear_orc_normal_1",
+        "normal_2": "skill_spear_orc_normal_2",
+        "normal_3": "skill_spear_orc_normal_3",
+        "rare": "skill_spear_orc_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "wolf_rider": {
       "heroId": "wolf_rider",
       "name": "利爪猎犬",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.9,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.16,
+        "projectileStyle": "flat",
+        "weaponVfx": "利爪直线扑击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 40,
+        "unitHpL1": 240,
+        "buildingHpL1": 300,
+        "samples": {
+          "L1": {
+            "attack": 40,
+            "unitHp": 240,
+            "fireRate": 1.9,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 283,
+            "unitHp": 1698,
+            "fireRate": 2.51,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 2303,
+            "unitHp": 13818,
+            "fireRate": 3.37,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_wolf_rider_normal",
-        "epic": "skill_wolf_rider_epic",
-        "legend": "skill_wolf_rider_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_wolf_rider_normal_1",
+        "normal_2": "skill_wolf_rider_normal_2",
+        "normal_3": "skill_wolf_rider_normal_3",
+        "rare": "skill_wolf_rider_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_knight": {
       "heroId": "skeleton_knight",
       "name": "蝙蝠突袭者",
-      "faction": "shu",
-      "range": "melee",
-      "archetype": "clear",
-      "archetypeLabel": "清场",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.4,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.57,
+        "projectileStyle": "flat",
+        "weaponVfx": "骨刃直线斩",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 38,
+        "unitHpL1": 130,
+        "buildingHpL1": 260,
+        "samples": {
+          "L1": {
+            "attack": 38,
+            "unitHp": 130,
+            "fireRate": 1.4,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 269,
+            "unitHp": 920,
+            "fireRate": 1.85,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 2188,
+            "unitHp": 7485,
+            "fireRate": 2.49,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_skeleton_knight_normal",
-        "epic": "skill_skeleton_knight_epic",
-        "legend": "skill_skeleton_knight_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_skeleton_knight_normal_1",
+        "normal_2": "skill_skeleton_knight_normal_2",
+        "normal_3": "skill_skeleton_knight_normal_3",
+        "rare": "skill_skeleton_knight_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "archer": {
       "heroId": "archer",
       "name": "见习女巫",
-      "faction": "wei",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.2,
+        "projectileStyle": "flat",
+        "weaponVfx": "魔法箭平直射击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 33,
+        "unitHpL1": 110,
+        "buildingHpL1": 260,
+        "samples": {
+          "L1": {
+            "attack": 33,
+            "unitHp": 110,
+            "fireRate": 1,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 233,
+            "unitHp": 778,
+            "fireRate": 1.32,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1900,
+            "unitHp": 6333,
+            "fireRate": 1.78,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_archer_normal",
-        "epic": "skill_archer_epic",
-        "legend": "skill_archer_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_archer_normal_1",
+        "normal_2": "skill_archer_normal_2",
+        "normal_3": "skill_archer_normal_3",
+        "rare": "skill_archer_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "infantry": {
       "heroId": "infantry",
       "name": "重步兵",
-      "faction": "wei",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.9,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.44,
+        "projectileStyle": "flat",
+        "weaponVfx": "塔盾格挡，平直盾击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 3,
+        "unitHpL1": 250,
+        "buildingHpL1": 360,
+        "samples": {
+          "L1": {
+            "attack": 3,
+            "unitHp": 250,
+            "fireRate": 0.9,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 21,
+            "unitHp": 1769,
+            "fireRate": 1.19,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 173,
+            "unitHp": 14394,
+            "fireRate": 1.6,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_infantry_normal",
-        "epic": "skill_infantry_epic",
-        "legend": "skill_infantry_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_infantry_normal_1",
+        "normal_2": "skill_infantry_normal_2",
+        "normal_3": "skill_infantry_normal_3",
+        "rare": "skill_infantry_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "arrow_tower": {
       "heroId": "arrow_tower",
       "name": "高射塔",
-      "faction": "wu",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.8,
+        "attackSpeedL1": 4.0,
+        "attackIntervalL1": 2.75,
+        "projectileStyle": "arc",
+        "weaponVfx": "高射炮弹，高空抛物线",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 80,
+        "unitHpL1": null,
+        "buildingHpL1": 380,
+        "samples": {
+          "L1": {
+            "attack": 80,
+            "unitHp": null,
+            "fireRate": 0.8,
+            "attackSpeed": 4.0
+          },
+          "L15": {
+            "attack": 566,
+            "unitHp": null,
+            "fireRate": 1.06,
+            "attackSpeed": 6.05
+          },
+          "L30": {
+            "attack": 4606,
+            "unitHp": null,
+            "fireRate": 1.42,
+            "attackSpeed": 9.43
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_arrow_tower_normal",
-        "epic": "skill_arrow_tower_epic",
-        "legend": "skill_arrow_tower_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_arrow_tower_normal_1",
+        "normal_2": "skill_arrow_tower_normal_2",
+        "normal_3": "skill_arrow_tower_normal_3",
+        "rare": "skill_arrow_tower_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
+      }
+    },
+    "heavy_shield": {
+      "heroId": "heavy_shield",
+      "name": "重型盾",
+      "quality": "rare",
+      "qualityLabel": "稀有",
+      "faction": "mechanical",
+      "factionLabel": "机械",
+      "category": "defense",
+      "categoryLabel": "防御",
+      "bondEligible": true,
+      "unitType": "building",
+      "combatStats": {
+        "fireRateL1": 0.7,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 3.14,
+        "projectileStyle": "flat",
+        "weaponVfx": "盾面光刃，平直盾击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 45,
+        "unitHpL1": null,
+        "buildingHpL1": 420,
+        "samples": {
+          "L1": {
+            "attack": 45,
+            "unitHp": null,
+            "fireRate": 0.7,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 318,
+            "unitHp": null,
+            "fireRate": 0.92,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 2591,
+            "unitHp": null,
+            "fireRate": 1.24,
+            "attackSpeed": 11.78
+          }
+        }
+      },
+      "skills": {
+        "normal_1": "skill_heavy_shield_normal_1",
+        "normal_2": "skill_heavy_shield_normal_2",
+        "normal_3": "skill_heavy_shield_normal_3",
+        "rare": "skill_heavy_shield_rare"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bear_warrior": {
       "heroId": "bear_warrior",
       "name": "重锤卫士",
-      "faction": "wei",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.2,
+        "projectileStyle": "flat",
+        "weaponVfx": "重锤平直挥击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 53,
+        "unitHpL1": 210,
+        "buildingHpL1": 260,
+        "samples": {
+          "L1": {
+            "attack": 53,
+            "unitHp": 210,
+            "fireRate": 1,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 375,
+            "unitHp": 1486,
+            "fireRate": 1.32,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 3051,
+            "unitHp": 12091,
+            "fireRate": 1.78,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_bear_warrior_normal",
-        "epic": "skill_bear_warrior_epic",
-        "legend": "skill_bear_warrior_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_bear_warrior_normal_1",
+        "normal_2": "skill_bear_warrior_normal_2",
+        "normal_3": "skill_bear_warrior_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "skeleton_warrior": {
       "heroId": "skeleton_warrior",
       "name": "骷髅刀盾兵",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "undead",
+      "factionLabel": "亡灵",
+      "category": "defense",
+      "categoryLabel": "防御",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.2,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.83,
+        "projectileStyle": "flat",
+        "weaponVfx": "刀盾平直格挡",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 24,
+        "unitHpL1": 92,
+        "buildingHpL1": 220,
+        "samples": {
+          "L1": {
+            "attack": 24,
+            "unitHp": 92,
+            "fireRate": 1.2,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 170,
+            "unitHp": 651,
+            "fireRate": 1.58,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1382,
+            "unitHp": 5297,
+            "fireRate": 2.13,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_skeleton_warrior_normal",
-        "epic": "skill_skeleton_warrior_epic",
-        "legend": "skill_skeleton_warrior_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_skeleton_warrior_normal_1",
+        "normal_2": "skill_skeleton_warrior_normal_2",
+        "normal_3": "skill_skeleton_warrior_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "goblin": {
       "heroId": "goblin",
       "name": "小野猪人",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "beast",
+      "factionLabel": "兽族",
+      "category": "speed",
+      "categoryLabel": "加速",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.3,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 1.69,
+        "projectileStyle": "flat",
+        "weaponVfx": "短矛轻快直线戳刺",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 20,
+        "unitHpL1": 80,
+        "buildingHpL1": 100,
+        "samples": {
+          "L1": {
+            "attack": 20,
+            "unitHp": 80,
+            "fireRate": 1.3,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 142,
+            "unitHp": 566,
+            "fireRate": 1.72,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1152,
+            "unitHp": 4606,
+            "fireRate": 2.31,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_goblin_normal",
-        "epic": "skill_goblin_epic",
-        "legend": "skill_goblin_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_goblin_normal_1",
+        "normal_2": "skill_goblin_normal_2",
+        "normal_3": "skill_goblin_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "blacksmith": {
       "heroId": "blacksmith",
       "name": "长枪教头",
-      "faction": "shu",
-      "range": "melee",
-      "archetype": "guard",
-      "archetypeLabel": "守门",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "supply",
+      "categoryLabel": "补给",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 0.9,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.44,
+        "projectileStyle": "flat",
+        "weaponVfx": "锻造火花，平直补给友军",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 25,
+        "unitHpL1": 200,
+        "buildingHpL1": 100,
+        "samples": {
+          "L1": {
+            "attack": 25,
+            "unitHp": 200,
+            "fireRate": 0.9,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 177,
+            "unitHp": 1415,
+            "fireRate": 1.19,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1439,
+            "unitHp": 11515,
+            "fireRate": 1.6,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_blacksmith_normal",
-        "epic": "skill_blacksmith_epic",
-        "legend": "skill_blacksmith_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_blacksmith_normal_1",
+        "normal_2": "skill_blacksmith_normal_2",
+        "normal_3": "skill_blacksmith_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "militia": {
       "heroId": "militia",
       "name": "短剑士",
-      "faction": "wu",
-      "range": "melee",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1.1,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.0,
+        "projectileStyle": "flat",
+        "weaponVfx": "短剑平直快攻",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 30,
+        "unitHpL1": 100,
+        "buildingHpL1": 100,
+        "samples": {
+          "L1": {
+            "attack": 30,
+            "unitHp": 100,
+            "fireRate": 1.1,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 212,
+            "unitHp": 708,
+            "fireRate": 1.45,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1727,
+            "unitHp": 5758,
+            "fireRate": 1.95,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_militia_normal",
-        "epic": "skill_militia_epic",
-        "legend": "skill_militia_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_militia_normal_1",
+        "normal_2": "skill_militia_normal_2",
+        "normal_3": "skill_militia_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "bone_archer": {
       "heroId": "bone_archer",
       "name": "火枪手",
-      "faction": "qun",
-      "range": "ranged",
-      "archetype": "siege",
-      "archetypeLabel": "破城",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": "human",
+      "factionLabel": "人族",
+      "category": "attack",
+      "categoryLabel": "攻击",
       "bondEligible": true,
+      "unitType": "unit",
+      "combatStats": {
+        "fireRateL1": 1,
+        "attackSpeedL1": 5.0,
+        "attackIntervalL1": 2.2,
+        "projectileStyle": "flat",
+        "weaponVfx": "火枪弹，平直射击",
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": 20,
+        "unitHpL1": 80,
+        "buildingHpL1": 100,
+        "samples": {
+          "L1": {
+            "attack": 20,
+            "unitHp": 80,
+            "fireRate": 1,
+            "attackSpeed": 5.0
+          },
+          "L15": {
+            "attack": 142,
+            "unitHp": 566,
+            "fireRate": 1.32,
+            "attackSpeed": 7.56
+          },
+          "L30": {
+            "attack": 1152,
+            "unitHp": 4606,
+            "fireRate": 1.78,
+            "attackSpeed": 11.78
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_bone_archer_normal",
-        "epic": "skill_bone_archer_epic",
-        "legend": "skill_bone_archer_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_1": "skill_bone_archer_normal_1",
+        "normal_2": "skill_bone_archer_normal_2",
+        "normal_3": "skill_bone_archer_normal_3"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_1",
+          "normal_2",
+          "normal_3"
+        ],
+        "rare": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "rare"
+        ],
+        "epic": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "epic"
+        ],
+        "legendary": [
+          "normal_1",
+          "normal_2",
+          "normal_3",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
       }
     },
     "gold_mine": {
       "heroId": "gold_mine",
-      "name": "采矿机",
-      "archetype": "tempo",
-      "archetypeLabel": "节奏",
+      "name": "金矿",
+      "quality": "common",
+      "qualityLabel": "普通",
+      "faction": null,
+      "factionLabel": "无",
+      "category": "resource",
+      "categoryLabel": "资源",
       "bondEligible": false,
-      "note": "铸币坊不计入羁绊",
+      "unitType": "resource",
+      "combatStats": {
+        "fireRateL1": null,
+        "attackSpeedL1": null,
+        "attackIntervalL1": null,
+        "formulas": {
+          "attack": "round(attackL1 * 1.15^(heroLevel-1))",
+          "unitHp": "round(unitHpL1 * 1.15^(heroLevel-1))",
+          "buildingHp": "round(buildingHpL1 * 1.15^(heroLevel-1))",
+          "fireRate": "round(fireRateL1 * 1.02^(heroLevel-1), 2)",
+          "attackSpeed": "round(attackSpeedL1 * 1.03^(heroLevel-1), 2)  // 弹道速度",
+          "attackInterval": "2.2 / fireRate"
+        },
+        "attackL1": null,
+        "unitHpL1": null,
+        "buildingHpL1": 200,
+        "samples": {
+          "L1": {
+            "attack": null,
+            "unitHp": null,
+            "fireRate": null,
+            "attackSpeed": null
+          },
+          "L15": {
+            "attack": null,
+            "unitHp": null,
+            "fireRate": null,
+            "attackSpeed": null
+          },
+          "L30": {
+            "attack": null,
+            "unitHp": null,
+            "fireRate": null,
+            "attackSpeed": null
+          }
+        }
+      },
       "skills": {
-        "normal": "skill_gold_mine_normal",
-        "epic": "skill_gold_mine_epic",
-        "legend": "skill_gold_mine_legend",
-        "epicUnlockLevel": 8,
-        "legendUnlockLevel": 20
+        "normal_2": "skill_gold_mine_normal_2"
+      },
+      "skillSlotsByQuality": {
+        "common": [
+          "normal_2"
+        ],
+        "rare": [
+          "normal_2",
+          "rare"
+        ],
+        "epic": [
+          "normal_2",
+          "epic"
+        ],
+        "legendary": [
+          "normal_2",
+          "legendary"
+        ]
+      },
+      "skillUnlock": {
+        "normal_1": 1,
+        "normal_2": 1,
+        "normal_3": 1,
+        "rare": 5,
+        "epic": 10,
+        "legendary": 20,
+        "description": "普通技能1/2/3 L1 即拥有；品质特技按英雄等级解锁"
+      },
+      "resourceProduction": {
+        "goldPerTick": 10,
+        "intervalSecL1": 6.0,
+        "intervalGrowthPerHeroLevel": 1.02,
+        "intervalFormula": "intervalSecL1 / intervalGrowthPerHeroLevel^(heroLevel-1)",
+        "perInstance": true,
+        "scope": "in_match_only",
+        "note": "局内经济金币，仅本局翻牌消耗；对战结束清零，不可带入局外账户",
+        "samples": {
+          "L1": {
+            "goldPerTick": 10,
+            "intervalSec": 6.0
+          },
+          "L15": {
+            "goldPerTick": 10,
+            "intervalSec": 4.55
+          },
+          "L30": {
+            "goldPerTick": 10,
+            "intervalSec": 3.38
+          }
+        }
       }
     }
   }

@@ -1,9 +1,12 @@
 /**
- * 英雄卡牌配置表（37 张）
+ * 英雄卡牌配置表（39 张）
  * 字段：id, name, avatar, quality, starter, level, power, buildingHp,
  *       attack, unitHp, attackSpeed, attackRange, income, type
  *
- * attackSpeed：1 级攻速，上限 10（极快），随升级提升
+ * 战斗属性 v3（详见 heroBattle.json → combatStats）：
+ * - attackSpeed（本表遗留字段）≈ 发射频率 fireRate；弹道速度见 heroBattle.json
+ * - attackRange：仅表现距离，不参与远近战判定
+ * - 英雄 30 级：attack/unitHp ×1.15/级；fireRate ×1.02/级；弹道速度 ×1.03/级
  */
 const HeroesConfig = {
   DECK_SIZE: 8,
@@ -44,6 +47,7 @@ const HeroesConfig = {
     { id: 'dread_knight', name: '巨斧酋长', avatar: '💀', quality: 'legendary', starter: false, level: 1, type: 'unit', power: 1129, buildingHp: 500, attack: 90, unitHp: 900, attackSpeed: 2.5, attackRange: 2 },
     { id: 'warlord', name: '双头奇美拉', avatar: '🦁', quality: 'legendary', starter: false, level: 1, type: 'unit', power: 1249, buildingHp: 500, attack: 120, unitHp: 1040, attackSpeed: 1.3, attackRange: 1.5 },
     { id: 'panda_monk', name: '爆破鬼才', avatar: '🐼', quality: 'legendary', starter: false, level: 1, type: 'unit', power: 1153, buildingHp: 400, attack: 160, unitHp: 960, attackSpeed: 1.4, attackRange: 1.3 },
+    { id: 'sky_dome', name: '天穹', avatar: '🔮', quality: 'legendary', starter: false, level: 1, type: 'building', power: 680, buildingHp: 480, attack: 65, unitHp: null, attackSpeed: 0.6, attackRange: null },
 
     // ===== 史诗 =====
     { id: 'shaman', name: '藤蔓萨满', avatar: '🪬', quality: 'epic', starter: false, level: 1, type: 'unit', power: 158, buildingHp: 360, attack: 58, unitHp: 96, attackSpeed: 1.2, attackRange: 3.5 },
@@ -64,6 +68,7 @@ const HeroesConfig = {
     { id: 'archer', name: '见习女巫', avatar: '🏹', quality: 'rare', starter: true, level: 1, type: 'unit', power: 166, buildingHp: 260, attack: 33, unitHp: 110, attackSpeed: 1.0, attackRange: 5 },
     { id: 'infantry', name: '重步兵', avatar: '⚔', quality: 'rare', starter: true, level: 1, type: 'unit', power: 256, buildingHp: 360, attack: 3, unitHp: 250, attackSpeed: 0.9, attackRange: 1 },
     { id: 'arrow_tower', name: '高射塔', avatar: '🗼', quality: 'rare', starter: true, level: 1, type: 'building', power: 277, buildingHp: 380, attack: 80, unitHp: null, attackSpeed: 0.8, attackRange: null },
+    { id: 'heavy_shield', name: '重型盾', avatar: '🛡️', quality: 'rare', starter: false, level: 1, type: 'building', power: 220, buildingHp: 420, attack: 45, unitHp: null, attackSpeed: 0.7, attackRange: null },
 
     // ===== 普通 =====
     { id: 'bear_warrior', name: '重锤卫士', avatar: '🐻', quality: 'common', starter: true, level: 1, type: 'unit', power: 206, buildingHp: 260, attack: 53, unitHp: 210, attackSpeed: 1.0, attackRange: 1 },
@@ -72,7 +77,8 @@ const HeroesConfig = {
     { id: 'blacksmith', name: '长枪教头', avatar: '🔧', quality: 'common', starter: false, level: 1, type: 'unit', power: 83, buildingHp: 100, attack: 25, unitHp: 200, attackSpeed: 0.9, attackRange: 1 },
     { id: 'militia', name: '短剑士', avatar: '🗡', quality: 'common', starter: false, level: 1, type: 'unit', power: 65, buildingHp: 100, attack: 30, unitHp: 100, attackSpeed: 1.1, attackRange: 1.2 },
     { id: 'bone_archer', name: '火枪手', avatar: '🔫', quality: 'common', starter: false, level: 1, type: 'unit', power: 57, buildingHp: 100, attack: 20, unitHp: 80, attackSpeed: 1.0, attackRange: 5 },
-    { id: 'gold_mine', name: '采矿机', avatar: '⛏', quality: 'common', starter: true, level: 1, type: 'resource', power: null, buildingHp: 200, attack: null, unitHp: null, attackSpeed: null, attackRange: null, income: 10 },
+  // 金矿：独立资源卡，无阵营；income=每周期局内金币，incomeIntervalSec=周期秒数（升级缩短）
+    { id: 'gold_mine', name: '金矿', avatar: '⛏', quality: 'common', starter: true, level: 1, type: 'resource', power: null, buildingHp: 200, attack: null, unitHp: null, attackSpeed: null, attackRange: null, income: 10, incomeIntervalSec: 6 },
   ],
 
   getById(id) {

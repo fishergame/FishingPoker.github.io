@@ -161,7 +161,7 @@ def gen_battle_balance(heroes: list[dict]) -> dict:
         "heroSkillNote": HERO_SKILL_NOTE,
         "combatCaps": {
             "recommendedCityDpsMultiplierMax": 1.45,
-            "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_BOND_REVIEW.md",
+            "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_SYSTEM.md",
         },
         "arenas": arenas,
     }
@@ -228,7 +228,7 @@ def gen_markdown(data: dict, heroes_map: dict) -> str:
         "",
         "## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）",
         "",
-        f"**默认编队**（6 张可攻击卡 + 采矿机）：`{', '.join(DEFAULT_DECK)}`",
+        f"**默认编队**（6 张可攻击卡 + 金矿）：`{', '.join(DEFAULT_DECK)}`",
         f"**L1 编队攻城 DPS**：{data['formulas']['defaultDeckL1CityDps']}",
         "",
         "| 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |",

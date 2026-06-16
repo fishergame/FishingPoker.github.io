@@ -18,15 +18,70 @@ const BattleSkillRuntime = (() => {
     return effect.value + (skillLevel - 1) * (scaling || 0);
   }
 
+  const SPECIAL_UNLOCK_LEVEL = { rare: 5, epic: 10, legendary: 20 };
+
   function getUnlockedSkillIds(heroId, heroLevel = 1) {
     const meta = SkillConfig.HERO_BATTLE?.[heroId];
     if (!meta?.skills) return [];
     const { skills } = meta;
     const ids = [];
+    if (skills.normal_1) ids.push(skills.normal_1);
+    if (skills.normal_2) ids.push(skills.normal_2);
+    if (skills.normal_3) ids.push(skills.normal_3);
+    // v3.3 兼容
+    if (skills.basic_attack) ids.push(skills.basic_attack);
     if (skills.normal) ids.push(skills.normal);
-    if (heroLevel >= (skills.epicUnlockLevel || 8) && skills.epic) ids.push(skills.epic);
-    if (heroLevel >= (skills.legendUnlockLevel || 20) && skills.legend) ids.push(skills.legend);
+    const cfg = typeof HeroesConfig !== 'undefined' ? HeroesConfig.getById(heroId) : null;
+    const q = cfg?.quality;
+    const unlockRules = meta.skillUnlock || SkillConfig.SKILL_UPGRADE?.unlockByHeroLevel || SPECIAL_UNLOCK_LEVEL;
+    const specialSlot = { rare: 'rare', epic: 'epic', legendary: 'legendary' }[q];
+    if (specialSlot && skills[specialSlot]) {
+      const need = unlockRules[specialSlot] ?? SPECIAL_UNLOCK_LEVEL[specialSlot] ?? 1;
+      const sk = SkillConfig.SKILLS[skills[specialSlot]];
+      const unlockLv = sk?.unlockLevel ?? need;
+      if (heroLevel >= unlockLv) ids.push(skills[specialSlot]);
+    }
+    // v2 兼容
+    if (!specialSlot) {
+      if (heroLevel >= (skills.epicUnlockLevel || 8) && skills.epic) ids.push(skills.epic);
+      if (heroLevel >= (skills.legendUnlockLevel || 20) && skills.legend) ids.push(skills.legend);
+    }
     return ids;
+  }
+
+  function isCombatPhase(sk) {
+    const phase = sk.phase;
+    return !phase || phase === 'always' || phase === 'field_only';
+  }
+
+  const TRAJECTORY_DR_TYPES = new Set(['damageReductionPct', 'globalDamageReductionPct']);
+
+  function buildTrajectoryDefense(skills) {
+    const result = { flat: 0, arc: 0 };
+    for (const sk of skills) {
+      if (!isCombatPhase(sk)) continue;
+      for (const e of sk.resolvedEffects) {
+        if (!TRAJECTORY_DR_TYPES.has(e.type)) continue;
+        const blocks = e.blocksTrajectory || ['flat'];
+        const val = e.resolvedValue ?? e.value ?? 0;
+        for (const traj of blocks) {
+          if (traj === 'flat' || traj === 'arc') {
+            result[traj] = (result[traj] || 0) + val;
+          }
+        }
+      }
+    }
+    result.flat = cap(result.flat, 'damageReductionPct');
+    result.arc = cap(result.arc, 'damageReductionPct');
+    return result;
+  }
+
+  function resolveAttackTrajectory(skills) {
+    for (const sk of skills) {
+      if (sk.attackTrajectory === 'arc') return 'arc';
+      if (sk.resolvedEffects?.some((e) => e.type === 'projectileArc')) return 'arc';
+    }
+    return 'flat';
   }
 
   function getActiveSkills(heroId, heroLevel = 1, skillLevels = {}) {
@@ -50,7 +105,8 @@ const BattleSkillRuntime = (() => {
   function sumEffects(skills, type, phaseFilter = null) {
     let sum = 0;
     for (const sk of skills) {
-      if (phaseFilter && sk.phase !== phaseFilter && sk.phase !== 'always') continue;
+      const phase = sk.phase || 'field_only';
+      if (phaseFilter && phase !== phaseFilter && phase !== 'always') continue;
       for (const e of sk.resolvedEffects) {
         if (e.type === type) sum += e.resolvedValue;
       }
@@ -87,6 +143,57 @@ const BattleSkillRuntime = (() => {
   }
 
   /**
+   * 资源卡（金矿）：周期产局内金币，无攻击
+   */
+  function buildResourceHero(heroId, options = {}) {
+    const {
+      heroLevel = 1,
+      flipCost = 0,
+      side = 'player',
+    } = options;
+
+    const cfg = HeroesConfig.getById(heroId);
+    if (!cfg || cfg.type !== 'resource') return null;
+
+    const meta = SkillConfig.HERO_BATTLE[heroId] || {};
+    const prod = meta.resourceProduction || {};
+    const growth = prod.intervalGrowthPerHeroLevel || 1.02;
+    const intervalL1 = prod.intervalSecL1 || cfg.incomeIntervalSec || 6;
+    const goldPerTick = prod.goldPerTick || cfg.income || 10;
+    const intervalSec = intervalL1 / (growth ** (heroLevel - 1));
+
+    const hpScale = BattleConfig.COMBAT_HP_SCALE || 1;
+    const statGrowth = HeroLevelConfig?.STAT_GROWTH_RATE || 1.15;
+    const hp = Math.round(statAtLevel(cfg.buildingHp, heroLevel, statGrowth) * hpScale);
+
+    return {
+      heroId,
+      quality: cfg.quality,
+      name: cfg.name,
+      unitType: 'resource',
+      faction: null,
+      factionLabel: '无',
+      hp,
+      maxHp: hp,
+      atk: 0,
+      atkInterval: null,
+      attackTimer: 0,
+      flipCost,
+      side,
+      heroLevel,
+      skillIds: getUnlockedSkillIds(heroId, heroLevel),
+      combatMods: {},
+      mineProduction: {
+        goldPerTick,
+        intervalSec,
+        scope: 'in_match_only',
+        perInstance: true,
+      },
+      mineTimer: Math.random() * intervalSec * 0.5,
+    };
+  }
+
+  /**
    * 从英雄配表 + 技能生成战斗单位
    */
   function buildCombatHero(heroId, options = {}) {
@@ -108,29 +215,26 @@ const BattleSkillRuntime = (() => {
     const skills = getActiveSkills(heroId, heroLevel, skillLevels);
     const isField = (phase) => phase === 'always' || phase === 'field_only';
 
+    const combatSkills = skills.filter(isCombatPhase);
     const atkPct = cap(
-      sumEffects(skills, 'atkPct', 'always') + sumEffects(skills, 'atkPct', 'field_only'),
+      sumEffects(combatSkills, 'atkPct', 'always') + sumEffects(combatSkills, 'atkPct', 'field_only'),
       'atkPct',
     );
-    const atkSpeedPct = cap(sumEffects(skills, 'atkSpeedPct'), 'atkSpeedPct');
-    const unitHpPct = cap(sumEffects(skills, 'unitHpPct'), 'unitHpPct');
-    const dmgRed = cap(
-      skills
-        .filter((sk) => sk.phase === 'always' || sk.phase === 'field_only')
-        .reduce((s, sk) => s + sumEffects([sk], 'damageReductionPct'), 0),
-      'damageReductionPct',
-    );
+    const atkSpeedPct = cap(sumEffects(combatSkills, 'atkSpeedPct'), 'atkSpeedPct');
+    const unitHpPct = cap(sumEffects(combatSkills, 'unitHpPct'), 'unitHpPct');
+    const trajectoryDefense = buildTrajectoryDefense(skills);
+    const dmgRed = Math.max(trajectoryDefense.flat, trajectoryDefense.arc);
     const cityDmgPct = cap(sumEffects(skills, 'cityDamagePct'), 'cityDamagePct');
     const splashPct = sumEffects(
-      skills.filter((sk) => sk.phase === 'field_only'),
+      skills.filter((sk) => isCombatPhase(sk)),
       'splashPct',
     );
     const dotPct = sumEffects(
-      skills.filter((sk) => sk.phase === 'field_only'),
+      skills.filter((sk) => isCombatPhase(sk)),
       'dotPctPerSec',
     );
     const executeEff = getEffect(
-      skills.filter((sk) => sk.phase === 'field_only'),
+      skills.filter((sk) => isCombatPhase(sk)),
       'executeBonusPct',
     );
     const deployBurst = getEffect(
@@ -161,11 +265,15 @@ const BattleSkillRuntime = (() => {
     atkInterval *= 1 / (1 + atkSpeedPct);
 
     const battleMeta = SkillConfig.HERO_BATTLE[heroId] || {};
+    const primaryAttackTrajectory = resolveAttackTrajectory(skills);
 
     return {
       heroId,
       quality: cfg.quality,
       name: cfg.name,
+      unitType: cfg.type || 'unit',
+      faction: battleMeta.faction || null,
+      factionLabel: battleMeta.factionLabel || null,
       archetype: battleMeta.archetype || null,
       archetypeLabel: battleMeta.archetypeLabel || null,
       hp,
@@ -179,6 +287,8 @@ const BattleSkillRuntime = (() => {
       skillIds: skills.map((s) => s.skillId),
       combatMods: {
         damageReductionPct: dmgRed,
+        trajectoryDefense,
+        primaryAttackTrajectory,
         cityDamagePct: cityDmgPct,
         splashPct,
         dotPctPerSec: dotPct,
@@ -196,9 +306,13 @@ const BattleSkillRuntime = (() => {
 
   function pickDeckHero(deckIds, qualityHint = null) {
     const pool = deckIds
-      .filter((id) => id && id !== 'gold_mine')
+      .filter(Boolean)
       .map((id) => HeroesConfig.getById(id))
-      .filter((h) => h && h.type !== 'resource');
+      .filter((h) => {
+        if (!h) return false;
+        if (h.type === 'resource') return h.id === 'gold_mine';
+        return true;
+      });
 
     if (pool.length === 0) return null;
 
@@ -222,6 +336,7 @@ const BattleSkillRuntime = (() => {
     getUnlockedSkillIds,
     getActiveSkills,
     buildCombatHero,
+    buildResourceHero,
     pickDeckHero,
     defaultDeck,
     statAtLevel,

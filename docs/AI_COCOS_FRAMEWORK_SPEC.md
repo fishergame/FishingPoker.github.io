@@ -270,26 +270,34 @@ interface CardAggregateData {
 
 ### 3.4 商店一级页 — ShopPage
 
-> 商店文档较简，以下结合战斗页货币表 + 商店 doc 整理。
+> 配表：`shop.json` v2.0.0 · 文档：`docs/SHOP_AND_ECONOMY.md` · 运行时：`shop-config.js`
 
-**3 个子模块（纵向 Scroll 或顶 Tab）**：
+**子模块（顶 Tab）**：
 
-| 模块 | 内容 |
-|------|------|
-| 特卖 | 月卡、神器包、角色包；商品卡片 + 特效 |
-| 基础 | 金币/木材/符文石/水晶/钻石 各档位；**每日优惠** |
-| 竞技场 | 按竞技场 1→N 排序；战旗/角色/金矿/金币礼包；解锁=达到该竞技场；买完或限时到期下架 |
+| 模块 | tabId | 内容 |
+|------|-------|------|
+| **礼包** | `giftPacks` | 四阵营卡牌礼包（人族/兽族/亡灵/机械）；广告转盘获取；**无月卡、无神器** |
+| **基础** | `basic` | **每日优惠**、**钻石转盘四档**（广告转盘）、**砖头四档**（1 广告 + 3 钻石）；**无通用卡包** |
+| 竞技场 | `arena` | 一期不做 |
 
-**月卡（特卖）**：
-- 首次购买即时奖 + 每日领取
-- 特权：跳过广告（与宝箱/召唤联动，一期 mock）
-- 可续订，时间累加
+**基础页（`basic`）**：
+- **每日优惠**：保留原 6 格 + 轮换池
+- **钻石转盘**（无限购）：120 / 280 / 720 / 1680 四档；均转盘+看广告；脚本概率/连败保底/暴击见 `docs/SHOP_AND_ECONOMY.md` §7
+- **砖头四档**（无限购）：看广告 50 砖；99 钻→100 砖；500 钻→600 砖；2000 钻→3000 砖
+
+**礼包页（`giftPacks`）**：
+- 4 个礼包，角色池来自 `bond.json`，**互不重叠**
+- 每 **3 天**刷新；每礼包 **5/5** 次购买；每次购买走 **转盘 + 看广告**
+- 单次领取 **3 张卡**（传奇×20 + 史诗×50 + 稀有×100），各 **1 名英雄**，**直接入卡库**可升级（非兑换）
+- 5 次用尽售罄；Toast「本周期购买已达上限，3天后刷新」
 
 **购买流程（一期）**：
 ```
-点击购买 → ShopService.purchase(productId) → mock 成功 
-→ 货币/道具入账 → RewardFlow → 刷新 UI
+点击购买 → 转盘 → (免费领取 | 看广告×N) → ShopService.claimGiftPack(productId)
+→ RewardFlow → 刷新礼包展示 / 售罄态
 ```
+
+**广告未完成**：回到转盘页，保留指针档位与已看广告进度；主按钮「看广告」/「继续抽奖」+ 次按钮「放弃机会」。
 
 **货币不足**：`CurrencyLackPopup` → 跳转 ShopPage 并 `scrollToProduct(currencyType)`
 
@@ -497,7 +505,7 @@ rankTier.json      # 段位
 chest.json
 heroAccountLevel.json  # 1-100
 currency.json
-shopProducts.json  # 特卖+基础+竞技场商品
+shop.json           # 礼包(四阵营) + 基础区商品；见 docs/SHOP_AND_ECONOMY.md
 summonPool.json
 summonLevel.json
 emoji.json
@@ -633,7 +641,7 @@ class DouyinAdapter {
 | 竞技场礼包 | arenaId, unlockTrophy, items[], price, expireAt |
 | 每日优惠 | dailyRefresh, discountPrice, originalPrice |
 
-排序：竞技场模块按 `arenaId` 升序；特卖/基础按 `sortWeight` 降序。
+排序：礼包页按 `sortWeight` 降序（售罄沉底）；基础区按配置序。
 
 ---
 
