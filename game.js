@@ -106,9 +106,11 @@ function renderSideBoard(container, side) {
         div.classList.add('hidden-card', `${side}-side`);
       } else if (cell.contentType === 'hero' && cell.hero) {
         div.classList.add('hero-card', `quality-${cell.hero.quality}`, `${side}-side`);
+        if (cell.hero.unitType === 'resource') div.classList.add('resource-hero-card');
         const hpPct = (cell.hero.hp / cell.hero.maxHp) * 100;
+        const icon = cell.hero.unitType === 'resource' ? '⛏' : QUALITY_ICONS[cell.hero.quality];
         div.innerHTML = `
-          <span class="hero-icon">${QUALITY_ICONS[cell.hero.quality]}</span>
+          <span class="hero-icon">${icon}</span>
           <div class="hero-hp-bar"><div class="hero-hp-fill" style="width:${hpPct}%"></div></div>
           <span class="hero-label">${cell.hero.name}${cell.hero.archetypeLabel ? ` · ${cell.hero.archetypeLabel}` : ''}</span>`;
       } else if (cell.contentType === 'resource' || cell.contentType === 'mystery_gold') {
@@ -340,6 +342,7 @@ function gameLoop(timestamp) {
 
   if (!state.gameOver) {
     goldAcc = R.tickGold(state, dt, goldAcc);
+    R.tickMineGold(state, dt);
     R.tickTimer(state, dt);
     R.tickCombat(state, dt);
     const aiFlipped = R.tickEnemyAi(state, dt);

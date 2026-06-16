@@ -1,5 +1,5 @@
 /**
- * 羁绊配表（bond.json）
+ * 羁绊配表（bond.json）— 仅种族阵营羁绊
  */
 const BondConfig = {
   VERSION: '1.0.0',
@@ -12,30 +12,29 @@ const BondConfig = {
   },
 
   /**
-   * 计算卡组激活的羁绊档位
-   * @param {Array<{heroId:string,faction:string,range:string,bondEligible:boolean}>} deckMeta
+   * 计算卡组激活的阵营羁绊档位
+   * @param {Array<{heroId:string,faction:string,bondEligible:boolean}>} deckMeta
    */
   computeActive(deckMeta) {
     const eligible = deckMeta.filter((h) => h.bondEligible);
     const factionCount = {};
-    let melee = 0;
-    let ranged = 0;
     for (const h of eligible) {
-      factionCount[h.faction] = (factionCount[h.faction] || 0) + 1;
-      if (h.range === 'melee') melee++;
-      else ranged++;
+      if (h.faction) factionCount[h.faction] = (factionCount[h.faction] || 0) + 1;
     }
-    const bestFaction = Object.entries(factionCount).sort((a, b) => b[1] - a[1])[0];
+
     const active = [];
+    const bestFaction = Object.entries(factionCount).sort((a, b) => b[1] - a[1])[0];
     if (bestFaction && bestFaction[1] >= 2) {
       const bond = this._byId[`faction_${bestFaction[0]}`];
-      if (bond) active.push({ bondId: bond.bondId, count: bestFaction[1], tiers: this._activeTiers(bond, bestFaction[1]) });
+      if (bond) {
+        active.push({
+          bondId: bond.bondId,
+          count: bestFaction[1],
+          tiers: this._activeTiers(bond, bestFaction[1]),
+        });
+      }
     }
-    const rangeBond = melee >= ranged ? this._byId.range_melee : this._byId.range_ranged;
-    const rangeCount = Math.max(melee, ranged);
-    if (rangeBond && rangeCount >= 2) {
-      active.push({ bondId: rangeBond.bondId, count: rangeCount, tiers: this._activeTiers(rangeBond, rangeCount) });
-    }
+
     return active;
   },
 

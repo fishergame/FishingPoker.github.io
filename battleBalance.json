@@ -58,7 +58,7 @@
   "heroSkillNote": "37 张命名英雄的独立技能表（skillNormalId / skillEpicId / skillLegendId）尚未落地为 JSON，设计见 docs/AI_COCOS_FRAMEWORK_SPEC.md；养成属性见 heroes-config.js + heroLevel.json statGrowthRate。",
   "combatCaps": {
     "recommendedCityDpsMultiplierMax": 1.45,
-    "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_BOND_REVIEW.md"
+    "note": "技能+羁绊对主城DPS合计倍率建议上限，见 docs/SKILL_SYSTEM.md"
   },
   "arenas": [
     {

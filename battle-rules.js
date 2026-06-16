@@ -5,6 +5,27 @@ const BattleRules = (() => {
   const C = BattleConfig;
   const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
+  const FACTION_COUNTER = {
+    human: 'mechanical',
+    mechanical: 'beast',
+    beast: 'undead',
+    undead: 'human',
+  };
+  const FACTION_COUNTER_BONUS = 0.10;
+
+  function getFactionCounterBonus(attacker, defender) {
+    if (!attacker || !defender) return 0;
+    const aFaction = attacker.faction;
+    const dFaction = defender.faction;
+    if (aFaction && dFaction && FACTION_COUNTER[aFaction] === dFaction) {
+      return FACTION_COUNTER_BONUS;
+    }
+    if (aFaction === 'human' && defender.unitType === 'building') {
+      return FACTION_COUNTER_BONUS;
+    }
+    return 0;
+  }
+
   let battleContext = {
     loaded: false,
     playerDeck: [],
@@ -93,12 +114,17 @@ const BattleRules = (() => {
     const quality = rollQuality(cost);
     const heroId = BattleSkillRuntime.pickDeckHero(getDeck(side), quality);
     if (!heroId) return null;
-    return BattleSkillRuntime.buildCombatHero(heroId, {
+    const cfg = typeof HeroesConfig !== 'undefined' ? HeroesConfig.getById(heroId) : null;
+    const options = {
       heroLevel: battleContext.heroLevels[heroId] || 1,
       skillLevels: battleContext.skillLevels,
       flipCost: cost,
       side,
-    });
+    };
+    if (cfg?.type === 'resource') {
+      return BattleSkillRuntime.buildResourceHero(heroId, options);
+    }
+    return BattleSkillRuntime.buildCombatHero(heroId, options);
   }
 
   function createCell(side, row, col) {
@@ -137,6 +163,7 @@ const BattleRules = (() => {
 
   function createInitialState() {
     return {
+      // 局内金币（in_match_only）：翻牌消耗；对战结束清零，不可带入局外
       playerGold: C.START_GOLD,
       enemyGold: C.START_GOLD,
       playerCityHp: C.MAIN_CITY_HP,
@@ -270,7 +297,11 @@ const BattleRules = (() => {
       const target = findNearestEnemyUnit(state, attackerCell);
       if (target?.hero) {
         const burst = Math.round(hero.atk * mods.deployBurstPct);
-        const dealt = applyDamageToHero(target.hero, burst, { isFieldCombat: true });
+        const traj = hero.combatMods?.primaryAttackTrajectory || 'flat';
+        const dealt = applyDamageToHero(target.hero, burst, {
+          isFieldCombat: true,
+          attackTrajectory: traj,
+        });
         state.events.push({
           type: 'skill_deploy_burst',
           source: attackerCell,
@@ -403,6 +434,11 @@ const BattleRules = (() => {
     let dmg = rawDamage;
     const mods = attacker.combatMods || {};
 
+    if (isFieldCombat && targetHero) {
+      const counter = getFactionCounterBonus(attacker, targetHero);
+      if (counter > 0) dmg = Math.round(dmg * (1 + counter));
+    }
+
     if (isFieldCombat && mods.executeThreshold != null && targetHero.maxHp > 0) {
       const ratio = targetHero.hp / targetHero.maxHp;
       if (ratio <= mods.executeThreshold) {
@@ -414,17 +450,23 @@ const BattleRules = (() => {
   }
 
   function applyDamageToHero(hero, rawDamage, options = {}) {
-    const { isFieldCombat = true } = options;
+    const { isFieldCombat = true, attackTrajectory = 'flat' } = options;
     let dmg = rawDamage;
-    const red = hero.combatMods?.damageReductionPct || 0;
-    if (isFieldCombat && red > 0) {
-      dmg = Math.round(dmg * (1 - red));
+    let red = 0;
+    if (isFieldCombat) {
+      const td = hero.combatMods?.trajectoryDefense;
+      if (td) {
+        red = attackTrajectory === 'arc' ? (td.arc || 0) : (td.flat || 0);
+      } else {
+        red = hero.combatMods?.damageReductionPct || 0;
+      }
+      if (red > 0) dmg = Math.round(dmg * (1 - red));
     }
     hero.hp = Math.max(0, hero.hp - dmg);
     return dmg;
   }
 
-  function applySplash(state, attackerCell, primaryTarget, rawDamage) {
+  function applySplash(state, attackerCell, primaryTarget, rawDamage, attackTrajectory = 'flat') {
     const splashPct = attackerCell.hero?.combatMods?.splashPct || 0;
     if (!attackerCell.hero || splashPct <= 0) return;
     if (primaryTarget.kind !== 'hero') return;
@@ -440,7 +482,10 @@ const BattleRules = (() => {
       const cell = state.cells[key];
       if (!cell?.hero || cell.hero.hp <= 0) continue;
       if (cell === primaryTarget.cell) continue;
-      const dealt = applyDamageToHero(cell.hero, splashDmg, { isFieldCombat: true });
+      const dealt = applyDamageToHero(cell.hero, splashDmg, {
+        isFieldCombat: true,
+        attackTrajectory,
+      });
       state.events.push({
         type: 'damage',
         source: attackerCell,
@@ -518,7 +563,7 @@ const BattleRules = (() => {
 
     for (const key of Object.keys(state.cells)) {
       const cell = state.cells[key];
-      if (!cell.hero || cell.hero.hp <= 0) continue;
+      if (!cell.hero || cell.hero.hp <= 0 || cell.hero.unitType === 'resource') continue;
 
       const hero = cell.hero;
       hero.attackTimer -= dt;
@@ -532,15 +577,20 @@ const BattleRules = (() => {
 
       if (target.kind === 'hero') {
         const raw = calcUnitDamage(hero, hero.atk, target.cell.hero, true);
-        const dealt = applyDamageToHero(target.cell.hero, raw, { isFieldCombat: true });
+        const traj = hero.combatMods?.primaryAttackTrajectory || 'flat';
+        const dealt = applyDamageToHero(target.cell.hero, raw, {
+          isFieldCombat: true,
+          attackTrajectory: traj,
+        });
         state.events.push({
           type: 'damage',
           source: cell,
           target: target.cell,
           amount: dealt,
           splash: false,
+          attackTrajectory: traj,
         });
-        applySplash(state, cell, target, hero.atk);
+        applySplash(state, cell, target, hero.atk, traj);
         const dotPct = hero.combatMods?.dotPctPerSec || 0;
         if (dotPct > 0) applyDotOnHit(target.cell.hero, dotPct);
         if (target.cell.hero.hp <= 0) onHeroKilled(state, target.cell, cell.side, cell);
@@ -575,6 +625,36 @@ const BattleRules = (() => {
       state.enemyGold += C.GOLD_PER_SEC;
     }
     return accumulator;
+  }
+
+  /** 金矿周期产局内金币；每张金矿独立计时（perInstance） */
+  function tickMineGold(state, dt) {
+    if (state.gameOver) return;
+
+    for (const key of Object.keys(state.cells)) {
+      const cell = state.cells[key];
+      const hero = cell.hero;
+      if (!hero || hero.hp <= 0 || hero.unitType !== 'resource') continue;
+
+      const mine = hero.mineProduction;
+      if (!mine?.goldPerTick || !mine.intervalSec) continue;
+
+      hero.mineTimer = (hero.mineTimer || 0) + dt;
+      while (hero.mineTimer >= mine.intervalSec) {
+        hero.mineTimer -= mine.intervalSec;
+        const amount = mine.goldPerTick;
+        setGold(state, cell.side, getGold(state, cell.side) + amount);
+        state.events.push({
+          type: 'mine_gold',
+          side: cell.side,
+          row: cell.row,
+          col: cell.col,
+          heroId: hero.heroId,
+          amount,
+          scope: mine.scope || 'in_match_only',
+        });
+      }
+    }
   }
 
   function tickTimer(state, dt) {
@@ -700,6 +780,7 @@ const BattleRules = (() => {
     flipCard,
     tickCombat,
     tickGold,
+    tickMineGold,
     tickTimer,
     checkWin,
     runAiFlip,
