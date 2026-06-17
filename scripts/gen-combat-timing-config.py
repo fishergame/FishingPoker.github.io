@@ -53,8 +53,30 @@ PROJECTILE = {
     "heavy_shield": "flat",
 }
 
-# 攻击间隔：L1 特例 + 其余沿用 2.2/legacyFireRate
-INTERVAL_OVERRIDE_L1 = {"dread_knight": 2.0}
+# 攻击间隔 L1 特例（覆盖 2.2/legacyFireRate）
+INTERVAL_OVERRIDE_L1 = {
+    "dread_knight": 2.0,
+    "blademaster": 1.0,   # 刺客：压低满级 DPS，L1 不低于 1.0s
+    "dragon_knight": 1.0,  # 开局传奇：避免 L1 过快
+    "ranger": 1.2,        # 超远程：拉长间隔，弹速仍走射程分档 2.55s
+}
+
+# 弹道速度 L1 按角色覆盖（近战重量感等；未列出的仍走射程/弹道类型分档）
+FLIGHT_OVERRIDE_L1 = {
+    "blademaster": 1.20,
+    "dread_knight": 1.70,
+    "royal_knight": 1.35,
+    "warlord": 1.40,
+}
+
+# 快攻传奇：公式算出 L1<1.0 时兜底（已被 INTERVAL_OVERRIDE_L1 覆盖的除外）
+FAST_LEGENDARY_INTERVAL_L1_MIN = 1.0
+
+# 全角色 L30 攻击间隔下限（秒），避免满级机枪感
+INTERVAL_L30_MIN = 0.65
+INTERVAL_L30_OVERRIDE = {
+    "blademaster": 0.70,  # 幻影刺客：满级再收紧
+}
 
 # 升级曲线（校验后采用）
 INTERVAL_GROWTH = 0.992  # 每级约 -0.8%，L30 约为 L1 的 79%
@@ -94,12 +116,18 @@ def interval_l1(hero: dict) -> float | None:
     if hid in INTERVAL_OVERRIDE_L1:
         return INTERVAL_OVERRIDE_L1[hid]
     legacy = hero.get("attackSpeed") or 1.0
-    return round(2.2 / legacy, 2)
+    v = round(2.2 / legacy, 2)
+    if hero.get("quality") == "legendary" and v < FAST_LEGENDARY_INTERVAL_L1_MIN:
+        v = FAST_LEGENDARY_INTERVAL_L1_MIN
+    return v
 
 
 def flight_l1(hero: dict) -> float | None:
     if hero["type"] == "resource":
         return None
+    hid = hero["id"]
+    if hid in FLIGHT_OVERRIDE_L1:
+        return FLIGHT_OVERRIDE_L1[hid]
     style = PROJECTILE.get(hero["id"], "flat")
     rng = hero.get("attackRange")
     if hero["type"] == "building" and style == "arc":
@@ -124,8 +152,12 @@ def at_level(l1: float | None, level: int, growth: float, min_val: float | None 
     return v
 
 
-def interval_series(l1: float, max_level: int = MAX_HERO_LEVEL) -> list[float]:
-    """攻击间隔逐级曲线：指数目标与「每级至少 -0.01s」取更快者，避免两位小数并列。"""
+def interval_series(
+    l1: float,
+    max_level: int = MAX_HERO_LEVEL,
+    l30_floor: float = INTERVAL_L30_MIN,
+) -> list[float]:
+    """攻击间隔逐级：指数目标与每级 -0.01s 取更快者；不低于 l30_floor。"""
     series = [round(l1, 2)]
     for level in range(2, max_level + 1):
         v_exp = round(l1 * (INTERVAL_GROWTH ** (level - 1)), 2)
@@ -133,14 +165,21 @@ def interval_series(l1: float, max_level: int = MAX_HERO_LEVEL) -> list[float]:
         v = min(v_exp, v_step)
         if v >= series[-1]:
             v = v_step
+        if v < l30_floor:
+            v = l30_floor
         series.append(v)
     return series
 
 
-def interval_at_level(l1: float | None, level: int) -> float | None:
+def interval_at_level(
+    l1: float | None,
+    level: int,
+    hero_id: str | None = None,
+) -> float | None:
     if l1 is None:
         return None
-    return interval_series(l1)[level - 1]
+    floor = INTERVAL_L30_OVERRIDE.get(hero_id, INTERVAL_L30_MIN) if hero_id else INTERVAL_L30_MIN
+    return interval_series(l1, l30_floor=floor)[level - 1]
 
 
 def old_v3_flight_index(hero: dict) -> float | None:
@@ -166,6 +205,8 @@ def build_rows(heroes: list[dict]) -> list[dict]:
     for h in heroes:
         il1 = interval_l1(h)
         fl1 = flight_l1(h)
+        l30_floor = INTERVAL_L30_OVERRIDE.get(h["id"], INTERVAL_L30_MIN)
+        intervals = interval_series(il1, l30_floor=l30_floor) if il1 is not None else None
         rows.append(
             {
                 "heroId": h["id"],
@@ -181,10 +222,10 @@ def build_rows(heroes: list[dict]) -> list[dict]:
                     "source": "heroBattle.json combatStats (skill-system v3 分支)",
                 },
                 "attackIntervalL1": il1,
-                "attackIntervalL2": interval_at_level(il1, 2),
-                "attackIntervalL15": interval_at_level(il1, 15),
-                "attackIntervalL30": interval_at_level(il1, 30),
-                "attackIntervalLevels": interval_series(il1) if il1 is not None else None,
+                "attackIntervalL2": interval_at_level(il1, 2, h["id"]),
+                "attackIntervalL15": interval_at_level(il1, 15, h["id"]),
+                "attackIntervalL30": interval_at_level(il1, 30, h["id"]),
+                "attackIntervalLevels": intervals,
                 "projectileFlightSecL1": fl1,
                 "projectileFlightSecL2": at_level(fl1, 2, FLIGHT_GROWTH),
                 "projectileFlightSecL15": at_level(fl1, 15, FLIGHT_GROWTH),
@@ -226,6 +267,8 @@ def gen_markdown(data: dict) -> str:
         "**设计取舍**：",
         "",
         "- 攻击间隔纯指数 + 两位小数时，常出现 **连两级同为 0.78s**；现强制每级至少缩短 0.01s，升级绿字始终有数",
+        f"- 全角色 L30 间隔下限 **{INTERVAL_L30_MIN}s**；幻影刺客等见 `intervalOverridesL1` / `intervalL30Overrides`",
+        "- 部分远程（荆棘女王）**拉长间隔、保持弹速**；近战弹速按角色 `flightOverridesL1` 覆盖射程分档",
         "- 弹道速度成长快于攻击间隔：升级后更容易看出「弹到了」",
         f"- 全量 30 级间隔见 `combatTiming.json` → `attackIntervalLevels`（或按上式逐级递推）",
         "- 弹道 L1 整体比旧 v3 指数口径 **+约 1s** 量级；重炮/高抛可更慢（2.0～2.85s）",
@@ -332,7 +375,7 @@ def gen_markdown(data: dict) -> str:
         "",
         "```json",
         '"formulas": {',
-        f'  "attackInterval": "逐级 min(round(L1×{INTERVAL_GROWTH}^(L-1),2), prev-{INTERVAL_DISPLAY_STEP})；或读 attackIntervalLevels[L-1]",',
+        f'  "attackInterval": "逐级 min(round(L1×{INTERVAL_GROWTH}^(L-1),2), prev-{INTERVAL_DISPLAY_STEP})，且 ≥ intervalL30Min(默认{INTERVAL_L30_MIN})；或读 attackIntervalLevels[L-1]",',
         f'  "projectileFlightSec": "round(projectileFlightSecL1 * {FLIGHT_GROWTH}^(heroLevel-1), 2)"',
         "}",
         "```",
@@ -347,7 +390,7 @@ def main() -> None:
     heroes = load_heroes()
     rows = build_rows(heroes)
     data = {
-        "version": "1.1.0",
+        "version": "1.2.0",
         "description": "攻击间隔与弹道飞行用时（秒）；替代 heroBattle v3 无单位弹速指数",
         "replaces": {
             "heroBattleCombatStats": "attackSpeedL1 / fireRateL1（见 cursor/skill-system-v3-d188）",
@@ -370,7 +413,8 @@ def main() -> None:
             "intervalGrowthPerLevel": round((INTERVAL_GROWTH - 1) * 100, 2),
             "flightGrowthPerLevel": round((FLIGHT_GROWTH - 1) * 100, 2),
             "intervalDisplayStepMin": INTERVAL_DISPLAY_STEP,
-            "attackIntervalMinReference": INTERVAL_MIN,
+            "attackIntervalL30Min": INTERVAL_L30_MIN,
+            "fastLegendaryIntervalL1Min": FAST_LEGENDARY_INTERVAL_L1_MIN,
         },
         "flightL1Tiers": {
             "flat": FLIGHT_FLAT_TIERS,
@@ -379,6 +423,8 @@ def main() -> None:
             "arcRangeStep": FLIGHT_ARC_RANGE_STEP,
         },
         "intervalOverridesL1": INTERVAL_OVERRIDE_L1,
+        "intervalL30Overrides": INTERVAL_L30_OVERRIDE,
+        "flightOverridesL1": FLIGHT_OVERRIDE_L1,
         "heroes": rows,
     }
 
