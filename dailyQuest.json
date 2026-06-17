@@ -1,0 +1,1393 @@
+{
+  "version": "1.0.0",
+  "description": "主城每日任务：登录连签（7日周期）+ 对战档位；数值随主城等级缩放",
+  "scaleBy": "mainCityLevel",
+  "flipBrickCostFormula": "12 + (mainCityLevel - 1) * 3",
+  "reset": {
+    "at": "00:00",
+    "timezone": "Asia/Shanghai"
+  },
+  "loginStreak": {
+    "base": 5,
+    "flipCostMult": 0.52,
+    "min": 11,
+    "max": 58,
+    "cycleDays": 7,
+    "dayMultipliers": [
+      1.0,
+      1.0,
+      1.06,
+      1.1,
+      1.14,
+      1.18,
+      1.75
+    ],
+    "breakResetsToDay": 1,
+    "loginBaseFormula": "clamp(round(5 + flipBrickCost * 0.52), 11, 58)",
+    "todayFormula": "round(loginBase * dayMultipliers[streakDay - 1])",
+    "tomorrowPreview": "今日领取后 streakDay+1；第7天领完次日为第1天；断签重置为第1天"
+  },
+  "battleTasks": {
+    "base": 3,
+    "flipCostMult": 0.26,
+    "min": 6,
+    "max": 28,
+    "countLosses": true,
+    "tiers": [
+      {
+        "tierId": "warmup",
+        "label": "热身",
+        "battlesRequired": 3,
+        "rewardMult": 0.55
+      },
+      {
+        "tierId": "daily",
+        "label": "日常",
+        "battlesRequired": 6,
+        "rewardMult": 0.9,
+        "cumulative": true
+      },
+      {
+        "tierId": "bonus",
+        "label": "加赏",
+        "battlesRequired": 10,
+        "rewardMult": 0.55,
+        "cumulative": true
+      }
+    ],
+    "battleBaseFormula": "clamp(round(3 + flipBrickCost * 0.26), 6, 28)",
+    "tierRewardFormula": "round(battleBase * rewardMult)",
+    "dayMaxFormula": "sum(all tier rewards)"
+  },
+  "ui": {
+    "entry": "主城页 · 每日任务弹窗",
+    "sections": [
+      "loginStreak",
+      "battleTasks"
+    ],
+    "loginShowsTomorrowPreview": true,
+    "battleCta": "前往对战"
+  },
+  "levels": [
+    {
+      "mainCityLevel": 1,
+      "flipBrickCost": 12,
+      "loginBase": 11,
+      "battleBase": 6,
+      "loginByStreakDay": [
+        11,
+        11,
+        12,
+        12,
+        13,
+        13,
+        19
+      ],
+      "loginDay7": 19,
+      "loginWeekTotal": 91,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 3
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 5
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 3
+        }
+      ],
+      "battleDayMax": 11,
+      "dayMaxCombined": 30
+    },
+    {
+      "mainCityLevel": 2,
+      "flipBrickCost": 15,
+      "loginBase": 13,
+      "battleBase": 7,
+      "loginByStreakDay": [
+        13,
+        13,
+        14,
+        14,
+        15,
+        15,
+        23
+      ],
+      "loginDay7": 23,
+      "loginWeekTotal": 107,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 4
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 6
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 4
+        }
+      ],
+      "battleDayMax": 14,
+      "dayMaxCombined": 37
+    },
+    {
+      "mainCityLevel": 3,
+      "flipBrickCost": 18,
+      "loginBase": 14,
+      "battleBase": 8,
+      "loginByStreakDay": [
+        14,
+        14,
+        15,
+        15,
+        16,
+        17,
+        24
+      ],
+      "loginDay7": 24,
+      "loginWeekTotal": 115,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 4
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 7
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 4
+        }
+      ],
+      "battleDayMax": 15,
+      "dayMaxCombined": 39
+    },
+    {
+      "mainCityLevel": 4,
+      "flipBrickCost": 21,
+      "loginBase": 16,
+      "battleBase": 8,
+      "loginByStreakDay": [
+        16,
+        16,
+        17,
+        18,
+        18,
+        19,
+        28
+      ],
+      "loginDay7": 28,
+      "loginWeekTotal": 132,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 4
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 7
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 4
+        }
+      ],
+      "battleDayMax": 15,
+      "dayMaxCombined": 43
+    },
+    {
+      "mainCityLevel": 5,
+      "flipBrickCost": 24,
+      "loginBase": 17,
+      "battleBase": 9,
+      "loginByStreakDay": [
+        17,
+        17,
+        18,
+        19,
+        19,
+        20,
+        30
+      ],
+      "loginDay7": 30,
+      "loginWeekTotal": 140,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 5
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 8
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 5
+        }
+      ],
+      "battleDayMax": 18,
+      "dayMaxCombined": 48
+    },
+    {
+      "mainCityLevel": 6,
+      "flipBrickCost": 27,
+      "loginBase": 19,
+      "battleBase": 10,
+      "loginByStreakDay": [
+        19,
+        19,
+        20,
+        21,
+        22,
+        22,
+        33
+      ],
+      "loginDay7": 33,
+      "loginWeekTotal": 156,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 6
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 9
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 6
+        }
+      ],
+      "battleDayMax": 21,
+      "dayMaxCombined": 54
+    },
+    {
+      "mainCityLevel": 7,
+      "flipBrickCost": 30,
+      "loginBase": 21,
+      "battleBase": 11,
+      "loginByStreakDay": [
+        21,
+        21,
+        22,
+        23,
+        24,
+        25,
+        37
+      ],
+      "loginDay7": 37,
+      "loginWeekTotal": 173,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 6
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 10
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 6
+        }
+      ],
+      "battleDayMax": 22,
+      "dayMaxCombined": 59
+    },
+    {
+      "mainCityLevel": 8,
+      "flipBrickCost": 33,
+      "loginBase": 22,
+      "battleBase": 12,
+      "loginByStreakDay": [
+        22,
+        22,
+        23,
+        24,
+        25,
+        26,
+        38
+      ],
+      "loginDay7": 38,
+      "loginWeekTotal": 180,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 7
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 11
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 7
+        }
+      ],
+      "battleDayMax": 25,
+      "dayMaxCombined": 63
+    },
+    {
+      "mainCityLevel": 9,
+      "flipBrickCost": 36,
+      "loginBase": 24,
+      "battleBase": 12,
+      "loginByStreakDay": [
+        24,
+        24,
+        25,
+        26,
+        27,
+        28,
+        42
+      ],
+      "loginDay7": 42,
+      "loginWeekTotal": 196,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 7
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 11
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 7
+        }
+      ],
+      "battleDayMax": 25,
+      "dayMaxCombined": 67
+    },
+    {
+      "mainCityLevel": 10,
+      "flipBrickCost": 39,
+      "loginBase": 25,
+      "battleBase": 13,
+      "loginByStreakDay": [
+        25,
+        25,
+        26,
+        28,
+        28,
+        30,
+        44
+      ],
+      "loginDay7": 44,
+      "loginWeekTotal": 206,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 7
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 12
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 7
+        }
+      ],
+      "battleDayMax": 26,
+      "dayMaxCombined": 70
+    },
+    {
+      "mainCityLevel": 11,
+      "flipBrickCost": 42,
+      "loginBase": 27,
+      "battleBase": 14,
+      "loginByStreakDay": [
+        27,
+        27,
+        29,
+        30,
+        31,
+        32,
+        47
+      ],
+      "loginDay7": 47,
+      "loginWeekTotal": 223,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 8
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 13
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 8
+        }
+      ],
+      "battleDayMax": 29,
+      "dayMaxCombined": 76
+    },
+    {
+      "mainCityLevel": 12,
+      "flipBrickCost": 45,
+      "loginBase": 28,
+      "battleBase": 15,
+      "loginByStreakDay": [
+        28,
+        28,
+        30,
+        31,
+        32,
+        33,
+        49
+      ],
+      "loginDay7": 49,
+      "loginWeekTotal": 231,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 8
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 8
+        }
+      ],
+      "battleDayMax": 30,
+      "dayMaxCombined": 79
+    },
+    {
+      "mainCityLevel": 13,
+      "flipBrickCost": 48,
+      "loginBase": 30,
+      "battleBase": 15,
+      "loginByStreakDay": [
+        30,
+        30,
+        32,
+        33,
+        34,
+        35,
+        52
+      ],
+      "loginDay7": 52,
+      "loginWeekTotal": 246,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 8
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 8
+        }
+      ],
+      "battleDayMax": 30,
+      "dayMaxCombined": 82
+    },
+    {
+      "mainCityLevel": 14,
+      "flipBrickCost": 51,
+      "loginBase": 32,
+      "battleBase": 16,
+      "loginByStreakDay": [
+        32,
+        32,
+        34,
+        35,
+        36,
+        38,
+        56
+      ],
+      "loginDay7": 56,
+      "loginWeekTotal": 263,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 9
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 9
+        }
+      ],
+      "battleDayMax": 32,
+      "dayMaxCombined": 88
+    },
+    {
+      "mainCityLevel": 15,
+      "flipBrickCost": 54,
+      "loginBase": 33,
+      "battleBase": 17,
+      "loginByStreakDay": [
+        33,
+        33,
+        35,
+        36,
+        38,
+        39,
+        58
+      ],
+      "loginDay7": 58,
+      "loginWeekTotal": 272,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 9
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 15
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 9
+        }
+      ],
+      "battleDayMax": 33,
+      "dayMaxCombined": 91
+    },
+    {
+      "mainCityLevel": 16,
+      "flipBrickCost": 57,
+      "loginBase": 35,
+      "battleBase": 18,
+      "loginByStreakDay": [
+        35,
+        35,
+        37,
+        38,
+        40,
+        41,
+        61
+      ],
+      "loginDay7": 61,
+      "loginWeekTotal": 287,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 10
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 16
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 10
+        }
+      ],
+      "battleDayMax": 36,
+      "dayMaxCombined": 97
+    },
+    {
+      "mainCityLevel": 17,
+      "flipBrickCost": 60,
+      "loginBase": 36,
+      "battleBase": 19,
+      "loginByStreakDay": [
+        36,
+        36,
+        38,
+        40,
+        41,
+        42,
+        63
+      ],
+      "loginDay7": 63,
+      "loginWeekTotal": 296,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 10
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 17
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 10
+        }
+      ],
+      "battleDayMax": 37,
+      "dayMaxCombined": 100
+    },
+    {
+      "mainCityLevel": 18,
+      "flipBrickCost": 63,
+      "loginBase": 38,
+      "battleBase": 19,
+      "loginByStreakDay": [
+        38,
+        38,
+        40,
+        42,
+        43,
+        45,
+        66
+      ],
+      "loginDay7": 66,
+      "loginWeekTotal": 312,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 10
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 17
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 10
+        }
+      ],
+      "battleDayMax": 37,
+      "dayMaxCombined": 103
+    },
+    {
+      "mainCityLevel": 19,
+      "flipBrickCost": 66,
+      "loginBase": 39,
+      "battleBase": 20,
+      "loginByStreakDay": [
+        39,
+        39,
+        41,
+        43,
+        44,
+        46,
+        68
+      ],
+      "loginDay7": 68,
+      "loginWeekTotal": 320,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 11
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 18
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 11
+        }
+      ],
+      "battleDayMax": 40,
+      "dayMaxCombined": 108
+    },
+    {
+      "mainCityLevel": 20,
+      "flipBrickCost": 69,
+      "loginBase": 41,
+      "battleBase": 21,
+      "loginByStreakDay": [
+        41,
+        41,
+        43,
+        45,
+        47,
+        48,
+        72
+      ],
+      "loginDay7": 72,
+      "loginWeekTotal": 337,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 12
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 19
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 12
+        }
+      ],
+      "battleDayMax": 43,
+      "dayMaxCombined": 115
+    },
+    {
+      "mainCityLevel": 21,
+      "flipBrickCost": 72,
+      "loginBase": 42,
+      "battleBase": 22,
+      "loginByStreakDay": [
+        42,
+        42,
+        45,
+        46,
+        48,
+        50,
+        74
+      ],
+      "loginDay7": 74,
+      "loginWeekTotal": 347,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 12
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 20
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 12
+        }
+      ],
+      "battleDayMax": 44,
+      "dayMaxCombined": 118
+    },
+    {
+      "mainCityLevel": 22,
+      "flipBrickCost": 75,
+      "loginBase": 44,
+      "battleBase": 22,
+      "loginByStreakDay": [
+        44,
+        44,
+        47,
+        48,
+        50,
+        52,
+        77
+      ],
+      "loginDay7": 77,
+      "loginWeekTotal": 362,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 12
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 20
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 12
+        }
+      ],
+      "battleDayMax": 44,
+      "dayMaxCombined": 121
+    },
+    {
+      "mainCityLevel": 23,
+      "flipBrickCost": 78,
+      "loginBase": 46,
+      "battleBase": 23,
+      "loginByStreakDay": [
+        46,
+        46,
+        49,
+        51,
+        52,
+        54,
+        80
+      ],
+      "loginDay7": 80,
+      "loginWeekTotal": 378,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 13
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 21
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 13
+        }
+      ],
+      "battleDayMax": 47,
+      "dayMaxCombined": 127
+    },
+    {
+      "mainCityLevel": 24,
+      "flipBrickCost": 81,
+      "loginBase": 47,
+      "battleBase": 24,
+      "loginByStreakDay": [
+        47,
+        47,
+        50,
+        52,
+        54,
+        55,
+        82
+      ],
+      "loginDay7": 82,
+      "loginWeekTotal": 387,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 13
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 22
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 13
+        }
+      ],
+      "battleDayMax": 48,
+      "dayMaxCombined": 130
+    },
+    {
+      "mainCityLevel": 25,
+      "flipBrickCost": 84,
+      "loginBase": 49,
+      "battleBase": 25,
+      "loginByStreakDay": [
+        49,
+        49,
+        52,
+        54,
+        56,
+        58,
+        86
+      ],
+      "loginDay7": 86,
+      "loginWeekTotal": 404,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 22
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 14
+        }
+      ],
+      "battleDayMax": 50,
+      "dayMaxCombined": 136
+    },
+    {
+      "mainCityLevel": 26,
+      "flipBrickCost": 87,
+      "loginBase": 50,
+      "battleBase": 26,
+      "loginByStreakDay": [
+        50,
+        50,
+        53,
+        55,
+        57,
+        59,
+        88
+      ],
+      "loginDay7": 88,
+      "loginWeekTotal": 412,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 23
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 14
+        }
+      ],
+      "battleDayMax": 51,
+      "dayMaxCombined": 139
+    },
+    {
+      "mainCityLevel": 27,
+      "flipBrickCost": 90,
+      "loginBase": 52,
+      "battleBase": 26,
+      "loginByStreakDay": [
+        52,
+        52,
+        55,
+        57,
+        59,
+        61,
+        91
+      ],
+      "loginDay7": 91,
+      "loginWeekTotal": 427,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 14
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 23
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 14
+        }
+      ],
+      "battleDayMax": 51,
+      "dayMaxCombined": 142
+    },
+    {
+      "mainCityLevel": 28,
+      "flipBrickCost": 93,
+      "loginBase": 53,
+      "battleBase": 27,
+      "loginByStreakDay": [
+        53,
+        53,
+        56,
+        58,
+        60,
+        63,
+        93
+      ],
+      "loginDay7": 93,
+      "loginWeekTotal": 436,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 15
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 24
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 15
+        }
+      ],
+      "battleDayMax": 54,
+      "dayMaxCombined": 147
+    },
+    {
+      "mainCityLevel": 29,
+      "flipBrickCost": 96,
+      "loginBase": 55,
+      "battleBase": 28,
+      "loginByStreakDay": [
+        55,
+        55,
+        58,
+        61,
+        63,
+        65,
+        96
+      ],
+      "loginDay7": 96,
+      "loginWeekTotal": 453,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 15
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 25
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 15
+        }
+      ],
+      "battleDayMax": 55,
+      "dayMaxCombined": 151
+    },
+    {
+      "mainCityLevel": 30,
+      "flipBrickCost": 99,
+      "loginBase": 56,
+      "battleBase": 28,
+      "loginByStreakDay": [
+        56,
+        56,
+        59,
+        62,
+        64,
+        66,
+        98
+      ],
+      "loginDay7": 98,
+      "loginWeekTotal": 461,
+      "battleTiers": [
+        {
+          "tierId": "warmup",
+          "label": "热身",
+          "battlesRequired": 3,
+          "rewardMult": 0.55,
+          "rewardBricks": 15
+        },
+        {
+          "tierId": "daily",
+          "label": "日常",
+          "battlesRequired": 6,
+          "rewardMult": 0.9,
+          "cumulative": true,
+          "rewardBricks": 25
+        },
+        {
+          "tierId": "bonus",
+          "label": "加赏",
+          "battlesRequired": 10,
+          "rewardMult": 0.55,
+          "cumulative": true,
+          "rewardBricks": 15
+        }
+      ],
+      "battleDayMax": 55,
+      "dayMaxCombined": 153
+    }
+  ]
+}

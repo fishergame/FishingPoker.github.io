@@ -5,6 +5,42 @@
 
 ---
 
+## 零、开局赠送卡组
+
+> 单一数据源：`heroes-config.js → DEFAULT_DECK`（`getStarterGrantIds()`）
+> 新号赠送 **8** 张，卡组容量 **8** 槽。
+
+| # | id | 名称 | 品质 | 类型 | 阵营 |
+|:---:|:---|:---|:---:|:---|:---|
+| 1 | `dragon_knight` | 龙焰女王 | legendary | unit | — |
+| 2 | `archer` | 见习女巫 | rare | unit | — |
+| 3 | `infantry` | 重步兵 | rare | unit | — |
+| 4 | `arrow_tower` | 高射塔 | rare | building | — |
+| 5 | `bear_warrior` | 重锤卫士 | common | unit | — |
+| 6 | `skeleton_warrior` | 骷髅刀盾兵 | common | unit | — |
+| 7 | `gold_mine` | 采矿机 | common | resource | 无阵营 |
+| 8 | `heavy_shield` | 重型盾 | rare | building | — |
+
+阵营对照见 `bond.json`；`gold_mine` 不参与羁绊。
+
+---
+
+## 零点五、局内翻牌格子 · 品质概率
+
+> 单一数据源：`battle-config.js`（`BattleRules.getQualityTable` / `rollQuality`）
+> **新手规则**：前 **3** 局，玩家侧 **50 金低级角色格** 使用 `50_newbie` 概率（含 **5% 传奇**）；第 4 局起该格不出传奇。
+
+| 格子类型 | 费用(金) | 普通 | 稀有 | 史诗 | 传奇 | 备注 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---|
+| 低级角色（常规） | 50 | 55% | 45% | 0% | 0% | 第 4 局起 |
+| 低级角色（新手前3局） | 50 | 50% | 40% | 5% | 5% | 仅玩家侧 |
+| 中级角色 | 100 | 20% | 25% | 50% | 5% |  |
+| 高级角色 | 250 | 0% | 20% | 20% | 60% |  |
+| 随机问好格子 | 25 | — | — | — | — | 空地 60% / 金矿 20% / 建筑 20% |
+| 金矿格子 | 50 | — | — | — | — | 必开 |
+
+---
+
 ## 一、技能表在哪里？
 
 ### 1. 翻牌对战 · 按品质被动（已实现在 `battle-config.js`）
@@ -55,18 +91,18 @@
 
 ## 四、攻城模拟（清场后集火 · 主城等级=卡组等级）
 
-**默认编队**（6 张可攻击卡 + 采矿机）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine`
-**L1 编队攻城 DPS**：194.5
+**开局赠送**（8 张，`heroes-config.js → DEFAULT_DECK`）：`dragon_knight, archer, infantry, arrow_tower, bear_warrior, skeleton_warrior, gold_mine, heavy_shield`
+**L1 编队攻城 DPS**：208.8
 
 | 主城/卡组等级 | 主城 HP | 编队 DPS | 理论拆城(s) |
 |:---:|:---:|:---:|:---:|
-| L1 | 1,500 | 194 | 7.7s |
-| L5 | 2,624 | 340 | 7.7s |
-| L10 | 5,277 | 684 | 7.7s |
-| L15 | 10,614 | 1376 | 7.7s |
-| L20 | 21,348 | 2768 | 7.7s |
-| L25 | 42,938 | 5568 | 7.7s |
-| L30 | 86,363 | 11198 | 7.7s |
+| L1 | 1,500 | 209 | 7.2s |
+| L5 | 2,624 | 365 | 7.2s |
+| L10 | 5,277 | 735 | 7.2s |
+| L15 | 10,614 | 1478 | 7.2s |
+| L20 | 21,348 | 2972 | 7.2s |
+| L25 | 42,938 | 5977 | 7.2s |
+| L30 | 86,363 | 12023 | 7.2s |
 
 ### 满配编队（8 张 L30 最高攻城 DPS）
 

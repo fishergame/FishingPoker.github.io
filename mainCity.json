@@ -46,7 +46,8 @@
       ],
       "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币"
     },
-    "shopBrickPacksRef": "shop.json → zones.basic.brickPacks（钻石四档）"
+    "shopBrickPacksRef": "shop.json → zones.basic.brickPacks（钻石四档）",
+    "dailyQuestRef": "dailyQuest.json · docs/MAIN_CITY_DAILY_QUEST.md（登录连签+对战任务，独立文档）"
   },
   "formulas": {
     "hp": "round(1500 * 1.15^(mainCityLevel-1))",
