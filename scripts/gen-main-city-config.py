@@ -519,6 +519,7 @@ def gen_main_city() -> dict:
                 "pveBuilding": "每级 2–3 个，翻开触发 PvE；胜利额外给砖头/金币",
             },
             "shopBrickPacksRef": "shop.json → zones.basic.brickPacks（钻石四档）",
+            "dailyQuestRef": "dailyQuest.json · docs/MAIN_CITY_DAILY_QUEST.md（登录连签+对战任务，独立文档）",
         },
         "formulas": {
             "hp": f"round({MAIN_CITY_HP_L1} * {STAT_GROWTH}^(mainCityLevel-1))",
