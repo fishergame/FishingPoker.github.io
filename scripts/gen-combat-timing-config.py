@@ -59,7 +59,9 @@ INTERVAL_OVERRIDE_L1 = {"dread_knight": 2.0}
 # 升级曲线（校验后采用）
 INTERVAL_GROWTH = 0.992  # 每级约 -0.8%，L30 约为 L1 的 79%
 FLIGHT_GROWTH = 0.976  # 每级约 -2.4%，L30 约为 L1 的 50%，升级感知更明显
-INTERVAL_MIN = 1.15  # 攻击间隔下限（秒），避免满级过快
+INTERVAL_MIN = 1.15  # 慢速卡参考下限（仅 L1≥此值时作兜底，不强制卡死每级）
+INTERVAL_DISPLAY_STEP = 0.01  # UI 两位小数：每级攻击间隔至少缩短 0.01s
+MAX_HERO_LEVEL = 30
 
 # 弹道速度 L1 分档（秒，整体较 v0.9 草案 +1s 左右，重武器更慢）
 FLIGHT_FLAT_TIERS = [
@@ -117,10 +119,28 @@ def at_level(l1: float | None, level: int, growth: float, min_val: float | None 
     if l1 is None:
         return None
     v = round(l1 * (growth ** (level - 1)), 2)
-    # 仅当 L1 已不低于下限时才钳制，避免龙焰女王等快攻 L2 反而变慢
     if min_val is not None and l1 >= min_val:
         v = max(min_val, v)
     return v
+
+
+def interval_series(l1: float, max_level: int = MAX_HERO_LEVEL) -> list[float]:
+    """攻击间隔逐级曲线：指数目标与「每级至少 -0.01s」取更快者，避免两位小数并列。"""
+    series = [round(l1, 2)]
+    for level in range(2, max_level + 1):
+        v_exp = round(l1 * (INTERVAL_GROWTH ** (level - 1)), 2)
+        v_step = round(series[-1] - INTERVAL_DISPLAY_STEP, 2)
+        v = min(v_exp, v_step)
+        if v >= series[-1]:
+            v = v_step
+        series.append(v)
+    return series
+
+
+def interval_at_level(l1: float | None, level: int) -> float | None:
+    if l1 is None:
+        return None
+    return interval_series(l1)[level - 1]
 
 
 def old_v3_flight_index(hero: dict) -> float | None:
@@ -161,9 +181,10 @@ def build_rows(heroes: list[dict]) -> list[dict]:
                     "source": "heroBattle.json combatStats (skill-system v3 分支)",
                 },
                 "attackIntervalL1": il1,
-                "attackIntervalL2": at_level(il1, 2, INTERVAL_GROWTH, INTERVAL_MIN),
-                "attackIntervalL15": at_level(il1, 15, INTERVAL_GROWTH, INTERVAL_MIN),
-                "attackIntervalL30": at_level(il1, 30, INTERVAL_GROWTH, INTERVAL_MIN),
+                "attackIntervalL2": interval_at_level(il1, 2),
+                "attackIntervalL15": interval_at_level(il1, 15),
+                "attackIntervalL30": interval_at_level(il1, 30),
+                "attackIntervalLevels": interval_series(il1) if il1 is not None else None,
                 "projectileFlightSecL1": fl1,
                 "projectileFlightSecL2": at_level(fl1, 2, FLIGHT_GROWTH),
                 "projectileFlightSecL15": at_level(fl1, 15, FLIGHT_GROWTH),
@@ -199,13 +220,14 @@ def gen_markdown(data: dict) -> str:
         "",
         f"| 属性 | 成长公式 | 参数 | L1→L30 体感 |",
         "|:---|:---|:---|:---|",
-        f"| 攻击间隔 | `round(L1 × {INTERVAL_GROWTH}^(L-1), 2)`；L1≥{INTERVAL_MIN} 时再 `max({INTERVAL_MIN}, …)` | 每级约 **-0.8%** | 约为 L1 的 **79%**，慢速卡满级不会过快 |",
+        f"| 攻击间隔 | 逐级 `min(round(L1×{INTERVAL_GROWTH}^(L-1),2), 上级-{INTERVAL_DISPLAY_STEP})` | 指数约 **-0.8%**，且**每级至少 -0.01s** | L30 约 **L1-0.29s** 或更快 |",
         f"| 弹道速度 | `round(L1 × {FLIGHT_GROWTH}^(L-1), 2)` | 每级约 **-2.4%** | 约为 L1 的 **50%**，飞行明显变快 |",
         "",
         "**设计取舍**：",
         "",
-        "- 攻击间隔放缓成长 + 下限 1.15s：避免巨斧酋长等近战满级又回到「连砍」",
+        "- 攻击间隔纯指数 + 两位小数时，常出现 **连两级同为 0.78s**；现强制每级至少缩短 0.01s，升级绿字始终有数",
         "- 弹道速度成长快于攻击间隔：升级后更容易看出「弹到了」",
+        f"- 全量 30 级间隔见 `combatTiming.json` → `attackIntervalLevels`（或按上式逐级递推）",
         "- 弹道 L1 整体比旧 v3 指数口径 **+约 1s** 量级；重炮/高抛可更慢（2.0～2.85s）",
         "",
         "---",
@@ -276,8 +298,9 @@ def gen_markdown(data: dict) -> str:
         "|:---:|:---:|:---:|:---:|:---:|",
     ]
     dk = by_id["dread_knight"]
+    dk_intervals = dk["attackIntervalLevels"]
     for lv in [1, 2, 5, 10, 15, 20, 30]:
-        iv = at_level(dk["attackIntervalL1"], lv, INTERVAL_GROWTH, INTERVAL_MIN)
+        iv = dk_intervals[lv - 1]
         fv = at_level(dk["projectileFlightSecL1"], lv, FLIGHT_GROWTH)
         lines.append(
             f"| L{lv} | {iv}s | {iv - dk['attackIntervalL1']:+.2f}s | {fv}s | {fv - dk['projectileFlightSecL1']:+.2f}s |"
@@ -309,7 +332,7 @@ def gen_markdown(data: dict) -> str:
         "",
         "```json",
         '"formulas": {',
-        f'  "attackInterval": "L1>={INTERVAL_MIN} ? round(max({INTERVAL_MIN}, L1×{INTERVAL_GROWTH}^(L-1)),2) : round(L1×{INTERVAL_GROWTH}^(L-1),2)",',
+        f'  "attackInterval": "逐级 min(round(L1×{INTERVAL_GROWTH}^(L-1),2), prev-{INTERVAL_DISPLAY_STEP})；或读 attackIntervalLevels[L-1]",',
         f'  "projectileFlightSec": "round(projectileFlightSecL1 * {FLIGHT_GROWTH}^(heroLevel-1), 2)"',
         "}",
         "```",
@@ -324,7 +347,7 @@ def main() -> None:
     heroes = load_heroes()
     rows = build_rows(heroes)
     data = {
-        "version": "1.0.0",
+        "version": "1.1.0",
         "description": "攻击间隔与弹道飞行用时（秒）；替代 heroBattle v3 无单位弹速指数",
         "replaces": {
             "heroBattleCombatStats": "attackSpeedL1 / fireRateL1（见 cursor/skill-system-v3-d188）",
@@ -339,14 +362,15 @@ def main() -> None:
         },
         "formulas": {
             "attackInterval": (
-                f"attackIntervalL1>={INTERVAL_MIN} "
-                f"? round(max({INTERVAL_MIN}, attackIntervalL1 * {INTERVAL_GROWTH}^(heroLevel-1)), 2) "
-                f": round(attackIntervalL1 * {INTERVAL_GROWTH}^(heroLevel-1), 2)"
+                f"perLevel: v = min(round(attackIntervalL1 * {INTERVAL_GROWTH}^(heroLevel-1), 2), "
+                f"prevAttackInterval - {INTERVAL_DISPLAY_STEP}); "
+                f"or lookup attackIntervalLevels[heroLevel-1]"
             ),
             "projectileFlightSec": f"round(projectileFlightSecL1 * {FLIGHT_GROWTH}^(heroLevel-1), 2)",
             "intervalGrowthPerLevel": round((INTERVAL_GROWTH - 1) * 100, 2),
             "flightGrowthPerLevel": round((FLIGHT_GROWTH - 1) * 100, 2),
-            "attackIntervalMin": INTERVAL_MIN,
+            "intervalDisplayStepMin": INTERVAL_DISPLAY_STEP,
+            "attackIntervalMinReference": INTERVAL_MIN,
         },
         "flightL1Tiers": {
             "flat": FLIGHT_FLAT_TIERS,
